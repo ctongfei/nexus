@@ -1,26 +1,22 @@
 package nexus
 
 import nexus.shape._
-import nexus.storage._
 import shapeless._
 import shapeless.nat._
-import shapeless.ops._
-import shapeless.ops.hlist._
 import shapeless.ops.nat._
 
 /**
  * @author Tongfei Chen
  */
-class DenseTensor[D <: DType, S <: HList](
+trait DenseTensor[D <: DType, A <: HList] extends Tensor[D, A] {
 
-  val storage: Storage[D],
-  val offset: Int,
-  val shape: IndexedSeq[Int],
-  val stride: IndexedSeq[Int]
-
-)
-  extends Tensor[D, S]
-{
+  val axes: A
+  val device: Device
+  val storage: Storage
+  val offset: Int
+  val shape: Seq[Int]
+  val stride: Seq[Int]
+  implicit val support: DTypeSupport[D, R, Storage]
 
   final def isDense = true
 
@@ -45,15 +41,15 @@ class DenseTensor[D <: DType, S <: HList](
     i
   }
 
-  def apply[@specialized R](indices: Int*)(implicit ev: DType.Ev[R, D]): R = storage(index(indices))
-
-  def update[@specialized R](indices: Int*)(newValue: R)(implicit ev: DType.Ev[R, D]): Unit = storage(index(indices)) = newValue
+  def apply(indices: Int*) = support.get(storage, index(indices))
+  def update(indices: Int*)(newValue: R) = support.set(storage, index(indices), newValue)
 
   protected def slice0[N <: Nat, T <: HList]
   (axis: N, i: Int)
-  (implicit t: RemoveAt.Aux[N, S, T], axisN: ToInt[N]): DenseTensor[D, T] =
-    new DenseTensor[D, T](
+  (implicit t: RemoveAt.Aux[N, A, T], axisN: ToInt[N]): DenseTensor[D, T] =
+    device.view[D, T, R, Storage](
       storage = storage,
+      axes = t(axes),
       offset = stride(axisN()) * i,
       shape = Shape.removeAt(shape, axisN()),
       stride = Shape.removeAt(stride, axisN())
@@ -61,35 +57,22 @@ class DenseTensor[D <: DType, S <: HList](
 
   def slice[H, T <: HList]
     (i: Int)
-    (implicit t: RemoveAt.Aux[_0, S, T]): DenseTensor[D, T] =
-  {
-    slice0(_0, i)
-  }
+    (implicit t: RemoveAt.Aux[_0, A, T]): DenseTensor[D, T] = slice0(_0, i)
 
-  def sliceAlong[A, N <: Nat, T <: HList]
-  (axis: A, i: Int)
-  (implicit n: IndexOf.Aux[A, S, N], t: RemoveAt.Aux[N, S, T], nn: ToInt[N]): DenseTensor[D, T] =
-  {
-    slice0(n(), i)
-  }
+  def sliceAlong[X, N <: Nat, T <: HList]
+  (axis: X, i: Int)
+  (implicit n: IndexOf.Aux[X, A, N], t: RemoveAt.Aux[N, A, T], nn: ToInt[N]): DenseTensor[D, T] = slice0(n(), i)
 
-  def along[A, N <: Nat, T <: HList]
-  (axis: A)
-  (implicit n: IndexOf.Aux[A, S, N], t: RemoveAt.Aux[N, S, T], nn: ToInt[N]): IndexedSeq[DenseTensor[D, T]] =
-  {
+  def along[X, N <: Nat, T <: HList]
+  (axis: X)
+  (implicit n: IndexOf.Aux[X, A, N], t: RemoveAt.Aux[N, A, T], nn: ToInt[N]): IndexedSeq[DenseTensor[D, T]] =
     (0 until shape(nn())) map { i => slice0(n(), i) }
-  }
 
   override def toString = {
-    val header = s"DenseTensor[Rank=${shape.length}, Axes=${}]"
+    val axesRawString = axes.toString
+    val axesString = axesRawString.substring(0, axesRawString.lastIndexOf(" :: "))
+    val header = s"Tensor[Rank=${shape.length}, Axes=$axesString]"
+    header
   }
-
-}
-
-object DenseTensor {
-
-  def ofStorage[D <: DType, S <: HList](storage: Storage[D], axes: S, shape: IndexedSeq[Int]) =
-    new DenseTensor[D, S](storage, 0, shape, shape.scanRight(1)(_*_).tail)
-
 
 }

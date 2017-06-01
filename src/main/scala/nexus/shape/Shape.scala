@@ -5,7 +5,7 @@ package nexus.shape
  */
 private[nexus] object Shape {
 
-  def removeAt(shape: IndexedSeq[Int], index: Int) =
-    shape.take(index - 1) ++ shape.drop(index)
+  def removeAt(shape: Seq[Int], index: Int) =
+    shape.take(index) ++ shape.drop(index + 1)
 
 }

@@ -1,6 +1,5 @@
 package nexus
 
-import nexus.shape._
 import shapeless._
 import shapeless.ops.hlist._
 import shapeless.ops.nat._
@@ -10,12 +9,19 @@ import shapeless.ops.nat._
  */
 trait Tensor[D <: DType, S <: HList] {
 
-  def apply[@specialized R](indices: Int*)(implicit ev: DType.Ev[R, D]): R
-  def update[@specialized R](indices: Int*)(newValue: R)(implicit ev: DType.Ev[R, D]): Unit
+  type Storage
+  type R
 
-  def isDense: Boolean
+  val axes: S
+
+  val storage: Storage
+  val support: DTypeSupport[D, R, Storage]
+
+  def apply(indices: Int*): R
+  def update(indices: Int*)(newValue: R): Unit
 
   type Rank = Length[S]#Out
   def rank(implicit e: ToInt[Rank]) = e()
 
 }
+

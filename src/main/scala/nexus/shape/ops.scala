@@ -32,7 +32,7 @@ object IndexOf {
 /**
  * Witnesses the HList without the [[I]]-th type in [[L]].
  */
-trait RemoveAt[I <: Nat, L <: HList] { type Out <: HList }
+trait RemoveAt[I <: Nat, L <: HList] extends DepFn1[L] { type Out <: HList }
 
 object RemoveAt {
 
@@ -43,12 +43,14 @@ object RemoveAt {
   implicit def removeAt0[H, T <: HList]: Aux[_0, H :: T, T] =
     new RemoveAt[_0, H :: T] {
       type Out = T
+      def apply(t: H :: T): T = t.tail
     }
 
   implicit def removeAtOther[H, T <: HList, R <: HList, P <: Nat]
   (implicit ev: RemoveAt.Aux[P, T, R]): Aux[Succ[P], H :: T, H :: R] =
     new RemoveAt[Succ[P], H :: T] {
       type Out = H :: R
+      def apply(t: H :: T): H :: R = t.head :: ev(t.tail)
     }
 
 }
