@@ -3,16 +3,14 @@ package nexus
 /**
  * @author Tongfei Chen
  */
-sealed trait DType
+sealed abstract class DType(val name: String) {
+  override def toString = name
+}
 
-class Int32 extends DType
-object Int32 extends Int32
+class Int32 extends DType("Int32")
 
-class Int64 extends DType
-object Int64 extends Int64
+class Int64 extends DType("Int64")
 
-class Float32 extends DType
-object Float32 extends Float32
+class Float32 extends DType("Float32")
 
-class Float64 extends DType
-object Float64 extends Float64
+class Float64 extends DType("Float64")

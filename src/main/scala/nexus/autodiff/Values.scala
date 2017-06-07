@@ -10,9 +10,4 @@ import scala.collection._
  */
 class Values {
 
-  private val map = mutable.HashMap[Expr[_, _], Tensor[_, _]]()
-
-  def apply[D <: DType, S <: HList](e: Expr[D, S]): Tensor[D, S] =
-    map(e).asInstanceOf[Tensor[D, S]]
-
 }

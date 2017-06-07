@@ -4,22 +4,29 @@ import nexus._
 import shapeless._
 
 object Id extends GenOp1 {
-  def apply[D <: DType, S <: HList](x: Tensor[D, S]) = x
-  def backward[D <: DType, S <: HList](dy: Tensor[D, S], x: Tensor[D, S], y: Tensor[D, S]) = dy
+  def forward[T <: TensorLike[T]](x: T) = x
+  def backward[T <: TensorLike[T]](dy: T, y: T, x: T) = dy
 }
 
 object Neg extends GenOp1 {
-  def apply[D <: DType, S <: HList](x: Tensor[D, S]): Tensor[D, S] = ???
-  def backward[D <: DType, S <: HList](dy: Tensor[D, S], x: Tensor[D, S], y: Tensor[D, S]) = ???
+  def forward[T <: TensorLike[T]](x: T) = -x
+  def backward[T <: TensorLike[T]](dy: T, y: T, x: T) = -dy
 }
 
 object Add extends GenOp2 {
-  def apply[D <: DType, S <: HList](x1: Tensor[D, S], x2: Tensor[D, S]): Tensor[D, S] = ???
-  def backward1[D <: DType, S <: HList](dy: Tensor[D, S], x1: Tensor[D, S], y: Tensor[D, S]): Tensor[D, S] = dy
-  def backward2[D <: DType, S <: HList](dy: Tensor[D, S], x2: Tensor[D, S], y: Tensor[D, S]): Tensor[D, S] = dy
+  def forward[T <: TensorLike[T]](x1: T, x2: T) = x1 + x2
+  def backward1[T <: TensorLike[T]](dy: T, y: T, x1: T, x2: T) = dy
+  def backward2[T <: TensorLike[T]](dy: T, y: T, x1: T, x2: T) = dy
 }
 
-object Exp extends GenOp1 {
-  def apply[D <: DType, S <: HList](x: Tensor[D, S]): Tensor[D, S] = ???
-  def backward[D <: DType, S <: HList](dy: Tensor[D, S], x: Tensor[D, S], y: Tensor[D, S]) = ???
+object Sub extends GenOp2 {
+  def forward[T <: TensorLike[T]](x1: T, x2: T) = x1 - x2
+  def backward1[T <: TensorLike[T]](dy: T, y: T, x1: T, x2: T) = dy
+  def backward2[T <: TensorLike[T]](dy: T, y: T, x1: T, x2: T) = -dy
+}
+
+object EMul extends GenOp2 {
+  def forward[T <: TensorLike[T]](x1: T, x2: T) = x1 |*| x2
+  def backward1[T <: TensorLike[T]](dy: T, y: T, x1: T, x2: T) = dy |*| x2
+  def backward2[T <: TensorLike[T]](dy: T, y: T, x1: T, x2: T) = dy |*| x1
 }

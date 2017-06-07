@@ -1,64 +1,165 @@
 package nexus
-import shapeless.HList
+import nexus.shape._
+import shapeless._
+import shapeless.nat._
+import shapeless.ops.hlist._
+import shapeless.ops.nat._
 
 /**
+ * Represents the CPU device.
  * @author Tongfei Chen
  */
-object CPU extends Device {
+object CPU extends CPU
+
+sealed class CPU extends DeviceLike[CPU] {
 
   def name: String = "CPU"
 
-  implicit object float32 extends DTypeSupport[Float32, Float, MemoryFloat32Storage] {
-    def newStorage(n: Int) = new MemoryFloat32Storage(new Array[Float](n))
-    def get(storage: MemoryFloat32Storage, i: Int) = storage.data(i)
-    def set(storage: MemoryFloat32Storage, i: Int, x: Float) = storage.data(i) = x
+  //region SUPPORTED DATA TYPES ON THIS DEVICE IS REGISTERED HERE
+
+  implicit object float32 extends Store[Float32, Float, Array[Float]] {
+    def allocate(n: Int) = new Array[Float](n)
+    def fromArray(array: Array[Float]) = array
+    def toArray(handle: Array[Float]) = handle
+    def get(handle: Array[Float], i: Int) = handle(i)
+    def set(handle: Array[Float], i: Int, x: Float) = handle(i) = x
   }
 
-  implicit object float64 extends DTypeSupport[Float64, Double, MemoryFloat64Storage] {
-    def newStorage(n: Int) = new MemoryFloat64Storage(new Array[Double](n))
-    def get(storage: MemoryFloat64Storage, i: Int) = storage.data(i)
-    def set(storage: MemoryFloat64Storage, i: Int, x: Double) = storage.data(i) = x
+  implicit object float64 extends Store[Float64, Double, Array[Double]] {
+    def allocate(n: Int) = new Array[Double](n)
+    def fromArray(array: Array[Double]) = array
+    def toArray(handle: Array[Double]) = handle
+    def get(handle: Array[Double], i: Int) = handle(i)
+    def set(handle: Array[Double], i: Int, x: Double) = handle(i) = x
   }
 
-
-  def tensorFromStorage[D <: DType, A <: HList, _R, _S](_storage: _S, _axes: A, _shape: Seq[Int])(implicit _support: DTypeSupport[D, _R, _S]): DenseTensor[D, A] = new DenseTensor[D, A] {
-    val device = CPU
-    val axes = _axes
-    val storage = _storage
-    val offset = 0
-    val shape = _shape
-    val stride = _shape.scanRight(1)(_ * _).tail
-    val support = _support
-    type Storage = _S
-    type R = _R
+  implicit object int32 extends Store[Int32, Int, Array[Int]] {
+    def allocate(n: Int) = new Array[Int](n)
+    def fromArray(array: Array[Int]) = array
+    def toArray(handle: Array[Int]) = handle
+    def get(handle: Array[Int], i: Int) = handle(i)
+    def set(handle: Array[Int], i: Int, x: Int) = handle(i) = x
   }
 
-  def view[D <: DType, A <: HList, _R, _S](_storage: _S, _axes: A, _offset: Int, _shape: Seq[Int], _stride: Seq[Int])(implicit _support: DTypeSupport[D, _R, _S]): DenseTensor[D, A] = new DenseTensor[D, A] {
-    val device = CPU
-    val axes = _axes
-    val storage = _storage
-    val offset = _offset
-    val shape = _shape
-    val stride = _stride
-    val support = _support
-    type Storage = _S
-    type R = _R
+  implicit object int64 extends Store[Int64, Long, Array[Long]] {
+    def allocate(n: Int) = new Array[Long](n)
+    def fromArray(array: Array[Long]) = array
+    def toArray(handle: Array[Long]) = handle
+    def get(handle: Array[Long], i: Int) = handle(i)
+    def set(handle: Array[Long], i: Int, x: Long) = handle(x) = i
   }
 
-  class MemoryInt32Storage (val data: Array[Int]) extends Storage[Int32]
-  class MemoryInt64Storage (val data: Array[Long]) extends Storage[Int64]
-  class MemoryFloat32Storage (val data: Array[Float]) extends Storage[Float32]
-  class MemoryFloat64Storage (val data: Array[Double]) extends Storage[Float64]
+  //endregion
+
+  abstract class Tensor[D <: DType, A <: HList] extends TensorLike[Tensor[D, A]] { self =>
+
+    type Self = Tensor[D, A]
+    type Axes = A
+    type Elem = D
+    type Device = CPU
+
+    val device: Device = CPU
+
+    val dtype: Elem
+    val axes: Axes
+    val handle: Handle
+    val offset: Int
+    val shape: Seq[Int]
+    val stride: Seq[Int]
+    implicit val bridge: Store[Elem, JvmElem, Handle]
+
+    def size = {
+      var s = 1
+      var k = 0
+      while (k < shape.length) {
+        s *= shape(k)
+        k += 1
+      }
+      s
+    }
+
+    // Column major
+    def index(indices: Seq[Int]) = {
+      var i = 0
+      var k = 0
+      while (k < shape.length) {
+        i += indices(k) * stride(k)
+        k += 1
+      }
+      i
+    }
+
+    def apply(indices: Int*) = bridge.get(handle, index(indices))
+    def update(indices: Int*)(newValue: JvmElem) = bridge.set(handle, index(indices), newValue)
+
+    protected def slice0[N <: Nat, T <: HList]
+    (axis: N, i: Int)
+    (implicit t: RemoveAt.Aux[A, N, T], axisN: ToInt[N]): Tensor[D, T] =
+      new Tensor[D, T] {
+        val dtype = self.dtype
+        val handle = self.handle
+        val axes = t(self.axes)
+        val offset = self.stride(axisN()) * i
+        val shape = Shape.removeAt(self.shape, axisN())
+        val stride = Shape.removeAt(self.stride, axisN())
+        val bridge = self.bridge
+        type JvmElem = self.JvmElem
+        type Storage = self.Handle
+      }
+
+    def slice[H, T <: HList]
+    (i: Int)
+    (implicit t: RemoveAt.Aux[A, _0, T]): Tensor[D, T] = slice0(_0, i)
+
+    def sliceAlong[X, N <: Nat, T <: HList]
+    (axis: X, i: Int)
+    (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): Tensor[D, T] = slice0(n(), i)
+
+    def along[X, N <: Nat, T <: HList]
+    (axis: X)
+    (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): IndexedSeq[Tensor[D, T]] =
+      (0 until shape(nn())) map { i => slice0(n(), i) }
+
+    def unary_- = ???
+    def unary_+ = ???
+    def +(that: Tensor[D, A]) = ???
+    def -(that: Tensor[D, A]) = ???
+    def |*|(that: Tensor[D, A]) = ???
+    def |/|(that: Tensor[D, A]) = ???
+    def :*(that: JvmElem) = ???
+
+    def |>[Y](op: Op1[Self, Y]) = op.forward(self)
+  }
 
   object Tensor {
 
-    def fromStorage[D <: DType, A <: HList, R, S](storage: S, axes: A, shape: Seq[Int])(implicit support: DTypeSupport[D, R, S]) = tensorFromStorage[D, A, R, S](storage, axes, shape)
+    private def fromHandle[D <: DType, A <: HList, R, H]
+    (_dtype: D, _handle: H, _axes: A, _shape: Seq[Int])
+    (implicit _support: Store[D, R, H]): Tensor[D, A] = new Tensor[D, A] {
+      val dtype = _dtype
+      val axes = _axes
+      val handle = _handle
+      val offset = 0
+      val shape = _shape
+      val stride = _shape.scanRight(1)(_*_).tail
+      val bridge = _support
+      type Handle = H
+      type JvmElem = R
+    }
+
+
+    def fromNestedArray[D <: DType, A <: HList, N <: Nat, R, H, T]
+    (dtype: D, axes: A)(array: T)
+    (implicit support: Store[D, R, H], nest: Nest[T, R, N], nn: Length.Aux[A, N]) = {
+      val shape = nest.shape(array)
+      fromHandle(dtype, support.fromArray(nest.flatten(array)), axes, shape)
+    }
+
+    def fromFlatArray[D <: DType, A <: HList, R, S](dtype: D, axes: A, shape: Array[Int])(array: Array[R])(implicit support: Store[D, R, S]) = {
+      fromHandle(dtype, support.fromArray(array), axes, shape)
+    }
 
   }
 
-  def add[D <: DType, A <: HList](a: Tensor[D, A], b: Tensor[D, A]): Tensor[D, A] = ???
-  def sub[D <: DType, A <: HList](a: Tensor[D, A], b: Tensor[D, A]): Tensor[D, A] = ???
-  def mul[D <: DType, A <: HList](a: Tensor[D, A], b: Tensor[D, A]): Tensor[D, A] = ???
-  def div[D <: DType, A <: HList](a: Tensor[D, A], b: Tensor[D, A]): Tensor[D, A] = ???
-  def neg[D <: DType, A <: HList](a: Tensor[D, A]): Tensor[D, A] = ???
+
 }
