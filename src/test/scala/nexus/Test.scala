@@ -1,7 +1,7 @@
 package nexus
 
-import nexus.CPU.MemoryFloat64Storage
-import nexus.ops._
+import nexus.cpu._
+import nexus.op._
 import shapeless._
 import shapeless.nat._
 
@@ -17,8 +17,13 @@ object Test extends App {
   val AB = new AB
 
 
-  val storage = new CPU.MemoryFloat32Storage(Array(1f, 2f, 3f, 4f, 5f, 6f))
-  val a = CPU.Tensor.fromHandle(Float32, storage, AA :: AB :: HNil, Array(2, 3))
+
+  val a = Tensor.fromNestedArray(AA :: AB :: HNil)(
+    Array(
+      Array(1f, 2f, 3f),
+      Array(4f, 5f, 6f)
+    )
+  )
 
   val a1 = a along AA
   val a2 = a along AB
@@ -26,14 +31,12 @@ object Test extends App {
   val a3 = a.sliceAlong(AA, 1)
   val a4 = a.sliceAlong(AB, 2)
 
-  import CPU._
+  val s = a.toString
 
-  val b = CPU.Tensor.fromNestedArray(Float64, AA :: AB :: HNil)(
-    Array(
-      Array(1d, 2d, 3d),
-      Array(4d, 5d, 6d)
-    )
-  )
+  val x = Input(a)
+  val y = Add(x, x)
+  val z = Add(x, y)
+
 
   val bp = 0
 

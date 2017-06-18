@@ -2,6 +2,7 @@ package nexus
 
 import shapeless._
 
+
 /**
  * Typelevel function that gets the index of type [[X]] in [[L]].
  */

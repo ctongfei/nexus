@@ -3,9 +3,9 @@ package nexus.shape
 /**
  * @author Tongfei Chen
  */
-private[nexus] object Shape {
+private[nexus] object ShapeUtils {
 
-  def removeAt(shape: Seq[Int], index: Int) =
+  def removeAt(shape: Array[Int], index: Int) =
     shape.take(index) ++ shape.drop(index + 1)
 
 }

@@ -2,7 +2,9 @@ package nexus
 
 /**
  * Represents a symbolic expression in a computational graph.
- * @tparam T Type of data that it holds
+ * @tparam T Type of data that it conceptually holds
+ * @since 0.1.0
+ * @author Tongfei Chen
  */
 sealed trait Expr[T] {
   def computeGradient: Boolean
