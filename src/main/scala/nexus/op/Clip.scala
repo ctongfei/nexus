@@ -18,14 +18,5 @@ object Clip extends ArgGenOp1[ClipF] {
 class ClipArg(val min: Double, val max: Double)
 
 trait ClipF[Arg, X, Y] extends ArgOp1[Arg, X, Y]
-
 object ClipF {
-  implicit def numeric[T[_, _], D, A <: HList](arg: ClipArg)(implicit env: Env[T, D]): ClipF[ClipArg, T[D, A], T[D, A]] =
-    new ClipF[ClipArg, T[D, A], T[D, A]] {
-      def apply(arg: ClipArg): Op1[T[D, A], T[D, A]] =
-        new Op1[T[D, A], T[D, A]] {
-          def forward(x: T[D, A]) = ???
-          def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = ???
-        }
-    }
 }

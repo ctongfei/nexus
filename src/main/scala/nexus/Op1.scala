@@ -9,6 +9,8 @@ package nexus
  */
 trait Op1[X, Y] extends (Expr[X] => Expr[Y]) {
 
+  def name: String
+
   /** Apply this operation to a symbolic expression. */
   def apply(x: Expr[X]): Expr[Y] = Apply1(this, x)
 
@@ -61,6 +63,7 @@ trait GenOp1[F[X, Y] <: Op1[X, Y]] { self =>
  * @since 0.1.0
  */
 trait Op2[X1, X2, Y] extends ((Expr[X1], Expr[X2]) => Expr[Y]) {
+  def name: String
   def apply(x1: Expr[X1], x2: Expr[X2]) = Apply2(this, x1, x2)
   def forward(x1: X1, x2: X2): Y
   def backward1(dy: Y, y: Y, x1: X1, x2: X2): X1

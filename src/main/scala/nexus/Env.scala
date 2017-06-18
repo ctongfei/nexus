@@ -1,6 +1,6 @@
 package nexus
 
-import shapeless.HList
+import shapeless.{HList, HNil}
 
 import scala.annotation._
 
@@ -9,13 +9,14 @@ import scala.annotation._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-@implicitNotFound("Cannot find a device to run ${T} with element type ${D}.")
-trait Env[T[_, _ <: HList], D] {
+@implicitNotFound("Cannot find a device to run ${UT} with element type ${D}.")
+trait Env[UT[_], D] {
 
-  def neg[A <: HList](x: T[D, A]): T[D, A]
-  def add[A <: HList](x: T[D, A], y: T[D, A]): T[D, A]
-  def sub[A <: HList](x: T[D, A], y: T[D, A]): T[D, A]
-  def mul[A <: HList](x: T[D, A], y: T[D, A]): T[D, A]
-  def div[A <: HList](x: T[D, A], y: T[D, A]): T[D, A]
+  def neg(x: UT[D]): UT[D]
+  def add(x: UT[D], y: UT[D]): UT[D]
+  def sub(x: UT[D], y: UT[D]): UT[D]
+  def eMul(x: UT[D], y: UT[D]): UT[D]
+  def eDiv(x: UT[D], y: UT[D]): UT[D]
+
 
 }

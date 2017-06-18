@@ -10,7 +10,9 @@ import shapeless._
  */
 object Id extends GenOp1[IdF]
 
-trait IdF[X, Y] extends Op1[X, Y]
+trait IdF[X, Y] extends Op1[X, Y] {
+  def name = "Id"
+}
 
 object IdF {
   implicit def any[X]: IdF[X, X] = new IdF[X, X] {

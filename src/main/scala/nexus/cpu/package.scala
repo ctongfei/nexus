@@ -5,6 +5,6 @@ package nexus
  */
 package object cpu {
 
-  implicit val cpuFloat32: Env[Tensor, Float] = new CPUFloat32
+  implicit val cpuFloat32: Env[UntypedDenseTensor, Float] = new CPUFloat32
 
 }
