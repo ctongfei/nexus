@@ -9,11 +9,11 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object MatMul extends GenOp2[MatMulF]
+object MMul extends GenOp2[MMulF]
 
-trait MatMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
-  def name = "MatMul"
+trait MMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
+  def name = "MMul"
 }
 
-object MatMulF {
+object MMulF {
 }

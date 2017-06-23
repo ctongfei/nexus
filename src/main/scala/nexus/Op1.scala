@@ -9,6 +9,9 @@ package nexus
  */
 trait Op1[X, Y] extends (Expr[X] => Expr[Y]) {
 
+  type Input = X
+  type Output = Y
+
   def name: String
 
   /** Apply this operation to a symbolic expression. */
@@ -63,6 +66,9 @@ trait GenOp1[F[X, Y] <: Op1[X, Y]] { self =>
  * @since 0.1.0
  */
 trait Op2[X1, X2, Y] extends ((Expr[X1], Expr[X2]) => Expr[Y]) {
+  type Input1 = X1
+  type Input2 = X2
+  type Output = Y
   def name: String
   def apply(x1: Expr[X1], x2: Expr[X2]) = Apply2(this, x1, x2)
   def forward(x1: X1, x2: X2): Y
@@ -82,4 +88,17 @@ trait GenOp2[F[X1, X2, Y] <: Op2[X1, X2, Y]] { self =>
   def backward2[X1, X2, Y](dy: Y, y: Y, x1: X1, x2: X2)(implicit f: F[X1, X2, Y]): X2 = f.backward2(dy, y, x1, x2)
   def ground[X1, X2, Y](implicit f: F[X1, X2, Y]): Op2[X1, X2, Y] = f
   def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]): Expr[Y] = Apply2(ground[X1, X2, Y], x1, x2)
+}
+
+trait Op3[X1, X2, X3, Y] extends ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y]) {
+  def name: String
+  def forward(x1: X1, x2: X2, x3: X3): Y
+  def apply(x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) = Apply3(this, x1, x2, x3)
+  def backward1(dy: Y, y: Y, x1: X1, x2: X2, x3: X3): X1
+  def backward2(dy: Y, y: Y, x1: X1, x2: X2, x3: X3): X2
+  def backward3(dy: Y, y: Y, x1: X1, x2: X2, x3: X3): X3
+}
+
+trait GenOp3[F[X1, X2, X3, Y] <: Op3[X1, X2, X3, Y]] { self =>
+
 }

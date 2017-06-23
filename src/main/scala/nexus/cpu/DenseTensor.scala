@@ -39,6 +39,11 @@ trait DenseTensor[D, A <: HList]
   (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]) =
     (0 until shape(nn())) map { i => slice0(n(), i) }
 
+  def expandDim[X, N <: Nat, T <: HList]
+  (axis: X, n: N)
+  (implicit d: InsertAt.Aux[A, N, X, T], nn: ToInt[N]) =
+
+
   def asSeq: Seq[D] = ???
 
   override def stringPrefix = "CPUTensor"
@@ -64,8 +69,8 @@ object DenseTensor {
   class Contiguous[D, A <: HList](handle: Array[D], val axes: A, shape: Array[Int])
     extends UntypedDenseTensor.Contiguous[D](handle, shape) with DenseTensor[D, A]
 
-  class Sliced[D, A <: HList](handle: Array[D], val axes: A, shape: Array[Int], offset: Int, stride: Array[Int])
-    extends UntypedDenseTensor.Sliced[D](handle, shape, offset, stride) with DenseTensor[D, A]
+  class View[D, A <: HList](handle: Array[D], val axes: A, shape: Array[Int], offset: Int, stride: Array[Int])
+    extends UntypedDenseTensor.View[D](handle, shape, offset, stride) with DenseTensor[D, A]
 
 
 }

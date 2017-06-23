@@ -23,10 +23,10 @@ trait UntypedDenseTensor[D] extends UntypedTensorLike[D, UntypedDenseTensor[D]] 
   def apply(indices: Int*) = handle(index(indices))
 
   def sliceUntyped(n: Int, i: Int): UntypedDenseTensor[D] =
-    new UntypedDenseTensor.Sliced(
+    new UntypedDenseTensor.View(
       handle = self.handle,
       shape = ShapeUtils.removeAt(self.shape, n),
-      offset = self.stride(n) * i,
+      offset = self.offset + self.stride(n) * i,
       stride = ShapeUtils.removeAt(self.stride, n)
     )
 
@@ -51,8 +51,8 @@ object UntypedDenseTensor {
     def typeWith[A <: HList](axes: A) = new DenseTensor.Contiguous[D, A](handle, axes, shape)
   }
 
-  class Sliced[D](val handle: Array[D], val shape: Array[Int], val offset: Int, val stride: Array[Int]) extends UntypedDenseTensor[D] {
-    def typeWith[A <: HList](axes: A) = new DenseTensor.Sliced[D, A](handle, axes, shape, offset, stride)
+  class View[D](val handle: Array[D], val shape: Array[Int], val offset: Int, val stride: Array[Int]) extends UntypedDenseTensor[D] {
+    def typeWith[A <: HList](axes: A) = new DenseTensor.View[D, A](handle, axes, shape, offset, stride)
   }
 
 

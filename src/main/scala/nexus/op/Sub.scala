@@ -1,8 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.cpu.DenseTensor
-import shapeless.HList
+import shapeless._
 
 /**
  * Subtraction of two tensors of the same axes and shape.
@@ -17,12 +16,12 @@ trait SubF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object SubF {
 
-  class CPUSubF[D, A <: HList](env: Env[cpu.UntypedDenseTensor, D]) extends SubF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
-    def forward(x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = env.sub(x1, x2) typeWith x1.axes
-    def backward1(dy: DenseTensor[D, A], y: DenseTensor[D, A], x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = dy
-    def backward2(dy: DenseTensor[D, A], y: DenseTensor[D, A], x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = env.neg(dy) typeWith x2.axes
+  class CPUSubF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]) extends SubF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
+    def forward(x1: cpu.DenseTensor[D, A], x2: cpu.DenseTensor[D, A]) = (x1 - x2) typeWith x1.axes
+    def backward1(dy: cpu.DenseTensor[D, A], y: cpu.DenseTensor[D, A], x1: cpu.DenseTensor[D, A], x2: cpu.DenseTensor[D, A]) = dy
+    def backward2(dy: cpu.DenseTensor[D, A], y: cpu.DenseTensor[D, A], x1: cpu.DenseTensor[D, A], x2: cpu.DenseTensor[D, A]) = env.neg(dy) typeWith x2.axes
   }
 
-  implicit def cpuSubF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): SubF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUSubF(env)
+  implicit def cpuSubF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): SubF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUSubF
 
 }

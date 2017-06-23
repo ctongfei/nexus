@@ -76,3 +76,17 @@ object InsertAt {
     }
 
 }
+
+/**
+ * Typelevel function that performs symmetric differences on two [[HList]]s. This is used in tensor multiplication.
+ */
+trait SymDiff[A <: HList, B <: HList] extends DepFn2[A, B] { type Out <: HList }
+
+object SymDiff {
+
+  def apply[A <: HList, B <: HList](implicit o: SymDiff[A, B]): Aux[A, B, o.Out] = o
+  type Aux[A <: HList, B <: HList, Out0 <: HList] = SymDiff[A, B] { type Out = Out0 }
+
+
+
+}

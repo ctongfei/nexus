@@ -4,7 +4,6 @@ import nexus.util._
 
 /**
  * Represents a symbolic expression in a computational graph.
- *
  * @tparam T Type of data that it conceptually holds
  * @since 0.1.0
  * @author Tongfei Chen
@@ -15,9 +14,8 @@ sealed trait Expr[+T] {
 
 /**
  * A placeholder for models' inputs.
- * @param value Input to a model
  */
-case class Input[+X](value: X, name: String = ExprName.next) extends Expr[X] {
+case class Input[+X](name: String = ExprName.nextInput) extends Expr[X] {
   def computeGradient = false
   override def toString = name
 }
@@ -26,7 +24,7 @@ case class Input[+X](value: X, name: String = ExprName.next) extends Expr[X] {
  * A constant value in a computational graph.
  * @param value Value of this constant
  */
-case class Const[+X](value: X, name: String = ExprName.next) extends Expr[X] {
+case class Const[+X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
   def computeGradient = false
   override def toString = name
 }
@@ -54,4 +52,12 @@ case class Apply1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
 case class Apply2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends Expr[Y] {
   def computeGradient = true
   override def toString = s"${op.name}($x1, $x2)"
+}
+
+/**
+ * The result of the application of a ternary function to three expressions.
+ */
+case class Apply3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) extends Expr[Y] {
+  def computeGradient = true
+  override def toString = s"${op.name}($x1, $x2, $x3)"
 }

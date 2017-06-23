@@ -1,7 +1,6 @@
 package nexus.op
 
 import nexus._
-import nexus.cpu._
 import shapeless._
 
 /**
@@ -17,12 +16,13 @@ trait AddF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object AddF {
 
-  class CPUAddF[D, A <: HList](env: Env[cpu.UntypedDenseTensor, D]) extends AddF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
-    def forward(x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = env.add(x1, x2) typeWith x1.axes
+  class CPUAddF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]) extends AddF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
+    import cpu._
+    def forward(x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = (x1 + x2) typeWith x1.axes
     def backward1(dy: DenseTensor[D, A], y: DenseTensor[D, A], x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = dy
     def backward2(dy: DenseTensor[D, A], y: DenseTensor[D, A], x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = dy
   }
 
-  implicit def cpuAddF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): AddF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUAddF(env)
+  implicit def cpuAddF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): AddF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUAddF
 }
 
