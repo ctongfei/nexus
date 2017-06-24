@@ -7,15 +7,15 @@ import shapeless._
 /**
  * @author Tongfei Chen
  */
-object CrossEntropyLoss extends GenOp2[CrossEntropyLossF]
+object LogLoss extends GenOp2[LogLossF]
 
-trait CrossEntropyLossF[YP, YG, L] extends Op2[YP, YG, L] {
+trait LogLossF[YP, YG, L] extends Op2[YP, YG, L] {
   def name = "CrossEntropyLoss"
 }
 
-object CrossEntropyLossF {
+object LogLossF {
 
-  class CPUCrossEntropyLossF[D](env: Env[cpu.UntypedDenseTensor, D]) extends CrossEntropyLossF[cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil]] {
+  class CPULogLossF[D](env: Env[cpu.UntypedDenseTensor, D]) extends LogLossF[cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil]] {
     def forward(yp: DenseTensor[D, HNil], yg: DenseTensor[D, HNil]) = {
       env.add(
         env.mul(yg, env.log(yp)),
@@ -36,6 +36,6 @@ object CrossEntropyLossF {
     def backward2(dy: DenseTensor[D, HNil], y: DenseTensor[D, HNil], x1: DenseTensor[D, HNil], x2: DenseTensor[D, HNil]) = ???
   }
 
-  implicit def cpuLogLossF[D](implicit env: Env[cpu.UntypedDenseTensor, D]): CrossEntropyLossF[cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil]] = new CPUCrossEntropyLossF(env)
+  implicit def cpuLogLossF[D](implicit env: Env[cpu.UntypedDenseTensor, D]): LogLossF[cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil], cpu.DenseTensor[D, HNil]] = new CPULogLossF(env)
 
 }

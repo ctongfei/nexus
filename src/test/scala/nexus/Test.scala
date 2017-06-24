@@ -36,7 +36,7 @@ object Test extends App {
 
   val inputDims = 2
   val hiddenDims = 10
-  val outputDim = 1
+  val outputDim = 2
 
   val W1 = Param(DenseTensor.fill(0f, Hidden :: In :: HNil, Array(hiddenDims, inputDims)), name = "W1")
   val b1 = Param(DenseTensor.fill(0f, Hidden :: HNil, Array(hiddenDims)), name = "b1")
@@ -49,7 +49,7 @@ object Test extends App {
 
     val t = Sigmoid(Add(MVMul(W1, x), b1))
     val yp = Sigmoid(Add(MVMul(W2, t), b2))
-    val loss = CrossEntropyLoss(yp, y)
+    val loss = LogLoss(yp, y)
   }
 
 
