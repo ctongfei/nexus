@@ -1,23 +1,24 @@
 package nexus
 
+import shapeless._
+import scala.language.higherKinds
+
 /**
  * @author Tongfei Chen
  */
-class UntypedTensorOps[UT[_], D](val a: UT[D])(env: Env[UT, D]) {
+trait TensorOpsMixin {
 
-  def +(b: UT[D]): UT[D] = env.add(a, b)
-  def -(b: UT[D]): UT[D] = env.sub(a, b)
-  def |*|(b: UT[D]): UT[D] = env.mul(a, b)
-  def |/|(b: UT[D]): UT[D] = env.div(a, b)
+  implicit class TensorOps[T[D, A <: HList], D, A <: HList](val a: T[D, A])(implicit env: Env[T, D]) {
 
-  def sigmoid: UT[D] = env.sigmoid(a)
+    import env._
+
+    def +(b: T[D, A]): T[D, A] = add(a, b)
+    def -(b: T[D, A]): T[D, A] = sub(a, b)
+    def |*|(b: T[D, A]): T[D, A] = mul(a, b)
+
+    def unary_- : T[D, A] = neg(a)
 
 
-}
-
-trait UntypedTensorOpsMixin {
-
-  private[nexus] implicit class untypedTensorOps[UT[_], D](val a: UT[D])(implicit env: Env[UT, D])
-    extends UntypedTensorOps[UT, D](a)(env)
+  }
 
 }

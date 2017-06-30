@@ -10,14 +10,14 @@ import shapeless._
 object Forward {
 
   def compute[X](e: Expr[X], inputs: ValueStore): (X, ValueStore) = {
-    val values = new ValueStore
+    val values = inputs
 
     def eval[X](e: Expr[X]): X = {
-      if (values contains e) values(e)
+      if (values contains e) values(e).asInstanceOf[X]
       else e match {
         case Input(_) =>
           val x = inputs(e)
-          values(e) = x; x
+          values(e) = x; x.asInstanceOf[X]
         case Param(x, _) => values(e) = x; x
         case Const(x, _) => values(e) = x; x
         case Apply1(o, x) =>
@@ -38,15 +38,3 @@ object Forward {
 
 }
 
-object Backward {
-
-  def compute[D, UT[D] <: UntypedTensorLike[D, UT[D]], T[D, A] <: TensorLike[D, A, T[D, A]] with UT[D]]
-  (e: Expr[T[D, HNil]], values: ValueStore)(implicit env: Env[UT, D]): ValueStore = {
-    val gradients = new ValueStore
-    gradients(e) = env.scalar(env.one) // gradient of loss is 1
-
-    
-
-  }
-
-}

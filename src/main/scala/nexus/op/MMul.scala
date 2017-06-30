@@ -16,4 +16,11 @@ trait MMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
 }
 
 object MMulF {
+  implicit def MMulImpl[UT[D], T[D, _ <: HList], D, A, B, C](implicit env: Env[T, D]): MMulF[T[D, A::B::$], T[D, B::C::$], T[D, A::C::$]] =
+    new MMulF[T[D, A::B::$], T[D, B::C::$], T[D, A::C::$]] {
+      import env._
+      def forward(x1: T[D, A::B::$], x2: T[D, B::C::$]) = ???
+      def backward1(dy: T[D, A::C::$], y: T[D, A::C::$], x1: T[D, A::B::$], x2: T[D, B::C::$]) = ???
+      def backward2(dy: T[D, A::C::$], y: T[D, A::C::$], x1: T[D, A::B::$], x2: T[D, B::C::$]) = ???
+    }
 }

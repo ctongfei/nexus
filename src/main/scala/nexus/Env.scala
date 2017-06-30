@@ -1,6 +1,8 @@
 package nexus
 
+import nexus.util._
 import shapeless._
+
 import scala.annotation._
 
 /**
@@ -8,34 +10,69 @@ import scala.annotation._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-@implicitNotFound("Cannot find a device to run ${UT} with element type ${D}.")
-trait Env[UT[_], D] {
+@implicitNotFound("Cannot find a device to run ${T} with element type ${D}.")
+trait Env[T[_, _ <: HList], D] {
+
+  type Handle
+
+  type Scalar = T[D, $]
+  type Vector[A] = T[D, A::$]
+  type Matrix[A, B] = T[D, A::B::$]
+  type Tensor[A <: HList] = T[D, A]
+
+  def newTensor[A <: HList](axes: A, shape: Array[Int]): Tensor[A]
+
+  def untype(x: T[D, _]): Handle
+  def typeOf[A <: HList](x: Tensor[A]): A
+  def typeWith[A <: HList](x: Handle, a: A): Tensor[A]
 
   def zero: D
   def one: D
-  def log(x: UT[D]): UT[D]
 
-  def getScalar(x: UT[D]): D
-  def scalar(x: D): UT[D]
+  def getScalar(x: Handle): D
+  def scalar(x: D): Handle
 
-  def sigmoid(x: UT[D]): UT[D]
 
-  def addInplace(x: UT[D], d: UT[D]): Unit
+  def addInplace(x: Handle, d: Handle): Unit
 
-  def addS(x: UT[D], u: D): UT[D]
+  def addScalarU(x: Handle, u: D): Handle
+  def addScalar[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(addScalarU(untype(x), u), typeOf(x))
 
-  def neg(x: UT[D]): UT[D]
-  def add(x: UT[D], y: UT[D]): UT[D]
-  def sub(x: UT[D], y: UT[D]): UT[D]
-  def mul(x: UT[D], y: UT[D]): UT[D]
-  def div(x: UT[D], y: UT[D]): UT[D]
+  def negU(x: Handle): Handle
+  def neg[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(negU(untype(x)), typeOf(x))
 
-  def inv(x: UT[D]): UT[D]
+  def addU(x: Handle, y: Handle): Handle
+  def add[A <: HList](x: Tensor[A], y: Tensor[A]): Tensor[A] = typeWith(addU(untype(x), untype(y)), typeOf(x))
 
-  def transpose(x: UT[D]): UT[D]
+  def subU(x: Handle, y: Handle): Handle
+  def sub[A <: HList](x: Tensor[A], y: Tensor[A]): Tensor[A] = typeWith(subU(untype(x), untype(y)), typeOf(x))
 
-  def mvMul(x: UT[D], y: UT[D]): UT[D]
-  def vvMul(x: UT[D], y: UT[D]): UT[D]
+  def mulU(x: Handle, y: Handle): Handle
+  def mul[A <: HList](x: Tensor[A], y: Tensor[A]): Tensor[A] = typeWith(mulU(untype(x), untype(y)), typeOf(x))
+
+  def divU(x: Handle, y: Handle): Handle
+  def div[A <: HList](x: Tensor[A], y: Tensor[A]): Tensor[A] = typeWith(divU(untype(x), untype(y)), typeOf(x))
+
+  def inv(x: Handle): Handle
+
+  def transposeU(x: Handle): Handle
+  def transpose[A, B](x: Matrix[A, B]): Matrix[B, A] = typeWith(transposeU(untype(x)), AxesUtils.swap(typeOf(x)))
+
+  def mvMulU(x: Handle, y: Handle): Handle
+  def mvMul[A, B](x: Matrix[A, B], y: Vector[B]): Vector[A] = typeWith(mvMulU(untype(x), untype(y)), typeOf(x).head::$)
+
+  def vvMulU(x: Handle, y: Handle): Handle
+  def vvMul[A, B](x: Vector[A], y: Vector[B]): Matrix[A, B] = typeWith(vvMulU(untype(x), untype(y)), typeOf(x).head::typeOf(y).head::$)
+
+  def logU(x: Handle): Handle
+  def log[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(logU(untype(x)), typeOf(x))
+
+  def sigmoidU(x: Handle): Handle
+  def sigmoid[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sigmoidU(untype(x)), typeOf(x))
+
+
+  def reduceSumU(x: Handle): Handle
+  def reduceSum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(reduceSumU(untype(x)), $)
 
 
 }

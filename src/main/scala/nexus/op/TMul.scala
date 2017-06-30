@@ -17,15 +17,10 @@ trait TMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object TMulF {
 
-  class CPUTMulF[D, A <: HList, B <: HList, C <: HList](env: Env[cpu.UntypedDenseTensor, D]) extends TMulF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, B], cpu.DenseTensor[D, C]] {
-    import cpu._
-    def forward(x1: DenseTensor[D, A], x2: DenseTensor[D, B]) = ???
-    def backward1(dy: DenseTensor[D, C], y: DenseTensor[D, C], x1: DenseTensor[D, A], x2: DenseTensor[D, B]) = ???
-    def backward2(dy: DenseTensor[D, C], y: DenseTensor[D, C], x1: DenseTensor[D, A], x2: DenseTensor[D, B]) = ???
+  implicit def TMulImpl[T[D, _ <: HList], D, A <: HList, B <: HList, C <: HList](implicit env: Env[T, D]) = new TMulF[T[D, A], T[D, B], T[D, C]] {
+    def forward(x1: T[D, A], x2: T[D, B]) = ???
+    def backward1(dy: T[D, C], y: T[D, C], x1: T[D, A], x2: T[D, B]) = ???
+    def backward2(dy: T[D, C], y: T[D, C], x1: T[D, A], x2: T[D, B]) = ???
   }
-
-  //implicit def cpuTMulF[D, A <: HList, B <: HList, C <: HList]
-  //(implicit env: Env[cpu.UntypedDenseTensor, D], su: SymmetricDiff.Aux[A, B, C]) = new CPUTMulF[D, A, B, C](env)
-
 
 }

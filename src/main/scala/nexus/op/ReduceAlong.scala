@@ -13,10 +13,4 @@ trait ReduceSumAlongF[Int, X, Y] extends ArgOp1[Int, X, Y]
 
 object ReduceSumAlongF {
 
-  class CPUReduceSumAlongF[D, A <: HList, X, B <: HList](env: Env[cpu.UntypedDenseTensor, D], axisI: Int, axisX: X) extends Op1[cpu.DenseTensor[D, A], cpu.DenseTensor[D, B]] {
-    def name = s"ReduceSumAlong[axis=$axisX]"
-    def forward(x: DenseTensor[D, A]) = ???
-    def backward(dy: DenseTensor[D, B], y: DenseTensor[D, B], x: DenseTensor[D, A]) = ???
-  }
-
 }

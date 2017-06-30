@@ -17,10 +17,11 @@ trait TransposeF[X, Y] extends Op1[X, Y] {
 }
 
 object TransposeF {
-  class CPUTransposeF[D, A, B](env: Env[cpu.UntypedDenseTensor, D]) extends TransposeF[cpu.DenseTensor[D, A :: B :: HNil], cpu.DenseTensor[D, B :: A :: HNil]] {
-    def forward(x: Input) = env.transpose(x) typeWith AxesUtils.swap(x.axes)
-    def backward(dy: Output, y: Output, x: Input) = env.transpose(dy) typeWith x.axes
+
+  implicit def TransposeImpl[T[D, _ <: HList], D, A, B](implicit env: Env[T, D]) = new TransposeF[T[D, A::B::$], T[D, B::A::$]] {
+    import env._
+    def forward(x: T[D, A::B::$]) = transpose(x)
+    def backward(dy: T[D, B::A::$], y: T[D, B::A::$], x: T[D, A::B::$]) = transpose(dy)
   }
 
-  implicit def cpuTransposeF[D, A, B](implicit env: Env[cpu.UntypedDenseTensor, D]): TransposeF[cpu.DenseTensor[D, A :: B :: HNil], cpu.DenseTensor[D, B :: A :: HNil]] = new CPUTransposeF(env)
 }

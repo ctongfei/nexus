@@ -1,6 +1,8 @@
 package nexus
 
+import nexus.autodiff._
 import nexus.cpu._
+import nexus.layer._
 import nexus.op._
 import nexus.op.activation._
 import nexus.op.loss._
@@ -16,7 +18,7 @@ object Test extends App {
   class Hidden; val Hidden = new Hidden
   class Out; val Out = new Out
 
-  val X = DenseTensor.fromNestedArray(Batch :: In :: HNil)(Array(
+  val X = DenseTensor.fromNestedArray(Batch :: In :: $)(Array(
     Array(0.0f, 0.9f),
     Array(0.1f, 0.1f),
     Array(0.2f, 0.2f),
@@ -27,33 +29,29 @@ object Test extends App {
     Array(0.7f, 0.7f)
   ))
 
-  val Y = DenseTensor.fromNestedArray(Batch :: HNil)(Array(
+  val Y = DenseTensor.fromNestedArray(Batch :: $)(Array(
     1f, 0f, 0f, 0f, 1f, 1f, 1f, 0f)
   )
 
   val xs = X along Batch
   val ys = Y along Batch
 
-  val inputDims = 2
-  val hiddenDims = 10
-  val outputDim = 2
 
-  val W1 = Param(DenseTensor.fill(0f, Hidden :: In :: HNil, Array(hiddenDims, inputDims)), name = "W1")
-  val b1 = Param(DenseTensor.fill(0f, Hidden :: HNil, Array(hiddenDims)), name = "b1")
-  val W2 = Param(DenseTensor.fill(0f, Out :: Hidden :: HNil, Array(outputDim, hiddenDims)), name = "W2")
-  val b2 = Param(DenseTensor.fill(0f, Out :: HNil, Array(outputDim)), name = "b2")
+  val x = Input[DenseTensor[Float, In::$]]()
+  val y = Input[DenseTensor[Float, Out::$]]()
+
+
+  val Layer1 = Affine(In -> 2, Hidden -> 10)
+  val Layer2 = Affine(Hidden -> 10, Out -> 2)
+
+  val output = x |> Layer1 |> Sigmoid |> Layer2 |> Sigmoid
+  val loss = CrossEntropyLoss(output, y)
 
   for ((xv, yv) <- xs zip ys) {
-    val x = Input(xv)
-    val y = Input(yv)
+    val (lossValue, values) = Forward.compute(loss, ValueStore(x -> xv, y -> yv))
+    val gradients = Backward.compute(loss, values)
 
-    val t = Sigmoid(Add(MVMul(W1, x), b1))
-    val yp = Sigmoid(Add(MVMul(W2, t), b2))
-    val loss = LogLoss(yp, y)
   }
-
-
-
 
 
   val bp = 0

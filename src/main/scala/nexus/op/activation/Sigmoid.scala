@@ -18,13 +18,9 @@ trait SigmoidF[X, Y] extends Op1[X, Y] {
 
 object SigmoidF {
 
-  class CPUSigmoidF[D, A <: HList](env: Env[cpu.UntypedDenseTensor, D]) extends NegF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
-    def forward(x: DenseTensor[D, A]) = env.sigmoid(x) typeWith x.axes
-    def backward(dy: DenseTensor[D, A], y: DenseTensor[D, A], x: DenseTensor[D, A]) = {
-      env.mul(dy, env.mul(y, env.addS(env.neg(y), env.one))) typeWith x.axes
-    }
+  implicit def SigmoidImpl[T[_, _ <: HList], D, A <: HList](implicit env: Env[T, D]) = new SigmoidF[T[D, A], T[D, A]] {
+    import env._
+    def forward(x: T[D, A]) = sigmoid(x)
+    def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = mul(dy, mul(y, addScalar(-y, one)))
   }
-
-  implicit def cpuSigmoidF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): SigmoidF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUSigmoidF(env)
-
 }

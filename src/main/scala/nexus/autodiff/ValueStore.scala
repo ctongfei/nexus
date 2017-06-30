@@ -8,14 +8,20 @@ import scala.collection._
  * A table for storing values/gradients.
  * @author Tongfei Chen
  */
-class ValueStore {
+class ValueStore private(val map: mutable.HashMap[GenExpr, Any]) {
 
-  val map = mutable.HashMap[Expr[Any], Any]()
+  def contains(x: GenExpr): Boolean = map.contains(x)
 
-  def contains[X](x: Expr[X]): Boolean = map.contains(x)
+  def apply(x: GenExpr): Any = map(x)
 
-  def apply[X](x: Expr[X]): X = map(x).asInstanceOf[X]
+  def update(x: GenExpr, value: Any): Unit = map += x -> value
 
-  def update[X](x: Expr[X], value: X) = map += x -> value
+  override def toString = map.toString()
+
+}
+
+object ValueStore {
+
+  def apply(vs: (GenExpr, Any)*) = new ValueStore(mutable.HashMap(vs: _*))
 
 }

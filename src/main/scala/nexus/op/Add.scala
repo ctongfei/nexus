@@ -16,13 +16,11 @@ trait AddF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object AddF {
 
-  class CPUAddF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]) extends AddF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
-    import cpu._
-    def forward(x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = (x1 + x2) typeWith x1.axes
-    def backward1(dy: DenseTensor[D, A], y: DenseTensor[D, A], x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = dy
-    def backward2(dy: DenseTensor[D, A], y: DenseTensor[D, A], x1: DenseTensor[D, A], x2: DenseTensor[D, A]) = dy
-  }
+  implicit def AddImpl[T[D, _ <: HList], D, A <: HList](implicit env: Env[T, D]): AddF[T[D, A], T[D, A], T[D, A]] =
+    new AddF[T[D, A], T[D, A], T[D, A]] {
+      def forward(x1: T[D, A], x2: T[D, A]) = x1 + x2
+      def backward1(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy
+      def backward2(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy
+    }
 
-  implicit def cpuAddF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): AddF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUAddF
 }
-

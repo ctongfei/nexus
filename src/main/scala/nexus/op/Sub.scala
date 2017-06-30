@@ -16,12 +16,10 @@ trait SubF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object SubF {
 
-  class CPUSubF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]) extends SubF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] {
-    def forward(x1: cpu.DenseTensor[D, A], x2: cpu.DenseTensor[D, A]) = (x1 - x2) typeWith x1.axes
-    def backward1(dy: cpu.DenseTensor[D, A], y: cpu.DenseTensor[D, A], x1: cpu.DenseTensor[D, A], x2: cpu.DenseTensor[D, A]) = dy
-    def backward2(dy: cpu.DenseTensor[D, A], y: cpu.DenseTensor[D, A], x1: cpu.DenseTensor[D, A], x2: cpu.DenseTensor[D, A]) = env.neg(dy) typeWith x2.axes
+  implicit def SubImpl[T[D, A <: HList], D, A <: HList](implicit env: Env[T, D]) = new SubF[T[D, A], T[D, A], T[D, A]] {
+    def forward(x1: T[D, A], x2: T[D, A]) = x1 - x2
+    def backward1(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy
+    def backward2(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = -dy
   }
-
-  implicit def cpuSubF[D, A <: HList](implicit env: Env[cpu.UntypedDenseTensor, D]): SubF[cpu.DenseTensor[D, A], cpu.DenseTensor[D, A], cpu.DenseTensor[D, A]] = new CPUSubF
 
 }

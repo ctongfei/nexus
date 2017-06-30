@@ -1,6 +1,7 @@
 package nexus.cpu
 
 import nexus._
+import nexus.typeop._
 import nexus.util._
 import shapeless._
 import shapeless.ops.hlist._
@@ -41,7 +42,7 @@ trait DenseTensor[D, A <: HList]
 
   def expandDim[X, N <: Nat, T <: HList]
   (axis: X, n: N)
-  (implicit d: InsertAt.Aux[A, N, X, T], nn: ToInt[N]) =
+  (implicit d: InsertAt.Aux[A, N, X, T], nn: ToInt[N]) = ???
 
 
   def asSeq: Seq[D] = ???

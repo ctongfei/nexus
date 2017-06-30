@@ -7,7 +7,7 @@ package nexus
  * @tparam Y Type of output
  * @since 0.1.0
  */
-trait Op1[X, Y] extends (Expr[X] => Expr[Y]) {
+trait Op1[X, Y] extends Module[X, Y] {
 
   type Input = X
   type Output = Y
@@ -28,6 +28,8 @@ trait Op1[X, Y] extends (Expr[X] => Expr[Y]) {
    * @return Gradient of ''x'': ∇x
    */
   def backward(dy : Y, y: Y, x: X): X
+
+  final def parameters = Seq()
 }
 
 /**
@@ -100,5 +102,6 @@ trait Op3[X1, X2, X3, Y] extends ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y]) {
 }
 
 trait GenOp3[F[X1, X2, X3, Y] <: Op3[X1, X2, X3, Y]] { self =>
+  def forward[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): Y = f.forward(x1, x2, x3)
 
 }

@@ -2,20 +2,26 @@ package nexus
 
 import nexus.util._
 
+sealed trait GenExpr
+
 /**
  * Represents a symbolic expression in a computational graph.
- * @tparam T Type of data that it conceptually holds
+ * @tparam X Type of data that it conceptually holds
  * @since 0.1.0
  * @author Tongfei Chen
  */
-sealed trait Expr[+T] {
+sealed trait Expr[+X] extends GenExpr {
   def computeGradient: Boolean
+
+  def |>[X1 >: X, Y](f: Module[X1, Y]): Expr[Y] = f(this)
+
+  def |>[F[x, y] <: Op1[x, y], X1 >: X, Y](op: GenOp1[F])(implicit f: F[X1, Y]): Expr[Y] = f(this)
 }
 
 /**
  * A placeholder for models' inputs.
  */
-case class Input[+X](name: String = ExprName.nextInput) extends Expr[X] {
+case class Input[X](name: String = ExprName.nextInput) extends Expr[X] {
   def computeGradient = false
   override def toString = name
 }
@@ -24,7 +30,7 @@ case class Input[+X](name: String = ExprName.nextInput) extends Expr[X] {
  * A constant value in a computational graph.
  * @param value Value of this constant
  */
-case class Const[+X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
+case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
   def computeGradient = false
   override def toString = name
 }
@@ -33,7 +39,7 @@ case class Const[+X](value: X, name: String = ExprName.nextConst) extends Expr[X
  * A parameter of a model.
  * @param value Initial value of this parameter
  */
-case class Param[+X](value: X, name: String) extends Expr[X] {
+case class Param[X](value: X, name: String) extends Expr[X] {
   def computeGradient = true
   override def toString = name
 }
