@@ -22,6 +22,8 @@ trait UntypedDenseTensor[D] extends UntypedTensorLike[D, UntypedDenseTensor[D]] 
 
   def apply(indices: Int*) = handle(index(indices))
 
+  def update(indices: Int*)(value: D) = handle(index(indices)) = value
+
   def sliceUntyped(n: Int, i: Int): UntypedDenseTensor[D] =
     new UntypedDenseTensor.View(
       handle = self.handle,

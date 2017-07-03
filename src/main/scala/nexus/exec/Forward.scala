@@ -1,4 +1,4 @@
-package nexus.autodiff
+package nexus.exec
 
 import nexus._
 import shapeless._
@@ -6,10 +6,14 @@ import shapeless._
 /**
  * Performs forward computation on a computation graph.
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 object Forward {
 
-  def compute[X](e: Expr[X], inputs: ValueStore): (X, ValueStore) = {
+  def compute[T[_, _ <: $$], D, X](e: Expr[X])(inputs: Assignment[_]*)(implicit env: Env[T, D]): (X, Values[T, D]) =
+    compute(e, Values[T, D](inputs: _*))
+
+  def compute[T[_, _ <: $$], D, X](e: Expr[X], inputs: Values[T, D]): (X, Values[T, D]) = {
     val values = inputs
 
     def eval[X](e: Expr[X]): X = {

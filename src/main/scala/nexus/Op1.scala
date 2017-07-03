@@ -103,5 +103,10 @@ trait Op3[X1, X2, X3, Y] extends ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y]) {
 
 trait GenOp3[F[X1, X2, X3, Y] <: Op3[X1, X2, X3, Y]] { self =>
   def forward[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): Y = f.forward(x1, x2, x3)
+  def backward1[X1, X2, X3, Y](dy: Y, y: Y, x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): X1 = f.backward1(dy, y, x1, x2, x3)
+  def backward2[X1, X2, X3, Y](dy: Y, y: Y, x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): X2 = f.backward2(dy, y, x1, x2, x3)
+  def backward3[X1, X2, X3, Y](dy: Y, y: Y, x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): X3 = f.backward3(dy, y, x1, x2, x3)
+  def ground[X1, X2, X3, Y](implicit f: F[X1, X2, X3, Y]): Op3[X1, X2, X3, Y] = f
+  def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[X1, X2, X3, Y]): Expr[Y] = Apply3(ground[X1, X2, X3, Y], x1, x2, x3)
 
 }

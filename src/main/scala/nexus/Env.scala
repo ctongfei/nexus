@@ -6,7 +6,7 @@ import shapeless._
 import scala.annotation._
 
 /**
- * Runtime environment of a tensor of type T and data type D.
+ * Runtime environment of a tensor of type T[D, _] and data type D.
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -38,6 +38,8 @@ trait Env[T[_, _ <: HList], D] {
   def addScalarU(x: Handle, u: D): Handle
   def addScalar[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(addScalarU(untype(x), u), typeOf(x))
 
+  def negS(x: D): D
+
   def negU(x: Handle): Handle
   def neg[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(negU(untype(x)), typeOf(x))
 
@@ -52,6 +54,9 @@ trait Env[T[_, _ <: HList], D] {
 
   def divU(x: Handle, y: Handle): Handle
   def div[A <: HList](x: Tensor[A], y: Tensor[A]): Tensor[A] = typeWith(divU(untype(x), untype(y)), typeOf(x))
+
+  def scaleU(x: Handle, u: D): Handle
+  def scale[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(scaleU(untype(x), u), typeOf(x))
 
   def inv(x: Handle): Handle
 
@@ -70,6 +75,8 @@ trait Env[T[_, _ <: HList], D] {
   def sigmoidU(x: Handle): Handle
   def sigmoid[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sigmoidU(untype(x)), typeOf(x))
 
+  def reluU(x: Handle): Handle
+  def relu[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(reluU(untype(x)), typeOf(x))
 
   def reduceSumU(x: Handle): Handle
   def reduceSum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(reduceSumU(untype(x)), $)

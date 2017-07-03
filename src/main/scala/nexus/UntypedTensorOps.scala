@@ -15,6 +15,8 @@ trait TensorOpsMixin {
     def +(b: T[D, A]): T[D, A] = add(a, b)
     def -(b: T[D, A]): T[D, A] = sub(a, b)
     def |*|(b: T[D, A]): T[D, A] = mul(a, b)
+    def |/|(b: T[D, A]): T[D, A] = div(a, b)
+    def :*(u: D): T[D, A] = scale(a, u)
 
     def unary_- : T[D, A] = neg(a)
 

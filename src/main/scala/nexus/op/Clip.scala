@@ -10,13 +10,16 @@ import shapeless.HList
  */
 object Clip extends ArgGenOp1[ClipF] {
 
-  def apply[X, Y](min: Double, max: Double)(implicit ev: ClipF[ClipArg, X, Y]): Op1[X, Y] =
-    ev(new ClipArg(min, max))
+  def apply[X, Y](min: Double, max: Double)(implicit af: ClipF[ClipArg, X, Y]): Op1[X, Y] =
+    af(new ClipArg(min, max))
 
 }
 
-class ClipArg(val min: Double, val max: Double)
+private[nexus] class ClipArg(val min: Double, val max: Double)
 
 trait ClipF[Arg, X, Y] extends ArgOp1[Arg, X, Y]
 object ClipF {
+
+  
+
 }

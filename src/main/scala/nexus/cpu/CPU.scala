@@ -76,6 +76,10 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   }
 
   def inplace2(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float])(f: (Float, Float) => Float): Unit = {
+    if (x1.rank == 0 && x2.rank == 0) {
+      x1.update()(f(x1(), x2()))
+      return
+    }
     var yi = 0
     var x1i = x1.offset
     var x2i = x2.offset
@@ -100,6 +104,8 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
     }
   }
 
+
+  def negS(x: Float) = -x
   def negU(x: UntypedDenseTensor[Float]) = map(x)(-_)
   def addU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_+_)
   def subU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_-_)
@@ -107,6 +113,9 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def divU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_/_)
 
   def inv(x: UntypedDenseTensor[Float]) = map(x)(1f/_)
+
+
+  def scaleU(x: UntypedDenseTensor[Float], u: Float) = map(x)(_ * u)
 
   def addInplace(x: UntypedDenseTensor[Float], d: UntypedDenseTensor[Float]) = inplace2(x, d)(_+_)
 
@@ -141,6 +150,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   }
 
   def sigmoidU(x: UntypedDenseTensor[Float]) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
+  def reluU(x: UntypedDenseTensor[Float]) = map(x)(a => if (a >= 0) a else 0f)
 
   def reduceSumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)
 }

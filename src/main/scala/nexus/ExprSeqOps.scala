@@ -7,13 +7,15 @@ package nexus
  */
 abstract class ExprSeqOps[A](val as: Expr[Seq[A]]) {
 
-  def head: Expr[A]
+  def asSeq: Seq[Expr[A]]
+
+  def head: Expr[A] = asSeq.head
 
   def tail: Expr[Seq[A]]
 
   def init: Expr[Seq[A]]
 
-  def last: Expr[A]
+  def last: Expr[A] = asSeq.last
 
   def map[B](f: Expr[A] => Expr[B]): Expr[Seq[B]]
 

@@ -21,9 +21,9 @@ object CrossEntropyLossF {
       def forward(yp: T[D, A::$], yg: T[D, A::$]) = {
         val logYp = log(yp)
         val xent = mul(yg, logYp)
-        reduceSum(xent)
+        neg(reduceSum(xent))
       }
-      def backward1(dl: T[D, $], l: T[D, $], yp: T[D, A::$], yg: T[D, A::$]) = div(yg, yp) // should times dl
+      def backward1(dl: T[D, $], l: T[D, $], yp: T[D, A::$], yg: T[D, A::$]) = neg(div(yg, yp)) // should times dl
       def backward2(dl: T[D, $], l: T[D, $], yp: T[D, A::$], yg: T[D, A::$]) = ???
     }
   
