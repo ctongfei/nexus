@@ -1,11 +1,17 @@
 package nexus.op
 
 import nexus._
-import shapeless._
 
 /**
  * Matrix-vector multiplication.
- * - Shape: (B::A, A) => B
+ *
+ * Inputs:
+ *  - Matrix \(\mathbf{X}_1\) with axes and shape \((B \to m, A \to n)\).
+ *  - Vector \(\mathbf{x}_2\) with axes and shape \((A \to n)\).
+ *
+ * Output:
+ *  - Vector \(\mathbf{y} = \mathbf{X}_1 \mathbf{x}_2\), with shape \((B \to m)\).
+ *
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -17,7 +23,7 @@ trait MVMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object MVMulF {
 
-  implicit def MVMulImpl[T[D, _ <: HList], D, A, B](implicit env: Env[T, D]): MVMulF[T[D, B::A::$], T[D, A::$], T[D, B::$]] =
+  implicit def MVMulImpl[T[D, _ <: $$], D, A, B](implicit env: Env[T, D]): MVMulF[T[D, B::A::$], T[D, A::$], T[D, B::$]] =
     new MVMulF[T[D, B::A::$], T[D, A::$], T[D, B::$]] {
       import env._
       def forward(x1: T[D, B::A::$], x2: T[D, A::$]) = mvMul(x1, x2)

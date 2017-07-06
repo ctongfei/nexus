@@ -21,6 +21,7 @@ trait Env[T[_, _ <: HList], D] {
   type Tensor[A <: HList] = T[D, A]
 
   def newTensor[A <: HList](axes: A, shape: Array[Int]): Tensor[A]
+  def newGaussianTensor[A <: HList](μ: Double, σ2: Double, axes: A, shape: Array[Int]): Tensor[A]
 
   def untype(x: T[D, _]): Handle
   def typeOf[A <: HList](x: Tensor[A]): A
@@ -58,7 +59,8 @@ trait Env[T[_, _ <: HList], D] {
   def scaleU(x: Handle, u: D): Handle
   def scale[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(scaleU(untype(x), u), typeOf(x))
 
-  def inv(x: Handle): Handle
+  def invU(x: Handle): Handle
+  def inv[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(invU(untype(x)), typeOf(x))
 
   def transposeU(x: Handle): Handle
   def transpose[A, B](x: Matrix[A, B]): Matrix[B, A] = typeWith(transposeU(untype(x)), AxesUtils.swap(typeOf(x)))
@@ -71,6 +73,9 @@ trait Env[T[_, _ <: HList], D] {
 
   def logU(x: Handle): Handle
   def log[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(logU(untype(x)), typeOf(x))
+
+  def expU(x: Handle): Handle
+  def exp[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(expU(untype(x)), typeOf(x))
 
   def sigmoidU(x: Handle): Handle
   def sigmoid[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sigmoidU(untype(x)), typeOf(x))

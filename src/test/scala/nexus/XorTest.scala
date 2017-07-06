@@ -3,11 +3,9 @@ package nexus
 import nexus.exec._
 import nexus.cpu._
 import nexus.layer._
-import nexus.op._
 import nexus.op.activation._
 import nexus.op.loss._
 import nexus.optimizer._
-import shapeless._
 
 /**
  * @author Tongfei Chen
@@ -36,28 +34,22 @@ object XorTest extends App {
   val x = Input[DenseTensor[Float, In::$]]()
   val y = Input[DenseTensor[Float, Out::$]]()
 
-  val Layer1 = Affine(In -> 2, Hidden -> 4)
-  val Layer2 = Affine(Hidden -> 4, Out -> 2)
+  val Layer1 = Affine(In -> 2, Hidden -> 2)
+  val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val output = x |> Layer1 |> Sigmoid |> Layer2 |> Sigmoid
-  val loss = CrossEntropyLoss(output, y)
+  val output = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  val loss = LogLoss(output, y)
 
-  val sgd = StochasticGradientDescent(0.1f)
+  val sgd = StochasticGradientDescent(0.02f)
 
-  for (i <- 0 until 100) {
+  for (i <- 0 until 1000000) {
     for ((xv, yv) <- xs zip ys) {
       val (lossValue, values) = Forward.compute(loss)(x ->> xv, y ->> yv)
       val gradients = Backward.compute(loss, values)
+      //println(Layer2.b.value)
+      println(s"Epoch $i: loss = ${lossValue()}")
       sgd.update(gradients)
     }
-
-    for ((xv, yv) <- xs zip ys) {
-      val (lossValue, values) = Forward.compute(loss)(x ->> xv, y ->> yv)
-      println(lossValue)
-    }
   }
-
-
   val bp = 0
-
 }

@@ -4,6 +4,8 @@ import nexus._
 import nexus.util._
 import shapeless._
 
+import scala.util._
+
 /**
  * @author Tongfei Chen
  */
@@ -13,6 +15,13 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
 
   def newTensor[A <: HList](axes: A, shape: Array[Int]) =
     DenseTensor.fromFlatArray(Array.ofDim[Float](ShapeUtils.product(shape)), axes, shape)
+
+
+  def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = {
+    val r = new Random()
+    val σ = math.sqrt(σ2)
+    DenseTensor.fromFlatArray(Array.fill(ShapeUtils.product(shape))(((r.nextGaussian() - μ) * σ).toFloat), axes, shape)
+  }
 
   def untype(x: DenseTensor[Float, _]) = x
   def typeOf[A <: HList](x: DenseTensor[Float, A]) = x.axes
@@ -112,14 +121,14 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def mulU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_*_)
   def divU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_/_)
 
-  def inv(x: UntypedDenseTensor[Float]) = map(x)(1f/_)
+  def invU(x: UntypedDenseTensor[Float]) = map(x)(1f/_)
 
 
   def scaleU(x: UntypedDenseTensor[Float], u: Float) = map(x)(_ * u)
 
   def addInplace(x: UntypedDenseTensor[Float], d: UntypedDenseTensor[Float]) = inplace2(x, d)(_+_)
 
-  def logU(x: UntypedDenseTensor[Float]) = map(x)(x => math.log(x).toFloat)
+  def logU(x: UntypedDenseTensor[Float]) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
   def getScalar(x: UntypedDenseTensor[Float]) = x.handle(0)
   def scalar(x: Float) = DenseTensor.fill(x, HNil, Array())
   def addScalarU(x: UntypedDenseTensor[Float], u: Float) = map(x)(a => a + u)
@@ -149,6 +158,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
     new UntypedDenseTensor.Contiguous[Float](z, Array(x.shape(0), y.shape(0)))
   }
 
+  def expU(x: UntypedDenseTensor[Float]) = map(x)(a => Math.exp(a).toFloat)
   def sigmoidU(x: UntypedDenseTensor[Float]) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
   def reluU(x: UntypedDenseTensor[Float]) = map(x)(a => if (a >= 0) a else 0f)
 

@@ -3,6 +3,7 @@ package nexus
 import nexus.exec._
 import nexus.cpu._
 import nexus.op._
+import nexus.op.activation._
 import nexus.optimizer._
 
 /**
@@ -10,6 +11,14 @@ import nexus.optimizer._
  * @author Tongfei Chen
  */
 object Test0 extends App {
+
+  class A; val A = new A
+
+  val a = Vector(A)(Array(1f, 4f))
+  val sa = Softmax.forward(a)
+  val da = Softmax.backward(Vector(A)(Array(1f, 1f)), sa, a)
+
+  val bp = 0
 
   val p = Param(DenseTensor.scalar(3.0f), "p")
 

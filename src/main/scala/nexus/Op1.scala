@@ -35,6 +35,10 @@ trait Op1[X, Y] extends Module[X, Y] {
 /**
  * Any generic unary neural (differential) function whose type parameters (axes, etc.) are not yet grounded:
  * itself can be applied to variables of different types constrained by the type parameter [[F]].
+ *
+ * Essentially, this function can be applied to a symbolic expression of type [[Expr]]`[X]` '''if and only if''' an
+ * implicit [[F]]`[X, Y]` is found, and the application returns a symbolic expression of type [[Expr]]`[Y]`.
+ *
  * @tparam F Type constraint expressing what type of variables this operation can apply to
  * @since 0.1.0
  */

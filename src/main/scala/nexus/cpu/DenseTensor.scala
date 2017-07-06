@@ -73,5 +73,12 @@ object DenseTensor {
   class View[D, A <: HList](handle: Array[D], val axes: A, shape: Array[Int], offset: Int, stride: Array[Int])
     extends UntypedDenseTensor.View[D](handle, shape, offset, stride) with DenseTensor[D, A]
 
+}
 
+object Scalar {
+  def apply[D: ClassTag](x: D) = DenseTensor.fromFlatArray(Array(x), $, Array())
+}
+
+object Vector {
+  def apply[D, A](A: A)(array: Array[D]) = DenseTensor.fromFlatArray(array, A::$, Array(array.length))
 }

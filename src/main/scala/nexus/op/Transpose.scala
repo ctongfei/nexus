@@ -1,9 +1,6 @@
 package nexus.op
 
 import nexus._
-import nexus.cpu.DenseTensor
-import nexus.util._
-import shapeless._
 
 /**
  * Transposition of a matrix (2-D tensor).
@@ -18,7 +15,7 @@ trait TransposeF[X, Y] extends Op1[X, Y] {
 
 object TransposeF {
 
-  implicit def TransposeImpl[T[D, _ <: HList], D, A, B](implicit env: Env[T, D]) = new TransposeF[T[D, A::B::$], T[D, B::A::$]] {
+  implicit def TransposeImpl[T[D, _ <: $$], D, A, B](implicit env: Env[T, D]) = new TransposeF[T[D, A::B::$], T[D, B::A::$]] {
     import env._
     def forward(x: T[D, A::B::$]) = transpose(x)
     def backward(dy: T[D, B::A::$], y: T[D, B::A::$], x: T[D, A::B::$]) = transpose(dy)
