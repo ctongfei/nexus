@@ -5,7 +5,10 @@ import shapeless._
 /**
  * Typelevel function that gets the index of type [[X]] in [[L]].
  */
-trait IndexOf[L <: HList, X] extends DepFn0 { type Out <: Nat }
+trait IndexOf[L <: HList, X] extends DepFn0 {
+  type Out <: Nat
+  def toInt: Int
+}
 
 object IndexOf {
 
@@ -16,13 +19,15 @@ object IndexOf {
     new IndexOf[X :: T, X] {
         type Out = _0
         def apply() = Nat._0
-      }
+        def toInt = 0
+    }
 
   implicit def indexOfN[T <: HList, H, X, I <: Nat]
-  (implicit indexOfP: IndexOf.Aux[T, X, I]): Aux[H :: T, X, Succ[I]] =
+  (implicit p: IndexOf.Aux[T, X, I]): Aux[H :: T, X, Succ[I]] =
     new IndexOf[H :: T, X] {
         type Out = Succ[I]
         def apply() = Succ[I]
+        def toInt = p.toInt + 1
     }
 
 }

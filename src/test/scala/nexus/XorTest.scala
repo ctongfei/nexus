@@ -40,9 +40,9 @@ object XorTest extends App {
   val output = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
   val loss = LogLoss(output, y)
 
-  val sgd = StochasticGradientDescent(0.02f)
+  val sgd = StochasticGradientDescent(0.1f)
 
-  for (i <- 0 until 1000000) {
+  for (i <- 0 until 100000) {
     for ((xv, yv) <- xs zip ys) {
       val (lossValue, values) = Forward.compute(loss)(x ->> xv, y ->> yv)
       val gradients = Backward.compute(loss, values)

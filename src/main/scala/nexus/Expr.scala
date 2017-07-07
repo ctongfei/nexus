@@ -24,6 +24,8 @@ sealed trait Expr[+X] extends GenExpr {
 case class Input[X](name: String = ExprName.nextInput) extends Expr[X] {
   def computeGradient = false
   override def toString = name
+
+  def =>>[Y](y: Expr[Y]): Module[X, Y] = ???
 }
 
 /**
