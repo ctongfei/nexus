@@ -1,5 +1,6 @@
 package nexus
 
+import nexus.typelevel._
 import nexus.util._
 import shapeless._
 
@@ -30,9 +31,11 @@ trait Env[T[_, _ <: HList], D] {
   def zero: D
   def one: D
 
+  def fromDouble(d: Double): D
+  def fromFloat(f: Float): D
+
   def getScalar(x: Handle): D
   def scalar(x: D): Handle
-
 
   def addInplace(x: Handle, d: Handle): Unit
 
@@ -62,14 +65,11 @@ trait Env[T[_, _ <: HList], D] {
   def invU(x: Handle): Handle
   def inv[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(invU(untype(x)), typeOf(x))
 
+  def sqrU(x: Handle): Handle
+  def sqr[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sqrU(untype(x)), typeOf(x))
+
   def transposeU(x: Handle): Handle
   def transpose[A, B](x: Matrix[A, B]): Matrix[B, A] = typeWith(transposeU(untype(x)), AxesUtils.swap(typeOf(x)))
-
-  def mvMulU(x: Handle, y: Handle): Handle
-  def mvMul[A, B](x: Matrix[A, B], y: Vector[B]): Vector[A] = typeWith(mvMulU(untype(x), untype(y)), typeOf(x).head::$)
-
-  def vvMulU(x: Handle, y: Handle): Handle
-  def vvMul[A, B](x: Vector[A], y: Vector[B]): Matrix[A, B] = typeWith(vvMulU(untype(x), untype(y)), typeOf(x).head::typeOf(y).head::$)
 
   def logU(x: Handle): Handle
   def log[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(logU(untype(x)), typeOf(x))
@@ -86,5 +86,15 @@ trait Env[T[_, _ <: HList], D] {
   def reduceSumU(x: Handle): Handle
   def reduceSum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(reduceSumU(untype(x)), $)
 
+
+  def mvMulU(x: Handle, y: Handle): Handle
+  def mvMul[A, B](x: Matrix[A, B], y: Vector[B]): Vector[A] = typeWith(mvMulU(untype(x), untype(y)), typeOf(x).head::$)
+
+  def vvMulU(x: Handle, y: Handle): Handle
+  def vvMul[A, B](x: Vector[A], y: Vector[B]): Matrix[A, B] = typeWith(vvMulU(untype(x), untype(y)), typeOf(x).head::typeOf(y).head::$)
+
+  def tMulU(x: Handle, y: Handle, matchedIndices: Seq[(Int, Int)]): Handle
+  def tMul[A <: HList, B <: HList, C <: HList](x: Tensor[A], y: Tensor[B])(implicit sd: SymDiff.Aux[A, B, C]): Tensor[C] =
+    typeWith(tMulU(untype(x), untype(y), sd.matchedIndices), sd(typeOf(x), typeOf(y)))
 
 }

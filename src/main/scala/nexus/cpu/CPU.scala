@@ -30,6 +30,9 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def zero = 0f
   def one = 1f
 
+  def fromDouble(d: Double) = d.toFloat
+  def fromFloat(f: Float) = f
+
   def map(x: UntypedDenseTensor[Float])(f: Float => Float): UntypedDenseTensor[Float] = {
     import x._
     if (x.rank == 0) return scalar(f(x()))
@@ -121,6 +124,8 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def mulU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_*_)
   def divU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_/_)
 
+
+  def sqrU(x: UntypedDenseTensor[Float]) = map(x)(x => x * x)
   def invU(x: UntypedDenseTensor[Float]) = map(x)(1f/_)
 
 
@@ -163,5 +168,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def reluU(x: UntypedDenseTensor[Float]) = map(x)(a => if (a >= 0) a else 0f)
 
   def reduceSumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)
+
+  def tMulU(x: UntypedDenseTensor[Float], y: UntypedDenseTensor[Float], matchedIndices: Seq[(Int, Int)]) = ???
 }
 

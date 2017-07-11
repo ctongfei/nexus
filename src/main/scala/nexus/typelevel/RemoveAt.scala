@@ -1,9 +1,10 @@
-package nexus.typeop
+package nexus.typelevel
 
 import shapeless._
 
 /**
  * Typelevel function that removes the [[I]]th type in [[L]].
+ * @author Tongfei Chen
  */
 trait RemoveAt[L <: HList, I <: Nat] extends DepFn1[L] { type Out <: HList }
 

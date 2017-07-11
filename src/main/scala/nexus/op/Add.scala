@@ -22,5 +22,4 @@ object AddF {
       def backward1(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy
       def backward2(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy
     }
-
 }

@@ -1,6 +1,7 @@
 package nexus
 
 import nexus.op._
+import nexus.typelevel._
 import shapeless.HList
 
 /**
@@ -11,10 +12,13 @@ trait ExprTensorMixin {
   implicit class ExprTensorOps[T[_, _ <: HList], D, A <: HList](val x: Expr[T[D, A]]) {
 
     def +(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = Add(x, y)
+    def -(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = Sub(x, y)
 
-    def |>[Y](op: Module[T[D, A], Y]) = op(x)
+    def |*|(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = EMul(x, y)
+    def ⊙(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = EMul(x, y)
 
-    def |>[F[X, Y] <: Op1[X, Y], Y](op: GenOp1[F])(implicit f: F[T[D, A], Y]) = f(x)
+
+    def |/|(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = EDiv(x, y)
 
   }
 

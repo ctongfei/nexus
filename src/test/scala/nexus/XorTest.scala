@@ -3,6 +3,7 @@ package nexus
 import nexus.exec._
 import nexus.cpu._
 import nexus.layer._
+import nexus.op._
 import nexus.op.activation._
 import nexus.op.loss._
 import nexus.optimizer._
@@ -37,19 +38,24 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val output = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  val hidden = x |> Layer1 |> Sigmoid
+
+  val output = hidden |> Layer2 |> Softmax
+
   val loss = LogLoss(output, y)
 
   val sgd = StochasticGradientDescent(0.1f)
 
-  for (i <- 0 until 100000) {
+  for (i <- 0 until 5000) {
+    var averageLoss = 0f
     for ((xv, yv) <- xs zip ys) {
       val (lossValue, values) = Forward.compute(loss)(x ->> xv, y ->> yv)
       val gradients = Backward.compute(loss, values)
       //println(Layer2.b.value)
-      println(s"Epoch $i: loss = ${lossValue()}")
+      averageLoss += lossValue()
       sgd.update(gradients)
     }
+    println(s"Epoch $i: loss = ${averageLoss / 4.0}")
   }
   val bp = 0
 }

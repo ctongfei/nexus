@@ -1,4 +1,4 @@
-package nexus.typeop
+package nexus.typelevel
 
 import shapeless._
 

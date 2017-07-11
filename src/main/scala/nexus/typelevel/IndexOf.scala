@@ -1,9 +1,10 @@
-package nexus.typeop
+package nexus.typelevel
 
 import shapeless._
 
 /**
  * Typelevel function that gets the index of type [[X]] in [[L]].
+ * @author Tongfei Chen
  */
 trait IndexOf[L <: HList, X] extends DepFn0 {
   type Out <: Nat

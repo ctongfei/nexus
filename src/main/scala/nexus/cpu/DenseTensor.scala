@@ -1,7 +1,7 @@
 package nexus.cpu
 
 import nexus._
-import nexus.typeop._
+import nexus.typelevel._
 import nexus.util._
 import shapeless._
 import shapeless.ops.hlist._
