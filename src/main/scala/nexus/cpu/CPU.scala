@@ -126,6 +126,9 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
 
 
   def sqrU(x: UntypedDenseTensor[Float]) = map(x)(x => x * x)
+  def sqrtU(x: UntypedDenseTensor[Float]) = map(x)(x => Math.sqrt(x).toFloat)
+
+  def invS(u: Float) = 1f / u
   def invU(x: UntypedDenseTensor[Float]) = map(x)(1f/_)
 
 
@@ -167,7 +170,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def sigmoidU(x: UntypedDenseTensor[Float]) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
   def reluU(x: UntypedDenseTensor[Float]) = map(x)(a => if (a >= 0) a else 0f)
 
-  def reduceSumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)
+  def sumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)
 
   def tMulU(x: UntypedDenseTensor[Float], y: UntypedDenseTensor[Float], matchedIndices: Seq[(Int, Int)]) = ???
 }

@@ -2,11 +2,10 @@ package nexus.op
 
 import nexus._
 import nexus.typelevel._
-import shapeless.Nat
-import shapeless.ops.tuple._
 
 /**
  * Renaming an axis in any tensor.
+ * @example {{{ Rename(B -> C) }}}
  * @author Tongfei Chen
  * @since 0.1.0
  */

@@ -6,8 +6,7 @@ package nexus
 trait ArgOp1[Arg, X, Y] extends (Arg => Op1[X, Y])
 
 /**
- * Any generic unary neural (differential) function whose type parameters (axes, etc.) are not yet grounded:
- * itself can be applied to variables of different types constrained by the type parameter [[F]].
+ * Polymorphic unary neural (differential) function with argument.
  * @tparam F Type constraint expressing what type of variables this operation can apply to
  * @since 0.1.0
  */

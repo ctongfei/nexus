@@ -62,11 +62,15 @@ trait Env[T[_, _ <: HList], D] {
   def scaleU(x: Handle, u: D): Handle
   def scale[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(scaleU(untype(x), u), typeOf(x))
 
+  def invS(u: D): D
   def invU(x: Handle): Handle
   def inv[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(invU(untype(x)), typeOf(x))
 
   def sqrU(x: Handle): Handle
   def sqr[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sqrU(untype(x)), typeOf(x))
+
+  def sqrtU(x: Handle): Handle
+  def sqrt[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sqrtU(untype(x)), typeOf(x))
 
   def transposeU(x: Handle): Handle
   def transpose[A, B](x: Matrix[A, B]): Matrix[B, A] = typeWith(transposeU(untype(x)), AxesUtils.swap(typeOf(x)))
@@ -83,8 +87,8 @@ trait Env[T[_, _ <: HList], D] {
   def reluU(x: Handle): Handle
   def relu[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(reluU(untype(x)), typeOf(x))
 
-  def reduceSumU(x: Handle): Handle
-  def reduceSum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(reduceSumU(untype(x)), $)
+  def sumU(x: Handle): Handle
+  def sum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(sumU(untype(x)), $)
 
 
   def mvMulU(x: Handle, y: Handle): Handle

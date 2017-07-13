@@ -28,7 +28,7 @@ object LogLossF {
     new LogLossF[T[D, A::$], T[D, A::$], T[D, $]] {
       import env._
       def forward(yp: T[D, A::$], yg: T[D, A::$]) =
-        -(reduceSum(yg |*| log(yp)))
+        -(sum(yg |*| log(yp)))
       def backward1(dl: T[D, $], l: T[D, $], yp: T[D, A::$], yg: T[D, A::$]) = {
          -(yg |/| yp)
       } // should times dl
