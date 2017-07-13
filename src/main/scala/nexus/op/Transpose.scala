@@ -7,7 +7,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Transpose extends GenOp1[TransposeF]
+object Transpose extends PolyOp1[TransposeF]
 
 trait TransposeF[X, Y] extends Op1[X, Y] {
   def name = "Transpose"

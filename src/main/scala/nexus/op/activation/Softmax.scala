@@ -14,7 +14,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Softmax extends GenOp1[SoftmaxF]
+object Softmax extends PolyOp1[SoftmaxF]
 
 @impMsg("Cannot apply Softmax on ${X}.")
 trait SoftmaxF[X, Y] extends Op1[X, Y] {

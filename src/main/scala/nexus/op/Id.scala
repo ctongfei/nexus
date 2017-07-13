@@ -8,7 +8,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Id extends GenOp1[IdF]
+object Id extends PolyOp1[IdF]
 
 trait IdF[X, Y] extends Op1[X, Y] {
   def name = "Id"

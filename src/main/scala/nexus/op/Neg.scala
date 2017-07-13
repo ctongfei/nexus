@@ -7,7 +7,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Neg extends GenOp1[NegF]
+object Neg extends PolyOp1[NegF]
 
 @impMsg("Cannot apply Neg to ${X}.")
 trait NegF[X, Y] extends Op1[X, Y] {

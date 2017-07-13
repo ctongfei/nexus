@@ -15,7 +15,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object LogLoss extends GenOp2[LogLossF]
+object LogLoss extends PolyOp2[LogLossF]
 
 @impMsg("Cannot apply LogLoss to ${YP} and ${YG}.")
 trait LogLossF[YP, YG, L] extends Op2[YP, YG, L] {

@@ -10,22 +10,34 @@ sealed trait GenExpr
  * @since 0.1.0
  * @author Tongfei Chen
  */
-sealed trait Expr[+X] extends GenExpr {
+sealed trait Expr[X] extends GenExpr {
   def computeGradient: Boolean
 
-  def |>[X1 >: X, Y](f: Module[X1, Y]): Expr[Y] = f(this)
+  def |>[Y](f: Module[X, Y]): Expr[Y] = f(this)
 
-  def |>[F[x, y] <: Op1[x, y], X1 >: X, Y](op: GenOp1[F])(implicit f: F[X1, Y]): Expr[Y] = f(this)
+  def |>[F[x, y] <: Op1[x, y], Y](op: PolyOp1[F])(implicit f: F[X, Y]): Expr[Y] = f(this)
+
+  def substitute[A](ax: Input[A], a: Expr[A]): Expr[X] = this match {
+    case x: Input[X] => if (x == ax) a.asInstanceOf[Expr[X]] else x
+    case x: Const[X] => x
+    case x: Param[X] => x
+    case Apply1(op, x) => Apply1(op, x.substitute(ax, a))
+    case Apply2(op, x1, x2) => Apply2(op, x1.substitute(ax, a), x2.substitute(ax, a))
+    case Apply3(op, x1, x2, x3) => Apply3(op, x1.substitute(ax, a), x2.substitute(ax, a), x3.substitute(ax, a))
+  }
 }
 
 /**
  * A placeholder for models' inputs.
  */
-case class Input[X](name: String = ExprName.nextInput) extends Expr[X] {
+case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
   def computeGradient = false
   override def toString = name
 
-  def =>>[Y](y: Expr[Y]): Module[X, Y] = ???
+  /** Constructs a neural function (lambda expression). */
+  def =>>[Y](y: Expr[Y]): Module[X, Y] = new Module[X, Y] {
+    def apply(x: Expr[X]) = y.substitute(self, x)
+  }
 }
 
 /**

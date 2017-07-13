@@ -8,7 +8,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sub extends GenOp2[SubF]
+object Sub extends PolyOp2[SubF]
 
 trait SubF[X1, X2, Y] extends Op2[X1, X2, Y] {
   def name = "Sub"

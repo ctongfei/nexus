@@ -8,7 +8,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object EMul extends GenOp2[EMulF]
+object EMul extends PolyOp2[EMulF]
 
 trait EMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
   def name = "EMul"

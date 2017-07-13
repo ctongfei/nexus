@@ -15,7 +15,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sigmoid extends GenOp1[SigmoidF]
+object Sigmoid extends PolyOp1[SigmoidF]
 
 @impMsg("Cannot apply Sigmoid on ${X}.")
 trait SigmoidF[X, Y] extends Op1[X, Y] {

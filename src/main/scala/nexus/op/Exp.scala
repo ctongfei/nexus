@@ -7,7 +7,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Exp extends GenOp1[ExpF]
+object Exp extends PolyOp1[ExpF]
 
 trait ExpF[X, Y] extends Op1[X, Y] {
   def name = "Exp"

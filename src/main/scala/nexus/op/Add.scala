@@ -7,7 +7,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Add extends GenOp2[AddF]
+object Add extends PolyOp2[AddF]
 
 @impMsg("Cannot apply Add to ${X1} and ${X2}.")
 trait AddF[X1, X2, Y] extends Op2[X1, X2, Y] {

@@ -8,7 +8,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object EDiv extends GenOp2[EDivF]
+object EDiv extends PolyOp2[EDivF]
 
 trait EDivF[X1, X2, Y] extends Op2[X1, X2, Y] {
   def name = "EDiv"

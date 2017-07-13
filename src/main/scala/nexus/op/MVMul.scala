@@ -15,7 +15,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object MVMul extends GenOp2[MVMulF]
+object MVMul extends PolyOp2[MVMulF]
 
 trait MVMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
   def name = "MVMul"

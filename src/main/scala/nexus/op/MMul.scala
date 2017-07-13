@@ -8,7 +8,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object MMul extends GenOp2[MMulF]
+object MMul extends PolyOp2[MMulF]
 
 @impMsg("Cannot apply MMul to ${X1} and ${X2}.")
 trait MMulF[X1, X2, Y] extends Op2[X1, X2, Y] {

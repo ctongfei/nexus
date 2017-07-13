@@ -9,7 +9,7 @@ import nexus.typelevel._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object TMul extends GenOp2[TMulF]
+object TMul extends PolyOp2[TMulF]
 
 trait TMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
   def name = "TMul"

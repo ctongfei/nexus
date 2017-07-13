@@ -7,4 +7,5 @@ Design goals:
  - **Typesafe**.  Very strong static type checking to eliminate most bugs at compile time.
  - **[TODO] Automatic batching over sequences/trees**. Free programmers from the pain of manual batching.
  - **[TODO] GPU Acceleration**. Reuse `Torch` C++ core.
+ - **[TODO] Differentiation through any `HList`/`Coproduct`**.
  
