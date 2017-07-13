@@ -11,11 +11,14 @@ sealed trait GenExpr
  * @author Tongfei Chen
  */
 sealed trait Expr[X] extends GenExpr {
+
   def computeGradient: Boolean
 
   def |>[Y](f: Module[X, Y]): Expr[Y] = f(this)
 
   def |>[F[x, y] <: Op1[x, y], Y](op: PolyOp1[F])(implicit f: F[X, Y]): Expr[Y] = f(this)
+
+  def |>[F[a, x, y] <: ArgOp1[a, x, y], A, Y](op: ArgPolyOp1[A, F])(implicit f: F[A, X, Y]): Expr[Y] = f(op.arg)(this)
 
   def substitute[A](ax: Input[A], a: Expr[A]): Expr[X] = this match {
     case x: Input[X] => if (x == ax) a.asInstanceOf[Expr[X]] else x
