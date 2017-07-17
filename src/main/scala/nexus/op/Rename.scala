@@ -9,11 +9,11 @@ import nexus.typelevel._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class Rename[U, V](uv: (U, V)) extends ArgPolyOp1[(U, V), RenameF] {
-  def arg = uv
+case class Rename[U, V](uv: (U, V)) extends ParaPolyOp1[(U, V), RenameF] {
+  def parameter = uv
 }
 
-trait RenameF[P, X, Y] extends ArgOp1[P, X, Y]
+trait RenameF[P, X, Y] extends (P => Op1[X, Y])
 
 object RenameF {
 

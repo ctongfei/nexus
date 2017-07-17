@@ -7,11 +7,11 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class Dropout(rate: Double) extends ArgPolyOp1[Double, DropoutF] {
-  def arg = rate
+case class Dropout(rate: Double) extends ParaPolyOp1[Double, DropoutF] {
+  def parameter = rate
 }
 
-trait DropoutF[Arg, X, Y] extends ArgOp1[Arg, X, Y]
+trait DropoutF[P, X, Y] extends (P => Op1[X, Y])
 
 object DropoutF {
 

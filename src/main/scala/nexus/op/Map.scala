@@ -8,11 +8,11 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class Map[D](f: Op1[D, D]) extends ArgPolyOp1[Op1[D, D], MapF] {
-  def arg = f
+case class Map[D](f: Op1[D, D]) extends ParaPolyOp1[Op1[D, D], MapF] {
+  def parameter = f
 }
 
-trait MapF[Arg, X, Y] extends ArgOp1[Arg, X, Y]
+trait MapF[P, X, Y] extends (P => Op1[X, Y])
 
 object MapF {
 

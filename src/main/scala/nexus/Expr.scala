@@ -12,11 +12,20 @@ sealed trait GenExpr
  */
 sealed trait Expr[X] extends GenExpr {
 
+  /**
+   * Passes this expression through any neural function.
+   */
   def |>[Y](f: Module[X, Y]): Expr[Y] = f(this)
 
-  def |>[F[x, y] <: Op1[x, y], Y](op: PolyOp1[F])(implicit f: F[X, Y]): Expr[Y] = f(this)
+  /**
+   * Passes this expression through any polymorphic neural function.
+   */
+  def |>[F[X, Y] <: Op1[X, Y], Y](op: PolyOp1[F])(implicit f: F[X, Y]): Expr[Y] = f(this)
 
-  def |>[F[a, x, y] <: ArgOp1[a, x, y], A, Y](op: ArgPolyOp1[A, F])(implicit f: F[A, X, Y]): Expr[Y] = f(op.arg)(this)
+  /**
+   * Passes this expression through any parametrized polymorphic neural function.
+   */
+  def |>[F[P, X, Y] <: (P => Op1[X, Y]), P, Y](op: ParaPolyOp1[P, F])(implicit f: F[P, X, Y]): Expr[Y] = f(op.parameter)(this)
 
   def substitute[A](ax: Input[A], a: Expr[A]): Expr[X] = this match {
     case x: Input[X] => if (x == ax) a.asInstanceOf[Expr[X]] else x
