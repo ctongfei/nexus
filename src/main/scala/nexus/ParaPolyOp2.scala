@@ -1,6 +1,5 @@
 package nexus
 
-
 /**
  * Parametrized polymorphic binary differentiable function.
  * @tparam F Type constraint expressing what type of variables this operation can apply to

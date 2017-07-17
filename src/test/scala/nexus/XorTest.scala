@@ -9,15 +9,18 @@ import nexus.op.loss._
 import nexus.optimizer._
 
 /**
+ * Neural network 101: XOR network.
  * @author Tongfei Chen
  */
 object XorTest extends App {
 
+  // Define names of axes (an empty class and an object with the same name)
   class Batch; val Batch = new Batch
   class In; val In = new In
   class Hidden; val Hidden = new Hidden
   class Out; val Out = new Out
 
+  /** Prepare the data. */
   val X = DenseTensor.fromNestedArray(Batch::In::$)(Array(
     Array(0f, 0f),
     Array(1f, 0f),
@@ -32,30 +35,37 @@ object XorTest extends App {
   val xs = X along Batch
   val ys = Y along Batch
 
+  /** Construct the computation graph (completely typesafe!) */
   val x = Input[DenseTensor[Float, In::$]]()
   val y = Input[DenseTensor[Float, Out::$]]()
 
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val hidden = x |> Layer1 |> Sigmoid
-
-  val output = hidden |> Layer2 |> Softmax
+  val output = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
   val loss = LogLoss(output, y)
 
+  /** Declare an optimizer. */
   val sgd = StochasticGradientDescent(0.1f)
 
-  for (i <- 0 until 5000) {
+  /** Start running! */
+  for (epoch <- 0 until 5000) {
     var averageLoss = 0f
+
+    // For each sample
     for ((xv, yv) <- xs zip ys) {
-      val (lossValue, values) = Forward.compute(loss)(x ->> xv, y ->> yv)
-      val gradients = Backward.compute(loss, values)
-      //println(Layer2.b.value)
+
+      val (lossValue, values) =  Forward .compute(loss)(x ->> xv, y ->> yv) // feed
+      val gradients           =  Backward.compute(loss, values)
+
       averageLoss += lossValue()
+
       sgd.update(gradients)
+
     }
-    println(s"Epoch $i: loss = ${averageLoss / 4.0}")
+
+    println(s"Epoch $epoch: loss = ${averageLoss / 4.0}")
   }
-  val bp = 0
+
 }
