@@ -12,7 +12,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot find a device to run ${T} with element type ${D}.")
-trait Env[T[_, _ <: HList], D] {
+trait Env[T[_, _ <: HList], @specialized(Float, Double) D] {
 
   type Handle
 
@@ -21,6 +21,8 @@ trait Env[T[_, _ <: HList], D] {
   type Matrix[A, B] = T[D, A::B::$]
   type Tensor[A <: HList] = T[D, A]
 
+  def field: Field[D]
+
   def newTensor[A <: HList](axes: A, shape: Array[Int]): Tensor[A]
   def newGaussianTensor[A <: HList](μ: Double, σ2: Double, axes: A, shape: Array[Int]): Tensor[A]
 
@@ -28,8 +30,8 @@ trait Env[T[_, _ <: HList], D] {
   def typeOf[A <: HList](x: Tensor[A]): A
   def typeWith[A <: HList](x: Handle, a: A): Tensor[A]
 
-  def zero: D
-  def one: D
+  def zero: D = field.zero
+  def one: D = field.one
 
   def fromDouble(d: Double): D
   def fromFloat(f: Float): D
@@ -37,12 +39,21 @@ trait Env[T[_, _ <: HList], D] {
   def getScalar(x: Handle): D
   def scalar(x: D): Handle
 
+  def mapU(x: Handle)(f: D => D): Handle
+  def map[A <: HList](x: Tensor[A])(f: D => D): Tensor[A] = typeWith(mapU(untype(x))(f), typeOf(x))
+
+  def zipWithU(x1: Handle, x2: Handle)(f: (D, D) => D): Handle
+  def zipWith[A <: HList](x1: Tensor[A], x2: Tensor[A])(f: (D, D) => D): Tensor[A] = typeWith(zipWithU(untype(x1), untype(x2))(f), typeOf(x1))
+
+  def zipWith3U(x1: Handle, x2: Handle, x3: Handle)(f: (D, D, D) => D): Handle
+  def zipWith3[A <: HList](x1: Tensor[A], x2: Tensor[A], x3: Tensor[A])(f: (D, D, D) => D): Tensor[A] = typeWith(zipWith3U(untype(x1), untype(x2), untype(x3))(f), typeOf(x1))
+
   def addInplace(x: Handle, d: Handle): Unit
 
   def addScalarU(x: Handle, u: D): Handle
   def addScalar[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(addScalarU(untype(x), u), typeOf(x))
 
-  def negS(x: D): D
+  def negS(x: D): D = field.negate(x)
 
   def negU(x: Handle): Handle
   def neg[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(negU(untype(x)), typeOf(x))
@@ -62,7 +73,7 @@ trait Env[T[_, _ <: HList], D] {
   def scaleU(x: Handle, u: D): Handle
   def scale[A <: HList](x: Tensor[A], u: D): Tensor[A] = typeWith(scaleU(untype(x), u), typeOf(x))
 
-  def invS(u: D): D
+  def invS(u: D): D = field.reciprocal(u)
   def invU(x: Handle): Handle
   def inv[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(invU(untype(x)), typeOf(x))
 

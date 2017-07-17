@@ -22,12 +22,12 @@ trait TensorOpsMixin {
     def :*(u: D): T[D, A] = scale(a, u)
     def :*(u: Float): T[D, A] = scale(a, fromFloat(u))
     def :*(u: Double): T[D, A] = scale(a, fromDouble(u))
-    def :*(u: T[D, $]): T[D, A] = scale(a, getScalar(untype(u)))
+    def :*(u: T[D, $])(implicit di: DummyImplicit): T[D, A] = scale(a, getScalar(untype(u)))
 
     def :/(u: D): T[D, A] = scale(a, invS(u))
     def :/(u: Float): T[D, A] = scale(a, fromFloat(1f / u))
     def :/(u: Double): T[D, A] = scale(a, fromDouble(1d / u))
-    def :/(u: T[D, $]): T[D, A] = scale(a, getScalar(untype(u)))
+    def :/(u: T[D, $])(implicit di: DummyImplicit): T[D, A] = scale(a, getScalar(untype(u)))
 
     def ⋈[B <: HList, C <: HList](b: T[D, B])(implicit env: Env[T, D], sd: SymDiff.Aux[A, B, C]): T[D, C] = tMul(a, b)
 

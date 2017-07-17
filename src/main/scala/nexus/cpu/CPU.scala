@@ -16,6 +16,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def newTensor[A <: HList](axes: A, shape: Array[Int]) =
     DenseTensor.fromFlatArray(Array.ofDim[Float](ShapeUtils.product(shape)), axes, shape)
 
+  def field = algebra.instances.all.floatAlgebra
 
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = {
     val r = new Random()
@@ -27,13 +28,10 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def typeOf[A <: HList](x: DenseTensor[Float, A]) = x.axes
   def typeWith[A <: HList](x: UntypedDenseTensor[Float], a: A) = x typeWith a
 
-  def zero = 0f
-  def one = 1f
-
   def fromDouble(d: Double) = d.toFloat
   def fromFloat(f: Float) = f
 
-  def map(x: UntypedDenseTensor[Float])(f: Float => Float): UntypedDenseTensor[Float] = {
+  def mapU(x: UntypedDenseTensor[Float])(f: Float => Float): UntypedDenseTensor[Float] = {
     import x._
     if (x.rank == 0) return scalar(f(x()))
     val y = new Array[Float](size)
@@ -59,7 +57,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
     new UntypedDenseTensor.Contiguous[Float](y, shape)
   }
 
-  def zipWith(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float])(f: (Float, Float) => Float): UntypedDenseTensor[Float] = {
+  def zipWithU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float])(f: (Float, Float) => Float): UntypedDenseTensor[Float] = {
     if (x1.rank == 0 && x2.rank == 0) return scalar(f(x1(), x2()))
     val y = new Array[Float](x1.size)
     var yi = 0
@@ -79,6 +77,38 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
           indices(d) += 1
           x1i += x1.stride(d) - (x1.stride(d + 1) * x1.shape(d + 1))
           x2i += x2.stride(d) - (x2.stride(d + 1) * x2.shape(d + 1))
+        }
+        d = x1.rank - 1
+      }
+      yi += 1
+    }
+    new UntypedDenseTensor.Contiguous[Float](y, x1.shape)
+  }
+
+
+  def zipWith3U(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float], x3: UntypedDenseTensor[Float])(f: (Float, Float, Float) => Float): UntypedDenseTensor[Float] = {
+    if (x1.rank == 0 && x2.rank == 0 && x3.rank == 0) return scalar(f(x1(), x2(), x3()))
+    val y = new Array[Float](x1.size)
+    var yi = 0
+    var x1i = x1.offset
+    var x2i = x2.offset
+    val x3i = x3.offset
+    var d = x1.rank - 1
+    val indices = Array.fill(x1.rank)(0)
+    while (yi < x1.size) {
+      y(yi) = f(x1.handle(x1i), x2.handle(x2i), x3.handle(x3i))
+      x1i += x1.stride(d)
+      x2i += x2.stride(d)
+      x3i += x3.stride(d)
+      indices(d) += 1
+      if (indices(d) >= x1.shape(d) && d > 0) {
+        while (indices(d) >= x1.shape(d) && d > 0) {
+          indices(d) = 0
+          d -= 1
+          indices(d) += 1
+          x1i += x1.stride(d) - (x1.stride(d + 1) * x1.shape(d + 1))
+          x2i += x2.stride(d) - (x2.stride(d + 1) * x2.shape(d + 1))
+          x3i += x3.stride(d) - (x3.stride(d + 1) * x3.shape(d + 1))
         }
         d = x1.rank - 1
       }
@@ -117,29 +147,27 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   }
 
 
-  def negS(x: Float) = -x
-  def negU(x: UntypedDenseTensor[Float]) = map(x)(-_)
-  def addU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_+_)
-  def subU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_-_)
-  def mulU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_*_)
-  def divU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWith(x1, x2)(_/_)
+  def negU(x: UntypedDenseTensor[Float]) = mapU(x)(-_)
+  def addU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWithU(x1, x2)(_+_)
+  def subU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWithU(x1, x2)(_-_)
+  def mulU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWithU(x1, x2)(_*_)
+  def divU(x1: UntypedDenseTensor[Float], x2: UntypedDenseTensor[Float]) = zipWithU(x1, x2)(_/_)
 
 
-  def sqrU(x: UntypedDenseTensor[Float]) = map(x)(x => x * x)
-  def sqrtU(x: UntypedDenseTensor[Float]) = map(x)(x => Math.sqrt(x).toFloat)
+  def sqrU(x: UntypedDenseTensor[Float]) = mapU(x)(x => x * x)
+  def sqrtU(x: UntypedDenseTensor[Float]) = mapU(x)(x => Math.sqrt(x).toFloat)
 
-  def invS(u: Float) = 1f / u
-  def invU(x: UntypedDenseTensor[Float]) = map(x)(1f/_)
+  def invU(x: UntypedDenseTensor[Float]) = mapU(x)(1f/_)
 
 
-  def scaleU(x: UntypedDenseTensor[Float], u: Float) = map(x)(_ * u)
+  def scaleU(x: UntypedDenseTensor[Float], u: Float) = mapU(x)(_ * u)
 
   def addInplace(x: UntypedDenseTensor[Float], d: UntypedDenseTensor[Float]) = inplace2(x, d)(_+_)
 
-  def logU(x: UntypedDenseTensor[Float]) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
+  def logU(x: UntypedDenseTensor[Float]) = mapU(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
   def getScalar(x: UntypedDenseTensor[Float]) = x.handle(0)
   def scalar(x: Float) = DenseTensor.fill(x, HNil, Array())
-  def addScalarU(x: UntypedDenseTensor[Float], u: Float) = map(x)(a => a + u)
+  def addScalarU(x: UntypedDenseTensor[Float], u: Float) = mapU(x)(a => a + u)
 
   def transposeU(x: UntypedDenseTensor[Float]) = new UntypedDenseTensor.View[Float](
     handle = x.handle,
@@ -166,9 +194,9 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
     new UntypedDenseTensor.Contiguous[Float](z, Array(x.shape(0), y.shape(0)))
   }
 
-  def expU(x: UntypedDenseTensor[Float]) = map(x)(a => Math.exp(a).toFloat)
-  def sigmoidU(x: UntypedDenseTensor[Float]) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
-  def reluU(x: UntypedDenseTensor[Float]) = map(x)(a => if (a >= 0) a else 0f)
+  def expU(x: UntypedDenseTensor[Float]) = mapU(x)(a => Math.exp(a).toFloat)
+  def sigmoidU(x: UntypedDenseTensor[Float]) = mapU(x)(a => 1f / (1f + math.exp(-a).toFloat))
+  def reluU(x: UntypedDenseTensor[Float]) = mapU(x)(a => if (a >= 0) a else 0f)
 
   def sumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)
 

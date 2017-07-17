@@ -5,6 +5,7 @@ import nexus._
 /**
  * L,,2,, distance (Euclidean distance) between two vectors.
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 object L2Distance extends PolyOp2[L2DistanceF]
 

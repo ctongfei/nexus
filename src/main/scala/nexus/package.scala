@@ -18,5 +18,8 @@ package object nexus extends TensorOpsMixin with ExprTensorMixin {
 
   private[nexus] type impMsg = scala.annotation.implicitNotFound
 
+  private[nexus] type Field[A] = algebra.ring.Field[A]
+  private[nexus] type Ring[A]  = algebra.ring.Ring[A]
+
 }
 

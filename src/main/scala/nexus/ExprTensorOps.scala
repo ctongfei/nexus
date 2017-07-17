@@ -9,16 +9,16 @@ import shapeless.HList
  */
 trait ExprTensorMixin {
 
-  implicit class ExprTensorOps[T[_, _ <: HList], D, A <: HList](val x: Expr[T[D, A]]) {
+  implicit class ExprTensorOps[T[_, _ <: HList], D, A <: HList](val x: Expr[T[D, A]])(implicit env: Env[T, D]) {
 
-    def +(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = Add(x, y)
-    def -(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = Sub(x, y)
+    def +(y: Expr[T[D, A]]): Expr[T[D, A]] = Add(x, y)
+    def -(y: Expr[T[D, A]]): Expr[T[D, A]] = Sub(x, y)
 
-    def |*|(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = EMul(x, y)
-    def ⊙(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = EMul(x, y)
+    def |*|(y: Expr[T[D, A]]): Expr[T[D, A]] = EMul(x, y)
+    def ⊙(y: Expr[T[D, A]]): Expr[T[D, A]] = EMul(x, y)
 
 
-    def |/|(y: Expr[T[D, A]])(implicit env: Env[T, D]): Expr[T[D, A]] = EDiv(x, y)
+    def |/|(y: Expr[T[D, A]]): Expr[T[D, A]] = EDiv(x, y)
 
   }
 
