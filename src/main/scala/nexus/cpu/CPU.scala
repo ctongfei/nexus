@@ -92,7 +92,7 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
     var yi = 0
     var x1i = x1.offset
     var x2i = x2.offset
-    val x3i = x3.offset
+    var x3i = x3.offset
     var d = x1.rank - 1
     val indices = Array.fill(x1.rank)(0)
     while (yi < x1.size) {
