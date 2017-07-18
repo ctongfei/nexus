@@ -194,11 +194,14 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
     new UntypedDenseTensor.Contiguous[Float](z, Array(x.shape(0), y.shape(0)))
   }
 
+
+  def dotU(x: UntypedDenseTensor[Float], y: UntypedDenseTensor[Float]) = sumU(mulU(x, y))
+
   def expU(x: UntypedDenseTensor[Float]) = mapU(x)(a => Math.exp(a).toFloat)
   def sigmoidU(x: UntypedDenseTensor[Float]) = mapU(x)(a => 1f / (1f + math.exp(-a).toFloat))
   def reluU(x: UntypedDenseTensor[Float]) = mapU(x)(a => if (a >= 0) a else 0f)
 
-  def sumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)
+  def sumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)  // TODO: wrong!
 
   def tMulU(x: UntypedDenseTensor[Float], y: UntypedDenseTensor[Float], matchedIndices: Seq[(Int, Int)]) = ???
 }

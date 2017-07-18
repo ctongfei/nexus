@@ -29,6 +29,8 @@ trait TensorOpsMixin {
     def :/(u: Double): T[D, A] = scale(a, fromDouble(1d / u))
     def :/(u: T[D, $])(implicit di: DummyImplicit): T[D, A] = scale(a, getScalar(untype(u)))
 
+    def ⋅(b: T[D, A]) = dot(a, b)
+
     def ⋈[B <: HList, C <: HList](b: T[D, B])(implicit env: Env[T, D], sd: SymDiff.Aux[A, B, C]): T[D, C] = tMul(a, b)
 
     def unary_- : T[D, A] = neg(a)

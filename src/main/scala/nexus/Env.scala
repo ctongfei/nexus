@@ -108,6 +108,9 @@ trait Env[T[_, _ <: HList], @specialized(Float, Double) D] {
   def vvMulU(x: Handle, y: Handle): Handle
   def vvMul[A, B](x: Vector[A], y: Vector[B]): Matrix[A, B] = typeWith(vvMulU(untype(x), untype(y)), typeOf(x).head::typeOf(y).head::$)
 
+  def dotU(x: Handle, y: Handle): Handle
+  def dot[A <: HList](x: Tensor[A], y: Tensor[A]): Scalar = typeWith(dotU(untype(x), untype(y)), $)
+
   def tMulU(x: Handle, y: Handle, matchedIndices: Seq[(Int, Int)]): Handle
   def tMul[A <: HList, B <: HList, C <: HList](x: Tensor[A], y: Tensor[B])(implicit sd: SymDiff.Aux[A, B, C]): Tensor[C] =
     typeWith(tMulU(untype(x), untype(y), sd.matchedIndices), sd(typeOf(x), typeOf(y)))
