@@ -1,6 +1,8 @@
 ### nexus
 A prototype of a typeful & typesafe deep learning system that strives to be different
 
+A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/src/test/scala/nexus/XorTest.scala).
+
 Design goals:
 
  - **Typeful**. Each axis of a tensor is statically typed using `HList`s. For example, an image is typed as `Tensor[Float, Width::Height::Channel::$]`, whereas a sentence in which each word is mapped to an embedding is typed as `Tensor[Float, Word::Embedding::$]`. Free programmers from remembering what each axis stands for.
