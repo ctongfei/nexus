@@ -3,6 +3,18 @@ A prototype of a typeful & typesafe deep learning system that strives to be diff
 
 A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/src/test/scala/nexus/XorTest.scala).
 
+Building a typesafe XOR network:
+```scala
+  val x = Input[DenseTensor[Float, In::$]]()  // input vectors
+  val y = Input[DenseTensor[Float, Out::$]]() // gold labeles
+
+  val Layer1 = Affine(In -> 2, Hidden -> 2)   // type: Module[Tensor[Float, In::$], Tensor[Float, Hidden::$]]
+  val Layer2 = Affine(Hidden -> 2, Out -> 2)  // type: Module[Tensor[Float, Hidden::$], Tensor[Float, Out::$]]
+  val hidden = x |> Layer1 |> Sigmoid         // type: Expr[Tensor[Float, Hidden::$]]
+  val output = hidden |> Layer2 |> Softmax    // type: Expr[Tensor[Float, Out::$]]
+  val loss   = LogLoss(output, y)             // type: Expr[Tensor[Float, $]]
+```
+
 Design goals:
 
  - **Typeful**. Each axis of a tensor is statically typed using `HList`s. For example, an image is typed as `Tensor[Float, Width::Height::Channel::$]`, whereas a sentence in which each word is mapped to an embedding is typed as `Tensor[Float, Word::Embedding::$]`. Free programmers from remembering what each axis stands for.
