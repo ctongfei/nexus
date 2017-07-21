@@ -8,6 +8,7 @@ scalaVersion := "2.12.2"
 
 libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2"
 libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0"
+libraryDependencies += "com.sun.jna" % "jna" % "3.0.9"
 
 // credit to http://stackoverflow.com/a/32114551/2990673
 lazy val mathFormulaInDoc = taskKey[Unit]("add MathJax script import in scaladoc html to display LaTeX formula")

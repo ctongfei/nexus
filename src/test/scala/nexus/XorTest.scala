@@ -47,10 +47,10 @@ object XorTest extends App {
   val loss = LogLoss(output, y)
 
   /** Declare an optimizer. */
-  val sgd = StochasticGradientDescent(0.1f)
+  val sgd = StochasticGradientDescent(0.3f)
 
   /** Start running! */
-  for (epoch <- 0 until 5000) {
+  for (epoch <- 0 until 400) {
     var averageLoss = 0f
 
     // For each sample

@@ -98,6 +98,9 @@ trait Env[T[_, _ <: HList], @specialized(Float, Double) D] {
   def reluU(x: Handle): Handle
   def relu[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(reluU(untype(x)), typeOf(x))
 
+  def posU(x: Handle): Handle
+  def pos[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(posU(untype(x)), typeOf(x))
+
   def sumU(x: Handle): Handle
   def sum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(sumU(untype(x)), $)
 
