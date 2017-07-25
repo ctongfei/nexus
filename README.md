@@ -8,10 +8,11 @@ Building a typesafe XOR network:
   val x = Input[DenseTensor[Float, In::$]]()  // input vectors
   val y = Input[DenseTensor[Float, Out::$]]() // gold labels
 
-  val Layer1 = Affine(In -> 2, Hidden -> 2)   // type: Module[Tensor[Float, In::$], Tensor[Float, Hidden::$]]
-  val Layer2 = Affine(Hidden -> 2, Out -> 2)  // type: Module[Tensor[Float, Hidden::$], Tensor[Float, Out::$]]
-  val hidden = x |> Layer1 |> Sigmoid         // type: Expr[Tensor[Float, Hidden::$]]
-  val output = hidden |> Layer2 |> Softmax    // type: Expr[Tensor[Float, Out::$]]
+  val output =  x                             // type: Expr[Tensor[Float, In::$]]
+             |> Affine(In -> 2, Hidden -> 2)  // type: Expr[Tensor[Float, Hidden::$]]
+             |> Sigmoid                       // type: Expr[Tensor[Float, Hidden::$]]
+             |> Affine(Hidden -> 2, Out -> 2) // type: Expr[Tensor[Float, Out::$]]
+             |> Softmax                       // type: Expr[Tensor[Float, Out::$]]
   val loss   = LogLoss(output, y)             // type: Expr[Tensor[Float, $]]
 ```
 
