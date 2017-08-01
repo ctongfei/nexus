@@ -5,12 +5,6 @@ import shapeless._
  */
 package object nexus extends TensorOpsMixin with ExprTensorMixin {
 
-  implicit class ExprAssignmentOps[X](val expr: Expr[X]) extends AnyVal {
-
-    def ->>(value: X) = Assignment(expr, value)
-
-  }
-
   private[nexus] type ::[+H, +T <: HList] = shapeless.::[H, T]
   private[nexus] type $$ = HList
   private[nexus] type $ = HNil

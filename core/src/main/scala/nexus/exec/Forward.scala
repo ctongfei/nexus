@@ -10,18 +10,18 @@ import shapeless._
  */
 object Forward {
 
-  def compute[T[_, _ <: $$], D, X](e: Expr[X])(inputs: Assignment[_]*)(implicit env: Env[T, D]): (X, Values[T, D]) =
+  def compute[T[_, _ <: $$], D, X](e: Expr[X])(inputs: Assignment*)(implicit env: Env[T, D]): (X, Values[T, D]) =
     compute(e, Values[T, D](inputs: _*))
 
   def compute[T[_, _ <: $$], D, X](e: Expr[X], inputs: Values[T, D]): (X, Values[T, D]) = {
     val values = inputs
 
     def eval[X](e: Expr[X]): X = {
-      if (values contains e) values(e).asInstanceOf[X]
+      if (values contains e) values(e)
       else e match {
         case Input(_) =>
           val x = inputs(e)
-          values(e) = x; x.asInstanceOf[X]
+          values(e) = x; x
         case Param(x, _) => values(e) = x; x
         case Const(x, _) => values(e) = x; x
         case Apply1(o, x) =>

@@ -6,7 +6,7 @@ A simple neural network for learning the XOR function can be found [**here**](ht
 Building a typesafe XOR network:
 ```scala
   val x = Input[DenseTensor[Float, In::$]]()  // input vectors
-  val y = Input[DenseTensor[Float, Out::$]]() // gold labeles
+  val y = Input[DenseTensor[Float, Out::$]]() // gold labels
 
   val Layer1 = Affine(In -> 2, Hidden -> 2)   // type: Module[Tensor[Float, In::$], Tensor[Float, Hidden::$]]
   val Layer2 = Affine(Hidden -> 2, Out -> 2)  // type: Module[Tensor[Float, Hidden::$], Tensor[Float, Out::$]]

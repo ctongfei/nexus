@@ -2,7 +2,9 @@ package nexus
 
 import nexus.util._
 
-sealed trait GenExpr
+sealed trait EExpr {
+  type Data
+}
 
 /**
  * Represents a symbolic expression in a computational graph.
@@ -10,7 +12,14 @@ sealed trait GenExpr
  * @since 0.1.0
  * @author Tongfei Chen
  */
-sealed trait Expr[X] extends GenExpr {
+sealed trait Expr[X] extends EExpr {
+
+  type Data = X
+
+  /**
+   * Creates an assignment to this expression.
+   */
+  def ->>(value: X) = Assignment(this, value)
 
   /**
    * Passes this expression through any neural function.
