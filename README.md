@@ -1,7 +1,7 @@
 ### nexus
 A prototype of a typeful & typesafe deep learning system that strives to be different
 
-A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/src/test/scala/nexus/XorTest.scala).
+A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/core/src/test/scala/nexus/XorTest.scala).
 
 Building a typesafe XOR network:
 ```scala
