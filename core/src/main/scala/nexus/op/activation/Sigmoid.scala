@@ -24,9 +24,10 @@ trait SigmoidF[X, Y] extends Op1[X, Y] {
 
 object SigmoidF {
 
-  implicit def SigmoidImpl[T[_, _ <: HList], D, A <: HList](implicit env: Env[T, D]) = new SigmoidF[T[D, A], T[D, A]] {
+  implicit def SigmoidImpl[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]) = new SigmoidF[T[D, A], T[D, A]] {
     import env._
     def forward(x: T[D, A]) = sigmoid(x)
     def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = dy |*| y |*| addScalar(-y, one)
   }
+
 }

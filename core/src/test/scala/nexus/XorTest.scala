@@ -35,7 +35,6 @@ object XorTest extends App {
   val xs = X along Batch
   val ys = Y along Batch
 
-  /** Construct the computation graph (completely typesafe!) */
   val x = Input[DenseTensor[Float, In::$]]()
   val y = Input[DenseTensor[Float, Out::$]]()
 
@@ -47,16 +46,16 @@ object XorTest extends App {
   val loss = LogLoss(output, y)
 
   /** Declare an optimizer. */
-  val sgd = StochasticGradientDescent(0.3f)
+  val sgd = StochasticGradientDescentOptimizer(0.5f)
 
   /** Start running! */
-  for (epoch <- 0 until 400) {
+  for (epoch <- 0 until 1000) {
     var averageLoss = 0f
 
     // For each sample
     for ((xv, yv) <- xs zip ys) {
 
-      val (lossValue, values) =  Forward .compute(loss)(x ->> xv, y ->> yv) // feed
+      val (lossValue, values) =  Forward .compute(loss)(x <<- xv, y <<- yv) // feed
       val gradients           =  Backward.compute(loss, values)
 
       averageLoss += lossValue()

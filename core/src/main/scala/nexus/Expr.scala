@@ -2,24 +2,13 @@ package nexus
 
 import nexus.util._
 
-sealed trait EExpr {
-  type Data
-}
-
 /**
  * Represents a symbolic expression in a computational graph.
  * @tparam X Type of data that it conceptually holds
  * @since 0.1.0
  * @author Tongfei Chen
  */
-sealed trait Expr[X] extends EExpr {
-
-  type Data = X
-
-  /**
-   * Creates an assignment to this expression.
-   */
-  def ->>(value: X) = Assignment(this, value)
+sealed trait Expr[X] {
 
   /**
    * Passes this expression through any neural function.
@@ -36,6 +25,11 @@ sealed trait Expr[X] extends EExpr {
    */
   def |>[F[P, X, Y] <: (P => Op1[X, Y]), P, Y](op: ParaPolyOp1[P, F])(implicit f: F[P, X, Y]): Expr[Y] = f(op.parameter)(this)
 
+  /**
+   * Creates an assignment to this expression.
+   */
+  def <<-(value: X) = Assignment(this, value)
+
   def substitute[A](ax: Input[A], a: Expr[A]): Expr[X] = this match {
     case x: Input[X] => if (x == ax) a.asInstanceOf[Expr[X]] else x
     case x: Const[X] => x
@@ -50,19 +44,22 @@ sealed trait Expr[X] extends EExpr {
  * A placeholder for models' inputs.
  */
 case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
+
   override def toString = name
 
   /** Constructs a neural function (lambda expression). */
   def =>>[Y](y: Expr[Y]): Module[X, Y] = new Module[X, Y] {
     def apply(x: Expr[X]) = y.substitute(self, x)
   }
+
 }
+
 
 /**
  * A constant value in a computational graph.
  * @param value Value of this constant
  */
-case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
+case class Const[X] (value: X, name: String = ExprName.nextConst) extends Expr[X] {
   override def toString = name
 }
 

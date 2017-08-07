@@ -7,7 +7,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait TensorLike[D, A <: HList, +T <: TensorLike[D, A, T]] extends UntypedTensorLike[D, T] { self: T =>
+trait TensorLike[D, A <: HList, T <: TensorLike[D, A, T]] extends UntypedTensorLike[D, T] { self: T =>
 
   def shape: Array[Int]
 

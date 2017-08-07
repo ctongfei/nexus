@@ -1,5 +1,6 @@
 package nexus.op
 
+import algebra.ring._
 import nexus._
 
 /**
@@ -16,9 +17,10 @@ trait AddF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object AddF {
 
-  implicit def scalar[D](implicit D: Field[D]): AddF[D, D, D] =
+  implicit def scalar[D](implicit D: AdditiveSemigroup[D]): AddF[D, D, D] =
     new AddF[D, D, D] {
-      def forward(x1: D, x2: D) = D.plus(x1, x2)
+      import D._
+      def forward(x1: D, x2: D) = plus(x1, x2)
       def backward1(dy: D, y: D, x1: D, x2: D) = dy
       def backward2(dy: D, y: D, x1: D, x2: D) = dy
     }

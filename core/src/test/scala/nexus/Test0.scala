@@ -16,7 +16,7 @@ object Test0 extends App {
 
   val l = EMul(p, p)
 
-  val sgd = StochasticGradientDescent(0.4f)
+  val sgd = StochasticGradientDescentOptimizer(0.4f)
 
   for (i <- 0 until 20) {
     println(s"Epoch $i: p = ${p.value()}")

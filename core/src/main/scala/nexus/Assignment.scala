@@ -7,7 +7,11 @@ package nexus
  */
 trait Assignment {
   type Data // existential type
+
+  /** The symbolic expression of this assignment. */
   val expr: Expr[Data]
+
+  /** The actual value assigned to the expression. */
   val value: Data
 }
 

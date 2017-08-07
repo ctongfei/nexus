@@ -40,11 +40,11 @@ object LogisticRegressionTest extends App {
   val output = x |> Layer |> Softmax
   val loss = LogLoss(output, y)
 
-  val sgd = StochasticGradientDescent(0.1f)
+  val sgd = StochasticGradientDescentOptimizer(0.1f)
 
   for (i <- 0 until 100) {
     for ((xv, yv) <- xs zip ys) {
-      val (lossValue, values) = Forward.compute(loss)(x ->> xv, y ->> yv)
+      val (lossValue, values) = Forward.compute(loss)(x <<- xv, y <<- yv)
       val grads = Backward.compute(loss, values)
       println(s"Iteration $i: loss = ${lossValue()}")
       sgd.update(grads)

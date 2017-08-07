@@ -104,7 +104,6 @@ trait Env[T[_, _ <: HList], @specialized(Float, Double) D] {
   def sumU(x: Handle): Handle
   def sum[A <: HList](x: Tensor[A]): Tensor[$] = typeWith(sumU(untype(x)), $)
 
-
   def mvMulU(x: Handle, y: Handle): Handle
   def mvMul[A, B](x: Matrix[A, B], y: Vector[B]): Vector[A] = typeWith(mvMulU(untype(x), untype(y)), typeOf(x).head::$)
 

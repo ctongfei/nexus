@@ -11,7 +11,7 @@ import scala.collection._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Values[T[_, _ <: HList], D] private(val map: mutable.HashMap[EExpr, Any])(implicit val env: Env[T, D]) {
+class Values[T[_, _ <: HList], D] private(val map: mutable.HashMap[Expr[_], Any])(implicit val env: Env[T, D]) {
 
   def contains[X](x: Expr[X]): Boolean = map.contains(x)
 

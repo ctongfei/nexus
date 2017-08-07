@@ -9,9 +9,6 @@ package nexus
  */
 trait Op1[X, Y] extends Module[X, Y] {
 
-  type Input = X
-  type Output = Y
-
   def name: String
 
   /** Apply this operation to a symbolic expression. */
@@ -31,7 +28,6 @@ trait Op1[X, Y] extends Module[X, Y] {
    */
   def backward(dy : Y, y: Y, x: X): X
 
-  final def parameters = Seq()
 }
 
 
@@ -43,9 +39,6 @@ trait Op1[X, Y] extends Module[X, Y] {
  * @since 0.1.0
  */
 trait Op2[X1, X2, Y] extends ((Expr[X1], Expr[X2]) => Expr[Y]) {
-  type Input1 = X1
-  type Input2 = X2
-  type Output = Y
   def name: String
   def apply(x1: Expr[X1], x2: Expr[X2]) = Apply2(this, x1, x2)
   def forward(x1: X1, x2: X2): Y
@@ -57,6 +50,13 @@ trait Op2[X1, X2, Y] extends ((Expr[X1], Expr[X2]) => Expr[Y]) {
   def backward2(dy: Y, y: Y, x1: X1, x2: X2): X2
 }
 
+/**
+ * Any ternary neural (differentiable) function whose type parameters (axes, etc.) are fully grounded.
+ * @author Tongfei Chen
+ * @tparam X1 Type of first input
+ * @tparam X2 Type of second input
+ * @tparam X3 Type of third input
+ */
 trait Op3[X1, X2, X3, Y] extends ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y]) {
   def name: String
   def forward(x1: X1, x2: X2, x3: X3): Y

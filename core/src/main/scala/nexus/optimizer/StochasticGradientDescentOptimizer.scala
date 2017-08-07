@@ -10,7 +10,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class StochasticGradientDescent[T[_, _ <: $$], D] private(val η: D)(implicit val env: Env[T, D]) extends Optimizer[T, D] {
+class StochasticGradientDescentOptimizer[T[_, _ <: $$], D] private(val η: D)(implicit val env: Env[T, D]) extends Optimizer[T, D] {
   import env._
 
   def update(gradients: Values[T, D]) = {
@@ -27,8 +27,8 @@ class StochasticGradientDescent[T[_, _ <: $$], D] private(val η: D)(implicit va
 
 }
 
-object StochasticGradientDescent {
+object StochasticGradientDescentOptimizer {
 
-  def apply[T[_, _ <: $$], D](η: D)(implicit env: Env[T, D]) = new StochasticGradientDescent(η)
+  def apply[T[_, _ <: $$], D](η: D)(implicit env: Env[T, D]) = new StochasticGradientDescentOptimizer(η)
 
 }
