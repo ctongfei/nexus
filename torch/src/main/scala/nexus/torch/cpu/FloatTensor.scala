@@ -16,6 +16,7 @@ class FloatTensor[A <: $$](val handle: THFloatTensor, val axes: A) extends Dense
   }
 
   def apply(indices: Int*) = ???
+
   def stringPrefix = "THFloatTensor"
   def stringBody = ???
 

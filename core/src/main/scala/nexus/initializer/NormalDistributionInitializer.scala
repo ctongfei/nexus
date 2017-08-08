@@ -7,6 +7,7 @@ import nexus._
  */
 object NormalDistributionInitializer {
 
+
 }
 // UniformDistributionInitializer
 

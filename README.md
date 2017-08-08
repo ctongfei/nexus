@@ -8,12 +8,12 @@ Building a typesafe XOR network:
   val x = Input[DenseTensor[Float, In::$]]()  // input vectors
   val y = Input[DenseTensor[Float, Out::$]]() // gold labels
 
-  val output = x                  |>  // type: Expr[Tensor[Float, In::$]]
+  val ŷ = x                       |>  // type: Expr[Tensor[Float, In::$]]
     Affine(In -> 2, Hidden -> 2)  |>  // type: Expr[Tensor[Float, Hidden::$]]
     Sigmoid                       |>  // type: Expr[Tensor[Float, Hidden::$]]
     Affine(Hidden -> 2, Out -> 2) |>  // type: Expr[Tensor[Float, Out::$]]
     Softmax                           // type: Expr[Tensor[Float, Out::$]]
-  val loss   = LogLoss(output, y)     // type: Expr[Tensor[Float, $]]
+  val loss = LogLoss(ŷ, y)            // type: Expr[Tensor[Float, $]]
 ```
 
 Design goals:

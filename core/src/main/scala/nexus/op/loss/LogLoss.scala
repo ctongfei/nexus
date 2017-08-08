@@ -17,8 +17,8 @@ import nexus._
  */
 object LogLoss extends PolyOp2[LogLossF]
 
-@impMsg("Cannot apply LogLoss to ${YP} and ${YG}.")
-trait LogLossF[YP, YG, L] extends Op2[YP, YG, L] {
+@impMsg("Cannot apply LogLoss to ${Ŷ} and ${Y}.")
+trait LogLossF[Ŷ, Y, L] extends Op2[Ŷ, Y, L] {
   def name = "LogLoss"
 }
 
@@ -27,12 +27,12 @@ object LogLossF {
   implicit def LogLossImpl[T[_, _ <: $$], D, A](implicit env: Env[T, D]): LogLossF[T[D, A::$], T[D, A::$], T[D, $]] =
     new LogLossF[T[D, A::$], T[D, A::$], T[D, $]] {
       import env._
-      def forward(yp: T[D, A::$], yg: T[D, A::$]) =
-        -(sum(yg |*| log(yp)))
-      def backward1(dl: T[D, $], l: T[D, $], yp: T[D, A::$], yg: T[D, A::$]) = {
-         -(yg |/| yp)
-      } // should times dl
-      def backward2(dl: T[D, $], l: T[D, $], yp: T[D, A::$], yg: T[D, A::$]) = -log(yp) // should times dl
+      def forward(ŷ: T[D, A::$], y: T[D, A::$]) =
+        -(sum(y |*| log(ŷ)))
+      def backward1(dl: T[D, $], l: T[D, $], ŷ: T[D, A::$], y: T[D, A::$]) =
+        -(y |/| ŷ) :* dl
+      def backward2(dl: T[D, $], l: T[D, $], ŷ: T[D, A::$], y: T[D, A::$]) =
+        -log(ŷ) :* dl
     }
   
 }

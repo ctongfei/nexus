@@ -41,9 +41,9 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val output = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
-  val loss = LogLoss(output, y)
+  val loss = LogLoss(ŷ, y)
 
   /** Declare an optimizer. */
   val sgd = StochasticGradientDescentOptimizer(0.5f)
