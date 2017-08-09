@@ -3,7 +3,11 @@ import shapeless._
 /**
  * @author Tongfei Chen
  */
-package object nexus extends TensorOpsMixin with ExprTensorMixin {
+package object nexus extends
+  TensorOpsMixin with
+  ExprTensorMixin with
+  Tuple2ExprOpsMixin
+{
 
   private[nexus] type ::[+H, +T <: HList] = shapeless.::[H, T]
   private[nexus] type $$ = HList

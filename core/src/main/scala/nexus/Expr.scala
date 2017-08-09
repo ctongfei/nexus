@@ -13,17 +13,25 @@ sealed trait Expr[X] {
   /**
    * Passes this expression through any neural function.
    */
-  def |>[Y](f: Module[X, Y]): Expr[Y] = f(this)
+  def |>[Y]
+  (f: Module[X, Y]): Expr[Y] =
+    f(this)
 
   /**
    * Passes this expression through any polymorphic neural function.
    */
-  def |>[F[X, Y] <: Op1[X, Y], Y](op: PolyOp1[F])(implicit f: F[X, Y]): Expr[Y] = f(this)
+  def |>[F[X, Y] <: Op1[X, Y], Y]
+  (op: PolyOp1[F])
+  (implicit f: F[X, Y]): Expr[Y] =
+    f(this)
 
   /**
    * Passes this expression through any parametrized polymorphic neural function.
    */
-  def |>[F[P, X, Y] <: (P => Op1[X, Y]), P, Y](op: ParaPolyOp1[P, F])(implicit f: F[P, X, Y]): Expr[Y] = f(op.parameter)(this)
+  def |>[F[P, X, Y] <: (P => Op1[X, Y]), P, Y]
+  (op: ParaPolyOp1[P, F])
+  (implicit f: F[P, X, Y]): Expr[Y] =
+    f(op.parameter)(this)
 
   /**
    * Creates an assignment to this expression.

@@ -5,7 +5,9 @@ import nexus.torch._
 import jtorch.th._
 
 /**
+ * Runtime environment for Float32 tensors that is backed by Torch.
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 object CPUFloat32 extends Env[DenseTensor, Float] {
   

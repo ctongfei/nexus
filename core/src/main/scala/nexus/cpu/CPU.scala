@@ -198,9 +198,16 @@ class CPUFloat32 extends Env[DenseTensor, Float] {
   def dotU(x: UntypedDenseTensor[Float], y: UntypedDenseTensor[Float]) = sumU(mulU(x, y))
 
   def expU(x: UntypedDenseTensor[Float]) = mapU(x)(a => Math.exp(a).toFloat)
+
+  def sinU(x: UntypedDenseTensor[Float]) = mapU(x)(a => Math.sin(a).toFloat)
+  def cosU(x: UntypedDenseTensor[Float]) = mapU(x)(a => Math.cos(a).toFloat)
+  def tanU(x: UntypedDenseTensor[Float]) = mapU(x)(a => Math.tan(a).toFloat)
+
   def sigmoidU(x: UntypedDenseTensor[Float]) = mapU(x)(a => 1f / (1f + math.exp(-a).toFloat))
   def reluU(x: UntypedDenseTensor[Float]) = mapU(x)(a => if (a > 0) a else 0f)
   def posU(x: UntypedDenseTensor[Float]) = mapU(x)(a => if (a > 0) 1f else 0f)
+
+
 
 
   def sumU(x: UntypedDenseTensor[Float]) = scalar(x.handle.sum)  // TODO: wrong!

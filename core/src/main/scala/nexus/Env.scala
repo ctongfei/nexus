@@ -92,6 +92,15 @@ trait Env[T[_, _ <: HList], @specialized(Float, Double) D] {
   def expU(x: Handle): Handle
   def exp[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(expU(untype(x)), typeOf(x))
 
+  def sinU(x: Handle): Handle
+  def sin[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sinU(untype(x)), typeOf(x))
+
+  def cosU(x: Handle): Handle
+  def cos[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(cosU(untype(x)), typeOf(x))
+
+  def tanU(x: Handle): Handle
+  def tan[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(tanU(untype(x)), typeOf(x))
+
   def sigmoidU(x: Handle): Handle
   def sigmoid[A <: HList](x: Tensor[A]): Tensor[A] = typeWith(sigmoidU(untype(x)), typeOf(x))
 

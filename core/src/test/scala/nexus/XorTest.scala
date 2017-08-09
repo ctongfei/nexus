@@ -38,10 +38,12 @@ object XorTest extends App {
   val x = Input[DenseTensor[Float, In::$]]()
   val y = Input[DenseTensor[Float, Out::$]]()
 
-  val Layer1 = Affine(In -> 2, Hidden -> 2)
-  val Layer2 = Affine(Hidden -> 2, Out -> 2)
-
-  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  val ŷ =
+    x                             |>
+    Affine(In -> 2, Hidden -> 2)  |>
+    Sigmoid                       |>
+    Affine(Hidden -> 2, Out -> 2) |>
+    Softmax
 
   val loss = LogLoss(ŷ, y)
 

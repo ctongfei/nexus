@@ -3,7 +3,7 @@ package nexus.op
 import nexus._
 
 /**
- * Identity function for any project, but stops gradient backpropagation.
+ * Identity function for any expression, but stops gradient backpropagation.
  * @author Tongfei Chen
  * @since 0.1.0
  */

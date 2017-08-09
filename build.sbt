@@ -6,9 +6,9 @@ lazy val mathFormulaInDoc = taskKey[Unit]("add MathJax script import in scaladoc
 lazy val commonSettings = Seq(
 
   organization := "me.tongfei",
-  version := "0.0.1-SNAPSHOT",
+  version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.12.2",
+  scalaVersion := "2.12.3",
 
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
   libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0",
