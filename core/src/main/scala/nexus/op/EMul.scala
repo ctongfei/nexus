@@ -16,7 +16,7 @@ trait EMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object EMulF {
 
-  implicit def EMulImpl[T[D, _ <: HList], D, A <: HList](implicit env: Env[T, D]): EMulF[T[D, A], T[D, A], T[D, A]] =
+  implicit def tensor[T[D, _ <: HList], D, A <: HList](implicit env: Env[T, D]): EMulF[T[D, A], T[D, A], T[D, A]] =
     new EMulF[T[D, A], T[D, A], T[D, A]] {
       def forward(x1: T[D, A], x2: T[D, A]) = x1 |*| x2
       def backward1(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy |*| x2

@@ -2,7 +2,7 @@ package nexus.torch.cpu
 
 import nexus._
 import nexus.torch._
-import jtorch.th._
+import jtorch._
 
 /**
  * Runtime environment for Float32 tensors that is backed by Torch.
@@ -10,17 +10,20 @@ import jtorch.th._
  * @since 0.1.0
  */
 object CPUFloat32 extends Env[DenseTensor, Float] {
-  
+
+  import THFloatTensorSyntax._
+
   type Handle = THFloatTensor
 
   def field = algebra.instances.all.floatAlgebra
-  def newTensor[A <: $$](axes: A, shape: Array[Int]) = ???
+  def newTensor[A <: $$](axes: A, shape: Array[Int]) = {
+    ???
+  }
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = ???
 
-
-  def untype(x: DenseTensor[Float, _]) = x.asInstanceOf[FloatTensor[_]].handle
+  def untype(x: DenseTensor[Float, _]) = x.asInstanceOf[FloatDenseTensor[_]].handle
   def typeOf[A <: $$](x: Tensor[A]) = x.axes
-  def typeWith[A <: $$](x: THFloatTensor, a: A) = new FloatTensor[A](x, a)
+  def typeWith[A <: $$](x: THFloatTensor, a: A) = new FloatDenseTensor[A](x, a)
   
   def fromDouble(d: Double) = d.toFloat
   def fromFloat(f: Float) = f
@@ -44,6 +47,9 @@ object CPUFloat32 extends Env[DenseTensor, Float] {
   def transposeU(x: THFloatTensor) = ???
   def logU(x: THFloatTensor) = ???
   def expU(x: THFloatTensor) = ???
+  def sinU(x: THFloatTensor) = ???
+  def cosU(x: THFloatTensor) = ???
+  def tanU(x: THFloatTensor) = ???
   def sigmoidU(x: THFloatTensor) = ???
   def reluU(x: THFloatTensor) = ???
   def posU(x: THFloatTensor) = ???

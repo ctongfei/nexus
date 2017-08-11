@@ -14,12 +14,9 @@ trait L1NormalizeF[X, Y] extends Op1[X, Y] {
 }
 
 object L1NormalizeF {
-  implicit def L1NormalizeImpl[T[_, _ <: $$], D, A](implicit env: Env[T, D]) = new L1NormalizeF[T[D, A::$], T[D, A::$]] {
+  implicit def vector[T[_, _ <: $$], D, A](implicit env: Env[T, D]) = new L1NormalizeF[T[D, A::$], T[D, A::$]] {
     import env._
-    def forward(x: T[D, A::$]) = {
-      val s = sum(x)
-      scale(x, getScalar(untype(inv(s))))
-    }
+    def forward(x: T[D, A::$]) = x :* inv(sum(x))
     def backward(dy: T[D, A::$], y: T[D, A::$], x: T[D, A::$]) = ???
   }
 }
