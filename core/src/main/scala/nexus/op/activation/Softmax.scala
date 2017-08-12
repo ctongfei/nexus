@@ -9,8 +9,7 @@ import nexus._
  *
  * Output: a vector \(\mathbf{y}\), computed as
  *
- * \( y_i = \dfrac {\exp{x_i}} {\sum_j {\exp{x_j}}} \).
- *
+ * \( y_i = \dfrac {\exp{x_i}} {\sum_j {\exp{x_j} } } \).
  * @author Tongfei Chen
  * @since 0.1.0
  */

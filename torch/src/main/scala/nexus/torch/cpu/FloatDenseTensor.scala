@@ -14,7 +14,7 @@ class FloatDenseTensor[A <: $$](val handle: THFloatTensor, val axes: A) extends 
 
   override def rank = handle.rank
 
-  def shape = handle.shape.map(_.toInt)
+  def shape = handle.shape
 
   def apply(indices: Int*) = indices.length match {
     case 0 => ???
@@ -27,7 +27,6 @@ class FloatDenseTensor[A <: $$](val handle: THFloatTensor, val axes: A) extends 
 
   def stringPrefix = "TorchFloatTensor"
 
-  def stringBody = ???
-
+  def stringBody = handle.stringRepr
 
 }
