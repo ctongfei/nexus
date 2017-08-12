@@ -15,10 +15,10 @@ trait ESinF[X, Y] extends Op1[X, Y] {
 
 object ESinF {
 
-  implicit def tensor[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]) = new ESinF[T[D, A], T[D, A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit env: Env[T, D]) = new ESinF[T[A], T[A]] {
     import env._
-    def forward(x: T[D, A]) = sin(x)
-    def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = dy |*| cos(y)
+    def forward(x: T[A]) = sin(x)
+    def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| cos(y)
   }
 
 }

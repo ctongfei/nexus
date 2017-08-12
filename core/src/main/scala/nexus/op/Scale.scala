@@ -15,10 +15,10 @@ trait ScaleF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object ScaleF {
 
-  implicit def tensor[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]) = new ScaleF[T[D, A], T[D, $], T[D, A]] {
-    def forward(x1: T[D, A], x2: T[D, $]) = x1 :* x2
-    def backward1(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, $]) = dy :* x2
-    def backward2(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, $]) = dy ⋅ x1
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit env: Env[T, D]) = new ScaleF[T[A], T[$], T[A]] {
+    def forward(x1: T[A], x2: T[$]) = x1 :* x2
+    def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[$]) = dy :* x2
+    def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[$]) = dy ⋅ x1
   }
 
 }

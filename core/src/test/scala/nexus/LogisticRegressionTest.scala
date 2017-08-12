@@ -32,10 +32,10 @@ object LogisticRegressionTest extends App {
   val xs = X along Batch
   val ys = Y along Batch
 
-  val x = Input[DenseTensor[Float, In::$]]()
-  val y = Input[DenseTensor[Float, Out::$]]()
+  val x = Input[DenseTensor[In::$]]()
+  val y = Input[DenseTensor[Out::$]]()
 
-  val Layer = Affine(In -> 2, Out -> 2)
+  val Layer = Affine(In -> 2, Out -> 2)(cpuFloat32)
 
   val output = x |> Layer |> Softmax
   val loss = LogLoss(output, y)

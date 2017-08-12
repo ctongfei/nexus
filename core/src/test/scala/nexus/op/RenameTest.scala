@@ -13,7 +13,7 @@ object RenameTest extends App {
   class B; val B = new B
   class C; val C = new C
 
-  val a = Input[DenseTensor[Float, A::B::$]]()
+  val a = Input[DenseTensor[A::B::$]]()
 
   val b = a |> Rename(B -> C)
 

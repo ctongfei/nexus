@@ -16,7 +16,7 @@ object MapTest extends App {
     def backward(dy: Float, y: Float, x: Float) = dy * math.cos(x).toFloat
   }
 
-  val a = Input[DenseTensor[Float, $]]()
+  val a = Input[DenseTensor[$]]()
 
   val b = a |> EMap(f)
 

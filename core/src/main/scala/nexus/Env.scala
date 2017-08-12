@@ -12,21 +12,21 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot find a device to run ${T} with element type ${D}.")
-trait Env[T[_, _ <: HList], @specialized(Float, Double) D] {
+trait Env[T[_ <: HList], @specialized(Float, Double) D] {
 
   type Handle
 
-  type Scalar = T[D, $]
-  type Vector[A] = T[D, A::$]
-  type Matrix[A, B] = T[D, A::B::$]
-  type Tensor[A <: HList] = T[D, A]
+  type Scalar = T[$]
+  type Vector[A] = T[A::$]
+  type Matrix[A, B] = T[A::B::$]
+  type Tensor[A <: HList] = T[A]
 
   def field: Field[D]
 
   def newTensor[A <: HList](axes: A, shape: Array[Int]): Tensor[A]
   def newGaussianTensor[A <: HList](μ: Double, σ2: Double, axes: A, shape: Array[Int]): Tensor[A]
 
-  def untype(x: T[D, _]): Handle
+  def untype(x: T[_]): Handle
   def typeOf[A <: HList](x: Tensor[A]): A
   def typeWith[A <: HList](x: Handle, a: A): Tensor[A]
 

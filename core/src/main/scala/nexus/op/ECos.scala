@@ -15,10 +15,10 @@ trait ECosF[X, Y] extends Op1[X, Y] {
 
 object ECosF {
 
-  implicit def tensor[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]) = new ECosF[T[D, A], T[D, A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit env: Env[T, D]) = new ECosF[T[A], T[A]] {
     import env._
-    def forward(x: T[D, A]) = cos(x)
-    def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = -dy |*| sin(y)
+    def forward(x: T[A]) = cos(x)
+    def backward(dy: T[A], y: T[A], x: T[A]) = -dy |*| sin(y)
   }
 
 }

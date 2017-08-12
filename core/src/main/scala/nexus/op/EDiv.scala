@@ -16,12 +16,12 @@ trait EDivF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object EDivF {
 
-  implicit def EDivImpl[T[D, _ <: HList], D, A <: HList](implicit env: Env[T, D]): EDivF[T[D, A], T[D, A], T[D, A]] =
-    new EDivF[T[D, A], T[D, A], T[D, A]] {
+  implicit def tensor[T[_ <: HList], D, A <: HList](implicit env: Env[T, D]): EDivF[T[A], T[A], T[A]] =
+    new EDivF[T[A], T[A], T[A]] {
       import env._
-      def forward(x1: T[D, A], x2: T[D, A]) = x1 |/| x2
-      def backward1(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = dy |/| x2
-      def backward2(dy: T[D, A], y: T[D, A], x1: T[D, A], x2: T[D, A]) = -dy |*| x1 |/| sqr(x2)
+      def forward(x1: T[A], x2: T[A]) = x1 |/| x2
+      def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = dy |/| x2
+      def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = -dy |*| x1 |/| sqr(x2)
     }
 
 }

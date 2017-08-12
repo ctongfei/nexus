@@ -15,10 +15,10 @@ trait EExpF[X, Y] extends Op1[X, Y] {
 
 object EExpF {
 
-  implicit def tensor[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]) = new EExpF[T[D, A], T[D, A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit env: Env[T, D]) = new EExpF[T[A], T[A]] {
     import env._
-    def forward(x: T[D, A]) = exp(x)
-    def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = dy |*| y
+    def forward(x: T[A]) = exp(x)
+    def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y
   }
 
 }

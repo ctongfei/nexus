@@ -8,7 +8,7 @@ import nexus.exec._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Optimizer[T[_, _ <: $$], D] {
+trait Optimizer[T[_ <: $$], D] {
 
   def env: Env[T, D]
 

@@ -16,12 +16,12 @@ trait EMapF[P, X, Y] extends (P => Op1[X, Y])
 
 object EMapF {
 
-  implicit def MapImpl[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]) = new EMapF[Op1[D, D], T[D, A], T[D, A]] {
-    def apply(f: Op1[D, D]) = new Op1[T[D, A], T[D, A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit env: Env[T, D]) = new EMapF[Op1[D, D], T[A], T[A]] {
+    def apply(f: Op1[D, D]) = new Op1[T[A], T[A]] {
       import env._
       def name = s"EMap[${f.name}]"
-      def forward(x: T[D, A]) = map(x)(f.forward)
-      def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = zipWith3(dy, y, x)(f.backward)
+      def forward(x: T[A]) = map(x)(f.forward)
+      def backward(dy: T[A], y: T[A], x: T[A]) = zipWith3(dy, y, x)(f.backward)
     }
   }
 

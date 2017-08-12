@@ -7,7 +7,7 @@ import nexus.cpu._
  */
 object SubstituteTest extends App {
 
-  val x = Input[DenseTensor[Float, $]]()
+  val x = Input[DenseTensor[$]]()
 
   val y = x |*| x
 
