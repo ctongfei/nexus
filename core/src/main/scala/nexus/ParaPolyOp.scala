@@ -59,3 +59,33 @@ trait ParaPolyOp2[P, F[P, X1, X2, Y] <: (P => Op2[X1, X2, Y])] { self =>
     Apply2(ground[X1, X2, Y], x1, x2)
 
 }
+
+
+/**
+ * Parametrized polymorphic terneary differentiable function.
+ * @tparam F Type constraint expressing what type of variables this operation can apply to
+ * @since 0.1.0
+ */
+trait ParaPolyOp3[P, F[P, X1, X2, X3, Y] <: (P => Op3[X1, X2, X3, Y])] { self =>
+
+  def parameter: P
+
+  def forward[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[P, X1, X2, X3, Y]): Y =
+    f(parameter).forward(x1, x2, x3)
+
+  def backward1[X1, X2, X3, Y](dy: Y, y: Y, x1: X1, x2: X2, x3: X3)(implicit f: F[P, X1, X2, X3, Y]): X1 =
+    f(parameter).backward1(dy, y, x1, x2, x3)
+
+  def backward2[X1, X2, X3, Y](dy: Y, y: Y, x1: X1, x2: X2, x3: X3)(implicit f: F[P, X1, X2, X3, Y]): X2 =
+    f(parameter).backward2(dy, y, x1, x2, x3)
+
+  def backward3[X1, X2, X3, Y](dy: Y, y: Y, x1: X1, x2: X2, x3: X3)(implicit f: F[P, X1, X2, X3, Y]): X3 =
+    f(parameter).backward3(dy, y, x1, x2, x3)
+
+  def ground[X1, X2, X3, Y](implicit f: F[P, X1, X2, X3, Y]): Op3[X1, X2, X3, Y] =
+    f(parameter)
+
+  def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[P, X1, X2, X3, Y]) =
+    Apply3(ground[X1, X2, X3, Y], x1, x2, x3)
+
+}

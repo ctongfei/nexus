@@ -6,7 +6,7 @@ import shapeless._
 package object nexus extends
   TensorOpsMixin with
   ExprTensorMixin with
-  Tuple2ExprOpsMixin
+  TupleExprOpsMixin
 {
 
   private[nexus] type ::[+H, +T <: HList] = shapeless.::[H, T]
