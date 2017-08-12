@@ -27,24 +27,17 @@ object THFloatTensorSyntax {
     def rank = a.getNDimension
     def rank_=(n: Int) = a.setNDimension(n)
 
-    def copy: THFloatTensor = {
-      val n = TH.THFloatTensor_newWithTensor(a)
-      TH.THFloatTensor_copy(n, a)
-      n
-    }
+    def copy: THFloatTensor = TH.THFloatTensor_newClone(a)
 
-    def +=(b: THFloatTensor) = TH.THFloatTensor_add(a, b, 1f)
     def +(b: THFloatTensor): THFloatTensor = {
       val c = a.copy
-      c += b
+      TH.THFloatTensor_cadd(c, a, 1f, b)
       c
     }
 
-    def -=(b: THFloatTensor) = TH.THFloatTensor_sub(a, b, 1f)
     def -(b: THFloatTensor): THFloatTensor = {
       val c = a.copy
-      c -= b
-      c
+      ???
     }
 
     def slice(n: Int, i: Int): THFloatTensor = {
