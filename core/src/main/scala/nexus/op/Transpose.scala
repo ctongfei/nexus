@@ -15,10 +15,10 @@ trait TransposeF[X, Y] extends Op1[X, Y] {
 
 object TransposeF {
 
-  implicit def TransposeImpl[T[D, _ <: $$], D, A, B](implicit env: Env[T, D]) = new TransposeF[T[D, A::B::$], T[D, B::A::$]] {
+  implicit def matrix[T[_ <: $$], D, A, B](implicit env: Env[T, D]) = new TransposeF[T[A::B::$], T[B::A::$]] {
     import env._
-    def forward(x: T[D, A::B::$]) = transpose(x)
-    def backward(dy: T[D, B::A::$], y: T[D, B::A::$], x: T[D, A::B::$]) = transpose(dy)
+    def forward(x: T[A::B::$]) = transpose(x)
+    def backward(dy: T[B::A::$], y: T[B::A::$], x: T[A::B::$]) = transpose(dy)
   }
 
 }

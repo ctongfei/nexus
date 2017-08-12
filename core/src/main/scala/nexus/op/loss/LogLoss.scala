@@ -24,14 +24,14 @@ trait LogLossF[Ŷ, Y, L] extends Op2[Ŷ, Y, L] {
 
 object LogLossF {
 
-  implicit def LogLossImpl[T[_, _ <: $$], D, A](implicit env: Env[T, D]): LogLossF[T[D, A::$], T[D, A::$], T[D, $]] =
-    new LogLossF[T[D, A::$], T[D, A::$], T[D, $]] {
+  implicit def vector[T[_ <: $$], D, A](implicit env: Env[T, D]): LogLossF[T[A::$], T[A::$], T[$]] =
+    new LogLossF[T[A::$], T[A::$], T[$]] {
       import env._
-      def forward(ŷ: T[D, A::$], y: T[D, A::$]) =
+      def forward(ŷ: T[A::$], y: T[A::$]) =
         -(sum(y |*| log(ŷ)))
-      def backward1(dl: T[D, $], l: T[D, $], ŷ: T[D, A::$], y: T[D, A::$]) =
+      def backward1(dl: T[$], l: T[$], ŷ: T[A::$], y: T[A::$]) =
         -(y |/| ŷ) :* dl
-      def backward2(dl: T[D, $], l: T[D, $], ŷ: T[D, A::$], y: T[D, A::$]) =
+      def backward2(dl: T[$], l: T[$], ŷ: T[A::$], y: T[A::$]) =
         -log(ŷ) :* dl
     }
   

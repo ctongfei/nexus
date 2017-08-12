@@ -35,8 +35,8 @@ object XorTest extends App {
   val xs = X along Batch
   val ys = Y along Batch
 
-  val x = Input[DenseTensor[Float, In::$]]()
-  val y = Input[DenseTensor[Float, Out::$]]()
+  val x = Input[DenseTensor[In::$]]()
+  val y = Input[DenseTensor[Out::$]]()
 
   val ŷ =
     x                             |>

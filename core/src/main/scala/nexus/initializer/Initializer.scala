@@ -7,10 +7,10 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Initializer[T[_, _ <: $$], D] {
+trait Initializer[T[_ <: $$], D] {
 
   def env: Env[T, D]
 
-  def initialize[A <: $$](x: T[D, A]): Unit
+  def initialize[A <: $$](x: T[A]): Unit
 
 }

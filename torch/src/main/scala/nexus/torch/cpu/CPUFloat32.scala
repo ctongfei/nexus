@@ -9,7 +9,7 @@ import jtorch._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object CPUFloat32 extends Env[DenseTensor, Float] {
+object CPUFloat32 extends Env[FloatDenseTensor, Float] {
 
   import THFloatTensorSyntax._
 
@@ -21,7 +21,7 @@ object CPUFloat32 extends Env[DenseTensor, Float] {
   }
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = ???
 
-  def untype(x: DenseTensor[Float, _]) = x.asInstanceOf[FloatDenseTensor[_]].handle
+  def untype(x: FloatDenseTensor[_]) = x.asInstanceOf[FloatDenseTensor[_]].handle
   def typeOf[A <: $$](x: Tensor[A]) = x.axes
   def typeWith[A <: $$](x: THFloatTensor, a: A) = new FloatDenseTensor[A](x, a)
   

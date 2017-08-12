@@ -8,13 +8,13 @@ import nexus.op._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Affine[T[_, _ <: $$], D, A, B] private(
-  val weight: Param[T[D, B::A::$]],
-  val bias: Param[T[D, B::$]]
+class Affine[T[_ <: $$], D, A, B] private(
+  val weight: Param[T[B::A::$]],
+  val bias: Param[T[B::$]]
 )(implicit val env: Env[T, D])
-  extends Module[T[D, A::$], T[D, B::$]]
+  extends Module[T[A::$], T[B::$]]
 {
-  def apply(x: Expr[T[D, A::$]]): Expr[T[D, B::$]] = Add(MVMul(weight, x), bias)
+  def apply(x: Expr[T[A::$]]): Expr[T[B::$]] = Add(MVMul(weight, x), bias)
 }
 
 object Affine {
@@ -26,14 +26,14 @@ object Affine {
    * @param W Weight matrix (axes B::A::$)
    * @param b Bias vector (axes B::$)
    */
-  def from[T[_, _ <: $$], D, A, B]
-  (W: Param[T[D, B::A::$]], b: Param[T[D, B::$]])(implicit env: Env[T, D]) = new Affine[T, D, A, B](W, b)
+  def from[T[_ <: $$], D, A, B]
+  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit env: Env[T, D]) = new Affine[T, D, A, B](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.
    * @example `Affine(In -> 784, Out -> 300)`
    */
-  def apply[T[_, _ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit env: Env[T, D]) = {
+  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit env: Env[T, D]) = {
     import env._
     val (aA, nA) = in
     val (aB, nB) = out

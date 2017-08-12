@@ -16,14 +16,14 @@ trait SumAlongF[U, X, Y] extends (U => Op1[X, Y])
 
 object SumAlongF {
 
-  implicit def tensor[T[_, _ <: $$], D, A <: $$, U, B <: $$]
+  implicit def tensor[T[_ <: $$], D, A <: $$, U, B <: $$]
   (implicit r: Remove.Aux[A, U, (U, B)], env: Env[T, D]) =
-    new SumAlongF[U, T[D, A], T[D, B]] {
+    new SumAlongF[U, T[A], T[B]] {
       import env._
-      def apply(u: U) = new Op1[T[D, A], T[D, B]] {
+      def apply(u: U) = new Op1[T[A], T[B]] {
         def name = s"SumAlong[${u.getClass.getSimpleName}]"
-        def forward(x: T[D, A]) =  ??? //sumAlong(x, r.index)
-        def backward(dy: T[D, B], y: T[D, B], x: T[D, A]) = ??? // dy.broadcast(r.removed, r.index)
+        def forward(x: T[A]) =  ??? //sumAlong(x, r.index)
+        def backward(dy: T[B], y: T[B], x: T[A]) = ??? // dy.broadcast(r.removed, r.index)
       }
     }
 

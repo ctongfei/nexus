@@ -16,10 +16,10 @@ trait NegF[X, Y] extends Op1[X, Y] {
 
 object NegF {
 
-  implicit def NegImpl[T[_, _ <: $$], D, A <: $$](implicit env: Env[T, D]): NegF[T[D, A], T[D, A]] =
-    new NegF[T[D, A], T[D, A]] {
-      def forward(x: T[D, A]) = -x
-      def backward(dy: T[D, A], y: T[D, A], x: T[D, A]) = -dy
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit env: Env[T, D]): NegF[T[A], T[A]] =
+    new NegF[T[A], T[A]] {
+      def forward(x: T[A]) = -x
+      def backward(dy: T[A], y: T[A], x: T[A]) = -dy
     }
 
 }

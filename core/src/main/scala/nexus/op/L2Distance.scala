@@ -16,12 +16,12 @@ trait L2DistanceF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object L2DistanceF {
   
-  implicit def L2DistanceImpl[T[_, _ <: $$], D, A](implicit env: Env[T, D]) =
-    new L2DistanceF[T[D, A::$], T[D, A::$], T[D, $]] {
+  implicit def vector[T[_ <: $$], D, A](implicit env: Env[T, D]) =
+    new L2DistanceF[T[A::$], T[A::$], T[$]] {
       import env._
-      def forward(x1: T[D, A::$], x2: T[D, A::$]) = sqrt(sum(sqr(x1 - x2)))
-      def backward1(dy: T[D, $], y: T[D, $], x1: T[D, A::$], x2: T[D, A::$]) = (x1 - x2) :* (dy |/| y)
-      def backward2(dy: T[D, $], y: T[D, $], x1: T[D, A::$], x2: T[D, A::$]) = (x2 - x1) :* (dy |/| y)
+      def forward(x1: T[A::$], x2: T[A::$]) = sqrt(sum(sqr(x1 - x2)))
+      def backward1(dy: T[$], y: T[$], x1: T[A::$], x2: T[A::$]) = (x1 - x2) :* (dy |/| y)
+      def backward2(dy: T[$], y: T[$], x1: T[A::$], x2: T[A::$]) = (x2 - x1) :* (dy |/| y)
     }
   
 }

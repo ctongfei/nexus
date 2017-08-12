@@ -11,7 +11,7 @@ import scala.collection._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Values[T[_, _ <: HList], D] private(val map: mutable.HashMap[Expr[_], Any])(implicit val env: Env[T, D]) {
+class Values[T[_ <: HList], D] private(val map: mutable.HashMap[Expr[_], Any])(implicit val env: Env[T, D]) {
 
   def contains[X](x: Expr[X]): Boolean = map.contains(x)
 
@@ -22,7 +22,7 @@ class Values[T[_, _ <: HList], D] private(val map: mutable.HashMap[Expr[_], Any]
   def increment[X](e: Expr[X], v: X) = {
     import env._
     if (contains(e))
-      this.map(e) = addU(untype(this(e).asInstanceOf[T[D, _]]), untype(v.asInstanceOf[T[D, _]]))
+      this.map(e) = addU(untype(this(e).asInstanceOf[T[_]]), untype(v.asInstanceOf[T[_]]))
     else
       this.map(e) = v
   }
@@ -33,7 +33,7 @@ class Values[T[_, _ <: HList], D] private(val map: mutable.HashMap[Expr[_], Any]
 
 object Values {
 
-  def apply[T[_, _ <: HList], D](vs: Assignment*)(implicit env: Env[T, D]) =
+  def apply[T[_ <: HList], D](vs: Assignment*)(implicit env: Env[T, D]) =
     new Values(mutable.HashMap(vs.map(a => a.expr -> a.value): _*))
 
 }
