@@ -36,7 +36,7 @@ object CPUFloat32 extends Env[DenseTensor, Float] {
   def addInplace(x: THFloatTensor, d: THFloatTensor) = ???
   def addScalarU(x: THFloatTensor, u: Float) = ???
   def negU(x: THFloatTensor) = ???
-  def addU(x: THFloatTensor, y: THFloatTensor) = ??? //TH.THFloatTensor_add(x, y, 1.0f)
+  def addU(x: THFloatTensor, y: THFloatTensor) = x + y
   def subU(x: THFloatTensor, y: THFloatTensor) = ???
   def mulU(x: THFloatTensor, y: THFloatTensor) = ???
   def divU(x: THFloatTensor, y: THFloatTensor) = ???

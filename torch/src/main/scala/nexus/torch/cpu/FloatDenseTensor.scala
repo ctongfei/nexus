@@ -30,3 +30,20 @@ class FloatDenseTensor[A <: $$](val handle: THFloatTensor, val axes: A) extends 
   def stringBody = handle.stringRepr
 
 }
+
+object FloatDenseTensor extends DenseTensorFactory[FloatDenseTensor, Float] {
+  def scalar(x: Float) = ???
+
+  def fill[A <: $$](value: => Float, axes: A, shape: Array[Int]) = ???
+
+  def fromFlatArray[A <: $$](array: Array[Float], axes: A, shape: Array[Int]) = {
+    val data = jvmFloatArrayToNative(array)
+    val s = TH.THFloatStorage_newWithData(data, array.length)
+    val h = TH.THFloatTensor_newWithStorage(s,
+      0,
+      TH.THLongStorage_newWithData(jvmLongArrayToNative(shape.map(_.toLong)), shape.length),
+      TH.THLongStorage_newWithData(jvmLongArrayToNative(shape.scanRight(1)(_ * _).tail.map(_.toLong)), shape.length)
+    )
+    new FloatDenseTensor[A](h, axes)
+  }
+}

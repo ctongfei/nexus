@@ -18,6 +18,17 @@ package object cpu {
   def nativeLongArrayToJvm(a: Long_*, n: Int): Array[Long] =
     Array.tabulate(n)(i => TH.longArray_getitem(a, i))
 
+
+  def jvmFloatArrayToNative(a: Array[Float]): Float_* = {
+    val na = TH.new_floatArray(a.length)
+    var i = 0
+    while (i < a.length) {
+      TH.floatArray_setitem(na, i, a(i))
+      i += 1
+    }
+    na
+  }
+
   def jvmLongArrayToNative(a: Array[Long]): Long_* = {
     val na = TH.new_longArray(a.length)
     var i = 0
