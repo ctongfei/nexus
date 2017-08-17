@@ -1,6 +1,7 @@
 package nexus.op
 
 import nexus._
+import nexus.impl._
 import nexus.typelevel._
 
 /**
@@ -17,9 +18,10 @@ trait TMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object TMulF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$, B <: $$, C <: $$](implicit env: Env[T, D], sd: SymDiff.Aux[A, B, C]) =
+  implicit def tensor[T[_ <: $$], D, A <: $$, B <: $$, C <: $$](implicit ops: TypedMathOps[T, D], sd: SymDiff.Aux[A, B, C]) =
     new TMulF[T[A], T[B], T[C]] {
-      import env._
+      import ops._
+      def _ops = ops.ground[C]
       def forward(x1: T[A], x2: T[B]) = x1 ⋈ x2
       def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // dy ⋈ x2
       def backward2(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // dy ⋈ x1

@@ -16,9 +16,10 @@ trait StopGradF[X, Y] extends Op1[X, Y] {
 object StopGradF {
 
   implicit def any[X]: StopGradF[X, X] = new StopGradF[X, X] {
+    def _ops = ???
     def forward(x: X) = x
     def backward(dy: X, y: X, x: X) = dy
-    override def differentiableWrtX = false // stops gradient propagation!
+    // override def differentiableWrtX = false // TODO: stops gradient propagation!
   }
 
 }

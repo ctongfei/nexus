@@ -25,21 +25,36 @@ class FloatDenseTensor[A <: $$](val handle: THFloatTensor, val axes: A) extends 
     case _ => ???
   }
 
-  def stringPrefix = "TorchFloatTensor"
+  def stringPrefix = "TorchCPUFloatTensor"
 
   def stringBody = handle.stringRepr
+
+  override def finalize() = {
+    TH.THFloatTensor_free(handle)
+    super.finalize()
+  }
 
 }
 
 object FloatDenseTensor extends DenseTensorFactory[FloatDenseTensor, Float] {
-  def scalar(x: Float) = ???
+
+  // Torch does not support 0-dim tensors.
+  // Implement it manually.
+  class ZeroDim(val value: Float) extends FloatDenseTensor(null, $) {
+    override def rank = 0
+    override def shape = Array()
+    def strides = Array()
+  }
+
+  def scalar(x: Float) = new ZeroDim(x)
 
   def fill[A <: $$](value: => Float, axes: A, shape: Array[Int]) = ???
 
   def fromFlatArray[A <: $$](array: Array[Float], axes: A, shape: Array[Int]) = {
     val data = jvmFloatArrayToNative(array)
     val s = TH.THFloatStorage_newWithData(data, array.length)
-    val h = TH.THFloatTensor_newWithStorage(s,
+    val h = TH.THFloatTensor_newWithStorage(
+      s,
       0,
       TH.THLongStorage_newWithData(jvmLongArrayToNative(shape.map(_.toLong)), shape.length),
       TH.THLongStorage_newWithData(jvmLongArrayToNative(shape.scanRight(1)(_ * _).tail.map(_.toLong)), shape.length)

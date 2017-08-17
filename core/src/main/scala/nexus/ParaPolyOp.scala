@@ -29,8 +29,9 @@ trait ParaPolyOp1[P, F[P, X, Y] <: (P => Op1[X, Y])] { self =>
     f(parameter)
 
   /** Applies this operation to a symbolic expression. */
-  def apply[X, Y](x: Expr[X])(implicit f: F[P, X, Y]) =
+  def apply[X, Y](x: Expr[X])(implicit f: F[P, X, Y]) = {
     Apply1(ground[X, Y], x)
+  }
 
 }
 

@@ -1,6 +1,7 @@
 package nexus.layer
 
 import nexus._
+import nexus.impl._
 import nexus.op._
 
 /**
@@ -11,7 +12,7 @@ import nexus.op._
 class Affine[T[_ <: $$], D, A, B] private(
   val weight: Param[T[B::A::$]],
   val bias: Param[T[B::$]]
-)(implicit val env: Env[T, D])
+)(implicit val ops: TypedMathOps[T, D])
   extends Module[T[A::$], T[B::$]]
 {
   def apply(x: Expr[T[A::$]]): Expr[T[B::$]] = Add(MVMul(weight, x), bias)
@@ -27,14 +28,14 @@ object Affine {
    * @param b Bias vector (axes B::$)
    */
   def from[T[_ <: $$], D, A, B]
-  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit env: Env[T, D]) = new Affine[T, D, A, B](W, b)
+  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit ops: TypedMathOps[T, D]) = new Affine[T, D, A, B](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.
    * @example `Affine(In -> 784, Out -> 300)`
    */
-  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit env: Env[T, D]) = {
-    import env._
+  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit ops: TypedMathOps[T, D]) = {
+    import ops._
     val (aA, nA) = in
     val (aB, nB) = out
     val W = Param(newGaussianTensor(0f, 1f, aB::aA::$, Array(nB, nA)), name = s"Affine$i.weight")

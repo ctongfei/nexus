@@ -1,6 +1,7 @@
 package nexus.op
 
 import nexus._
+import nexus.impl._
 import shapeless._
 
 /**
@@ -16,8 +17,9 @@ trait EMulF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object EMulF {
 
-  implicit def tensor[T[_ <: HList], D, A <: HList](implicit env: Env[T, D]): EMulF[T[A], T[A], T[A]] =
+  implicit def tensor[T[_ <: HList], D, A <: HList](implicit ops: TypedMathOps[T, D]): EMulF[T[A], T[A], T[A]] =
     new EMulF[T[A], T[A], T[A]] {
+      def _ops = ops.ground[A]
       def forward(x1: T[A], x2: T[A]) = x1 |*| x2
       def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = dy |*| x2
       def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = dy |*| x1

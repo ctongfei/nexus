@@ -1,6 +1,7 @@
 package nexus.op.activation
 
 import nexus._
+import nexus.impl._
 
 /**
  * Softmax activation function.
@@ -15,24 +16,23 @@ import nexus._
  */
 object Softmax extends PolyOp1[SoftmaxF]
 
-@impMsg("Cannot apply Softmax on ${X}.")
+@implicitNotFound("Cannot apply Softmax on ${X}.")
 trait SoftmaxF[X, Y] extends Op1[X, Y] {
   def name = "Softmax"
 }
 
 object SoftmaxF {
 
-  implicit def vector[T[_ <: $$], D, A](implicit env: Env[T, D]) = new SoftmaxF[T[A::$], T[A::$]] {
-    import env._
+  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]) = new SoftmaxF[T[A::$], T[A::$]] {
+    import ops._
+    def _ops = ops.ground[A::$]
     def forward(x: T[A::$]) = {
       val expX = exp(x)
-      scale(expX, getScalar(untype(inv(sum(expX)))))
+      expX :* inv(sum(exp(x)))
     }
     def backward(dy: T[A::$], y: T[A::$], x: T[A::$]) = {
       val dyy = dy |*| y
-      val sumdyy = sum(dyy)
-      val r = dyy - scale(y, getScalar(untype(sumdyy)))
-      r
+      dyy - (y :* sum(dyy))
     }
   }
 

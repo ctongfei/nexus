@@ -16,6 +16,7 @@ trait IdF[X, Y] extends Op1[X, Y] {
 object IdF {
 
   implicit def any[X]: IdF[X, X] = new IdF[X, X] {
+    def _ops = ???
     def forward(x: X) = x
     def backward(dy: X, y: X, x: X) = dy
   }

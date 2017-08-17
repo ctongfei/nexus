@@ -1,6 +1,7 @@
 package nexus.op
 
 import nexus._
+import nexus.impl._
 import shapeless.ops.hlist.Remove
 
 /**
@@ -17,10 +18,11 @@ trait SumAlongF[U, X, Y] extends (U => Op1[X, Y])
 object SumAlongF {
 
   implicit def tensor[T[_ <: $$], D, A <: $$, U, B <: $$]
-  (implicit r: Remove.Aux[A, U, (U, B)], env: Env[T, D]) =
+  (implicit r: Remove.Aux[A, U, (U, B)], ops: TypedMathOps[T, D]) =
     new SumAlongF[U, T[A], T[B]] {
-      import env._
+      import ops._
       def apply(u: U) = new Op1[T[A], T[B]] {
+        def _ops = ops.ground[B]
         def name = s"SumAlong[${u.getClass.getSimpleName}]"
         def forward(x: T[A]) =  ??? //sumAlong(x, r.index)
         def backward(dy: T[B], y: T[B], x: T[A]) = ??? // dy.broadcast(r.removed, r.index)

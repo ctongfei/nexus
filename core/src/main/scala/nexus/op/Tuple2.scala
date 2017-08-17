@@ -14,6 +14,7 @@ trait Tuple2F[X1, X2, Y] extends Op2[X1, X2, Y] {
 object Tuple2F {
 
   implicit def any2[X1, X2] = new Tuple2F[X1, X2, (X1, X2)] {
+    def _ops = ???
     def forward(x1: X1, x2: X2) = (x1, x2)
     def backward1(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._1
     def backward2(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._2

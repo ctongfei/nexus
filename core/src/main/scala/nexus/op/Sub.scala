@@ -1,6 +1,7 @@
 package nexus.op
 
 import nexus._
+import nexus.impl._
 import shapeless._
 
 /**
@@ -16,10 +17,11 @@ trait SubF[X1, X2, Y] extends Op2[X1, X2, Y] {
 
 object SubF {
 
-  implicit def tensor[T[A <: HList], D, A <: HList](implicit env: Env[T, D]) = new SubF[T[A], T[A], T[A]] {
-    def forward(x1: T[A], x2: T[A]) = x1 - x2
-    def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = dy
-    def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = -dy
+  implicit def tensor[T[A <: HList], D, A <: HList](implicit ops: TypedMathOps[T, D]) = new SubF[T[A], T[A], T[A]] {
+    def _ops = ops.ground[A]
+    def forward(x1: T[A], x2: T[A]): T[A] = x1 - x2
+    def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]): T[A] = dy
+    def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]): T[A] = -dy
   }
 
 }
