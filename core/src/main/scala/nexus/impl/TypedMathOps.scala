@@ -15,6 +15,8 @@ trait TypedMathOps[T[_ <: $$], D] extends Typing[T] { self =>
 
   def newTensor[A <: $$](axes: A, shape: Array[Int]): T[A]
 
+  def newZeroBy[A <: $$](x: T[A]): T[A]
+
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]): T[A]
 
   def scalar(x: D) = typeWith(H.scalar(x), $)
@@ -82,6 +84,9 @@ trait TypedMathOps[T[_ <: $$], D] extends Typing[T] { self =>
 
   def sum[A <: $$](x: T[A]): T[$] = typeWith(H.sum(untype(x)), $)
 
+  def mmMul[A, B, C](x: T[A::B::$], y: T[B::C::$]): T[A::C::$] =
+    typeWith(H.mmMul(untype(x), untype(y)), AxesUtils.mmMul(typeOf(x), typeOf(y)))
+
   def mvMul[A, B](x: T[A::B::$], y: T[B::$]): T[A::$] =
     typeWith(H.mvMul(untype(x), untype(y)), typeOf(x).head::$)
 
@@ -104,6 +109,8 @@ trait TypedMathOps[T[_ <: $$], D] extends Typing[T] { self =>
 
 
   def ground[A <: $$]: GradOps[T[A]] = new GradOps[T[A]] {
+
+    def zeroBy(x: T[A]) = self.newZeroBy(x)
     def add(x1: T[A], x2: T[A]) = self.add(x1, x2)
     def addI(x1: T[A], x2: T[A]) = self.addI(x1, x2)
     def sub(x1: T[A], x2: T[A]) = self.sub(x1, x2)

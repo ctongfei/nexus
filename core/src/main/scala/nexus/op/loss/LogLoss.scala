@@ -16,10 +16,10 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object LogLoss extends PolyOp2[LogLossF]
+object LogLoss extends PolyDOp2[LogLossF]
 
 @implicitNotFound("Cannot apply LogLoss to ${Ŷ} and ${Y}.")
-trait LogLossF[Ŷ, Y, L] extends Op2[Ŷ, Y, L] {
+trait LogLossF[Ŷ, Y, L] extends DOp2[Ŷ, Y, L] {
   def name = "LogLoss"
 }
 
@@ -28,7 +28,7 @@ object LogLossF {
   implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]): LogLossF[T[A::$], T[A::$], T[$]] =
     new LogLossF[T[A::$], T[A::$], T[$]] {
       import ops._
-      def _ops = ops.ground[$]
+      def gradOps = ops.ground[$]
       def forward(ŷ: T[A::$], y: T[A::$]) =
         -(sum(y |*| log(ŷ)))
       def backward1(dl: T[$], l: T[$], ŷ: T[A::$], y: T[A::$]) =

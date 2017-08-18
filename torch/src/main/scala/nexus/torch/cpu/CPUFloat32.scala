@@ -19,6 +19,8 @@ object CPUFloat32 extends TypedMathOps[FloatDenseTensor, Float] with Typing[Floa
   def D = ???
   def newTensor[A <: $$](axes: A, shape: Array[Int]) = ???
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = ???
+
+  def newZeroBy[A <: $$](x: FloatDenseTensor[A]) = ???
   def fromDouble(d: Double) = ???
   def fromFloat(f: Float) = ???
 }

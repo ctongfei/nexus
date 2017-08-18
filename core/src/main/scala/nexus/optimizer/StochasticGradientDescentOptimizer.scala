@@ -14,7 +14,7 @@ class StochasticGradientDescentOptimizer private(val η: Double) extends Optimiz
 
   def update(gradients: Values) = {
     for ((p @ Param(value, _), grad) <- gradients.map) {
-      import p.ops._
+      import p.gradOps._
       addI(value, scale(grad, -η))
     }
   }

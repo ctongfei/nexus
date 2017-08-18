@@ -16,10 +16,10 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sigmoid extends PolyOp1[SigmoidF]
+object Sigmoid extends PolyDOp1[SigmoidF]
 
 @implicitNotFound("Cannot apply Sigmoid on ${X}.")
-trait SigmoidF[X, Y] extends Op1[X, Y] {
+trait SigmoidF[X, Y] extends DOp1[X, Y] {
   def name = "Sigmoid"
 }
 
@@ -27,7 +27,7 @@ object SigmoidF {
 
   implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new SigmoidF[T[A], T[A]] {
     import ops._
-    def _ops = ops.ground[A]
+    def gradOps = ops.ground[A]
     def forward(x: T[A]) = sigmoid(x)
     def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y |*| addS(-y, D.one)
   }

@@ -8,5 +8,10 @@ package nexus
 class ExpressionNotDifferentiableException(e: Expr[_])
   extends Exception(s"Not differentiable with respect to expression $e.")
 
-class OperatorNotDifferentiableException(name: String)
-  extends Exception(s"Operator $name is not differentiable.")
+class OperatorNotDifferentiableException(name: String, ordinal: Int)
+  extends Exception(s"Operator $name is not differentiable with respect to its ${ordinal match {
+    case 1 => "1st"
+    case 2 => "2nd"
+    case 3 => "3rd"
+    case n => s"${n}th" // actually will never happen: nexus only allows operators with maximum arity 3
+  }} parameter.")

@@ -17,6 +17,8 @@ trait MathOps[_H, @specialized(Float, Double) _D] extends GradOps[_H] {
   def getScalar(x: H): D
   def scalar(x: D): H
 
+  def zeroBy(x: H): H
+
   def add(x1: H, x2: H): H
   def addI(x1: H, x2: H): Unit
   def addS(x1: H, x2: D): H
@@ -30,6 +32,8 @@ trait MathOps[_H, @specialized(Float, Double) _D] extends GradOps[_H] {
 
   def eDiv(x1: H, x2: H): H
 
+
+  def scale(x: _H, k: Double) = scale(x, D.fromDouble(k))
   def scale(x: H, k: D): H
 
   def inv(x: H): H
@@ -52,6 +56,7 @@ trait MathOps[_H, @specialized(Float, Double) _D] extends GradOps[_H] {
 
   def transpose(x: H): H
 
+  def mmMul(x: H, y: H): H
   def mvMul(x: H, y: H): H
   def vvMul(x: H, y: H): H
   def dot(x: H, y: H): H

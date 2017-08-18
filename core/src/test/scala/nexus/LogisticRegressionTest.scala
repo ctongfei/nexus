@@ -35,7 +35,7 @@ object LogisticRegressionTest extends App {
   val x = Input[DenseTensor[In::$]]()
   val y = Input[DenseTensor[Out::$]]()
 
-  val Layer = Affine(In -> 2, Out -> 2)(cpuFloat32)
+  val Layer = Affine(In -> 2, Out -> 2)
 
   val output = x |> Layer |> Softmax
   val loss = LogLoss(output, y)

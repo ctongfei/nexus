@@ -12,9 +12,9 @@ import nexus.op._
 class Linear[T[_ <: $$], D, A, B] private(
   val weight: Param[T[B::A::$]]
 )(implicit val ops: TypedMathOps[T, D])
-  extends Module[T[A::$], T[B::$]]
+  extends DModule[T[A::$], T[B::$]]
 {
-  def apply(x: Expr[T[A::$]]): Expr[T[B::$]] = MVMul(weight, x)
+  def apply(x: Expr[T[A::$]]): DExpr[T[B::$]] = MVMul(weight, x)
 }
 
 object Linear {

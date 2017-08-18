@@ -24,6 +24,8 @@ object TypedCPUFloat32 extends TypedMathOps[DenseTensor, Float] with Typing[Dens
     DenseTensor.fromFlatArray(Array.fill(ShapeUtils.product(shape))(((r.nextGaussian() - μ) * σ).toFloat), axes, shape)
   }
 
+  def newZeroBy[A <: $$](x: DenseTensor[A]) = newTensor(x.axes, x.shape)
+
   def untype(x: DenseTensor[_]) = x
   def typeOf[A <: HList](x: DenseTensor[A]) = x.axes
   def typeWith[A <: HList](x: UntypedDenseTensor, a: A) = x typeWith a
@@ -155,6 +157,8 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
   }
 
 
+  def zeroBy(x: UntypedDenseTensor) = new UntypedDenseTensor.Contiguous(new Array[Float](x.size), x.shape)
+
   def neg(x: UntypedDenseTensor) = map(x)(-_)
   def add(x1: UntypedDenseTensor, x2: UntypedDenseTensor) = map2(x1, x2)(_+_)
   def sub(x1: UntypedDenseTensor, x2: UntypedDenseTensor) = map2(x1, x2)(_-_)
@@ -169,7 +173,6 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
 
 
   def scale(x: UntypedDenseTensor, u: Float) = map(x)(_ * u)
-  def scale(x: UntypedDenseTensor, u: Double) = map(x)(_ * u.toFloat)
 
   def addI(x: UntypedDenseTensor, d: UntypedDenseTensor) = inplace2(x, d)(_+_)
 
@@ -186,6 +189,9 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
     offset = 0,
     stride = Array(x.stride(1), x.stride(0))
   )
+
+
+  def mmMul(x: UntypedCPUFloat32.H, y: UntypedCPUFloat32.H) = ???
 
   def mvMul(x: UntypedDenseTensor, y: UntypedDenseTensor) = {
     require(x.rank == 2 && y.rank == 1)

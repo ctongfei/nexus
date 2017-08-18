@@ -5,6 +5,8 @@ package nexus.impl
  */
 trait GradOps[H] {
 
+  def zeroBy(x: H): H
+
   def add(x1: H, x2: H): H
   def addI(x1: H, x2: H): Unit
 

@@ -14,10 +14,10 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Softmax extends PolyOp1[SoftmaxF]
+object Softmax extends PolyDOp1[SoftmaxF]
 
 @implicitNotFound("Cannot apply Softmax on ${X}.")
-trait SoftmaxF[X, Y] extends Op1[X, Y] {
+trait SoftmaxF[X, Y] extends DOp1[X, Y] {
   def name = "Softmax"
 }
 
@@ -25,7 +25,7 @@ object SoftmaxF {
 
   implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]) = new SoftmaxF[T[A::$], T[A::$]] {
     import ops._
-    def _ops = ops.ground[A::$]
+    def gradOps = ops.ground[A::$]
     def forward(x: T[A::$]) = {
       val expX = exp(x)
       expX :* inv(sum(exp(x)))

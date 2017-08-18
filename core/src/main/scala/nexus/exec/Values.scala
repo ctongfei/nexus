@@ -19,9 +19,9 @@ class Values private(val map: mutable.HashMap[Expr[_], Any]) {
 
   def update[X](x: Expr[X], value: X): Unit = map.update(x, value)
 
-  def increment[X](e: Expr[X], v: X) = {
+  def increment[X](e: DExpr[X], v: X) = {
     if (contains(e))
-      e.ops.addI(this(e), v)
+      e.gradOps.addI(this(e), v)
     else
       this.map(e) = v
   }

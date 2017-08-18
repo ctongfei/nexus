@@ -9,11 +9,11 @@ import shapeless.ops.hlist.Remove
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class SumAlong[U](u: U) extends ParaPolyOp1[U, SumAlongF] {
+case class SumAlong[U](u: U) extends ParaPolyDOp1[U, SumAlongF] {
   def parameter = u
 }
 
-trait SumAlongF[U, X, Y] extends (U => Op1[X, Y])
+trait SumAlongF[U, X, Y] extends (U => DOp1[X, Y])
 
 object SumAlongF {
 
@@ -21,8 +21,8 @@ object SumAlongF {
   (implicit r: Remove.Aux[A, U, (U, B)], ops: TypedMathOps[T, D]) =
     new SumAlongF[U, T[A], T[B]] {
       import ops._
-      def apply(u: U) = new Op1[T[A], T[B]] {
-        def _ops = ops.ground[B]
+      def apply(u: U) = new DOp1[T[A], T[B]] {
+        def gradOps = ops.ground[B]
         def name = s"SumAlong[${u.getClass.getSimpleName}]"
         def forward(x: T[A]) =  ??? //sumAlong(x, r.index)
         def backward(dy: T[B], y: T[B], x: T[A]) = ??? // dy.broadcast(r.removed, r.index)
