@@ -15,7 +15,10 @@ class Affine[T[_ <: $$], D, A, B] private(
 )(implicit val ops: TypedMathOps[T, D])
   extends DModule[T[A::$], T[B::$]]
 {
-  def apply(x: Expr[T[A::$]]): DExpr[T[B::$]] = Add(MVMul(weight, x), bias)
+
+  def apply(x: Expr[T[A::$]]): DExpr[T[B::$]] =
+    Add(MVMul(weight, x), bias)
+
 }
 
 object Affine {

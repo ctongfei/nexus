@@ -54,7 +54,7 @@ object XorTest extends App {
   val sgd = StochasticGradientDescentOptimizer(0.5f)
 
   /** Start running! */
-  for (epoch <- 0 until 1000) {
+  for (epoch <- 0 until 3000) {
     var averageLoss = 0f
 
     // For each sample
@@ -71,5 +71,11 @@ object XorTest extends App {
 
     println(s"Epoch $epoch: loss = ${averageLoss / 4.0}")
   }
+
+  println(Layer1.weight.value)
+  println(Layer1.bias.value)
+
+  println(Layer2.weight.value)
+  println(Layer2.bias.value)
 
 }

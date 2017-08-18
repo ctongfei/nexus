@@ -11,9 +11,7 @@ import nexus.util._
  */
 sealed trait Expr[X] {
 
-  /**
-   * Passes this expression through any neural function.
-   */
+  /** Passes this expression through any function. */
   def |>[Y]
   (f: Module[X, Y]): Expr[Y] =
     f(this)
@@ -25,17 +23,13 @@ sealed trait Expr[X] {
   def |>[Y]
   (f: Op1[X, Y]): Expr[Y] = f(this)
 
-  /**
-   * Passes this expression through any polymorphic neural function.
-   */
+  /** Passes this expression through any polymorphic neural function. */
   def |>[F[X, Y] <: Op1[X, Y], Y]
   (op: PolyOp1[F])
   (implicit f: F[X, Y]): Expr[Y] =
     f(this)
 
-  /**
-   * Passes this expression through any parametrized polymorphic neural function.
-   */
+  /** Passes this expression through any parametrized polymorphic neural function. */
   def |>[F[P, X, Y] <: (P => Op1[X, Y]), P, Y]
   (op: ParaPolyOp1[P, F])
   (implicit f: F[P, X, Y]): Expr[Y] =
@@ -56,14 +50,16 @@ sealed trait Expr[X] {
     case DApply1(op, x) => DApply1(op, x.substitute(ax, a))
     case DApply2(op, x1, x2) => DApply2(op, x1.substitute(ax, a), x2.substitute(ax, a))
     case DApply3(op, x1, x2, x3) => DApply3(op, x1.substitute(ax, a), x2.substitute(ax, a), x3.substitute(ax, a))
-
   }
 }
 
+/**
+ * Represents an expression in a computational graph
+ * whose gradient would be computed in backward computation.
+ */
 sealed trait DExpr[X] extends Expr[X] {
 
   def gradOps: GradOps[X]
-
 
   def |>[Y]
   (f: DOp1[X, Y]): DExpr[Y] = f(this)
@@ -91,6 +87,7 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
   def =>>[Y](y: Expr[Y]): Module[X, Y] = new Module[X, Y] {
     def apply(x: Expr[X]) = y.substitute(self, x)
   }
+
 
 }
 
@@ -138,16 +135,28 @@ case class Apply3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[
   override def toString = s"${op.name}($x1, $x2, $x3)"
 }
 
+/**
+ * The result of the application of a unary differentiable function to an expression.
+ * Gradient of this expression would be computed in backward computation.
+ */
 case class DApply1[X, Y](op: DOp1[X, Y], x: Expr[X]) extends DExpr[Y] {
   def gradOps = op.gradOps
   override def toString = s"${op.name}($x)"
 }
 
+/**
+ * The result of the application of a binary differentiable function to two expressions.
+ * Gradient of this expression would be computed in backward computation.
+ */
 case class DApply2[X1, X2, Y](op: DOp2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends DExpr[Y] {
   def gradOps = op.gradOps
   override def toString = s"${op.name}($x1, $x2)"
 }
 
+/**
+ * The result of the application of a ternary differentiable function to three expressions.
+ * Gradient of this expression would be computed in backward computation.
+ */
 case class DApply3[X1, X2, X3, Y](op: DOp3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) extends DExpr[Y] {
   def gradOps = op.gradOps
   override def toString = s"${op.name}($x1, $x2, $x3)"

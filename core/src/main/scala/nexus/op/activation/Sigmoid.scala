@@ -8,11 +8,11 @@ import shapeless._
 
 /**
  * Sigmoid activation function that maps any real output to the interval (0, 1).
- * The input should be a vector \(\mathbf{x}\).
  *
- * The output is also a vector \(\mathbf{y}\), computed as
+ * Input: a vector 「bb"x"」.
  *
- * \(y_i = \dfrac{1}{1 + e^{-x_i}}\).
+ * Output: a vector 「bb"y"」, of the same length as 「bb"x"」, computed as
+ * 「y_i = 1/(1 + e^(-x_i))」.
  * @author Tongfei Chen
  * @since 0.1.0
  */

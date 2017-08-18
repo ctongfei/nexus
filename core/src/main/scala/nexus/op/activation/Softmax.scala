@@ -6,11 +6,10 @@ import nexus.impl._
 /**
  * Softmax activation function.
  *
- * Input: a vector \(\mathbf{x}\).
+ * Input: a vector 「bb"x"」.
  *
- * Output: a vector \(\mathbf{y}\), computed as
- *
- * \( y_i = \dfrac {\exp{x_i}} {\sum_j {\exp{x_j} } } \).
+ * Output: a vector 「bb"y"」, of the same size as 「bb"x"」, computed as
+ * 「y_i = (exp x_i) / (sum_j exp x_j)」.
  * @author Tongfei Chen
  * @since 0.1.0
  */

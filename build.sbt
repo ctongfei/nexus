@@ -22,7 +22,17 @@ lazy val commonSettings = Seq(
       listHtmlFile(docDir).foreach { f =>
         val content = Source.fromFile(f).getLines().mkString("\n")
         val writer = new java.io.PrintWriter(f)
-        writer.write(content.replace("<head>", """<head><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>"""))
+        writer.write(content.replace(
+          "<head>",
+          """<head>
+             |  <script type="text/x-mathjax-config">
+             |    MathJax.Hub.Config({
+             |      asciimath2jax: { delimiters: [['「', '」']] }
+             |    });
+             |  </script>
+             |  <script type="text/javascript" async
+             |    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+             |  </script>""".stripMargin))
         writer.close()
       }
   },

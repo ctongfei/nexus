@@ -5,6 +5,10 @@ import nexus.impl._
 
 /**
  * Euclidean inner product of two vectors.
+ *
+ * Inputs: two vectors 「bb "a"」 and 「bb "b"」 with the same length.
+ *
+ * Output: a scalar, computed as 「y = bb"a" cdot bb"b" = sum_i  a_i b_i」.
  * @author Tongfei Chen
  * @since 0.1.0
  */
