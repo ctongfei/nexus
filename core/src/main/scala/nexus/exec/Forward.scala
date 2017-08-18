@@ -10,10 +10,10 @@ import shapeless._
  */
 object Forward {
 
-  def compute[T[_ <: $$], D, X](e: Expr[X])(inputs: Assignment*)(implicit env: Env[T, D]): (X, Values[T, D]) =
-    compute(e, Values[T, D](inputs: _*))
+  def compute[T[_ <: $$], D, X](e: Expr[X])(inputs: Assignment*): (X, Values) =
+    compute(e, Values(inputs: _*))
 
-  def compute[T[_ <: $$], D, X](e: Expr[X], inputs: Values[T, D]): (X, Values[T, D]) = {
+  def compute[T[_ <: $$], D, X](e: Expr[X], inputs: Values): (X, Values) = {
     val values = inputs
 
     def eval[X](e: Expr[X]): X = {
@@ -33,6 +33,16 @@ object Forward {
         case Apply3(o, x1, x2, x3) =>
           val y = o.forward(eval(x1), eval(x2), eval(x3))
           values(e) = y; y
+        case DApply1(o, x) =>
+          val y = o.forward(eval(x))
+          values(e) = y; y
+        case DApply2(o, x1, x2) =>
+          val y = o.forward(eval(x1), eval(x2))
+          values(e) = y; y
+        case DApply3(o, x1, x2, x3) =>
+          val y = o.forward(eval(x1), eval(x2), eval(x3))
+          values(e) = y; y
+
       }
     }
 

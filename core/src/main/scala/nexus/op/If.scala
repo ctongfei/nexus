@@ -1,25 +1,25 @@
 package nexus.op
 
 import nexus._
+import nexus.impl._
 
 /**
  * @author Tongfei Chen
  */
-object If extends PolyOp3[IfF]
+object If extends PolyDOp3[IfF]
 
-trait IfF[X1, X2, X3, Y] extends Op3[X1, X2, X3, Y] {
+trait IfF[C, T, F, R] extends DOp3[C, T, F, R] {
   def name = "If"
 }
 
-
 object IfF {
-/*
-  implicit def IfImpl[X]: IfF[Boolean, X, X, X] = new IfF[Boolean, X, X, X] {
-    def forward(x1: Boolean, x2: X, x3: X) = if (x1) x2 else x3
-    def backward1(dy: X, y: X, x1: Boolean, x2: X, x3: X) = ???
-    def backward2(dy: X, y: X, x1: Boolean, x2: X, x3: X) = if (x1) dy else 0
-    def backward3(dy: X, y: X, x1: Boolean, x2: X, x3: X) = if (!x1) dy else 0
-  }
-*/
-}
 
+  implicit def differentiable[X](implicit XG: GradOps[X]): IfF[Boolean, X, X, X] = new IfF[Boolean, X, X, X] {
+    override def gradOps = XG
+    def forward(c: Boolean, t: X, f: X) = if (c) t else f
+    def backward1(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(name, 1)
+    def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = if (c) dy else XG.zeroBy(t)
+    def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = if (!c) dy else XG.zeroBy(f)
+  }
+
+}

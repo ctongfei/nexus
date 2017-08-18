@@ -8,10 +8,8 @@ import nexus.exec._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Optimizer[T[_ <: $$], D] {
+trait Optimizer {
 
-  def env: Env[T, D]
-
-  def update(gradients: Values[T, D]): Unit
+  def update(gradients: Values): Unit
 
 }

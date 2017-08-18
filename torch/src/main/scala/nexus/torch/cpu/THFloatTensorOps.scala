@@ -52,7 +52,7 @@ object THFloatTensorSyntax {
 
     def stringRepr: String = rank match {
       case 0 =>
-        get(offset).toString
+        a.asInstanceOf[FloatDenseTensor.ZeroDim].value.toString
       case 1 =>
         (0 until shape(0)).map { i => get(offset + i * strides(0)) }.mkString("[", ", \t", "]")
       case _ =>

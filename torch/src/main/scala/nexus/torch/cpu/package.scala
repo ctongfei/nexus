@@ -1,14 +1,14 @@
 package nexus.torch
 
 import jtorch._
-import nexus.Env
+import nexus.impl._
 
 /**
  * @author Tongfei Chen
  */
 package object cpu {
 
-  implicit val cpuFloat32: Env[FloatDenseTensor, Float] = CPUFloat32
+  implicit val cpuFloat32: TypedMathOps[FloatDenseTensor, Float] = CPUFloat32
 
   System.loadLibrary("jnith")
   System.loadLibrary("TH.1")

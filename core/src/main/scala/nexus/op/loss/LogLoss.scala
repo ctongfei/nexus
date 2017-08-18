@@ -1,6 +1,7 @@
 package nexus.op.loss
 
 import nexus._
+import nexus.impl._
 
 /**
  * The logarithmic loss (a.k.a. the cross entropy loss) function.
@@ -15,18 +16,19 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object LogLoss extends PolyOp2[LogLossF]
+object LogLoss extends PolyDOp2[LogLossF]
 
-@impMsg("Cannot apply LogLoss to ${Ŷ} and ${Y}.")
-trait LogLossF[Ŷ, Y, L] extends Op2[Ŷ, Y, L] {
+@implicitNotFound("Cannot apply LogLoss to ${Ŷ} and ${Y}.")
+trait LogLossF[Ŷ, Y, L] extends DOp2[Ŷ, Y, L] {
   def name = "LogLoss"
 }
 
 object LogLossF {
 
-  implicit def vector[T[_ <: $$], D, A](implicit env: Env[T, D]): LogLossF[T[A::$], T[A::$], T[$]] =
+  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]): LogLossF[T[A::$], T[A::$], T[$]] =
     new LogLossF[T[A::$], T[A::$], T[$]] {
-      import env._
+      import ops._
+      def gradOps = ops.ground[$]
       def forward(ŷ: T[A::$], y: T[A::$]) =
         -(sum(y |*| log(ŷ)))
       def backward1(dl: T[$], l: T[$], ŷ: T[A::$], y: T[A::$]) =
