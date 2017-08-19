@@ -48,7 +48,7 @@ object XorTest extends App {
     Layer2  |>
     Softmax
 
-  val loss = LogLoss(ŷ, y)
+  val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
   val sgd = StochasticGradientDescentOptimizer(0.5f)
