@@ -19,6 +19,6 @@ object MapTest extends App {
 
   val a = Input[DenseTensor[$]]()
 
-  val b = a |> EMap(f)
+  val b = a |> Map(f)
 
 }

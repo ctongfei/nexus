@@ -17,7 +17,7 @@ trait MMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 }
 
 object MMulF {
-  implicit def matrix[T[_ <: $$], D, A, B, C](implicit ops: TypedMathOps[T, D]): MMulF[T[A::B::$], T[B::C::$], T[A::C::$]] =
+  implicit def matrix[T[_ <: $$], D, A, B, C](implicit ops: TypedRealTensorOps[T, D]): MMulF[T[A::B::$], T[B::C::$], T[A::C::$]] =
     new MMulF[T[A::B::$], T[B::C::$], T[A::C::$]] {
       import ops._
       def gradOps = ops.ground[A::C::$]

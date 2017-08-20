@@ -1,6 +1,7 @@
 package nexus.op
 
 import nexus._
+import nexus.exception._
 import nexus.impl._
 
 /**

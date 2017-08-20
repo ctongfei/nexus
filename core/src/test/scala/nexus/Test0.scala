@@ -3,7 +3,6 @@ package nexus
 import nexus.exec._
 import nexus.cpu._
 import nexus.op._
-import nexus.op.activation._
 import nexus.optimizer._
 
 /**
@@ -20,7 +19,7 @@ object Test0 extends App {
 
   for (i <- 0 until 20) {
     println(s"Epoch $i: p = ${p.value()}")
-    val (lv, values) = Forward.compute(l, Values())
+    val (lv, values) = Forward.compute(l, ExprValueMap())
     val gradients = Backward.compute(l, values)
     sgd.update(gradients)
   }

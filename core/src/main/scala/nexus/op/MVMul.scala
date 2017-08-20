@@ -24,7 +24,7 @@ trait MVMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object MVMulF {
 
-  implicit def mv[T[_ <: $$], D, A, B](implicit ops: TypedMathOps[T, D]): MVMulF[T[B::A::$], T[A::$], T[B::$]] =
+  implicit def mv[T[_ <: $$], D, A, B](implicit ops: TypedRealTensorOps[T, D]): MVMulF[T[B::A::$], T[A::$], T[B::$]] =
     new MVMulF[T[B::A::$], T[A::$], T[B::$]] {
       import ops._
       def gradOps = ops.ground[B::$]

@@ -17,7 +17,7 @@ trait NegF[X, Y] extends DOp1[X, Y] {
 
 object NegF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]): NegF[T[A], T[A]] =
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]): NegF[T[A], T[A]] =
     new NegF[T[A], T[A]] {
       def gradOps = ops.ground[A]
       def forward(x: T[A]) = -x

@@ -13,15 +13,15 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object EExp extends PolyDOp1[EExpF]
+object Exp extends PolyDOp1[ExpF]
 
-trait EExpF[X, Y] extends DOp1[X, Y] {
+trait ExpF[X, Y] extends DOp1[X, Y] {
   def name = "EExp"
 }
 
-object EExpF {
+object ExpF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new EExpF[T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new ExpF[T[A], T[A]] {
     import ops._
     def gradOps = ops.ground[A]
     def forward(x: T[A]) = exp(x)

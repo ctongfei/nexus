@@ -96,13 +96,18 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
  * A parameter of a model.
  * @param value Initial value of this parameter
  */
-case class Param[X](value: X, name: String)(val gradOps: GradOps[X]) extends DExpr[X] {
+case class Param[X](var value: X, name: String)(val gradOps: GradOps[X]) extends DExpr[X] {
   override def toString = name
+
+  def +=(g: X) = if (gradOps.mutable)
+    gradOps.addI(value, g)
+  else value = gradOps.add(value, g)
+
 }
 
 object Param {
 
-  def apply[T[_ <: $$], D, A <: $$](value: T[A], name: String)(implicit ops: TypedMathOps[T, D]) = new Param(value, name)(ops.ground[A])
+  def apply[T[_ <: $$], D, A <: $$](value: T[A], name: String)(implicit ops: TypedRealTensorOps[T, D]) = new Param(value, name)(ops.ground[A])
 
 }
 

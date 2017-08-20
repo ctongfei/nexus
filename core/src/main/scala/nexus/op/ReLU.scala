@@ -1,4 +1,4 @@
-package nexus.op.activation
+package nexus.op
 
 import nexus._
 import nexus.impl._
@@ -17,7 +17,7 @@ trait ReLUF[X, Y] extends DOp1[X, Y] {
 
 object ReLUF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new ReLUF[T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new ReLUF[T[A], T[A]] {
     import ops._
     def gradOps = ops.ground[A]
     def forward(x: T[A]) = relu(x)

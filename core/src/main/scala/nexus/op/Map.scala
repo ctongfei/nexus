@@ -9,15 +9,15 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class EMap[D](f: DOp1[D, D]) extends ParaPolyDOp1[DOp1[D, D], EMapF] {
+case class Map[D](f: DOp1[D, D]) extends ParaPolyDOp1[DOp1[D, D], MapF] {
   def parameter = f
 }
 
-trait EMapF[P, X, Y] extends (P => DOp1[X, Y])
+trait MapF[P, X, Y] extends (P => DOp1[X, Y])
 
-object EMapF {
+object MapF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new EMapF[DOp1[D, D], T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new MapF[DOp1[D, D], T[A], T[A]] {
     def apply(f: DOp1[D, D]) = new DOp1[T[A], T[A]] {
       import ops._
       def name = s"EMap[${f.name}]"

@@ -18,14 +18,14 @@ import nexus.impl._
  */
 object CrossEntropy extends PolyDOp2[CrossEntropyF]
 
-@implicitNotFound("Cannot apply CrossEntropy to ${Ŷ} and ${Y}.")
+@implicitNotFound("Cannot apply CrossEntropy to ${P} and ${Q}.")
 trait CrossEntropyF[P, Q, Y] extends DOp2[P, Q, Y] {
   def name = "CrossEntropy"
 }
 
 object CrossEntropyF {
 
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]): CrossEntropyF[T[A :: $], T[A :: $], T[$]] =
+  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]): CrossEntropyF[T[A::$], T[A::$], T[$]] =
     new CrossEntropyF[T[A :: $], T[A :: $], T[$]] {
       import ops._
       def gradOps = ops.ground[$]

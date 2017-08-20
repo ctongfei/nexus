@@ -1,6 +1,7 @@
 package nexus.op.loss
 
 import nexus._
+import nexus.exception._
 import nexus.impl._
 
 object LogLoss extends PolyDOp2[LogLossF]
@@ -12,7 +13,7 @@ trait LogLossF[Y, Ŷ, L] extends DOp2[Y, Ŷ, L] {
 
 object LogLossF {
 
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]): LogLossF[Int, T[A::$], T[$]] =
+  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]): LogLossF[Int, T[A::$], T[$]] =
     new LogLossF[Int, T[A::$], T[$]] {
       import ops._
       def gradOps = ops.ground[$]

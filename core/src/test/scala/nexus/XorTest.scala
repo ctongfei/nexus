@@ -4,7 +4,6 @@ import nexus.exec._
 import nexus.cpu._
 import nexus.layer._
 import nexus.op._
-import nexus.op.activation._
 import nexus.op.loss._
 import nexus.optimizer._
 
@@ -51,7 +50,7 @@ object XorTest extends App {
   val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
-  val sgd = StochasticGradientDescentOptimizer(0.5f)
+  val sgd = new AdamOptimizer(0.1)
 
   /** Start running! */
   for (epoch <- 0 until 3000) {

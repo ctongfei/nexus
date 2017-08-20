@@ -17,7 +17,7 @@ trait EMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object EMulF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]): EMulF[T[A], T[A], T[A]] =
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]): EMulF[T[A], T[A], T[A]] =
     new EMulF[T[A], T[A], T[A]] {
       def gradOps = ops.ground[A]
       def forward(x1: T[A], x2: T[A]) = x1 |*| x2

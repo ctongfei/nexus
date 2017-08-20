@@ -10,10 +10,10 @@ import scala.util._
 /**
  * @author Tongfei Chen
  */
-object TypedCPUFloat32 extends TypedMathOps[DenseTensor, Float] with Typing[DenseTensor] {
+object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with AxisTyping[DenseTensor] {
   type H = UntypedDenseTensor
   val H = UntypedCPUFloat32
-  def D = algebra.instances.all.floatAlgebra
+  val D = RealOps.Float32
 
   def newTensor[A <: HList](axes: A, shape: Array[Int]) =
     DenseTensor.fromFlatArray(Array.ofDim[Float](ShapeUtils.product(shape)), axes, shape)
@@ -24,7 +24,8 @@ object TypedCPUFloat32 extends TypedMathOps[DenseTensor, Float] with Typing[Dens
     DenseTensor.fromFlatArray(Array.fill(ShapeUtils.product(shape))(((r.nextGaussian() - μ) * σ).toFloat), axes, shape)
   }
 
-  def newZeroBy[A <: $$](x: DenseTensor[A]) = newTensor(x.axes, x.shape)
+
+  def zeroBy[A <: $$](x: DenseTensor[A]) = newTensor(x.axes, x.shape)
 
   def untype(x: DenseTensor[_]) = x
   def typeOf[A <: HList](x: DenseTensor[A]) = x.axes
@@ -37,13 +38,15 @@ object TypedCPUFloat32 extends TypedMathOps[DenseTensor, Float] with Typing[Dens
 }
 
 
-object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
+object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float] {
 
-  def D = algebra.instances.all.floatAlgebra
+  val D = RealOps.Float32
+
+  def mutable = true
 
   def map(x: UntypedDenseTensor)(f: Float => Float): UntypedDenseTensor = {
     import x._
-    if (x.rank == 0) return scalar(f(x()))
+    if (x.rank == 0) return wrapScalar(f(x()))
     val y = new Array[Float](size)
     var yi = 0
     var xi = offset
@@ -68,7 +71,7 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
   }
 
   def map2(x1: UntypedDenseTensor, x2: UntypedDenseTensor)(f: (Float, Float) => Float): UntypedDenseTensor = {
-    if (x1.rank == 0 && x2.rank == 0) return scalar(f(x1(), x2()))
+    if (x1.rank == 0 && x2.rank == 0) return wrapScalar(f(x1(), x2()))
     val y = new Array[Float](x1.size)
     var yi = 0
     var x1i = x1.offset
@@ -97,7 +100,7 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
 
 
   def map3(x1: UntypedDenseTensor, x2: UntypedDenseTensor, x3: UntypedDenseTensor)(f: (Float, Float, Float) => Float): UntypedDenseTensor = {
-    if (x1.rank == 0 && x2.rank == 0 && x3.rank == 0) return scalar(f(x1(), x2(), x3()))
+    if (x1.rank == 0 && x2.rank == 0 && x3.rank == 0) return wrapScalar(f(x1(), x2(), x3()))
     val y = new Array[Float](x1.size)
     var yi = 0
     var x1i = x1.offset
@@ -166,6 +169,8 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
   def eDiv(x1: UntypedDenseTensor, x2: UntypedDenseTensor) = map2(x1, x2)(_/_)
 
 
+  def addS(x1: UntypedDenseTensor, x2: Double) = map(x1)(_+x2.toFloat)
+
   def sqr(x: UntypedDenseTensor) = map(x)(x => x * x)
   def sqrt(x: UntypedDenseTensor) = map(x)(x => Math.sqrt(x).toFloat)
 
@@ -178,8 +183,8 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
 
   def log(x: UntypedDenseTensor) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
 
-  def getScalar(x: UntypedDenseTensor) = x.handle(0)
-  def scalar(x: Float): UntypedDenseTensor = DenseTensor.fill(x, $, Array())
+  def unwrapScalar(x: UntypedDenseTensor) = x.handle(0)
+  def wrapScalar(x: Float): UntypedDenseTensor = DenseTensor.fill(x, $, Array())
 
   def addS(x: UntypedDenseTensor, u: Float) = map(x)(a => a + u)
 
@@ -191,7 +196,7 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
   )
 
 
-  def mmMul(x: UntypedCPUFloat32.H, y: UntypedCPUFloat32.H) = ???
+  def mmMul(x: UntypedDenseTensor, y: UntypedDenseTensor) = ???
 
   def mvMul(x: UntypedDenseTensor, y: UntypedDenseTensor) = {
     require(x.rank == 2 && y.rank == 1)
@@ -227,7 +232,7 @@ object UntypedCPUFloat32 extends MathOps[UntypedDenseTensor, Float] {
 
 
 
-  def sum(x: UntypedDenseTensor) = scalar(x.handle.sum)  // TODO: wrong!
+  def sum(x: UntypedDenseTensor) = wrapScalar(x.handle.sum)  // TODO: wrong!
 
   def tMul(x: UntypedDenseTensor, y: UntypedDenseTensor, matchedIndices: Seq[(Int, Int)]) = ???
 }

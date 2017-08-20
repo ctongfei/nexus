@@ -14,7 +14,7 @@ trait DropoutF[P, X, Y] extends (P => DOp1[X, Y])
 
 object DropoutF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new DropoutF[Double, T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new DropoutF[Double, T[A], T[A]] {
     def apply(rate: Double) = new DOp1[T[A], T[A]] {
       def name = s"Dropout[$rate]"
       def gradOps = ops.ground[A]

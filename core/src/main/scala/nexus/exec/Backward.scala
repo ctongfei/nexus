@@ -11,9 +11,9 @@ import shapeless._
  */
 object Backward {
 
-  def compute[T[A <: HList], D](e: Expr[T[$]], values: Values)(implicit ops: TypedMathOps[T, D]): Values = {
+  def compute[T[A <: HList], D](e: Expr[T[$]], values: ExprValueMap)(implicit ops: TypedRealTensorOps[T, D]): ExprValueMap = {
 
-    val ∇ = Values(e <<- ops.scalar(ops.D.one)) // gradient of loss is 1
+    val ∇ = ExprValueMap(e <<- ops.wrapScalar(ops.D.one)) // gradient of loss is 1
 
     def eval[Y](e: Expr[Y]): Unit = e match {
 

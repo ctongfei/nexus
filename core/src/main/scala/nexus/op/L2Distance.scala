@@ -19,7 +19,7 @@ trait L2DistanceF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object L2DistanceF {
   
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedMathOps[T, D]) =
+  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]) =
     new L2DistanceF[T[A::$], T[A::$], T[$]] {
       import ops._
       def gradOps = ops.ground[$]

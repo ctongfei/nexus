@@ -8,7 +8,7 @@ import nexus.impl._
  */
 package object cpu {
 
-  implicit val cpuFloat32: TypedMathOps[FloatDenseTensor, Float] = CPUFloat32
+  implicit val cpuFloat32: TypedRealTensorOps[FloatDenseTensor, Float] = CPUFloat32
 
   System.loadLibrary("jnith")
   System.loadLibrary("TH.1")

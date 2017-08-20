@@ -17,7 +17,7 @@ trait EDivF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object EDivF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]): EDivF[T[A], T[A], T[A]] =
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]): EDivF[T[A], T[A], T[A]] =
     new EDivF[T[A], T[A], T[A]] {
       import ops._
       def gradOps = ops.ground[A]

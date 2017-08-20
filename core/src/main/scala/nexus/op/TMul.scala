@@ -18,7 +18,7 @@ trait TMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object TMulF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$, B <: $$, C <: $$](implicit ops: TypedMathOps[T, D], sd: SymDiff.Aux[A, B, C]) =
+  implicit def tensor[T[_ <: $$], D, A <: $$, B <: $$, C <: $$](implicit ops: TypedRealTensorOps[T, D], sd: SymDiff.Aux[A, B, C]) =
     new TMulF[T[A], T[B], T[C]] {
       import ops._
       def gradOps = ops.ground[C]

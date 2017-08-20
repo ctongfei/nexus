@@ -1,21 +1,16 @@
 package nexus.impl
 
-import nexus._
-
 /**
  * Environment for running untyped (NumPy/Torch/etc.) style NdArrays.
  * @tparam H Type of underlying untyped handle.
  * @author Tongfei Chen
  */
-trait MathOps[_H, @specialized(Float, Double) _D] extends GradOps[_H] {
+trait UntypedRealTensorOps[H, @specialized(Float, Double) D] extends UntypedTensorOps[H, D] with GradOps[H] {
 
-  type H = _H
-  type D = _D
+  def D: RealOps[D]
 
-  def D: Field[D]
-
-  def getScalar(x: H): D
-  def scalar(x: D): H
+  def unwrapScalar(x: H): D
+  def wrapScalar(x: D): H
 
   def zeroBy(x: H): H
 
@@ -32,8 +27,7 @@ trait MathOps[_H, @specialized(Float, Double) _D] extends GradOps[_H] {
 
   def eDiv(x1: H, x2: H): H
 
-
-  def scale(x: _H, k: Double) = scale(x, D.fromDouble(k))
+  def scale(x: H, k: Double) = scale(x, D.fromDouble(k))
   def scale(x: H, k: D): H
 
   def inv(x: H): H
@@ -62,12 +56,5 @@ trait MathOps[_H, @specialized(Float, Double) _D] extends GradOps[_H] {
   def dot(x: H, y: H): H
 
   def tMul(x: H, y: H, matchedIndices: Seq[(Int, Int)]): H
-
-
-  def map(x: H)(f: D => D): H
-
-  def map2(x1: H, x2: H)(f: (D, D) => D): H
-
-  def map3(x1: H, x2: H, x3: H)(f: (D, D, D) => D): H
 
 }

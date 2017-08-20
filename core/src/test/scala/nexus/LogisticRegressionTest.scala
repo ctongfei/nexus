@@ -5,7 +5,6 @@ import nexus.op._
 import nexus.optimizer._
 import nexus.exec._
 import nexus.layer._
-import nexus.op.activation._
 import nexus.op.loss._
 
 /**
@@ -38,7 +37,7 @@ object LogisticRegressionTest extends App {
   val Layer = Affine(In -> 2, Out -> 2)
 
   val output = x |> Layer |> Softmax
-  val loss = LogLoss(output, y)
+  val loss = CrossEntropy(y, output)
 
   val sgd = StochasticGradientDescentOptimizer(0.1f)
 

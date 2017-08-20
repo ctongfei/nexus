@@ -5,7 +5,7 @@ import nexus._
 /**
  * @author Tongfei Chen
  */
-trait Typing[T[_ <: $$]] {
+trait AxisTyping[T[_ <: $$]] {
 
   type H
 

@@ -16,7 +16,7 @@ trait TransposeF[X, Y] extends DOp1[X, Y] {
 
 object TransposeF {
 
-  implicit def matrix[T[_ <: $$], D, A, B](implicit ops: TypedMathOps[T, D]) = new TransposeF[T[A::B::$], T[B::A::$]] {
+  implicit def matrix[T[_ <: $$], D, A, B](implicit ops: TypedRealTensorOps[T, D]) = new TransposeF[T[A::B::$], T[B::A::$]] {
     import ops._
     def gradOps = ops.ground[B::A::$]
     def forward(x: T[A::B::$]) = transpose(x)

@@ -19,7 +19,7 @@ trait RenameF[P, X, Y] extends (P => DOp1[X, Y])
 object RenameF {
 
   implicit def tensor[T[_ <: $$], D, A <: $$, U, V, B <: $$]
-  (implicit r: Replace.Aux[A, U, V, B], ops: TypedMathOps[T, D]) =
+  (implicit r: Replace.Aux[A, U, V, B], ops: TypedRealTensorOps[T, D]) =
     new RenameF[(U, V), T[A], T[B]] {
       def apply(p: (U, V)) = new DOp1[T[A], T[B]] {
         val (u, v) = p

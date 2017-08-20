@@ -12,7 +12,7 @@ import nexus.op._
 class Affine[T[_ <: $$], D, A, B] private(
   val weight: Param[T[B::A::$]],
   val bias: Param[T[B::$]]
-)(implicit val ops: TypedMathOps[T, D])
+)(implicit val ops: TypedRealTensorOps[T, D])
   extends DModule[T[A::$], T[B::$]]
 {
 
@@ -31,13 +31,13 @@ object Affine {
    * @param b Bias vector (axes B::$)
    */
   def from[T[_ <: $$], D, A, B]
-  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit ops: TypedMathOps[T, D]) = new Affine[T, D, A, B](W, b)
+  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit ops: TypedRealTensorOps[T, D]) = new Affine[T, D, A, B](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.
    * @example `Affine(In -> 784, Out -> 300)`
    */
-  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit ops: TypedMathOps[T, D]) = {
+  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit ops: TypedRealTensorOps[T, D]) = {
     import ops._
     val (aA, nA) = in
     val (aB, nB) = out

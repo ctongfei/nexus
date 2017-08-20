@@ -18,7 +18,7 @@ trait SumAlongF[U, X, Y] extends (U => DOp1[X, Y])
 object SumAlongF {
 
   implicit def tensor[T[_ <: $$], D, A <: $$, U, B <: $$]
-  (implicit r: Remove.Aux[A, U, (U, B)], ops: TypedMathOps[T, D]) =
+  (implicit r: Remove.Aux[A, U, (U, B)], ops: TypedRealTensorOps[T, D]) =
     new SumAlongF[U, T[A], T[B]] {
       import ops._
       def apply(u: U) = new DOp1[T[A], T[B]] {

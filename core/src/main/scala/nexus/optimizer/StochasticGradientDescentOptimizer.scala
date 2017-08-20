@@ -12,11 +12,11 @@ import shapeless._
  */
 class StochasticGradientDescentOptimizer private(val η: Double) extends Optimizer {
 
-  def update(gradients: Values) = {
-    for ((p @ Param(value, _), grad) <- gradients.map) {
-      import p.gradOps._
-      addI(value, scale(grad, -η))
-    }
+  def updateParam[X](p: Param[X], g: X) = {
+    implicit val ops = p.gradOps
+
+    p += g :* (-η)
+
   }
 
 }

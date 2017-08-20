@@ -10,7 +10,7 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object CPUFloat32 extends TypedMathOps[FloatDenseTensor, Float] with Typing[FloatDenseTensor] {
+object CPUFloat32 extends TypedRealTensorOps[FloatDenseTensor, Float] with AxisTyping[FloatDenseTensor] {
   type H = THFloatTensor
   def untype(x: FloatDenseTensor[_]) = ???
   def typeOf[A <: $$](x: FloatDenseTensor[A]) = ???
@@ -20,7 +20,7 @@ object CPUFloat32 extends TypedMathOps[FloatDenseTensor, Float] with Typing[Floa
   def newTensor[A <: $$](axes: A, shape: Array[Int]) = ???
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = ???
 
-  def newZeroBy[A <: $$](x: FloatDenseTensor[A]) = ???
+  def zeroBy[A <: $$](x: FloatDenseTensor[A]) = ???
   def fromDouble(d: Double) = ???
   def fromFloat(f: Float) = ???
 }

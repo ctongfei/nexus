@@ -8,15 +8,15 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object ECos extends PolyDOp1[ECosF]
+object Cos extends PolyDOp1[CosF]
 
-trait ECosF[X, Y] extends DOp1[X, Y] {
+trait CosF[X, Y] extends DOp1[X, Y] {
   def name = "ECos"
 }
 
-object ECosF {
+object CosF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new ECosF[T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new CosF[T[A], T[A]] {
     import ops._
     def gradOps = ops.ground[A]
     def forward(x: T[A]) = cos(x)

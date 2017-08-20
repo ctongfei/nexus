@@ -2,7 +2,6 @@ package nexus.op
 
 import nexus._
 import nexus.cpu._
-import nexus.op.activation._
 
 /**
  * @author Tongfei Chen

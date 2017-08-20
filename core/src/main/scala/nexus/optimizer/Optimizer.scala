@@ -10,6 +10,16 @@ import nexus.exec._
  */
 trait Optimizer {
 
-  def update(gradients: Values): Unit
+  def updateParam[X](p: Param[X], g: X): Unit
+
+  def update(gradients: ExprValueMap): Unit = {
+    for (item <- gradients) {
+      item.expr match {
+        case p: Param[item.Data] =>
+          updateParam(p, item.value)
+        case _ =>
+      }
+    }
+  }
 
 }

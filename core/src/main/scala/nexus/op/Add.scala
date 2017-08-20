@@ -19,7 +19,16 @@ trait AddF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object AddF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]): AddF[T[A], T[A], T[A]] =
+  implicit def scalar[D](implicit ops: RealOps[D]): AddF[D, D, D] =
+    new AddF[D, D, D] {
+      import ops._
+      def gradOps = ops
+      def forward(x1: D, x2: D) = add(x1, x2)
+      def backward1(dy: D, y: D, x1: D, x2: D) = dy
+      def backward2(dy: D, y: D, x1: D, x2: D) = dy
+    }
+
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]): AddF[T[A], T[A], T[A]] =
     new AddF[T[A], T[A], T[A]] {
       def gradOps = ops.ground[A]
       def forward(x1: T[A], x2: T[A]) = x1 + x2

@@ -8,15 +8,15 @@ import nexus.impl._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object ESin extends PolyDOp1[ESinF]
+object Sin extends PolyDOp1[SinF]
 
-trait ESinF[X, Y] extends DOp1[X, Y] {
+trait SinF[X, Y] extends DOp1[X, Y] {
   def name = "ESin"
 }
 
-object ESinF {
+object SinF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedMathOps[T, D]) = new ESinF[T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new SinF[T[A], T[A]] {
     import ops._
     def gradOps = ops.ground[A]
     def forward(x: T[A]) = sin(x)

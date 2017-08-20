@@ -11,9 +11,9 @@ import scala.language.higherKinds
  */
 trait TensorOpsMixin {
 
-  implicit class TensorOps[T[_ <: $$], D, A <: $$](val a: T[A])(implicit env: TypedMathOps[T, D]) {
+  implicit class TensorOps[T[_ <: $$], D, A <: $$](val a: T[A])(implicit ops: TypedRealTensorOps[T, D]) {
 
-    import env._
+    import ops._
 
     def +(b: T[A]): T[A] = add(a, b)
     def -(b: T[A]): T[A] = sub(a, b)
@@ -21,14 +21,14 @@ trait TensorOpsMixin {
     def |/|(b: T[A]): T[A] = eDiv(a, b)
 
     def :*(u: D): T[A] = scale(a, u)
-    def :*(u: Float): T[A] = scale(a, fromFloat(u))
-    def :*(u: Double): T[A] = scale(a, fromDouble(u))
-    def :*(u: T[$])(implicit di: DummyImplicit): T[A] = scale(a, getScalar(u))
+    def :*(u: Float): T[A] = scale(a, D.fromFloat(u))
+    def :*(u: Double): T[A] = scale(a, D.fromDouble(u))
+    def :*(u: T[$])(implicit di: DummyImplicit): T[A] = scale(a, unwrapScalar(u))
 
     def :/(u: D): T[A] = scale(a, D.reciprocal(u))
-    def :/(u: Float): T[A] = scale(a, fromFloat(1f / u))
-    def :/(u: Double): T[A] = scale(a, fromDouble(1d / u))
-    def :/(u: T[$])(implicit di: DummyImplicit): T[A] = scale(a, getScalar(u))
+    def :/(u: Float): T[A] = scale(a, D.fromFloat(1f / u))
+    def :/(u: Double): T[A] = scale(a, D.fromDouble(1d / u))
+    def :/(u: T[$])(implicit di: DummyImplicit): T[A] = scale(a, unwrapScalar(u))
 
     def ⋅(b: T[A]): T[$] = dot(a, b)
 
