@@ -50,7 +50,7 @@ object XorTest extends App {
   val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
-  val sgd = new AdamOptimizer(0.1)
+  val sgd = new BackstitchOptimizer(0.1, 0.3, 5)
 
   /** Start running! */
   for (epoch <- 0 until 3000) {

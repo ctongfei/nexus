@@ -103,6 +103,8 @@ case class Param[X](var value: X, name: String)(val gradOps: GradOps[X]) extends
     gradOps.addI(value, g)
   else value = gradOps.add(value, g)
 
+  def -=(g: X) = +=(gradOps.neg(g))
+
 }
 
 object Param {
