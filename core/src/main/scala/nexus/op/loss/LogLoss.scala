@@ -2,7 +2,8 @@ package nexus.op.loss
 
 import nexus._
 import nexus.exception._
-import nexus.impl._
+import nexus.op._
+import nexus.algebra._
 
 object LogLoss extends PolyDOp2[LogLossF]
 

@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * Matrix multiplication of two matrices (2-D tensors).

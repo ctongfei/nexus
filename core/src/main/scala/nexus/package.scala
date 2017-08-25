@@ -1,28 +1,14 @@
 import shapeless._
 
 /**
+ * '''Nexus''': A typesafe tensor / deep learning library
  * @author Tongfei Chen
  */
-package object nexus extends
-  TensorOpsMixin with
-  ExprTensorMixin with
-  TupleExprOpsMixin with
-  GradOpsMixin
-{
+package object nexus {
 
-  private[nexus] type ::[+H, +T <: HList] = shapeless.::[H, T]
-  private[nexus] type $$ = HList
-  private[nexus] type $ = HNil
-  private[nexus] val  $: $ = HNil // explicit type annotation to avoid some implicit search bugs
-
-  private[nexus] type Scalar[T[_ <: $$]] = T[$]
-  private[nexus] type Vector[T[_ <: $$], A] = T[A::$]
-  private[nexus] type Matrix[T[_ <: $$], A, B] = T[A::B::$]
-
-  private[nexus] type Field[A] = algebra.ring.Field[A]
-  private[nexus] type Ring[A]  = algebra.ring.Ring[A]
-
-  private[nexus] type implicitNotFound = scala.annotation.implicitNotFound
+  type ::[+H, +T <: HList] = shapeless.::[H, T]
+  type $$ = HList
+  type $ = HNil
+  val  $: $ = HNil // explicit type annotation to avoid some implicit search bugs
 
 }
-

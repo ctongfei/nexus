@@ -1,8 +1,8 @@
 package nexus.cpu
 
 import nexus._
-import nexus.impl._
-import nexus.util._
+import nexus.algebra._
+import nexus.algebra.typelevel.util._
 import shapeless._
 
 import scala.util._
@@ -10,10 +10,10 @@ import scala.util._
 /**
  * @author Tongfei Chen
  */
-object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with AxisTyping[DenseTensor] {
+object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with TensorAxisTyping[DenseTensor] {
   type H = UntypedDenseTensor
   val H = UntypedCPUFloat32
-  val D = RealOps.Float32
+  val R = RealOps.Float32
 
   def newTensor[A <: HList](axes: A, shape: Array[Int]) =
     DenseTensor.fromFlatArray(Array.ofDim[Float](ShapeUtils.product(shape)), axes, shape)
@@ -40,7 +40,8 @@ object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with AxisT
 
 object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float] {
 
-  val D = RealOps.Float32
+  type R = Float
+  val R = RealOps.Float32
 
   def mutable = true
 
@@ -181,7 +182,6 @@ object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float]
 
   def addI(x: UntypedDenseTensor, d: UntypedDenseTensor) = inplace2(x, d)(_+_)
 
-  def log(x: UntypedDenseTensor) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
 
   def unwrapScalar(x: UntypedDenseTensor) = x.handle(0)
   def wrapScalar(x: Float): UntypedDenseTensor = DenseTensor.fill(x, $, Array())
@@ -217,9 +217,12 @@ object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float]
   }
 
 
-  def dot(x: UntypedDenseTensor, y: UntypedDenseTensor) = sum(eMul(x, y))
+  def dot(x: UntypedDenseTensor, y: UntypedDenseTensor): R = sum(eMul(x, y))
 
   def exp(x: UntypedDenseTensor) = map(x)(a => Math.exp(a).toFloat)
+  def log(x: UntypedDenseTensor) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
+  def log1p(x: UntypedDenseTensor) = map(x)(x => Math.log1p(x).toFloat)
+  def expm1(x: UntypedDenseTensor) = map(x)(x => Math.expm1(x).toFloat)
 
   def sin(x: UntypedDenseTensor) = map(x)(a => Math.sin(a).toFloat)
   def cos(x: UntypedDenseTensor) = map(x)(a => Math.cos(a).toFloat)
@@ -232,7 +235,7 @@ object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float]
 
 
 
-  def sum(x: UntypedDenseTensor) = wrapScalar(x.handle.sum)  // TODO: wrong!
+  def sum(x: UntypedDenseTensor) = x.handle.sum  // TODO: wrong!
 
   def tMul(x: UntypedDenseTensor, y: UntypedDenseTensor, matchedIndices: Seq[(Int, Int)]) = ???
 }

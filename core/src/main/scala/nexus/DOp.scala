@@ -1,6 +1,6 @@
 package nexus
 
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * A differentiable unary function.

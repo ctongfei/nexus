@@ -1,8 +1,8 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
-import nexus.typelevel._
+import nexus.algebra._
+import nexus.algebra.typelevel._
 import shapeless._
 
 /**

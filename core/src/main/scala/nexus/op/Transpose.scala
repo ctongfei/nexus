@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * Transposition of a matrix (2-D tensor).

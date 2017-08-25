@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * Inner product of two tensors.
@@ -20,12 +20,12 @@ trait DotF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object DotF {
   
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new DotF[T[A], T[A], T[$]] {
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit ops: TypedRealTensorOps[T, R]) = new DotF[T[A], T[A], R] {
     import ops._
-    def gradOps = ops.ground[$]
+    def gradOps = ops.R
     def forward(x1: T[A], x2: T[A]) = dot(x1, x2)
-    def backward1(dy: T[$], y: T[$], x1: T[A], x2: T[A]) = x2 :* dy
-    def backward2(dy: T[$], y: T[$], x1: T[A], x2: T[A]) = x1 :* dy
+    def backward1(dy: R, y: R, x1: T[A], x2: T[A]) = x2 :* dy
+    def backward2(dy: R, y: R, x1: T[A], x2: T[A]) = x1 :* dy
   }
   
 }

@@ -1,7 +1,7 @@
 package nexus.exec
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 import shapeless._
 
 /**
@@ -11,9 +11,9 @@ import shapeless._
  */
 object Backward {
 
-  def compute[T[A <: HList], D](e: Expr[T[$]], values: ExprValueMap)(implicit ops: TypedRealTensorOps[T, D]): ExprValueMap = {
+  def compute[T[A <: HList], R](e: Expr[R], values: ExprValueMap)(implicit ops: TypedRealTensorOps[T, R]): ExprValueMap = {
 
-    val ∇ = ExprValueMap(e <<- ops.wrapScalar(ops.D.one)) // gradient of loss is 1
+    val ∇ = ExprValueMap(e <<- ops.R.one) // gradient of loss is 1
 
     def eval[Y](e: Expr[Y]): Unit = e match {
 

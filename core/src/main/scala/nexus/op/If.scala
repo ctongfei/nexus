@@ -2,7 +2,7 @@ package nexus.op
 
 import nexus._
 import nexus.exception._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * @author Tongfei Chen

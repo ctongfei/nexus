@@ -4,6 +4,7 @@ import nexus.exec._
 import nexus.cpu._
 import nexus.layer._
 import nexus.op._
+import nexus.op.activation._
 import nexus.op.loss._
 import nexus.optimizer._
 
@@ -50,7 +51,7 @@ object XorTest extends App {
   val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
-  val sgd = new BackstitchOptimizer(0.1, 0.3, 5)
+  val sgd = new AdamOptimizer(0.05)
 
   /** Start running! */
   for (epoch <- 0 until 3000) {
@@ -62,7 +63,7 @@ object XorTest extends App {
       val (lossValue, values) =  Forward .compute(loss)(x <<- xv, y <<- yv) // feed
       val gradients           =  Backward.compute(loss, values)
 
-      averageLoss += lossValue()
+      averageLoss += lossValue
 
       sgd.update(gradients)
 

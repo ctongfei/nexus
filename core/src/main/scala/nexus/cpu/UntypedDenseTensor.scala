@@ -1,7 +1,7 @@
 package nexus.cpu
 
 import nexus._
-import nexus.util._
+import nexus.algebra.typelevel.util._
 import shapeless._
 
 trait UntypedDenseTensor extends UntypedTensorLike[Float, UntypedDenseTensor] { self =>

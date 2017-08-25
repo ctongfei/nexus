@@ -1,8 +1,8 @@
 package nexus.cpu
 
 import nexus._
-import nexus.typelevel._
-import nexus.util._
+import nexus.algebra.typelevel._
+import nexus.algebra.typelevel.util._
 import shapeless._
 import shapeless.ops.hlist._
 import shapeless.ops.nat._

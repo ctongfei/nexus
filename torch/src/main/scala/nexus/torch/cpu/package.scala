@@ -1,7 +1,7 @@
 package nexus.torch
 
 import jtorch._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * @author Tongfei Chen

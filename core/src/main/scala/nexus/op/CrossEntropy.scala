@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * The cross entropy function.
@@ -25,15 +25,16 @@ trait CrossEntropyF[P, Q, Y] extends DOp2[P, Q, Y] {
 
 object CrossEntropyF {
 
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]): CrossEntropyF[T[A::$], T[A::$], T[$]] =
-    new CrossEntropyF[T[A :: $], T[A :: $], T[$]] {
+  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]): CrossEntropyF[T[A::$], T[A::$], D] =
+    new CrossEntropyF[T[A :: $], T[A :: $], D] {
       import ops._
-      def gradOps = ops.ground[$]
+      implicit val D = ops.R
+      def gradOps = ops.R
       def forward(p: T[A :: $], q: T[A :: $]) =
         -(sum(p |*| log(q)))
-      def backward1(dl: T[$], l: T[$], p: T[A :: $], q: T[A :: $]) =
+      def backward1(dl: D, l: D, p: T[A :: $], q: T[A :: $]) =
         -log(q) :* dl
-      def backward2(dl: T[$], l: T[$], p: T[A :: $], q: T[A :: $]) =
+      def backward2(dl: D, l: D, p: T[A :: $], q: T[A :: $]) =
         -(p |/| q) :* dl
     }
 

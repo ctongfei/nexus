@@ -41,8 +41,16 @@ lazy val commonSettings = Seq(
   mathFormulaInDoc <<= mathFormulaInDoc triggeredBy (doc in Compile)
 )
 
+
+lazy val algebra = (project in file("algebra"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "nexus-algebra"
+  )
+
 lazy val core = (project in file("core"))
   .settings(commonSettings: _*)
+  .dependsOn(algebra)
   .settings(
     name := "nexus-core"
   )

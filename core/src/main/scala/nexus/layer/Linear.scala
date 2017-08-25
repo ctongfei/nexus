@@ -1,7 +1,7 @@
 package nexus.layer
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 import nexus.op._
 
 /**

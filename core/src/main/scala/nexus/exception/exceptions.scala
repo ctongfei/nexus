@@ -1,6 +1,6 @@
 package nexus.exception
 
-import nexus.Expr
+import nexus._
 
 /**
  * Exception thrown when attempting to differentiate an expression w.r.t. a non-differentiable variable.
@@ -19,5 +19,3 @@ class OperatorNotDifferentiableException(name: String, ordinal: Int)
     case n => s"${n}th" // actually will never happen: nexus only allows operators with maximum arity 3
   }} parameter.")
 
-class IncrementingImmutableGradientException
-  extends Exception("Gradient for this type is immutable; cannot increment its value.")

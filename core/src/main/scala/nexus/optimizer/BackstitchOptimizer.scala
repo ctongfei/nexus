@@ -1,6 +1,7 @@
 package nexus.optimizer
 
 import nexus._
+import nexus.op._
 
 /**
  * Backstitch optimizer.
@@ -14,7 +15,7 @@ import nexus._
  * @param n One negative step every ''n'' steps
  * @author Tongfei Chen
  */
-class BackstitchOptimizer(ν: Double, α: Double = 0.3, n: Int = 2) extends Optimizer {
+class BackstitchOptimizer(ν: Double, α: Double = 0.3, n: Int = 2) extends FirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X) = {
     implicit val ops = p.gradOps

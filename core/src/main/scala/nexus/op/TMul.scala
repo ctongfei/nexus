@@ -1,8 +1,8 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
-import nexus.typelevel._
+import nexus.algebra._
+import nexus.algebra.typelevel._
 
 /**
  * General tensor multiplication (contraction) that marginalizes out all axes between two tensors that match.

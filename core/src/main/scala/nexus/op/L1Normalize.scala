@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * L1 normalization.
@@ -18,7 +18,7 @@ object L1NormalizeF {
   implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]) = new L1NormalizeF[T[A::$], T[A::$]] {
     import ops._
     def gradOps = ops.ground[A::$]
-    def forward(x: T[A::$]) = x :* inv(sum(x))
+    def forward(x: T[A::$]) = x :* R.inv(sum(x))
     def backward(dy: T[A::$], y: T[A::$], x: T[A::$]) = ???
   }
 }

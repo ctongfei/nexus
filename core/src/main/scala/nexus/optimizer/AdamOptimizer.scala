@@ -2,15 +2,18 @@ package nexus.optimizer
 
 import nexus._
 import nexus.exec._
+import nexus.op._
 
 /**
- * Adam optimizer.
+ * The Adaptive Moment Estimation ('''Adam''') optimizer.
  *
- * Reference: https://arxiv.org/pdf/1412.6980.pdf
- *
+ * Reference:
+ * D P Kingma, J Ba (2015): Adam: A Method for Stochastic Optimization. ICLR.
+ * [[https://arxiv.org/pdf/1412.6980.pdf]]
  * @author Tongfei Chen
+ * @since 0.1.0
  */
-class AdamOptimizer(α: Double = 0.001, β1: Double = 0.9, β2: Double = 0.999, ε: Double = 1e-8) extends Optimizer {
+class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.999, ε: Double = 1e-8) extends FirstOrderOptimizer {
 
   case class AdamHistory[X](var m: X, var v: X)
 

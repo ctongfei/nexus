@@ -1,5 +1,7 @@
 package nexus
 
+import nexus.algebra._
+import nexus.algebra.typelevel._
 import shapeless._
 
 /**
@@ -29,3 +31,5 @@ trait TensorLike[D, A <: HList, T <: TensorLike[D, A, T]] extends UntypedTensorL
   }
 
 }
+
+

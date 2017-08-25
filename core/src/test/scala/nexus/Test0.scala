@@ -10,7 +10,7 @@ import nexus.optimizer._
  * @author Tongfei Chen
  */
 object Test0 extends App {
-
+/*
   val p = Param(DenseTensor.scalar(3.0f), "p")
 
   val l = EMul(p, p)
@@ -23,5 +23,5 @@ object Test0 extends App {
     val gradients = Backward.compute(l, values)
     sgd.update(gradients)
   }
-
+*/
 }

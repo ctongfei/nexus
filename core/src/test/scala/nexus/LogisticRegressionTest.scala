@@ -5,6 +5,7 @@ import nexus.op._
 import nexus.optimizer._
 import nexus.exec._
 import nexus.layer._
+import nexus.op.activation._
 import nexus.op.loss._
 
 /**
@@ -45,7 +46,7 @@ object LogisticRegressionTest extends App {
     for ((xv, yv) <- xs zip ys) {
       val (lossValue, values) = Forward.compute(loss)(x <<- xv, y <<- yv)
       val grads = Backward.compute(loss, values)
-      println(s"Iteration $i: loss = ${lossValue()}")
+      println(s"Iteration $i: loss = ${lossValue}")
       sgd.update(grads)
     }
   }

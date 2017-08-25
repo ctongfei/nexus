@@ -1,8 +1,7 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.exec._
-import shapeless._
+import nexus.op._
 
 /**
  * Basic stochastic gradient descent optimizer.
@@ -10,7 +9,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class GradientDescentOptimizer(val η: Double) extends Optimizer {
+class GradientDescentOptimizer(η: => Double) extends FirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X) = {
     implicit val ops = p.gradOps

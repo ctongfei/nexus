@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 import scala.annotation._
 
@@ -19,13 +19,14 @@ trait L2DistanceF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object L2DistanceF {
   
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]) =
-    new L2DistanceF[T[A::$], T[A::$], T[$]] {
+  implicit def vector[T[_ <: $$], R, A](implicit ops: TypedRealTensorOps[T, R]) =
+    new L2DistanceF[T[A::$], T[A::$], R] {
       import ops._
-      def gradOps = ops.ground[$]
-      def forward(x1: T[A::$], x2: T[A::$]) = sqrt(sum(sqr(x1 - x2)))
-      def backward1(dy: T[$], y: T[$], x1: T[A::$], x2: T[A::$]) = (x1 - x2) :* (dy |/| y)
-      def backward2(dy: T[$], y: T[$], x1: T[A::$], x2: T[A::$]) = (x2 - x1) :* (dy |/| y)
+      implicit val R = ops.R
+      def gradOps = ops.R
+      def forward(x1: T[A::$], x2: T[A::$]) = R.sqrt(sum(sqr(x1 - x2)))
+      def backward1(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = (x1 - x2) :* (dy / y)
+      def backward2(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = (x2 - x1) :* (dy / y)
     }
   
 }

@@ -1,8 +1,7 @@
 package nexus
 
-import nexus.impl._
+import nexus.algebra._
 import nexus.op._
-import nexus.typelevel._
 
 /**
  * @author Tongfei Chen

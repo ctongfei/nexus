@@ -2,7 +2,7 @@ package nexus.torch.cpu
 
 import jtorch._
 import nexus._
-import nexus.util._
+import nexus.algebra.typelevel.util._
 import shapeless._
 
 /**

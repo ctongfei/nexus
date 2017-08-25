@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * Element-wise square.
@@ -16,11 +16,12 @@ trait ESqrF[X, Y] extends DOp1[X, Y] {
 
 object ESqrF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new ESqrF[T[A], T[A]] {
-    import ops._
-    def gradOps = ops.ground[A]
-    def forward(x: T[A]) = sqr(x)
-    def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| x :* 2f
-  }
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]): ESqrF[T[A], T[A]] =
+    new ESqrF[T[A], T[A]] {
+      import ops._
+      def gradOps = ops.ground[A]
+      def forward(x: T[A]) = sqr(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| x :* 2f
+    }
 
 }

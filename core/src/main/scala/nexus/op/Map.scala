@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
+import nexus.algebra._
 
 /**
  * Applies an arbitrary differentiable function to all elements in a specific tensor.

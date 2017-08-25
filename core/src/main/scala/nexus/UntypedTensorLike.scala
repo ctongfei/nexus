@@ -1,6 +1,6 @@
 package nexus
 
-import nexus.util._
+import nexus.algebra.typelevel.util._
 import shapeless.HList
 
 /**

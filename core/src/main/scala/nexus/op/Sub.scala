@@ -1,8 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.impl._
-import shapeless._
+import nexus.algebra._
 
 /**
  * Subtraction of two tensors of the same axes and shape.
