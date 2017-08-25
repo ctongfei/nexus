@@ -13,7 +13,7 @@ Building a typesafe XOR network:
     Sigmoid                       |>  // type: Expr[Tensor[Float, Hidden::$]]
     Affine(Hidden -> 2, Out -> 2) |>  // type: Expr[Tensor[Float, Out::$]]
     Softmax                           // type: Expr[Tensor[Float, Out::$]]
-  val loss = CrossEntropy(y, yʹ)      // type: Expr[Tensor[Float, $]]
+  val loss = CrossEntropy(y, yʹ)      // type: Expr[Float]
 ```
 
 Design goals:
