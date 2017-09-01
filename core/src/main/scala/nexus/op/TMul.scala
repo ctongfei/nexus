@@ -18,10 +18,10 @@ trait TMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object TMulF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$, B <: $$, C <: $$](implicit ops: TypedRealTensorOps[T, D], sd: SymDiff.Aux[A, B, C]) =
+  implicit def tensor[T[_ <: $$], R, A <: $$, B <: $$, C <: $$](implicit T: TypedRealTensorOps[T, R], sd: SymDiff.Aux[A, B, C]) =
     new TMulF[T[A], T[B], T[C]] {
-      import ops._
-      def gradOps = ops.ground[C]
+      import T._
+      def gradOps = T.ground[C]
       def forward(x1: T[A], x2: T[B]) = x1 ⋈ x2
       def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // dy ⋈ x2
       def backward2(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // dy ⋈ x1

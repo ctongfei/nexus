@@ -16,11 +16,11 @@ trait ESinF[X, Y] extends DOp1[X, Y] {
 
 object ESinF {
 
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit ops: TypedRealTensorOps[T, R]) = new ESinF[T[A], T[A]] {
-    import ops._
-    def gradOps = ops.ground[A]
-    def forward(x: T[A]) = sin(x)
-    def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| cos(y)
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: TypedRealTensorOps[T, R]) = new ESinF[T[A], T[A]] {
+    import T._
+    def gradOps = T.ground[A]
+    def forward(x: T[A]) = eSin(x)
+    def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| eCos(y)
   }
 
 }

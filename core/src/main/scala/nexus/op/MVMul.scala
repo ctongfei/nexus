@@ -24,10 +24,10 @@ trait MVMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object MVMulF {
 
-  implicit def mv[T[_ <: $$], D, A, B](implicit ops: TypedRealTensorOps[T, D]): MVMulF[T[B::A::$], T[A::$], T[B::$]] =
+  implicit def mv[T[_ <: $$], R, A, B](implicit T: TypedRealTensorOps[T, R]): MVMulF[T[B::A::$], T[A::$], T[B::$]] =
     new MVMulF[T[B::A::$], T[A::$], T[B::$]] {
-      import ops._
-      def gradOps = ops.ground[B::$]
+      import T._
+      def gradOps = T.ground[B::$]
       def forward(x1: T[B::A::$], x2: T[A::$]) = mvMul(x1, x2)
       def backward1(dy: T[B::$], y: T[B::$], x1: T[B::A::$], x2: T[A::$]) = vvMul(dy, x2)
       def backward2(dy: T[B::$], y: T[B::$], x1: T[B::A::$], x2: T[A::$]) = mvMul(transpose(x1), dy)

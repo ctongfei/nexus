@@ -1,4 +1,4 @@
-package nexus.torch.cpu
+package nexus.impl.torch.cpu
 
 import nexus._
 import jtorch._

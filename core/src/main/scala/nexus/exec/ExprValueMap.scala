@@ -1,7 +1,7 @@
 package nexus.exec
 
 import nexus._
-import shapeless._
+import cats._
 
 import scala.collection._
 

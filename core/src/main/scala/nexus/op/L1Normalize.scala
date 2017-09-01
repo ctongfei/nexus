@@ -15,9 +15,9 @@ trait L1NormalizeF[X, Y] extends DOp1[X, Y] {
 }
 
 object L1NormalizeF {
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]) = new L1NormalizeF[T[A::$], T[A::$]] {
-    import ops._
-    def gradOps = ops.ground[A::$]
+  implicit def vector[T[_ <: $$], R, A](implicit T: TypedRealTensorOps[T, R]) = new L1NormalizeF[T[A::$], T[A::$]] {
+    import T._
+    def gradOps = T.ground[A::$]
     def forward(x: T[A::$]) = x :* R.inv(sum(x))
     def backward(dy: T[A::$], y: T[A::$], x: T[A::$]) = ???
   }

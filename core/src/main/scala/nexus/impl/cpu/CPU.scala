@@ -1,4 +1,4 @@
-package nexus.cpu
+package nexus.impl.cpu
 
 import nexus._
 import nexus.algebra._
@@ -13,7 +13,9 @@ import scala.util._
 object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with TensorAxisTyping[DenseTensor] {
   type H = UntypedDenseTensor
   val H = UntypedCPUFloat32
-  val R = RealOps.Float32
+
+
+  val R = H.R
 
   def newTensor[A <: HList](axes: A, shape: Array[Int]) =
     DenseTensor.fromFlatArray(Array.ofDim[Float](ShapeUtils.product(shape)), axes, shape)
@@ -172,10 +174,10 @@ object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float]
 
   def addS(x1: UntypedDenseTensor, x2: Double) = map(x1)(_+x2.toFloat)
 
-  def sqr(x: UntypedDenseTensor) = map(x)(x => x * x)
-  def sqrt(x: UntypedDenseTensor) = map(x)(x => Math.sqrt(x).toFloat)
+  def eSqr(x: UntypedDenseTensor) = map(x)(x => x * x)
+  def eSqrt(x: UntypedDenseTensor) = map(x)(x => Math.sqrt(x).toFloat)
 
-  def inv(x: UntypedDenseTensor) = map(x)(1f/_)
+  def eInv(x: UntypedDenseTensor) = map(x)(1f/_)
 
 
   def scale(x: UntypedDenseTensor, u: Float) = map(x)(_ * u)

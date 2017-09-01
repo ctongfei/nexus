@@ -25,16 +25,16 @@ trait CrossEntropyF[P, Q, Y] extends DOp2[P, Q, Y] {
 
 object CrossEntropyF {
 
-  implicit def vector[T[_ <: $$], D, A](implicit ops: TypedRealTensorOps[T, D]): CrossEntropyF[T[A::$], T[A::$], D] =
-    new CrossEntropyF[T[A :: $], T[A :: $], D] {
-      import ops._
-      implicit val D = ops.R
-      def gradOps = ops.R
+  implicit def vector[T[_ <: $$], R, A](implicit T: TypedRealTensorOps[T, R]): CrossEntropyF[T[A::$], T[A::$], R] =
+    new CrossEntropyF[T[A :: $], T[A :: $], R] {
+      import T._
+      implicit val R = T.R
+      def gradOps = T.R
       def forward(p: T[A :: $], q: T[A :: $]) =
-        -(sum(p |*| log(q)))
-      def backward1(dl: D, l: D, p: T[A :: $], q: T[A :: $]) =
-        -log(q) :* dl
-      def backward2(dl: D, l: D, p: T[A :: $], q: T[A :: $]) =
+        -(sum(p |*| eLog(q)))
+      def backward1(dl: R, l: R, p: T[A :: $], q: T[A :: $]) =
+        -eLog(q) :* dl
+      def backward2(dl: R, l: R, p: T[A :: $], q: T[A :: $]) =
         -(p |/| q) :* dl
     }
 

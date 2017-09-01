@@ -25,7 +25,7 @@ object SoftPlusF {
     new SoftPlusF[T[A], T[A]] {
       import ops._
       def gradOps = ops.ground[A]
-      def forward(x: T[A]) = log1p(exp(x))
+      def forward(x: T[A]) = eLog1p(eExp(x))
       def backward(dy: T[A], y: T[A], x: T[A]) = sigmoid(x)
     }
 

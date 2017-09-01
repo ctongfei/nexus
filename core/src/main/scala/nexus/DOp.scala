@@ -17,7 +17,7 @@ trait DOp1[X, Y] extends Op1[X, Y] {
    * @param x Value of ''x''
    * @return Gradient of ''x'': ∇x
    */
-  def backward(dy : Y, y: Y, x: X): X
+  def backward(dy: Y, y: Y, x: X): X
 }
 
 /**

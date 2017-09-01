@@ -1,4 +1,4 @@
-package nexus.torch
+package nexus.impl.torch
 
 import jtorch._
 import nexus.algebra._

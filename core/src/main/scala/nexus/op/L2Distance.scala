@@ -19,12 +19,12 @@ trait L2DistanceF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object L2DistanceF {
   
-  implicit def vector[T[_ <: $$], R, A](implicit ops: TypedRealTensorOps[T, R]) =
+  implicit def vector[T[_ <: $$], R, A](implicit T: TypedRealTensorOps[T, R]) =
     new L2DistanceF[T[A::$], T[A::$], R] {
-      import ops._
-      implicit val R = ops.R
-      def gradOps = ops.R
-      def forward(x1: T[A::$], x2: T[A::$]) = R.sqrt(sum(sqr(x1 - x2)))
+      import T._
+      implicit val R = T.R
+      def gradOps = T.R
+      def forward(x1: T[A::$], x2: T[A::$]) = R.eSqrt(sum(eSqr(x1 - x2)))
       def backward1(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = (x1 - x2) :* (dy / y)
       def backward2(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = (x2 - x1) :* (dy / y)
     }

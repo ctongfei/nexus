@@ -8,7 +8,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Item[V[_]] {
+trait ExprValuePair[V[_]] {
 
   /** Existential type for the data held in the expression. */
   type Data
@@ -21,7 +21,7 @@ trait Item[V[_]] {
 
 }
 
-trait Assignment extends Item[Id]
+trait Assignment extends ExprValuePair[Id]
 
 object Assignment {
 

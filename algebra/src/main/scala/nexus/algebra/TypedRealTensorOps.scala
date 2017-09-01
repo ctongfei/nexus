@@ -11,8 +11,8 @@ import nexus.algebra.typelevel._
  */
 trait TypedRealTensorOps[T[_ <: $$], R] extends TypedTensorOps[T, R] with TensorAxisTyping[T] { self =>
 
-  def H: UntypedRealTensorOps[H, R]
-  def R: RealOps[R]
+  val H: UntypedRealTensorOps[H, R]
+  val R: RealOps[R]
 
   def zeroBy[A <: $$](x: T[A]): T[A]
 
@@ -45,29 +45,27 @@ trait TypedRealTensorOps[T[_ <: $$], R] extends TypedTensorOps[T, R] with Tensor
   def scale[A <: $$](x: T[A], u: R): T[A] =
     typeWith(H.scale(untype(x), u), typeOf(x))
 
-  def inv[A <: $$](x: T[A]): T[A] =
-    typeWith(H.inv(untype(x)), typeOf(x))
+  def eInv[A <: $$](x: T[A]): T[A] =
+    typeWith(H.eInv(untype(x)), typeOf(x))
 
-  def sqr[A <: $$](x: T[A]): T[A] =
-    typeWith(H.sqr(untype(x)), typeOf(x))
+  def eSqr[A <: $$](x: T[A]): T[A] =
+    typeWith(H.eSqr(untype(x)), typeOf(x))
 
-  def sqrt[A <: $$](x: T[A]): T[A] =
-    typeWith(H.sqrt(untype(x)), typeOf(x))
+  def eSqrt[A <: $$](x: T[A]): T[A] =
+    typeWith(H.eSqrt(untype(x)), typeOf(x))
 
   def transpose[A, B](x: T[A::B::$]): T[B::A::$] =
     typeWith(H.transpose(untype(x)), AxesUtils.swap(typeOf(x)))
 
-  def log[A <: $$](x: T[A]): T[A] = typeWith(H.log(untype(x)), typeOf(x))
-  def exp[A <: $$](x: T[A]): T[A] = typeWith(H.exp(untype(x)), typeOf(x))
-  def log1p[A <: $$](x: T[A]): T[A] = typeWith(H.log1p(untype(x)), typeOf(x))
-  def expm1[A <: $$](x: T[A]): T[A] = typeWith(H.expm1(untype(x)), typeOf(x))
+  def eLog[A <: $$](x: T[A]): T[A] = typeWith(H.log(untype(x)), typeOf(x))
+  def eExp[A <: $$](x: T[A]): T[A] = typeWith(H.exp(untype(x)), typeOf(x))
+  def eLog1p[A <: $$](x: T[A]): T[A] = typeWith(H.log1p(untype(x)), typeOf(x))
+  def eExpm1[A <: $$](x: T[A]): T[A] = typeWith(H.expm1(untype(x)), typeOf(x))
 
 
-  def sin[A <: $$](x: T[A]): T[A] = typeWith(H.sin(untype(x)), typeOf(x))
-
-  def cos[A <: $$](x: T[A]): T[A] = typeWith(H.cos(untype(x)), typeOf(x))
-
-  def tan[A <: $$](x: T[A]): T[A] = typeWith(H.tan(untype(x)), typeOf(x))
+  def eSin[A <: $$](x: T[A]): T[A] = typeWith(H.sin(untype(x)), typeOf(x))
+  def eCos[A <: $$](x: T[A]): T[A] = typeWith(H.cos(untype(x)), typeOf(x))
+  def eTan[A <: $$](x: T[A]): T[A] = typeWith(H.tan(untype(x)), typeOf(x))
 
   def sigmoid[A <: $$](x: T[A]): T[A] = typeWith(H.sigmoid(untype(x)), typeOf(x))
 
@@ -103,7 +101,7 @@ trait TypedRealTensorOps[T[_ <: $$], R] extends TypedTensorOps[T, R] with Tensor
     def eMul(x1: T[A], x2: T[A]) = self.eMul(x1, x2)
     def eDiv(x1: T[A], x2: T[A]) = self.eDiv(x1, x2)
     def scale(x: T[A], k: Double) = self.scale(x, R.fromDouble(k))
-    def sqrt(x: T[A]) = self.sqrt(x)
+    def eSqrt(x: T[A]) = self.eSqrt(x)
   }
 
 }

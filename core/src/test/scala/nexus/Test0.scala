@@ -1,7 +1,6 @@
 package nexus
 
 import nexus.exec._
-import nexus.cpu._
 import nexus.op._
 import nexus.optimizer._
 

@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.cpu._
+import nexus.impl.cpu._
 
 /**
  * @author Tongfei Chen

@@ -89,7 +89,6 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
     def apply(x: Expr[X]) = y.substitute(self, x)
   }
 
-
 }
 
 
@@ -97,7 +96,7 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
  * A parameter of a model.
  * @param value Initial value of this parameter
  */
-case class Param[X](var value: X, name: String)(val gradOps: GradOps[X]) extends DExpr[X] {
+case class Param[X](var value: X, name: String)(implicit val gradOps: GradOps[X]) extends DExpr[X] {
   override def toString = name
 
   def +=(g: X) = if (gradOps.mutable)
@@ -108,11 +107,6 @@ case class Param[X](var value: X, name: String)(val gradOps: GradOps[X]) extends
 
 }
 
-object Param {
-
-  def apply[T[_ <: $$], D, A <: $$](value: T[A], name: String)(implicit ops: TypedRealTensorOps[T, D]) = new Param(value, name)(ops.ground[A])
-
-}
 
 /**
  * A constant value in a computational graph.

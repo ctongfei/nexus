@@ -1,9 +1,10 @@
 package nexus
 
-import nexus.cpu._
+import nexus.impl.cpu._
 import nexus.op._
 import nexus.optimizer._
 import nexus.exec._
+import nexus.impl.cpu.DenseTensor
 import nexus.layer._
 import nexus.op.activation._
 import nexus.op.loss._

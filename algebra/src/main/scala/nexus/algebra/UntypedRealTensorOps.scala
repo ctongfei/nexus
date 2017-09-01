@@ -2,12 +2,13 @@ package nexus.algebra
 
 /**
  * Environment for running untyped (NumPy/Torch/etc.) style NdArrays.
- * @tparam H Type of underlying untyped handle.
+ * @tparam H Type of underlying untyped handle
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 trait UntypedRealTensorOps[H, @specialized(Float, Double) R] extends UntypedTensorOps[H, R] with GradOps[H] {
 
-  def R: RealOps[R]
+  val R: RealOps[R]
 
   def unwrapScalar(x: H): R
   def wrapScalar(x: R): H
@@ -30,10 +31,10 @@ trait UntypedRealTensorOps[H, @specialized(Float, Double) R] extends UntypedTens
   def scale(x: H, k: Double) = scale(x, R.fromDouble(k))
   def scale(x: H, k: R): H
 
-  def inv(x: H): H
+  def eInv(x: H): H
 
-  def sqr(x: H): H
-  def sqrt(x: H): H
+  def eSqr(x: H): H
+  def eSqrt(x: H): H
 
   def log(x: H): H
   def exp(x: H): H

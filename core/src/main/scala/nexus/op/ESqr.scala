@@ -16,11 +16,11 @@ trait ESqrF[X, Y] extends DOp1[X, Y] {
 
 object ESqrF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]): ESqrF[T[A], T[A]] =
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: TypedRealTensorOps[T, D]): ESqrF[T[A], T[A]] =
     new ESqrF[T[A], T[A]] {
-      import ops._
-      def gradOps = ops.ground[A]
-      def forward(x: T[A]) = sqr(x)
+      import T._
+      def gradOps = T.ground[A]
+      def forward(x: T[A]) = eSqr(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| x :* 2f
     }
 

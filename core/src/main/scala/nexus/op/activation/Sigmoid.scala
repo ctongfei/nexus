@@ -16,16 +16,16 @@ import nexus.op._
  */
 object Sigmoid extends PolyDOp1[SigmoidF]
 
-@implicitNotFound("Cannot apply Sigmoid on ${X}.")
+@implicitNotFound("Cannot apply Sigmoid to ${X}.")
 trait SigmoidF[X, Y] extends DOp1[X, Y] {
   def name = "Sigmoid"
 }
 
 object SigmoidF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new SigmoidF[T[A], T[A]] {
-    import ops._
-    def gradOps = ops.ground[A]
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: TypedRealTensorOps[T, R]) = new SigmoidF[T[A], T[A]] {
+    import T._
+    def gradOps = T.ground[A]
     def forward(x: T[A]) = sigmoid(x)
     def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y |*| addS(-y, R.one)
   }

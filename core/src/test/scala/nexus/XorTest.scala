@@ -1,7 +1,7 @@
 package nexus
 
 import nexus.exec._
-import nexus.cpu._
+import nexus.impl.cpu._
 import nexus.layer._
 import nexus.op._
 import nexus.op.activation._
@@ -20,7 +20,7 @@ object XorTest extends App {
   class Hidden; val Hidden = new Hidden
   class Out; val Out = new Out
 
-  /** Prepare the data. */
+  /* Prepare the data. */
   val X = DenseTensor.fromNestedArray(Batch::In::$)(Array(
     Array(0f, 0f),
     Array(1f, 0f),
@@ -41,9 +41,7 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val ŷ =
-    x       |>
-    Layer1  |>
+  val ŷ = x |> Layer1 |>
     Sigmoid |>
     Layer2  |>
     Softmax

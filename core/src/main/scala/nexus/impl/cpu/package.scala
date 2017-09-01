@@ -1,4 +1,4 @@
-package nexus
+package nexus.impl
 
 import nexus.algebra._
 

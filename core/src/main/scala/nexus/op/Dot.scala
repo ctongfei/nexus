@@ -20,9 +20,9 @@ trait DotF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object DotF {
   
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit ops: TypedRealTensorOps[T, R]) = new DotF[T[A], T[A], R] {
-    import ops._
-    def gradOps = ops.R
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: TypedRealTensorOps[T, R]) = new DotF[T[A], T[A], R] {
+    import T._
+    def gradOps = T.R
     def forward(x1: T[A], x2: T[A]) = dot(x1, x2)
     def backward1(dy: R, y: R, x1: T[A], x2: T[A]) = x2 :* dy
     def backward2(dy: R, y: R, x1: T[A], x2: T[A]) = x1 :* dy

@@ -21,10 +21,10 @@ trait EExpF[X, Y] extends DOp1[X, Y] {
 
 object EExpF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit ops: TypedRealTensorOps[T, D]) = new EExpF[T[A], T[A]] {
-    import ops._
-    def gradOps = ops.ground[A]
-    def forward(x: T[A]) = exp(x)
+  implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: TypedRealTensorOps[T, D]) = new EExpF[T[A], T[A]] {
+    import T._
+    def gradOps = T.ground[A]
+    def forward(x: T[A]) = eExp(x)
     def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y
   }
 

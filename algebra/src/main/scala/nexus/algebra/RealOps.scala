@@ -1,50 +1,48 @@
 package nexus.algebra
 
-import nexus.exception._
-
 /**
  * Encapsulates mathematical operations on real numbers.
  *
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait RealOps[@specialized(Float, Double) D] extends algebra.ring.Field[D] with GradOps[D] {
+trait RealOps[@specialized(Float, Double) R] extends algebra.ring.Field[R] with GradOps[R] {
 
   def mutable = false
 
-  def add(x: D, y: D): D
-  override def plus(x: D, y: D) = add(x, y)
+  def add(x: R, y: R): R
+  override def plus(x: R, y: R) = add(x, y)
 
-  def sub(x: D, y: D): D
-  override def minus(x: D, y: D) = sub(x, y)
+  def sub(x: R, y: R): R
+  override def minus(x: R, y: R) = sub(x, y)
 
-  def neg(x: D): D
-  override def negate(x: D) = neg(x)
+  def neg(x: R): R
+  override def negate(x: R) = neg(x)
 
-  def mul(x: D, y: D): D
-  override def times(x: D, y: D) = mul(x, y)
+  def mul(x: R, y: R): R
+  override def times(x: R, y: R) = mul(x, y)
 
-  def div(x: D, y: D): D
+  def div(x: R, y: R): R
 
-  def inv(x: D): D
-  override def reciprocal(x: D) = inv(x)
+  def inv(x: R): R
+  override def reciprocal(x: R) = inv(x)
 
-  def zeroBy(x: D) = zero
+  def zeroBy(x: R) = zero
 
-  def exp(x: D): D
-  def log(x: D): D
-  def expm1(x: D): D
-  def log1p(x: D): D
+  def exp(x: R): R
+  def log(x: R): R
+  def expm1(x: R): R
+  def log1p(x: R): R
 
-  def sin(x: D): D
-  def cos(x: D): D
-  def tan(x: D): D
+  def sin(x: R): R
+  def cos(x: R): R
+  def tan(x: R): R
 
-  def sqr(x: D): D
+  def sqr(x: R): R
 
-  final def eMul(x1: D, x2: D) = mul(x1, x2)
-  final def eDiv(x1: D, x2: D) = div(x1, x2)
-  final def scale(x: D, k: Double) = mul(x, fromDouble(k))
+  final def eMul(x1: R, x2: R) = mul(x1, x2)
+  final def eDiv(x1: R, x2: R) = div(x1, x2)
+  final def scale(x: R, k: Double) = mul(x, fromDouble(k))
 
   def fromFloat(x: Float) = fromDouble(x)
 }
@@ -63,9 +61,8 @@ object RealOps {
     
     def addS(x1: Float, x2: Double) = x1 + x2.toFloat
 
-
     def sqr(x: Float) = x * x
-    def sqrt(x: Float) = Math.sqrt(x).toFloat
+    def eSqrt(x: Float) = Math.sqrt(x).toFloat
     def exp(x: Float) = Math.exp(x).toFloat
     def log(x: Float) = Math.log(x).toFloat
     def expm1(x: Float) = Math.expm1(x).toFloat
@@ -76,7 +73,7 @@ object RealOps {
 
     override def fromDouble(a: Double) = a.toFloat
     override def fromInt(n: Int) = n.toFloat
-    def addI(x1: Float, x2: Float) = throw new IncrementingImmutableGradientException
+    def addI(x1: Float, x2: Float) = x1 + x2
   }
   
   implicit object Float64 extends RealOps[Double] {
@@ -93,7 +90,7 @@ object RealOps {
 
 
     def sqr(x: Double) = x * x
-    def sqrt(x: Double) = Math.sqrt(x)
+    def eSqrt(x: Double) = Math.sqrt(x)
     def exp(x: Double) = Math.exp(x)
     def log(x: Double) = Math.log(x)
     def expm1(x: Double) = Math.expm1(x)
@@ -104,7 +101,7 @@ object RealOps {
 
     override def fromDouble(a: Double) = a
     override def fromInt(n: Int) = n
-    def addI(x1: Double, x2: Double) = throw new IncrementingImmutableGradientException
+    def addI(x1: Double, x2: Double) = x1 + x2
   }
 
 }

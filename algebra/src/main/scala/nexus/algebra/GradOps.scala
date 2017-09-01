@@ -12,7 +12,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait GradOps[X] {
+trait GradOps[@specialized(Float, Double) X] {
 
   def mutable: Boolean
 
@@ -34,12 +34,15 @@ trait GradOps[X] {
 
   def scale(x: X, k: Double): X
 
-  def sqrt(x: X): X
+  def eSqrt(x: X): X
 
 }
 
 object GradOps {
 
-  implicit def tensor[T[_ <: $$], A <: $$, D](implicit ops: TypedRealTensorOps[T, D]): GradOps[T[A]] = ops.ground[A]
+  implicit def scalar[R](implicit R: RealOps[R]) = R
+  implicit def tensor[T[_ <: $$], A <: $$, R](implicit ops: TypedRealTensorOps[T, R]): GradOps[T[A]] = ops.ground[A]
 
 }
+
+//TODO: automatic typeclass derivation for all sum/product types?

@@ -14,4 +14,6 @@ trait UntypedTensorOps[H, @specialized(Float, Double) R] {
 
   def map3(x1: H, x2: H, x3: H)(f: (R, R, R) => R): H
 
+  //TODO: slice/broadcast/squeeze/expandDim/etc.
+
 }

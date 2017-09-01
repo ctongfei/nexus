@@ -1,7 +1,7 @@
-package nexus.torch.cpu
+package nexus.impl.torch.cpu
 
 import nexus._
-import nexus.torch._
+import nexus.impl.torch._
 import jtorch._
 import nexus.algebra._
 
@@ -12,11 +12,11 @@ import nexus.algebra._
  */
 object CPUFloat32 extends TypedRealTensorOps[FloatDenseTensor, Float] with TensorAxisTyping[FloatDenseTensor] {
   type H = THFloatTensor
+  val R = RealOps.Float32
   def untype(x: FloatDenseTensor[_]) = ???
   def typeOf[A <: $$](x: FloatDenseTensor[A]) = ???
   def typeWith[A <: $$](x: THFloatTensor, a: A) = ???
-  def H = ???
-  def R = ???
+  val H = ???
   def newTensor[A <: $$](axes: A, shape: Array[Int]) = ???
   def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = ???
 

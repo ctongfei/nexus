@@ -9,10 +9,10 @@ import nexus.op._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Affine[T[_ <: $$], D, A, B] private(
+class Affine[T[_ <: $$], R, A, B] private(
   val weight: Param[T[B::A::$]],
   val bias: Param[T[B::$]]
-)(implicit val ops: TypedRealTensorOps[T, D])
+)(implicit val ops: TypedRealTensorOps[T, R])
   extends DModule[T[A::$], T[B::$]]
 {
 

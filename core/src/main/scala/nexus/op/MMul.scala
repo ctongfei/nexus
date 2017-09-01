@@ -17,10 +17,10 @@ trait MMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 }
 
 object MMulF {
-  implicit def matrix[T[_ <: $$], D, A, B, C](implicit ops: TypedRealTensorOps[T, D]): MMulF[T[A::B::$], T[B::C::$], T[A::C::$]] =
+  implicit def matrix[T[_ <: $$], R, A, B, C](implicit T: TypedRealTensorOps[T, R]): MMulF[T[A::B::$], T[B::C::$], T[A::C::$]] =
     new MMulF[T[A::B::$], T[B::C::$], T[A::C::$]] {
-      import ops._
-      def gradOps = ops.ground[A::C::$]
+      import T._
+      def gradOps = T.ground[A::C::$]
       def forward(x1: T[A::B::$], x2: T[B::C::$]) = mmMul(x1, x2)
       def backward1(dy: T[A::C::$], y: T[A::C::$], x1: T[A::B::$], x2: T[B::C::$]) = mmMul(dy, transpose(x2))
       def backward2(dy: T[A::C::$], y: T[A::C::$], x1: T[A::B::$], x2: T[B::C::$]) = mmMul(transpose(x1), dy)

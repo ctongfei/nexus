@@ -32,8 +32,8 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
       h.v = (h.v :* β2) + ((g |*| g) :* (1 - β2))
       val m̂ = h.m :/ (1 - Math.pow(β1, t))
       val v̂ = h.v :/ (1 - Math.pow(β2, t))
-      p -= (m̂ |/| sqrt(v̂) +# ε) :* α
-
+      val Δp = (m̂ |/| (eSqrt(v̂) +# ε)) :* α
+      p -= Δp
     }
     else history(p) = AdamHistory(zeroBy(g), zeroBy(g))
   }

@@ -1,4 +1,4 @@
-package nexus.cpu
+package nexus.impl.cpu
 
 import nexus._
 import nexus.algebra.typelevel._

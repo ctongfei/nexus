@@ -14,7 +14,6 @@ trait GradSyntax {
     def +(y: X) = add(x, y)
     def +#(y: Double) = addS(x, y)
 
-    def +=(y: X) = addI(x, y)
     def -(y: X) = sub(x, y)
     def unary_- = neg(x)
 

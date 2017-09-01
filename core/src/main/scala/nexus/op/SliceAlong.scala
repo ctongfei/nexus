@@ -17,11 +17,11 @@ trait SliceAlongF[P, X, Y] extends (P => DOp1[X, Y])
 
 object SliceAlongF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$, U, N <: Nat, B <: $$]
-  (implicit ops: TypedRealTensorOps[T, D], ui: IndexOf.Aux[A, U, N], ur: RemoveAt.Aux[A, N, B]) = new SliceAlongF[(U, Int), T[A], T[B]] {
+  implicit def tensor[T[_ <: $$], R, A <: $$, U, N <: Nat, B <: $$]
+  (implicit T: TypedRealTensorOps[T, R], ui: IndexOf.Aux[A, U, N], ur: RemoveAt.Aux[A, N, B]) = new SliceAlongF[(U, Int), T[A], T[B]] {
     def apply(p: (U, Int)) = new DOp1[T[A], T[B]] {
-      import ops._
-      def gradOps = ops.ground[B]
+      import T._
+      def gradOps = T.ground[B]
       val (axis, i) = p
       def name = s"SliceAlong[${axis.getClass.getSimpleName}->$i]"
       def forward(x: T[A]) = ???
