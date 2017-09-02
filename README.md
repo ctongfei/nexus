@@ -28,3 +28,7 @@ Design goals:
  - **[TODO] Distributed training**.
  - **[TODO] Typesafe higher-order gradients**.
  
+### Citation
+Please cite this in academic works as
+
+Tongfei Chen (2017): Typesafe Abstractions for Tensor Operations. In _Proceedings of the 8th ACM SIGPLAN Scala Symposium_.
