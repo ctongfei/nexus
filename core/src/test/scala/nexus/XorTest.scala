@@ -49,10 +49,10 @@ object XorTest extends App {
   val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
-  val sgd = new AdamOptimizer(0.05)
+  val opt = new AdamOptimizer(0.1)
 
   /** Start running! */
-  for (epoch <- 0 until 3000) {
+  for (epoch <- 0 until 1000) {
     var averageLoss = 0f
 
     // For each sample
@@ -63,7 +63,7 @@ object XorTest extends App {
 
       averageLoss += lossValue
 
-      sgd.update(gradients)
+      opt.update(gradients)
 
     }
 

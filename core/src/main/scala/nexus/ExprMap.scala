@@ -1,7 +1,6 @@
-package nexus.exec
+package nexus
 
 import cats._
-import nexus._
 
 import scala.collection._
 

@@ -4,17 +4,26 @@ import nexus._
 import nexus.algebra._
 
 /**
- * Subtraction of two tensors of the same axes and shape.
+ * Subtraction of two tensors of the same axes/shape.
  * @author Tongfei Chen
  * @since 0.1.0
  */
 object Sub extends PolyDOp2[SubF]
 
+@implicitNotFound("Cannot apply Sub to ${X1} and ${X2}.")
 trait SubF[X1, X2, Y] extends DOp2[X1, X2, Y] {
   def name = "Sub"
 }
 
 object SubF {
+
+  implicit def scalar[R](implicit R: RealOps[R]): SubF[R, R, R] =
+    new SubF[R, R, R] {
+      def gradOps = R
+      def backward1(dy: R, y: R, x1: R, x2: R) = dy
+      def backward2(dy: R, y: R, x1: R, x2: R) = -dy
+      def forward(x1: R, x2: R) = x1 - x2
+    }
 
   implicit def tensor[T[A <: $$], R, A <: $$](implicit T: TypedRealTensorOps[T, R]) = new SubF[T[A], T[A], T[A]] {
     def gradOps = T.ground[A]

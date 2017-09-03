@@ -10,10 +10,10 @@ import shapeless._
  */
 object Forward {
 
-  def compute[T[_ <: $$], D, X](e: Expr[X])(inputs: Assignment*): (X, ExprValueMap) =
+  def compute[X](e: Expr[X])(inputs: Assignment*): (X, ExprValueMap) =
     compute(e, ExprValueMap(inputs: _*))
 
-  def compute[T[_ <: $$], D, X](e: Expr[X], inputs: ExprValueMap): (X, ExprValueMap) = {
+  def compute[X](e: Expr[X], inputs: ExprValueMap): (X, ExprValueMap) = {
     val values = inputs
 
     def eval[X](e: Expr[X]): X = {

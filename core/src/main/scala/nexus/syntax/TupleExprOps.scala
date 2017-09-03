@@ -1,4 +1,6 @@
-package nexus
+package nexus.syntax
+
+import nexus._
 
 /**
  * @author Tongfei Chen

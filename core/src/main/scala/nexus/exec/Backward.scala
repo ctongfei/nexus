@@ -17,38 +17,54 @@ object Backward {
 
     def eval[Y](e: Expr[Y]): Unit = e match {
 
-      case DApply1(o: DOp1[eX, Y], x: DExpr[_]) =>
-          val g = o.backward(∇(e), values(e), values(x).asInstanceOf[eX])
-          ∇.increment(x, g)
-          eval(x)
+      case e @ DApply1(o, x) => {
+        x match {
+          case x: DExpr[e.Input] =>
+            val g = o.backward(∇(e), values(e), values(x))
+            ∇.increment(x, g)
+            eval(x)
+          case _ => // not differentiable
+        }
+      }
 
-      case DApply2(o: DOp2[eX1, eX2, Y], x1, x2) =>
-        if (x1.isInstanceOf[DExpr[eX1]]) {
-          val g1 = o.backward1(∇(e), values(e), values(x1).asInstanceOf[eX1], values(x2).asInstanceOf[eX2])
-          ∇.increment(x1.asInstanceOf[DExpr[eX1]], g1)
-          eval(x1)
+      case e @ DApply2(o, x1, x2) => {
+        x1 match {
+          case x1: DExpr[e.Input1] =>
+            val g1 = o.backward1(∇(e), values(e), values(x1), values(x2))
+            ∇.increment(x1, g1)
+            eval(x1)
+          case _ => // not differentiable
         }
-        if (x2.isInstanceOf[DExpr[eX2]]) {
-          val g2 = o.backward2(∇(e), values(e), values(x1).asInstanceOf[eX1], values(x2).asInstanceOf[eX2])
-          ∇.increment(x2.asInstanceOf[DExpr[eX2]], g2)
-          eval(x2)
+        x2 match {
+          case x2: DExpr[e.Input2] =>
+            val g2 = o.backward2(∇(e), values(e), values(x1), values(x2))
+            ∇.increment(x2, g2)
+            eval(x2)
+          case _ => // not differentiable
         }
+      }
 
-      case DApply3(o: DOp3[eX1, eX2, eX3, Y], x1, x2, x3) =>
-        if (x1.isInstanceOf[DExpr[eX1]]) {
-          val g1 = o.backward1(∇(e), values(e), values(x1), values(x2), values(x3))
-          ∇.increment(x1.asInstanceOf[DExpr[eX1]], g1)
-          eval(x1)
+      case e @ DApply3(o, x1, x2, x3) =>
+        x1 match {
+          case x1: DExpr[e.Input1] =>
+            val g1 = o.backward1(∇(e), values(e), values(x1), values(x2), values(x3))
+            ∇.increment(x1, g1)
+            eval(x1)
+          case _ => // not differentiable
         }
-        if (x2.isInstanceOf[DExpr[eX2]]) {
-          val g2 = o.backward2(∇(e), values(e), values(x1), values(x2), values(x3))
-          ∇.increment(x2.asInstanceOf[DExpr[eX2]], g2)
-          eval(x2)
+        x2 match {
+          case x2: DExpr[e.Input2] =>
+            val g2 = o.backward2(∇(e), values(e), values(x1), values(x2), values(x3))
+            ∇.increment(x2, g2)
+            eval(x2)
+          case _ => // not differentiable
         }
-        if (x3.isInstanceOf[DExpr[eX3]]) {
-          val g3 = o.backward3(∇(e), values(e), values(x1), values(x2), values(x3))
-          ∇.increment(x3.asInstanceOf[DExpr[eX3]], g3)
-          eval(x3)
+        x3 match {
+          case x3: DExpr[e.Input3] =>
+            val g3 = o.backward3(∇(e), values(e), values(x1), values(x2), values(x3))
+            ∇.increment(x3, g3)
+            eval(x3)
+          case _ => // not differentiable
         }
       case _ => // not differentiable
     }

@@ -20,9 +20,8 @@ class BackstitchOptimizer(ν: Double, α: Double = 0.3, n: Int = 2) extends Firs
   def updateParam[X](p: Param[X], g: X) = {
     implicit val ops = p.gradOps
 
-    if (t % n == 0) { // negative step!
+    if (t % n == 0) // negative step!
       p += g :* ((n - 1) * α * ν)
-    }
     else
       p -= g :* ((1 + α) * ν)
   }

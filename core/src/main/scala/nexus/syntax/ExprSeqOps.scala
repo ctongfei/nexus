@@ -1,7 +1,10 @@
-package nexus
+package nexus.syntax
+
+import nexus.Expr
 
 /**
  * Higher-order operations on symbolic expressions of sequences.
+ *
  * @author Tongfei Chen
  * @since 0.1.0
  */

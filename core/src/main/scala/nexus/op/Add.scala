@@ -4,7 +4,7 @@ import nexus._
 import nexus.algebra._
 
 /**
- * Addition of two object if these two objects are of the
+ * Adds two scalars or two scalars of the same axes/shape.
  * @author Tongfei Chen
  * @since 0.1.0
  */

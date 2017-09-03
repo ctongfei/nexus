@@ -1,4 +1,5 @@
 import nexus.algebra._
+import nexus.syntax._
 import shapeless._
 
 /**
