@@ -4,12 +4,20 @@ import nexus._
 import nexus.algebra._
 import shapeless._
 
-/**
- * Element-wise division between two tensors.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object EDiv extends PolyDOp2[EDivF]
+trait DivF[X1, X2, Y] extends DOp2[X1, X2, Y] {
+  def name = "Div"
+}
+
+object DivF {
+
+  implicit def scalar[R](implicit R: RealOps[R]) = new DivF[R, R, R] {
+    def gradOps = R
+    def backward1(dy: R, y: R, x1: R, x2: R) = dy / x2
+    def backward2(dy: R, y: R, x1: R, x2: R) = -dy * x1 / R.sqr(x2)
+    def forward(x1: R, x2: R) = x1 / x2
+  }
+
+}
 
 trait EDivF[X1, X2, Y] extends DOp2[X1, X2, Y] {
   def name = "EDiv"

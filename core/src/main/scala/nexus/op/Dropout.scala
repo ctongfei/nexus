@@ -10,6 +10,7 @@ import nexus.algebra._
  */
 case class Dropout(parameter: Double) extends ParaPolyDOp1[Double, DropoutF]
 
+@implicitNotFound("Cannot apply Dropout to ${X}.")
 trait DropoutF[P, X, Y] extends (P => DOp1[X, Y])
 
 object DropoutF {

@@ -116,63 +116,149 @@ case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X]
   override def toString = name
 }
 
-//TODO: make X types below existential?
 /**
  * The result of the application of a unary function to an expression.
  */
-case class Apply1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
-  type Input = X
+trait Apply1[Y] extends Expr[Y] {
+  type X
+  val op: Op1[X, Y]
+  val x: Expr[X]
   override def toString = s"${op.name}($x)"
+}
+
+object Apply1 {
+  def unapply[Y](e: Apply1[Y]): Option[(Op1[e.X, Y], Expr[e.X])] = Some(e.op, e.x)
+  def apply[_X, Y](_op: Op1[_X, Y], _x: Expr[_X]): Apply1[Y] = new Apply1[Y] {
+    type X = _X
+    val op = _op
+    val x = _x
+  }
+
 }
 
 /**
  * The result of the application of a binary function to two expressions.
  */
-case class Apply2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends Expr[Y] {
-  type Input1 = X1
-  type Input2 = X2
+trait Apply2[Y] extends Expr[Y] {
+  type X1
+  type X2
+  val op: Op2[X1, X2, Y]
+  val x1: Expr[X1]
+  val x2: Expr[X2]
   override def toString = s"${op.name}($x1, $x2)"
+}
+
+object Apply2 {
+  def unapply[Y](e: Apply2[Y]): Option[(Op2[e.X1, e.X2, Y], Expr[e.X1], Expr[e.X2])] = Some(e.op, e.x1, e.x2)
+  def apply[_X1, _X2, Y](_op: Op2[_X1, _X2, Y], _x1: Expr[_X1], _x2: Expr[_X2]): Apply2[Y] = new Apply2[Y] {
+    type X1 = _X1
+    type X2 = _X2
+    val op = _op
+    val x1 = _x1
+    val x2 = _x2
+  }
 }
 
 /**
  * The result of the application of a ternary function to three expressions.
  */
-case class Apply3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) extends Expr[Y] {
-  type Input1 = X1
-  type Input2 = X2
-  type Input3 = X3
+trait Apply3[Y] extends Expr[Y] {
+  type X1
+  type X2
+  type X3
+  val op: Op3[X1, X2, X3, Y]
+  val x1: Expr[X1]
+  val x2: Expr[X2]
+  val x3: Expr[X3]
   override def toString = s"${op.name}($x1, $x2, $x3)"
+}
+
+object Apply3 {
+  def unapply[Y](e: Apply3[Y]): Option[(Op3[e.X1, e.X2, e.X3, Y], Expr[e.X1], Expr[e.X2], Expr[e.X3])] = Some(e.op, e.x1, e.x2, e.x3)
+  def apply[_X1, _X2, _X3, Y](_op: Op3[_X1, _X2, _X3, Y], _x1: Expr[_X1], _x2: Expr[_X2], _x3: Expr[_X3]): Apply3[Y] = new Apply3[Y] {
+    type X1 = _X1
+    type X2 = _X2
+    type X3 = _X3
+    val op = _op
+    val x1 = _x1
+    val x2 = _x2
+    val x3 = _x3
+  }
 }
 
 /**
  * The result of the application of a unary differentiable function to an expression.
  * Gradient of this expression would be computed in backward computation.
  */
-case class DApply1[X, Y](op: DOp1[X, Y], x: Expr[X]) extends DExpr[Y] {
-  type Input = X
+trait DApply1[Y] extends DExpr[Y] {
+  type X
+  val op: DOp1[X, Y]
+  val x: Expr[X]
   def gradOps = op.gradOps
   override def toString = s"${op.name}($x)"
+}
+
+object DApply1 {
+  def unapply[Y](e: DApply1[Y]): Option[(DOp1[e.X, Y], Expr[e.X])] = Some(e.op, e.x)
+  def apply[_X, Y](_op: DOp1[_X, Y], _x: Expr[_X]): DApply1[Y] = new DApply1[Y] {
+    type X = _X
+    val op = _op
+    val x = _x
+  }
+
 }
 
 /**
  * The result of the application of a binary differentiable function to two expressions.
  * Gradient of this expression would be computed in backward computation.
  */
-case class DApply2[X1, X2, Y](op: DOp2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends DExpr[Y] {
-  type Input1 = X1
-  type Input2 = X2
+trait DApply2[Y] extends DExpr[Y] {
+  type X1
+  type X2
+  val op: DOp2[X1, X2, Y]
+  val x1: Expr[X1]
+  val x2: Expr[X2]
   def gradOps = op.gradOps
   override def toString = s"${op.name}($x1, $x2)"
 }
+
+object DApply2 {
+  def unapply[Y](e: DApply2[Y]): Option[(DOp2[e.X1, e.X2, Y], Expr[e.X1], Expr[e.X2])] = Some(e.op, e.x1, e.x2)
+  def apply[_X1, _X2, Y](_op: DOp2[_X1, _X2, Y], _x1: Expr[_X1], _x2: Expr[_X2]): DApply2[Y] = new DApply2[Y] {
+    type X1 = _X1
+    type X2 = _X2
+    val op = _op
+    val x1 = _x1
+    val x2 = _x2
+  }
+}
+
 
 /**
  * The result of the application of a ternary differentiable function to three expressions.
  * Gradient of this expression would be computed in backward computation.
  */
-case class DApply3[X1, X2, X3, Y](op: DOp3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) extends DExpr[Y] {
-  type Input1 = X1
-  type Input2 = X2
-  type Input3 = X3
+trait DApply3[Y] extends DExpr[Y] {
+  type X1
+  type X2
+  type X3
+  val op: DOp3[X1, X2, X3, Y]
+  val x1: Expr[X1]
+  val x2: Expr[X2]
+  val x3: Expr[X3]
   def gradOps = op.gradOps
   override def toString = s"${op.name}($x1, $x2, $x3)"
+}
+
+object DApply3 {
+  def unapply[Y](e: DApply3[Y]): Option[(DOp3[e.X1, e.X2, e.X3, Y], Expr[e.X1], Expr[e.X2], Expr[e.X3])] = Some(e.op, e.x1, e.x2, e.x3)
+  def apply[_X1, _X2, _X3, Y](_op: DOp3[_X1, _X2, _X3, Y], _x1: Expr[_X1], _x2: Expr[_X2], _x3: Expr[_X3]): DApply3[Y] = new DApply3[Y] {
+    type X1 = _X1
+    type X2 = _X2
+    type X3 = _X3
+    val op = _op
+    val x1 = _x1
+    val x2 = _x2
+    val x3 = _x3
+  }
 }

@@ -9,6 +9,7 @@ import nexus.algebra._
  */
 object ArgMax extends PolyOp1[ArgMaxF]
 
+@implicitNotFound("Cannot apply Argmax to ${X}.")
 trait ArgMaxF[X, Y] extends Op1[X, Y] {
   def name = "ArgMax"
 }

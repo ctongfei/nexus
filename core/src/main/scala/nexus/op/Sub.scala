@@ -3,13 +3,6 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 
-/**
- * Subtraction of two tensors of the same axes/shape.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object Sub extends PolyDOp2[SubF]
-
 @implicitNotFound("Cannot apply Sub to ${X1} and ${X2}.")
 trait SubF[X1, X2, Y] extends DOp2[X1, X2, Y] {
   def name = "Sub"

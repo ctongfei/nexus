@@ -3,13 +3,6 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 
-/**
- * Scalar multiplication.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object Mul extends PolyDOp2[MulF]
-
 @implicitNotFound("Cannot apply Mul on ${X1} and ${X2}.")
 trait MulF[X1, X2, Y] extends DOp2[X1, X2, Y] {
   def name = "Mul"
@@ -34,13 +27,6 @@ object MulF {
     }
 
 }
-
-/**
- * Element-wise multiplication (a.k.a. Hadamard product) between two tensors.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object EMul extends PolyDOp2[EMulF]
 
 @implicitNotFound("Cannot apply EMul to ${X1} and ${X2}.")
 trait EMulF[X1, X2, Y] extends DOp2[X1, X2, Y] {

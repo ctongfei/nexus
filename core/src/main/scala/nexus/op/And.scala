@@ -8,6 +8,7 @@ import nexus.algebra._
  */
 object And extends PolyOp2[AndF]
 
+@implicitNotFound("Cannot apply And to ${X1} and ${X2}.")
 trait AndF[X1, X2, Y] extends Op2[X1, X2, Y] {
   def name = "And"
 }

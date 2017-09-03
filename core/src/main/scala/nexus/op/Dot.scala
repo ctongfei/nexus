@@ -14,6 +14,7 @@ import nexus.algebra._
  */
 object Dot extends PolyDOp2[DotF]
 
+@implicitNotFound("Cannot apply Dot to ${X1} and ${X2}.")
 trait DotF[X1, X2, Y] extends DOp2[X1, X2, Y] {
   def name = "Dot"
 }

@@ -3,13 +3,6 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 
-/**
- * Adds two scalars or two scalars of the same axes/shape.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object Add extends PolyDOp2[AddF]
-
 @implicitNotFound("Cannot apply Add to ${X1} and ${X2}.")
 trait AddF[X1, X2, Y] extends DOp2[X1, X2, Y] {
   def name = "Add"
