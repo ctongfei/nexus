@@ -8,7 +8,7 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait ExprValuePair[V[_]] {
+trait ExprValuePair[V[_]] extends Product2[Expr[_], V[_]] {
 
   /** Existential type for the data held in the expression. */
   type Data
@@ -21,7 +21,7 @@ trait ExprValuePair[V[_]] {
 
   def _1 = expr
   def _2 = value
-
+  def canEqual(that: Any) = false
 }
 
 trait Assignment extends ExprValuePair[Id]

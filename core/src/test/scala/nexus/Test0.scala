@@ -12,6 +12,8 @@ import nexus.optimizer._
  */
 object Test0 extends App {
 
+  val ll = Mul(3f, 3f)
+
   val p = Param(3.0f, name = "p")
 
   val l = Mul(p, p)
