@@ -18,12 +18,13 @@ trait SumAlongF[U, X, Y] extends (U => DOp1[X, Y])
 object SumAlongF {
 
   implicit def tensor[T[_ <: $$], R, A <: $$, U, B <: $$]
-  (implicit r: Remove.Aux[A, U, (U, B)], T: TypedRealTensorOps[T, R]) =
+  (implicit r: Remove.Aux[A, U, (U, B)], T: IsTypedRealTensor[T, R]) =
     new SumAlongF[U, T[A], T[B]] {
       import T._
       def apply(u: U) = new DOp1[T[A], T[B]] {
-        def gradOps = T.ground[B]
+        def tag = T.ground[B]
         def name = s"SumAlong[${u.getClass.getSimpleName}]"
+
         def forward(x: T[A]) =  ??? //sumAlong(x, r.index)
         def backward(dy: T[B], y: T[B], x: T[A]) = ??? // dy.broadcast(r.removed, r.index)
       }

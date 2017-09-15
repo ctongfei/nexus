@@ -1,7 +1,7 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.exec._
+import nexus.algebra.syntax._
 import nexus.op._
 
 /**
@@ -22,7 +22,7 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
 
   def updateParam[X](p: Param[X], g: X) = {
 
-    implicit val ops = p.gradOps
+    implicit val ops = p.tag
     import ops._
 
     if (history contains p) {

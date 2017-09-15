@@ -10,7 +10,7 @@ import scala.reflect._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-@implicitNotFound("Cannot prove that ${T} is the ${N}-dimensional JVM array of ${A}.")
+@implicitNotFound("${T} is not the ${N}-dimensional JVM array of ${A}.")
 trait Nest[T, A, N <: Nat] {
   def classTagA: ClassTag[A]
   def classTagT: ClassTag[T]

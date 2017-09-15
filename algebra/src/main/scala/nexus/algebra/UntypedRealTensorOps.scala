@@ -6,12 +6,9 @@ package nexus.algebra
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait UntypedRealTensorOps[H, @specialized(Float, Double) R] extends UntypedTensorOps[H, R] with GradOps[H] {
+trait UntypedRealTensorOps[H, @specialized(Float, Double) R] extends IsUntypedTensor[H, R] with Grad[H] {
 
-  val R: RealOps[R]
-
-  def unwrapScalar(x: H): R
-  def wrapScalar(x: R): H
+  val R: IsReal[R]
 
   def zeroBy(x: H): H
 
@@ -49,6 +46,9 @@ trait UntypedRealTensorOps[H, @specialized(Float, Double) R] extends UntypedTens
 
   def sigmoid(x: H): H
   def reLU(x: H): H
+
+  def abs(x: H): H
+  def sgn(x: H): H
   def isPos(x: H): H
 
   def transpose(x: H): H

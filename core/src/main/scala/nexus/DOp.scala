@@ -6,7 +6,7 @@ import nexus.algebra._
  * A differentiable unary function.
  */
 trait DOp1[X, Y] extends Op1[X, Y] {
-  def gradOps: GradOps[Y]
+  def tag: Grad[Y]
 
   def apply(x: DExpr[X]): DExpr[Y] = DApply1(this, x)
 
@@ -24,7 +24,7 @@ trait DOp1[X, Y] extends Op1[X, Y] {
  * A binary function that is differentiable with respect to at least one argument.
  */
 trait DOp2[X1, X2, Y] extends Op2[X1, X2, Y] {
-  def gradOps: GradOps[Y]
+  def tag: Grad[Y]
   def apply(x1: DExpr[X1], x2: Expr[X2]) = DApply2(this, x1, x2)
   def apply(x1: Expr[X1], x2: DExpr[X2]) = DApply2(this, x1, x2)
   def apply(x1: DExpr[X1], x2: DExpr[X2]) = DApply2(this, x1, x2)
@@ -37,7 +37,7 @@ trait DOp2[X1, X2, Y] extends Op2[X1, X2, Y] {
  * A ternary function that is differentiable with respect to at least one argument.
  */
 trait DOp3[X1, X2, X3, Y] extends Op3[X1, X2, X3, Y] {
-  def gradOps: GradOps[Y]
+  def tag: Grad[Y]
   def apply(x1: DExpr[X1], x2: Expr[X2], x3: Expr[X3]) = DApply3(this, x1, x2, x3)
   def apply(x1: Expr[X1], x2: DExpr[X2], x3: Expr[X3]) = DApply3(this, x1, x2, x3)
   def apply(x1: Expr[X1], x2: Expr[X2], x3: DExpr[X3]) = DApply3(this, x1, x2, x3)

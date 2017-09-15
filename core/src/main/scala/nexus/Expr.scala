@@ -60,7 +60,10 @@ sealed trait Expr[X] {
  */
 sealed trait DExpr[X] extends Expr[X] {
 
-  def gradOps: GradOps[X]
+  /**
+   * Runtime information attached to the type.
+   */
+  def tag: Grad[X]
 
   def |>[Y]
   (f: DOp1[X, Y]): DExpr[Y] = f(this)
@@ -96,14 +99,14 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
  * A parameter of a model.
  * @param value Initial value of this parameter
  */
-case class Param[X](var value: X, name: String)(implicit val gradOps: GradOps[X]) extends DExpr[X] {
+case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) extends DExpr[X] {
   override def toString = name
 
-  def +=(g: X) = if (gradOps.mutable)
-    gradOps.addI(value, g)
-  else value = gradOps.add(value, g)
+  def +=(g: X) = if (tag.mutable)
+    tag.addI(value, g)
+  else value = tag.add(value, g)
 
-  def -=(g: X) = +=(gradOps.neg(g))
+  def -=(g: X) = +=(tag.neg(g))
 
 }
 
@@ -150,7 +153,7 @@ case class Apply3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[
  */
 case class DApply1[X, Y](op: DOp1[X, Y], x: Expr[X]) extends DExpr[Y] {
   type Input = X
-  def gradOps = op.gradOps
+  def tag = op.tag
   override def toString = s"${op.name}($x)"
 }
 
@@ -161,7 +164,7 @@ case class DApply1[X, Y](op: DOp1[X, Y], x: Expr[X]) extends DExpr[Y] {
 case class DApply2[X1, X2, Y](op: DOp2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends DExpr[Y] {
   type Input1 = X1
   type Input2 = X2
-  def gradOps = op.gradOps
+  def tag = op.tag
   override def toString = s"${op.name}($x1, $x2)"
 }
 
@@ -173,6 +176,6 @@ case class DApply3[X1, X2, X3, Y](op: DOp3[X1, X2, X3, Y], x1: Expr[X1], x2: Exp
   type Input1 = X1
   type Input2 = X2
   type Input3 = X3
-  def gradOps = op.gradOps
+  def tag = op.tag
   override def toString = s"${op.name}($x1, $x2, $x3)"
 }

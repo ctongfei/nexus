@@ -1,11 +1,10 @@
 package nexus
 
+import nexus.algebra.instances._
 import nexus.exec._
 import nexus.impl.cpu._
 import nexus.layer._
 import nexus.op._
-import nexus.op.activation._
-import nexus.op.loss._
 import nexus.optimizer._
 
 /**
@@ -41,10 +40,7 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val ŷ = x |> Layer1 |>
-    Sigmoid |>
-    Layer2  |>
-    Softmax
+  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
   val loss = CrossEntropy(y, ŷ)
 

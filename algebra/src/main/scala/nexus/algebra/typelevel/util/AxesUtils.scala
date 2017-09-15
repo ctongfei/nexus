@@ -3,7 +3,9 @@ package nexus.algebra.typelevel.util
 import nexus.algebra._
 
 /**
+ * Contains routines that manipulates axis HLists.
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 object AxesUtils {
 

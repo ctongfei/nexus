@@ -1,7 +1,7 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.op._
+import nexus.algebra.syntax._
 
 /**
  * Backstitch optimizer.
@@ -18,7 +18,7 @@ import nexus.op._
 class BackstitchOptimizer(ν: Double, α: Double = 0.3, n: Int = 2) extends FirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X) = {
-    implicit val ops = p.gradOps
+    implicit val ops = p.tag
 
     if (t % n == 0) // negative step!
       p += g :* ((n - 1) * α * ν)

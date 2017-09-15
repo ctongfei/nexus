@@ -19,6 +19,9 @@ trait ExprValuePair[V[_]] {
   /** The stored information assigned to the specific expression. */
   val value: V[Data]
 
+  def _1 = expr
+  def _2 = value
+
 }
 
 trait Assignment extends ExprValuePair[Id]

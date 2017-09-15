@@ -11,10 +11,11 @@ import shapeless._
  */
 object Backward {
 
-  def compute[R](e: Expr[R], values: ExprValueMap)(implicit R: RealOps[R]): ExprValueMap = {
+  def compute[R](e: Expr[R], values: ExprValueMap)(implicit R: IsReal[R]): ExprValueMap = {
 
     val ∇ = ExprValueMap(e <<- R.one) // gradient of loss is 1
 
+    //TODO: Is DFS here correct? change to queue?
     def eval[Y](e: Expr[Y]): Unit = e match {
 
       case e @ DApply1(o, x) => {

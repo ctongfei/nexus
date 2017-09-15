@@ -7,7 +7,7 @@ import nexus.algebra._
  */
 trait ScalarSyntax {
 
-  implicit class ScalarOps[X](val x: X)(implicit X: RealOps[X]) {
+  implicit class ScalarOps[X](val x: X)(implicit X: IsReal[X]) {
 
     import X._
 

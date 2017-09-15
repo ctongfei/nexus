@@ -1,7 +1,7 @@
 package nexus.exec
 
+import cats._
 import nexus._
-import shapeless._
 
 /**
  * Performs forward computation on a computation graph.
@@ -10,44 +10,46 @@ import shapeless._
  */
 object Forward {
 
-  def compute[X](e: Expr[X])(inputs: Assignment*): (X, ExprValueMap) =
-    compute(e, ExprValueMap(inputs: _*))
-
-  def compute[X](e: Expr[X], inputs: ExprValueMap): (X, ExprValueMap) = {
-    val values = inputs
-
-    def eval[X](e: Expr[X]): X = {
+  class Instance(val values: ExprValueMap) extends (Expr ~> Id) {
+    def apply[A](e: Expr[A]) = {
       if (values contains e) values(e)
       else e match {
         case Input(_) =>
-          val x = inputs(e)
+          val x = values(e)
           values(e) = x; x
         case Param(x, _) => values(e) = x; x
         case Const(x, _) => values(e) = x; x
         case Apply1(o, x) =>
-          val y = o.forward(eval(x))
+          val y = o.forward(apply(x))
           values(e) = y; y
         case Apply2(o, x1, x2) =>
-          val y = o.forward(eval(x1), eval(x2))
+          val y = o.forward(apply(x1), apply(x2))
           values(e) = y; y
         case Apply3(o, x1, x2, x3) =>
-          val y = o.forward(eval(x1), eval(x2), eval(x3))
+          val y = o.forward(apply(x1), apply(x2), apply(x3))
           values(e) = y; y
         case DApply1(o, x) =>
-          val y = o.forward(eval(x))
+          val y = o.forward(apply(x))
           values(e) = y; y
         case DApply2(o, x1, x2) =>
-          val y = o.forward(eval(x1), eval(x2))
+          val y = o.forward(apply(x1), apply(x2))
           values(e) = y; y
         case DApply3(o, x1, x2, x3) =>
-          val y = o.forward(eval(x1), eval(x2), eval(x3))
+          val y = o.forward(apply(x1), apply(x2), apply(x3))
           values(e) = y; y
-
       }
     }
+  }
 
+  def given(values: ExprValueMap): Expr ~> Id = new Instance(values)
+
+  def compute[X](e: Expr[X])(inputs: Assignment*): (X, ExprValueMap) =
+    compute(e, ExprValueMap(inputs: _*))
+
+  def compute[X](e: Expr[X], inputs: ExprValueMap): (X, ExprValueMap) = {
+    val eval = given(inputs)
     val y = eval(e)
-    (y, values)
+    (y, inputs)
   }
 
 }

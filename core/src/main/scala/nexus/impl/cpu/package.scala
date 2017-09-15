@@ -7,6 +7,6 @@ import nexus.algebra._
  */
 package object cpu {
 
-  implicit val cpuFloat32: TypedRealTensorOps[DenseTensor, Float] = TypedCPUFloat32
+  implicit val cpuFloat32: IsTypedRealTensor[DenseTensor, Float] = TypedCPUFloat32
 
 }

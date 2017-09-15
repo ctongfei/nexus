@@ -14,7 +14,7 @@ class ExprValueMap extends ExprMap[Id] with Iterable[Assignment] {
 
   def increment[X](e: DExpr[X], v: X) = {
     if (contains(e)) {
-      val gradOps = e.gradOps
+      val gradOps = e.tag
       if (gradOps.mutable)
         gradOps.addI(this(e), v)
       else this(e) = gradOps.add(this(e), v)

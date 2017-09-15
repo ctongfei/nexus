@@ -13,6 +13,7 @@ lazy val commonSettings = Seq(
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
   libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0",
   libraryDependencies += "org.typelevel" %% "cats-core" % "0.9.0",
+  libraryDependencies += "org.typelevel" %% "cats-free" % "0.9.0",
 
   mathFormulaInDoc := {
     val apiDir = (doc in Compile).value

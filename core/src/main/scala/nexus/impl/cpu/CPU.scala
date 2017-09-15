@@ -10,7 +10,7 @@ import scala.util._
 /**
  * @author Tongfei Chen
  */
-object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with TensorAxisTyping[DenseTensor] {
+object TypedCPUFloat32 extends IsTypedRealTensor[DenseTensor, Float] with AxisTyping[DenseTensor] {
   type H = UntypedDenseTensor
   val H = UntypedCPUFloat32
 
@@ -43,7 +43,7 @@ object TypedCPUFloat32 extends TypedRealTensorOps[DenseTensor, Float] with Tenso
 object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float] {
 
   type R = Float
-  val R = RealOps.Float32
+  val R = nexus.algebra.instances.Float32
 
   def mutable = true
 
@@ -230,6 +230,9 @@ object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float]
   def cos(x: UntypedDenseTensor) = map(x)(a => Math.cos(a).toFloat)
   def tan(x: UntypedDenseTensor) = map(x)(a => Math.tan(a).toFloat)
 
+
+  def abs(x: UntypedDenseTensor) = map(x)(Math.abs)
+  def sgn(x: UntypedDenseTensor) = map(x)(Math.signum)
   def sigmoid(x: UntypedDenseTensor) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
   def reLU(x: UntypedDenseTensor) = map(x)(a => if (a > 0) a else 0f)
   def isPos(x: UntypedDenseTensor) = map(x)(a => if (a > 0) 1f else 0f)

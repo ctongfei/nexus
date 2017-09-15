@@ -7,7 +7,7 @@ import nexus.algebra._
  */
 trait GradSyntax {
 
-  implicit class _GradOps[X](val x: X)(implicit ops: GradOps[X]) {
+  implicit class GradOps[X](val x: X)(implicit ops: Grad[X]) {
 
     import ops._
 

@@ -31,6 +31,7 @@ trait DenseTensor[A <: HList]
   (implicit t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): DenseTensor[T] =
     sliceUntyped(nn(), i) typeWith t(axes)
 
+
   def sliceAlong[X, N <: Nat, T <: HList]
   (axis: X, i: Int)
   (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]) = slice0(n(), i)
