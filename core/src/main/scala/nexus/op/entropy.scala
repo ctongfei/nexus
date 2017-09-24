@@ -17,3 +17,5 @@ import nexus.func._
  * @since 0.1.0
  */
 object CrossEntropy extends PolyDOp2[CrossEntropyF]
+
+object KullbackLeiblerDivergence extends PolyDOp2[KullbackLeiblerDivergenceF]

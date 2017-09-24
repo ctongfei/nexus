@@ -1,7 +1,6 @@
 package nexus
 
 import cats._
-
 import scala.collection._
 
 /**

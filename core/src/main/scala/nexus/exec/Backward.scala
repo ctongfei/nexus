@@ -11,6 +11,10 @@ import shapeless._
  */
 object Backward {
 
+  private def reverseTopologicalSort(e: Expr[_]): Iterable[Expr[_]] = {
+    ???
+  }
+
   def compute[R](e: Expr[R], values: ExprValueMap)(implicit R: IsReal[R]): ExprValueMap = {
 
     val ∇ = ExprValueMap(e <<- R.one) // gradient of loss is 1

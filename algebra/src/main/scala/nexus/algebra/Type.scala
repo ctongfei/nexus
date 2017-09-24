@@ -8,11 +8,6 @@ package nexus.algebra
  */
 trait Type[X]
 
-trait Tagged[X] { self: X =>
-  def tag: Type[X]
-}
-
-
 trait TypeH[T[_ <: $$]] {
   def ground[A <: $$]: Type[T[A]]
 }

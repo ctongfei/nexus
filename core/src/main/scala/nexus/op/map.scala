@@ -11,3 +11,8 @@ import nexus.func._
 case class Map[D](f: DOp1[D, D]) extends ParaPolyDOp1[DOp1[D, D], MapF] {
   def parameter = f
 }
+
+object Map {
+
+
+}

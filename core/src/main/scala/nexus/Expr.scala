@@ -1,7 +1,8 @@
 package nexus
 
+import cats._
 import nexus.algebra._
-import nexus.algebra.typelevel.util._
+import nexus.algebra.syntax._
 import nexus.util._
 
 /**
@@ -11,6 +12,8 @@ import nexus.util._
  * @author Tongfei Chen
  */
 sealed trait Expr[X] {
+
+  def value[F[_]](implicit f: Expr ~> F) = f(this)
 
   /** Passes this expression through any function. */
   def |>[Y]
@@ -39,10 +42,10 @@ sealed trait Expr[X] {
   /**
    * Creates an assignment to this expression.
    */
-  def <<-(value: X) = Assignment(this, value)
+  def <<-(value: X): Assignment = Assignment(this, value)
 
   def substitute[A](ax: Input[A], a: Expr[A]): Expr[X] = this match {
-    case x: Input[X] => if (x == ax) a.asInstanceOf[Expr[X]] else x
+    case x: Input[X] => if (x eq ax) a.asInstanceOf[Expr[X]] else x
     case x: Const[X] => x
     case x: Param[X] => x
     case Apply1(op, x) => Apply1(op, x.substitute(ax, a))
@@ -106,7 +109,7 @@ case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) exten
     tag.addI(value, g)
   else value = tag.add(value, g)
 
-  def -=(g: X) = +=(tag.neg(g))
+  def -=(g: X) = +=(-g)
 
 }
 

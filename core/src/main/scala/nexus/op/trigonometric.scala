@@ -26,3 +26,15 @@ object Cos extends PolyDOp1[CosF] {
    */
   object Elementwise extends PolyDOp1[ECosF]
 }
+
+/**
+ * Tangent on a scalar.
+ * @author Tongfei Chen
+ * @since 0.1.0
+ */
+object Tan extends PolyDOp1[TanF] {
+  /**
+   * Elementwise tangent on a tensor.
+   */
+  object Elementwise extends PolyDOp1[ETanF]
+}

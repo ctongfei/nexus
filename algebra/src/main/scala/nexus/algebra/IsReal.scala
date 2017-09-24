@@ -1,11 +1,14 @@
 package nexus.algebra
 
+import scala.annotation._
+
 /**
  * Encapsulates mathematical operations on real numbers.
  *
  * @author Tongfei Chen
  * @since 0.1.0
  */
+@implicitNotFound("Cannot prove that type ${R} is a real number.")
 trait IsReal[@specialized(Float, Double) R] extends algebra.ring.Field[R] with Grad[R] {
 
   def mutable = false
@@ -54,7 +57,6 @@ trait IsReal[@specialized(Float, Double) R] extends algebra.ring.Field[R] with G
 
 object IsReal {
 
-  implicit val float32 = instances.Float32
-  implicit val float64 = instances.Float64
+  implicit def extract[T[_ <: $$], R](implicit T: IsTypedRealTensor[T, R]): IsReal[R] = T.R
 
 }

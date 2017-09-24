@@ -25,3 +25,21 @@ object CrossEntropyF {
     }
 
 }
+
+trait KullbackLeiblerDivergenceF[P, Q, Y] extends DOp2[P, Q, Y] {
+  def name = "KullbackLeiblerDivergence"
+}
+
+object KullbackLeiblerDivergenceF {
+
+  implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]): KullbackLeiblerDivergenceF[T[A::$], T[A::$], R] =
+    new KullbackLeiblerDivergenceF[T[A::$], T[A::$], R] {
+      import T._
+      def tag = T.R
+      def forward(p: T[A::$], q: T[A::$]) =
+        sum(p |*| eLog(p |/| q))
+      def backward1(dy: R, y: R, p: T[A::$], q: T[A::$]) = ???
+      def backward2(dy: R, y: R, p: T[A::$], q: T[A::$]) = ???
+    }
+
+}

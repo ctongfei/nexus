@@ -3,8 +3,8 @@ package nexus.algebra.instances
 import nexus.algebra._
 
 object Float32 extends IsReal[Float] {
-  def one = 1f
-  def zero = 0f
+  val one = 1f
+  val zero = 0f
   def add(x: Float, y: Float) = x + y
   def sub(x: Float, y: Float) = x - y
   def neg(x: Float) = -x

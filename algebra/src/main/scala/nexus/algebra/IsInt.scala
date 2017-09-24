@@ -1,11 +1,15 @@
 package nexus.algebra
 
+import scala.annotation._
+
 
 /**
  * Encapsulates mathematical operations on integers.
+ *
  * @author Tongfei Chen
  * @since 0.1.0
  */
+@implicitNotFound("Cannot prove that type ${I} is an integer.")
 trait IsInt[@specialized(Int, Long) I] extends algebra.ring.CommutativeRing[I] with Type[I] {
 
   def add(x: I, y: I): I

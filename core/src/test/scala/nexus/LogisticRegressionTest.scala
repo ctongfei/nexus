@@ -1,11 +1,9 @@
 package nexus
 
-import nexus.algebra.syntax._
-import nexus.impl.cpu._
 import nexus.op._
 import nexus.optimizer._
 import nexus.exec._
-import nexus.impl.cpu.DenseTensor
+import nexus.impl.cpu._
 import nexus.layer._
 
 /**

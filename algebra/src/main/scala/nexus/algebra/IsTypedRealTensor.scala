@@ -3,11 +3,14 @@ package nexus.algebra
 import nexus.algebra.typelevel.util._
 import nexus.algebra.typelevel._
 
+import scala.annotation._
+
 /**
  * Typeclass that describes the algebraic structures on tensors whose elements are real numbers.
  * @author Tongfei Chen
  * @since 0.1.0
  */
+@implicitNotFound("Cannot prove that ${T} is a typed tensor of ${R}.")
 trait IsTypedRealTensor[T[_ <: $$], R] extends IsTypedTensor[T, R] with AxisTyping[T] with GradH[T] { self =>
 
   val H: UntypedRealTensorOps[H, R]

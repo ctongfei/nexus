@@ -23,7 +23,7 @@ object SinF {
 
 @implicitNotFound("Cannot apply Sin.Elementwise to ${X}.")
 trait ESinF[X, Y] extends DOp1[X, Y] {
-  def name = "ESin"
+  def name = "Sin.Elementwise"
 }
 
 object ESinF {
@@ -56,12 +56,12 @@ object CosF {
 
 @implicitNotFound("Cannot apply Cos.Elementwise to ${X}.")
 trait ECosF[X, Y] extends DOp1[X, Y] {
-  def name = "ECos"
+  def name = "Cos.Elementwise"
 }
 
 object ECosF {
 
-  implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: IsTypedRealTensor[T, D]) = new ECosF[T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new ECosF[T[A], T[A]] {
     import T._
     def tag = T.ground[A]
     def forward(x: T[A]) = eCos(x)
@@ -70,6 +70,36 @@ object ECosF {
 
 }
 
-//TODO: Tan, ETan, ATan2
+@implicitNotFound("Cannot apply Tan to ${X}.")
+trait TanF[X, Y] extends DOp1[X, Y] {
+  def name = "Tan"
+}
+
+object TanF {
+  implicit def scalar[R](implicit R: IsReal[R]): TanF[R, R] =
+    new TanF[R, R] {
+      import R._
+      def tag = R
+      def forward(x: R) = tan(x)
+      def backward(dy: R, y: R, x: R) = dy * (sqr(y) + one)
+    }
+}
+
+trait ETanF[X, Y] extends DOp1[X, Y] {
+  def name = "Tan.Elementwise"
+}
+
+object ETanF {
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]): ETanF[T[A], T[A]] =
+    new ETanF[T[A], T[A]] {
+      import T._
+      def tag = T.ground[A]
+      def forward(x: T[A]) = eTan(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| (addS(eSqr(y), R.one))
+    }
+
+}
+
+//TODO: ATan2
 //TODO: Sinh, Cosh, Tanh
 //TODO: Arcsin, Arccos, Arctan

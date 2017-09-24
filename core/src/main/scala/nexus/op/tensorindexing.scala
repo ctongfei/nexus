@@ -25,3 +25,11 @@ object UnwrapScalar extends PolyDOp1[UnwrapScalarF]
  * @author Tongfei Chen
  */
 case class OneHot[U](parameter: (U, Int)) extends ParaPolyOp1[(U, Int), OneHotF]
+
+/**
+ * Slices a tensor along a specific axis.
+ * @example {{{ SliceAlong(Width -> 3) }}}
+ * @author Tongfei Chen
+ * @since 0.1.0
+ */
+case class SliceAlong[U](parameter: (U, Int)) extends ParaPolyDOp1[(U, Int), SliceAlongF]

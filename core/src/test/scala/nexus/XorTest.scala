@@ -1,6 +1,6 @@
 package nexus
 
-import nexus.algebra.instances._
+import nexus.algebra._
 import nexus.exec._
 import nexus.impl.cpu._
 import nexus.layer._

@@ -1,5 +1,7 @@
 import scala.io._
 
+enablePlugins(ScalaUnidocPlugin)
+
 // credit to http://stackoverflow.com/a/32114551/2990673
 lazy val mathFormulaInDoc = taskKey[Unit]("add MathJax script import in scaladoc html to display LaTeX formula")
 
@@ -21,7 +23,7 @@ lazy val commonSettings = Seq(
     // will replace this "importTag" by "scriptLine
     // find all html file and apply patch
     if(docDir.isDirectory)
-      listHtmlFile(docDir).foreach { f =>
+      for (f <- listHtmlFile(docDir)) {
         val content = Source.fromFile(f).getLines().mkString("\n")
         val writer = new java.io.PrintWriter(f)
         writer.write(content.replace(

@@ -38,7 +38,7 @@ trait DenseTensor[A <: HList]
 
   def along[X, N <: Nat, T <: HList]
   (axis: X)
-  (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]) =
+  (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): Seq[DenseTensor[T]] =
     (0 until shape(nn())) map { i => slice0(n(), i) }
 
   def expandDim[X, N <: Nat, T <: HList]

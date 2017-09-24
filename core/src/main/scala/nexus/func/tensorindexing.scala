@@ -2,6 +2,8 @@ package nexus.func
 
 import nexus._
 import nexus.algebra._
+import nexus.algebra.typelevel._
+import shapeless._
 
 @implicitNotFound("Cannot apply WrapScalar to ${X}.")
 trait WrapScalarF[X, Y] extends DOp1[X, Y] {
@@ -43,4 +45,22 @@ object OneHotF {
 
   //implicit def tensor[TI[_ <: $$], TR[_ <: $$], A <: $$, U] = new OneHotF[U, TI[A], TR[A::U::$]]
 
+}
+
+
+trait SliceAlongF[P, X, Y] extends (P => DOp1[X, Y])
+
+object SliceAlongF {
+
+  implicit def tensor[T[_ <: $$], R, A <: $$, U, N <: Nat, B <: $$]
+  (implicit T: IsTypedRealTensor[T, R], ui: IndexOf.Aux[A, U, N], ur: RemoveAt.Aux[A, N, B]) = new SliceAlongF[(U, Int), T[A], T[B]] {
+    def apply(p: (U, Int)) = new DOp1[T[A], T[B]] {
+      import T._
+      def tag = T.ground[B]
+      val (axis, i) = p
+      def name = s"SliceAlong[${axis.getClass.getSimpleName}->$i]"
+      def forward(x: T[A]) = ???
+      def backward(dy: T[B], y: T[B], x: T[A]) = ???
+    }
+  }
 }
