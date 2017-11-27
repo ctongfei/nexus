@@ -12,14 +12,15 @@ trait ScaleF[X1, X2, Y] extends DOp2[X1, X2, Y] {
 
 object ScaleF {
 
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new ScaleF[T[A], R, T[A]] {
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new ScaleF[R, T[A], T[A]] {
     def tag = T.ground[A]
-    def forward(x1: T[A], x2: R) = x1 :* x2
-    def backward1(dy: T[A], y: T[A], x1: T[A], x2: R) = dy :* x2
-    def backward2(dy: T[A], y: T[A], x1: T[A], x2: R) = dy ⋅ x1
+    def forward(x1: R, x2: T[A]) = x2 :* x1
+    def backward1(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy ⋅ x2
+    def backward2(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy :* x1
   }
 
 }
+
 
 @implicitNotFound("Cannot apply Dot to ${X1} and ${X2}.")
 trait DotF[X1, X2, Y] extends DOp2[X1, X2, Y] {
@@ -30,7 +31,7 @@ object DotF {
 
   implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new DotF[T[A], T[A], R] {
     import T._
-    def tag = T.R
+    def tag = H.R
     def forward(x1: T[A], x2: T[A]) = dot(x1, x2)
     def backward1(dy: R, y: R, x1: T[A], x2: T[A]) = x2 :* dy
     def backward2(dy: R, y: R, x1: T[A], x2: T[A]) = x1 :* dy
@@ -100,9 +101,9 @@ object ContractF {
     new ContractF[T[A], T[B], T[C]] {
       import T._
       def tag = T.ground[C]
-      def forward(x1: T[A], x2: T[B]) = x1 ⋈ x2
-      def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // dy ⋈ x2
-      def backward2(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // dy ⋈ x1
+      def forward(x1: T[A], x2: T[B]) = contract(x1, x2)(sd)
+      def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // contract(dy, x2)(sd.recoverLeft)
+      def backward2(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = ??? // contract(dy, x1)(sd.recoverRight)
     }
 
 }

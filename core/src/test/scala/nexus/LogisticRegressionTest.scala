@@ -38,7 +38,7 @@ object LogisticRegressionTest extends App {
   val output = x |> Layer |> Softmax
   val loss = CrossEntropy(y, output)
 
-  val sgd = new GradientDescentOptimizer(0.1)
+  val sgd = new BackstitchOptimizer(0.1)
 
   for (i <- 0 until 100) {
     for ((xv, yv) <- xs zip ys) {

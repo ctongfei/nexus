@@ -2,15 +2,22 @@ package nexus.exec
 
 import nexus._
 
-
 /**
- * Reference:
- * G Neubig, Y Goldberg, C Dyer (2017):
- * On-the-fly operation batching in dynamic computation graphs. NIPS.
- * [https://arxiv.org/pdf/1705.07860.pdf]
  * @author Tongfei Chen
  */
+class Batch
+
 object StaticBatching {
+
+  val Batch = new Batch
+
+  def batchTensor[T[_ <: $$], A <: $$](e: Expr[T[A]], n: Int): Expr[T[Batch::A]] = e match {
+    case e: Input[T[A]] => Input[T[Batch::A]](name = s"${e.name}_batched")
+    case e: Const[T[A]] => ??? // Broadcast(Batch)(e)
+    case e: Param[T[A]] => ??? // Broadcast(Batch)(e)
+    case e @ DApply1(f, x) => ???
+
+  }
 
 
 }

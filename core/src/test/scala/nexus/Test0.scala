@@ -1,6 +1,7 @@
 package nexus
 
 import nexus.exec._
+import nexus.impl.cpu.DenseTensor
 import nexus.op._
 import nexus.syntax._
 import nexus.optimizer._
@@ -11,11 +12,13 @@ import nexus.optimizer._
  */
 object Test0 extends App {
 
-  val ll = Mul(3f, 3f)
-
   val p = Param(3.0f, name = "p")
 
-  val l = Mul(p, p)
+  val q = Param(DenseTensor.fill(0f, ()::$, Array(1)), name = "q")
+
+  val t = Abs.Elementwise.apply(q)
+
+  val l = Abs(p)
 
   val sgd = new GradientDescentOptimizer(0.2)
 

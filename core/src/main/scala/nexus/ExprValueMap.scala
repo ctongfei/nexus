@@ -14,19 +14,22 @@ class ExprValueMap extends ExprMap[Id] with Iterable[Assignment] {
 
   def increment[X](e: DExpr[X], v: X) = {
     if (contains(e)) {
-      val gradOps = e.tag
-      if (gradOps.mutable)
-        gradOps.addI(this(e), v)
-      else this(e) = gradOps.add(this(e), v)
+      val X = e.tag
+      if (X.mutable)
+        X.addI(this(e), v)
+      else this(e) = X.add(this(e), v)
     }
     else update(e, v)
   }
 
-  override def iterator: Iterator[Assignment] = map.iterator.map { case (e: Expr[eX], v) => new Assignment {
-    type Data = eX
-    val expr = e
-    val value = v.asInstanceOf[eX]
-  }}
+  override def iterator: Iterator[Assignment] = map.iterator.map {
+    case (e: Expr[eX], v) =>
+      new Assignment {
+        type Data = eX
+        val expr = e
+        val value = v.asInstanceOf[eX]
+      }
+  }
 
 }
 

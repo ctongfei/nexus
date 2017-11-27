@@ -5,7 +5,7 @@ import nexus._
 /**
  * @author Tongfei Chen
  */
-trait AxisTyping[T[_ <: $$]] {
+trait AxisTyping[T[_ <: $$]] { self: IsTypedTensor[T, _] =>
 
   type H
 

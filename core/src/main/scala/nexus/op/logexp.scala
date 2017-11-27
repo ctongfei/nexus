@@ -15,6 +15,10 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Exp {
+object Exp extends PolyDOp1[ExpF] {
   object Elementwise extends PolyDOp1[EExpF]
+}
+
+object Log extends PolyDOp1[LogF] {
+  object Elementwise extends PolyDOp1[ELogF]
 }

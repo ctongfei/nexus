@@ -14,8 +14,8 @@ object CrossEntropyF {
   implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]): CrossEntropyF[T[A::$], T[A::$], R] =
     new CrossEntropyF[T[A :: $], T[A :: $], R] {
       import T._
-      implicit val R = T.R
-      def tag = T.R
+      implicit val R = H.R
+      def tag = H.R
       def forward(p: T[A :: $], q: T[A :: $]) =
         -(sum(p |*| eLog(q)))
       def backward1(dl: R, l: R, p: T[A :: $], q: T[A :: $]) =
@@ -35,7 +35,7 @@ object KullbackLeiblerDivergenceF {
   implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]): KullbackLeiblerDivergenceF[T[A::$], T[A::$], R] =
     new KullbackLeiblerDivergenceF[T[A::$], T[A::$], R] {
       import T._
-      def tag = T.R
+      def tag = H.R
       def forward(p: T[A::$], q: T[A::$]) =
         sum(p |*| eLog(p |/| q))
       def backward1(dy: R, y: R, p: T[A::$], q: T[A::$]) = ???

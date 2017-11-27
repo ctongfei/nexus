@@ -8,12 +8,12 @@ Building a typesafe XOR network:
   val x = Input[DenseTensor[Float, In::$]]()  // input vectors
   val y = Input[DenseTensor[Float, Out::$]]() // gold labels
 
-  val yʹ = x                      |>  // type: Expr[Tensor[Float, In::$]]
+  val ŷ = x                       |>  // type: Expr[Tensor[Float, In::$]]
     Affine(In -> 2, Hidden -> 2)  |>  // type: Expr[Tensor[Float, Hidden::$]]
     Sigmoid                       |>  // type: Expr[Tensor[Float, Hidden::$]]
     Affine(Hidden -> 2, Out -> 2) |>  // type: Expr[Tensor[Float, Out::$]]
     Softmax                           // type: Expr[Tensor[Float, Out::$]]
-  val loss = CrossEntropy(y, yʹ)      // type: Expr[Float]
+  val loss = CrossEntropy(y, ŷ)       // type: Expr[Float]
 ```
 
 Design goals:
@@ -22,7 +22,7 @@ Design goals:
  - **Typesafe**.  Very strong static type checking to eliminate most bugs at compile time.
  - **Never, ever specific axis index again**. For things like `reduce_sum(x, axis=1)`, write `x |> SumAlong(AxisName)`.
  - **Mixing differentiable code with non-differentiable code**.
- - **[TODO] Automatic typeclass derivation**: Differentiation through any case class (product type).
+ - **Automatic typeclass derivation**: Differentiation through any case class (product type).
  - **[TODO] Automatic batching over sequences/trees**. Free programmers from the pain of manual batching.
  - **[TODO] GPU Acceleration**. Reuse `Torch` C++ core through Swig [(bindings)](https://github.com/ctongfei/torch-swig-java).
  - **[TODO] Multiple backends**. Torch / DyNet.

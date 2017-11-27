@@ -16,6 +16,7 @@ trait PolyFOp2[F[X1, X2, Y] <: DOp2[X1, X2, Y], NF[X1, X2, Y] <: Op2[X1, X2, Y]]
   def apply[X1, X2, Y](x1: DExpr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]): DExpr[Y] = DApply2(f, x1, x2)
   def apply[X1, X2, Y](x1: Expr[X1], x2: DExpr[X2])(implicit f: F[X1, X2, Y]): DExpr[Y] = DApply2(f, x1, x2)
   def apply[X1, X2, Y](x1: DExpr[X1], x2: DExpr[X2])(implicit f: F[X1, X2, Y]): DExpr[Y] = DApply2(f, x1, x2)
+
 }
 
 

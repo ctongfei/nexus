@@ -8,8 +8,9 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Scale extends PolyDOp2[ScaleF]
-
+object Scale extends PolyDOp2[ScaleF] {
+  //def By[R](k: R) = Curried(k)
+}
 
 /**
  * Inner product of two tensors.

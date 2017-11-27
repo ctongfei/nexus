@@ -1,8 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.algebra._
-import shapeless.ops.hlist.Remove
+import nexus.func._
 
 /**
  * Computes the sum along a specific axis of a given tensor.
@@ -10,3 +9,4 @@ import shapeless.ops.hlist.Remove
  * @since 0.1.0
  */
 case class SumAlong[U](parameter: U) extends ParaPolyDOp1[U, SumAlongF]
+

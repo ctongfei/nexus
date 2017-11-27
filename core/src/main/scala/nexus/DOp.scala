@@ -12,7 +12,7 @@ trait DOp1[X, Y] extends Op1[X, Y] {
 
   /**
    * Performs gradient backpropagation.
-   * @param dy Gradient of ''y'': ∇y
+   * @param dy Gradient of loss wrt ''y''
    * @param y Value of ''y''
    * @param x Value of ''x''
    * @return Gradient of ''x'': ∇x

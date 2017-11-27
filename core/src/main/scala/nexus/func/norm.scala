@@ -3,6 +3,7 @@ package nexus.func
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
+import nexus.op.batch._
 
 /**
  * @author Tongfei Chen
@@ -22,20 +23,12 @@ object AbsF {
 
 }
 
-trait EAbsF[X, Y] extends DOp1[X, Y] {
+object EAbsU extends RealElementwiseDOp1 {
   def name = "Abs.Elementwise"
+  def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eAbs(x)
+  def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| T.eSgn(x)
 }
 
-object EAbsF {
-
-  implicit def scalar[T[_ <: $$], A <: $$, R](implicit T: IsTypedRealTensor[T, R]): AbsF[T[A], T[A]] =
-    new AbsF[T[A], T[A]] {
-      def tag = T.ground[A]
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.eSgn(x)
-      def forward(x: T[A]) = T.eAbs(x)
-    }
-
-}
 
 trait L1NormalizeF[X, Y] extends DOp1[X, Y] {
   def name = "L1Normalize"

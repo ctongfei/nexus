@@ -3,6 +3,7 @@ package nexus.func
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
+import nexus.op._
 
 @implicitNotFound("Cannot apply ReLU to ${X}.")
 trait ReLUF[X, Y] extends DOp1[X, Y] {
@@ -44,10 +45,10 @@ trait SoftPlusF[X, Y] extends DOp1[X, Y] {
 
 object SoftPlusF {
 
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit ops: IsTypedRealTensor[T, R]): SoftPlusF[T[A], T[A]] =
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]): SoftPlusF[T[A], T[A]] =
     new SoftPlusF[T[A], T[A]] {
-      import ops._
-      def tag = ops.ground[A]
+      import T._
+      def tag = T.ground[A]
       def forward(x: T[A]) = eLog1p(eExp(x))
       def backward(dy: T[A], y: T[A], x: T[A]) = sigmoid(x)
     }
@@ -72,6 +73,22 @@ object SoftmaxF {
       val dyy = dy |*| y
       dyy - (y :* sum(dyy))
     }
+  }
+
+}
+
+trait SoftmaxWithTemperatureF[X, T, Y] extends DOp2[X, T, Y]
+
+object SoftmaxWithTemperatureF {
+
+  implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) = new SoftmaxWithTemperatureF[T[A::$], R, T[A::$]] {
+    import T._
+    def name = "SoftmaxWithTemperature"
+    def tag = T.ground[A::$]
+    def forward(x: T[A::$], t: R) = ???
+    def backward1(dy: T[A::$], y: T[A::$], x: T[A::$], t: R) = ???
+    def backward2(dy: T[A::$], y: T[A::$], x: T[A::$], t: R) = ???
+
   }
 
 }

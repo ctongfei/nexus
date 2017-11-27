@@ -12,9 +12,15 @@ import nexus.op._
 class Affine[T[_ <: $$], R, A, B] private(
   val weight: Param[T[B::A::$]],
   val bias: Param[T[B::$]]
-)(implicit val ops: IsTypedRealTensor[T, R])
+)(implicit T: IsTypedRealTensor[T, R])
   extends DModule[T[A::$], T[B::$]]
 {
+
+  type Input = A
+  val Input = T.typeOf(weight.value).tail.head
+
+  type Output = B
+  val Output = T.typeOf(weight.value).head
 
   def apply(x: Expr[T[A::$]]): DExpr[T[B::$]] =
     Add(MVMul(weight, x), bias)
@@ -30,8 +36,8 @@ object Affine {
    * @param W Weight matrix (axes B::A::$)
    * @param b Bias vector (axes B::$)
    */
-  def from[T[_ <: $$], D, A, B]
-  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit ops: IsTypedRealTensor[T, D]) = new Affine[T, D, A, B](W, b)
+  def from[T[_ <: $$], R, A, B]
+  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit ops: IsTypedRealTensor[T, R]) = new Affine[T, R, A, B](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.

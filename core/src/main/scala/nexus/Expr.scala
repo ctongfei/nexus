@@ -17,7 +17,7 @@ sealed trait Expr[X] {
 
   /** Passes this expression through any function. */
   def |>[Y]
-  (f: Module[X, Y]): Expr[Y] =
+  (f: Expr[X] => Expr[Y]): Expr[Y] =
     f(this)
 
   def |>[Y]

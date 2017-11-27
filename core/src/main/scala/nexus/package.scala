@@ -4,7 +4,7 @@ import nexus.syntax._
 import shapeless._
 
 /**
- * '''Nexus''': A typesafe tensor / deep learning library.
+ * '''Nexus''': Typeful & typesafe deep learning.
  * @author Tongfei Chen
  */
 package object nexus extends ExprTensorMixin {
@@ -13,7 +13,6 @@ package object nexus extends ExprTensorMixin {
   type $$ = HList
   type $ = HNil
   val  $: $ = HNil // explicit type annotation to avoid some implicit search bugs
-
 
   type         Int8    = Byte
   implicit val Int8    = nxai.Int8
@@ -28,7 +27,7 @@ package object nexus extends ExprTensorMixin {
   implicit val Int64   = nxai.Int64
 
   type         Float16 = Half
-  def Float16 = ???
+  //TODO: Float16
 
   type         Float32 = Float
   implicit val Float32 = nxai.Float32
@@ -38,5 +37,11 @@ package object nexus extends ExprTensorMixin {
 
   type         Bool    = Boolean
   implicit val Bool    = nxai.Bool
+
+  private[nexus] def objTypeName(a: Any) = {
+    val raw = a.getClass.getTypeName
+    val last = raw.split('.').last
+    if (last.endsWith("$")) last.init else last
+  }
 
 }

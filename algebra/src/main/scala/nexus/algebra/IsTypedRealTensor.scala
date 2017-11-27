@@ -13,7 +13,7 @@ import scala.annotation._
 @implicitNotFound("Cannot prove that ${T} is a typed tensor of ${R}.")
 trait IsTypedRealTensor[T[_ <: $$], R] extends IsTypedTensor[T, R] with AxisTyping[T] with GradH[T] { self =>
 
-  val H: UntypedRealTensorOps[H, R]
+  val H: IsUntypedRealTensor[H, R]
   val R: IsReal[R]
 
   def zeroBy[A <: $$](x: T[A]): T[A]
@@ -89,9 +89,8 @@ trait IsTypedRealTensor[T[_ <: $$], R] extends IsTypedTensor[T, R] with AxisTypi
 
   def dot[A <: $$](x: T[A], y: T[A]): R = H.dot(untype(x), untype(y))
 
-  def tMul[A <: $$, B <: $$, C <: $$](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] =
+  def contract[A <: $$, B <: $$, C <: $$](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] =
     typeWith(H.tMul(untype(x), untype(y), sd.matchedIndices), sd(typeOf(x), typeOf(y)))
-
 
   def ground[A <: $$]: Grad[T[A]] = new Grad[T[A]] {
     def mutable = true

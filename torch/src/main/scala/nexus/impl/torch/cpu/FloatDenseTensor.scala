@@ -36,7 +36,7 @@ class FloatDenseTensor[A <: $$](val handle: THFloatTensor, val axes: A) extends 
 
 }
 
-object FloatDenseTensor extends DenseTensorFactory[FloatDenseTensor, Float] {
+object FloatDenseTensor extends TypedTensorFactory[FloatDenseTensor, Float] {
 
   // Torch does not support 0-dim tensors.
   // Implement it manually.

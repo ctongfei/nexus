@@ -13,6 +13,8 @@ trait SymDiff[A <: HList, B <: HList] extends DepFn2[A, B] {
   def matchedIndices: List[(Int, Int)]
   def lhsRetainedIndices: List[(Int, Int)]
   def rhsRetainedIndices: List[(Int, Int)]
+  //def recoverLeft: SymDiff.Aux[Out, B, A]
+  //def recoverRight: SymDiff.Aux[Out, A, B]
 }
 
 object SymDiff {

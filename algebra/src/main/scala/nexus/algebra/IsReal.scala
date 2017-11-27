@@ -53,6 +53,7 @@ trait IsReal[@specialized(Float, Double) R] extends algebra.ring.Field[R] with G
   final def scale(x: R, k: Double) = mul(x, fromDouble(k))
 
   def fromFloat(x: Float) = fromDouble(x)
+  def toFloat(x: R): Float
 }
 
 object IsReal {

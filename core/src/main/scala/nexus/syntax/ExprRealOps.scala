@@ -9,6 +9,7 @@ import nexus.op._
  */
 trait ExprRealMixin {
 
+
   implicit class ExprRealOps[R](val x: Expr[R])(implicit R: IsReal[R]) {
 
     def +(y: DExpr[R]): Expr[R] = Add(x, y)
@@ -17,11 +18,13 @@ trait ExprRealMixin {
 
     def *(y: Expr[R]): Expr[R] = Mul(x, y)
 
+    def /(y: Expr[R]): Expr[R] = Div(x, y)
+
   }
 
   implicit class ExprRealOps2[T[_ <: $$], R, A <: $$](val x: Expr[R])(implicit T: IsTypedRealTensor[T, R]) {
 
-    def *:(y: Expr[T[A]]): Expr[T[A]] = Scale(y, x)
+    def *:(y: Expr[T[A]]): Expr[T[A]] = Scale(x, y)
 
   }
 

@@ -9,7 +9,7 @@ import nexus.func._
  * @since 0.1.0
  */
 object Abs extends PolyDOp1[AbsF] {
-  object Elementwise extends PolyDOp1[EAbsF]
+  object Elementwise extends PolyDOp1[EAbsU.F]
 }
 
 /**
@@ -26,3 +26,4 @@ object L1Normalize extends PolyDOp1[L1NormalizeF]
  */
 object L2Distance extends PolyDOp2[L2DistanceF]
 
+object CosineSimilarity extends PolyDOp2[CosineSimilarityF]

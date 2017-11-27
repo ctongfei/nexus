@@ -5,11 +5,13 @@ import shapeless._
 import scala.annotation._
 
 /**
- * Typeclass witnessing that the specific type can be differentiated with respect to.
+ * Typeclass witnessing that the specific type with respect to which an expression is differentiable.
  *
- * A typeclass attached on differentiable expressions ([[nexus.DExpr]])
- * or differentiable operators ([[nexus.DOp1]] etc.) that contains basic math operations on gradients.
- * These are used by optimizers ([[nexus.optimizer.FirstOrderOptimizer]]).
+ * An instance of this typeclass should be attached to differentiable expressions ([[nexus.DExpr]])
+ * or differentiable operators ([[nexus.DOp1]] etc.).
+ *
+ * This typeclass contains basic math operations on gradients that are used by optimizers
+ * ([[nexus.optimizer.FirstOrderOptimizer]]).
  *
  * @author Tongfei Chen
  * @since 0.1.0
@@ -46,10 +48,13 @@ object Grad extends ProductTypeClassCompanion[Grad] {
   @inline def apply[X](implicit X: Grad[X]) = X
   
   implicit def ground[T[_ <: $$], A <: $$](implicit T: GradH[T]): Grad[T[A]] = T.ground[A]
-  
+
+  /**
+   * Automatic typeclass derivation on product types using `Shapeless`.
+   */
   object typeClass extends ProductTypeClass[Grad] {
     
-    case class Product[H, T <: $$](H: Grad[H], T: Grad[T]) extends Grad[H :: T] {
+    class Product[H, T <: $$](H: Grad[H], T: Grad[T]) extends Grad[H :: T] {
       def mutable = H.mutable && T.mutable
       def zeroBy(x: H :: T) = H.zeroBy(x.head) :: T.zeroBy(x.tail)
       def add(x1: H :: T, x2: H :: T) = H.add(x1.head, x2.head) :: T.add(x1.tail, x2.tail)
@@ -66,7 +71,7 @@ object Grad extends ProductTypeClassCompanion[Grad] {
       def eSqrt(x: H :: T) = H.eSqrt(x.head) :: T.eSqrt(x.tail)
     }
 
-    def product[H, T <: $$](ch: Grad[H], ct: Grad[T]) = Product(ch, ct)
+    def product[H, T <: $$](H: Grad[H], T: Grad[T]) = new Product(H, T)
 
     object emptyProduct extends Grad[$] {
       def add(x1: $, x2: $) = $
@@ -81,6 +86,8 @@ object Grad extends ProductTypeClassCompanion[Grad] {
       def mutable = true
       def addS(x1: $, x2: Double) = $
     }
+
+    // TODO: Coproduct?
 
     def project[F, G](G: => Grad[G], fg: F => G, gf: G => F): Grad[F] = new Grad[F] {
       def mutable = G.mutable
@@ -97,9 +104,6 @@ object Grad extends ProductTypeClassCompanion[Grad] {
     }
   }
 }
-
-
-//TODO: automatic typeclass derivation for all sum/product types? (HList/Coproducts/Generic)
 
 trait GradH[T[_ <: $$]] extends TypeH[T] {
 

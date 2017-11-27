@@ -19,7 +19,6 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
 
   val history = new ExprMap[AdamHistory]()
 
-
   def updateParam[X](p: Param[X], g: X) = {
 
     implicit val ops = p.tag

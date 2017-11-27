@@ -17,6 +17,8 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.typelevel" %% "cats-core" % "0.9.0",
   libraryDependencies += "org.typelevel" %% "cats-free" % "0.9.0",
 
+  libraryDependencies += "me.tongfei" %% "poly-io" % "0.3.2" % Test,
+
   mathFormulaInDoc := {
     val apiDir = (doc in Compile).value
     val docDir = apiDir    // /"some"/"subfolder"  // in my case, only api/some/solder is parsed
@@ -64,6 +66,12 @@ lazy val torch = (project in file("torch"))
   .dependsOn(core)
   .settings(
     name := "nexus-torch"
+  )
+
+lazy val vision = (project in file("vision"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "nexus-vision"
   )
 
 // function that find html files recursively

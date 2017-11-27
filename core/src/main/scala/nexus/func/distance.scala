@@ -21,3 +21,19 @@ object L2DistanceF {
     }
 
 }
+
+trait CosineSimilarityF[X1, X2, Y] extends DOp2[X1, X2, Y] {
+  def name = "CosineSimilarity"
+}
+
+object CosineSimilarityF {
+  
+  implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) = 
+    new CosineSimilarityF[T[A::$], T[A::$], R] {
+      def tag = T.R
+      def forward(x1: T[A::$], x2: T[A::$]) = ???
+      def backward1(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = ???
+      def backward2(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = ???
+    }
+  
+}

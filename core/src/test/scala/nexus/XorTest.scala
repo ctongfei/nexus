@@ -40,12 +40,12 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
-  val loss = CrossEntropy(y, ŷ)
+  val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
-  val opt = new AdamOptimizer(0.1)
+  val opt = new GradientDescentOptimizer(0.1)
 
   /** Start running! */
   for (epoch <- 0 until 1000) {

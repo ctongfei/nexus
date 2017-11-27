@@ -58,7 +58,7 @@ object SliceAlongF {
       import T._
       def tag = T.ground[B]
       val (axis, i) = p
-      def name = s"SliceAlong[${axis.getClass.getSimpleName}->$i]"
+      def name = s"SliceAlong[${objTypeName(axis)}->$i]"
       def forward(x: T[A]) = ???
       def backward(dy: T[B], y: T[B], x: T[A]) = ???
     }

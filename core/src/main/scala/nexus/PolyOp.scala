@@ -31,6 +31,7 @@ trait PolyOp2[F[X1, X2, Y] <: Op2[X1, X2, Y]] {
   def apply[X1, X2, Y](x1: X1, x2: X2)(implicit f: F[X1, X2, Y]): Y = f.forward(x1, x2)
 
   def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]): Expr[Y] = Apply2(f, x1, x2)
+
 }
 
 

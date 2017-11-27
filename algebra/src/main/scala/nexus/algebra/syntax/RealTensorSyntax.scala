@@ -32,7 +32,7 @@ trait RealTensorSyntax {
 
     def ⋅(b: T[A]): R = dot(a, b)
 
-    def ⋈[B <: $$, C <: $$](b: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] = tMul(a, b)
+    def ⋈[B <: $$, C <: $$](b: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] = contract(a, b)
 
   }
 }

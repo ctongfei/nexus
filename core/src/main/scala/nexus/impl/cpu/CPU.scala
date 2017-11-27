@@ -40,7 +40,7 @@ object TypedCPUFloat32 extends IsTypedRealTensor[DenseTensor, Float] with AxisTy
 }
 
 
-object UntypedCPUFloat32 extends UntypedRealTensorOps[UntypedDenseTensor, Float] {
+object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedDenseTensor, Float] {
 
   type R = Float
   val R = nexus.algebra.instances.Float32

@@ -4,7 +4,7 @@ import cats._
 import scala.collection._
 
 /**
- * A heterogeneous map whose keys are symbolic expressions.
+ * A map whose keys are symbolic expressions.
  * @tparam V Higher-kinded type that specifies what is stored in this map.
  *           A key of type `Expr[X]` is associated with a value of type `V[X]`.
  * @author Tongfei Chen
@@ -22,10 +22,13 @@ class ExprMap[V[_]] extends (Expr ~> V) with Iterable[ExprValuePair[V]] {
 
   def update[X](x: Expr[X], v: V[X]) = map.update(x, v)
 
-  def iterator: Iterator[ExprValuePair[V]] = map.iterator.map { case (e: Expr[eX], v) => new ExprValuePair[V] {
-    type Data = eX
-    val expr = e
-    val value = v.asInstanceOf[V[eX]]
-  }}
+  def iterator: Iterator[ExprValuePair[V]] = map.iterator.map {
+    case (e: Expr[eX], v) =>
+      new ExprValuePair[V] {
+        type Data = eX
+        val expr = e
+        val value = v.asInstanceOf[V[eX]]
+      }
+  }
 
 }
