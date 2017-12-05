@@ -109,7 +109,5 @@ object Grad extends ProductTypeClassCompanion[Grad] {
 }
 
 trait GradH[T[_ <: $$]] extends TypeH[T] {
-
   def ground[A <: $$]: Grad[T[A]]
-
 }

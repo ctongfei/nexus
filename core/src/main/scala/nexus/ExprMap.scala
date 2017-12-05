@@ -18,9 +18,9 @@ class ExprMap[V[_]] extends (Expr ~> V) with Iterable[ExprValuePair[V]] {
   def contains(x: Expr[_]) = map contains x
 
   /** Gets the value associated with the specified expression. */
-  def apply[X](x: Expr[X]): V[X] = map(x).asInstanceOf[V[X]]
+  def apply[X](e: Expr[X]): V[X] = map(e).asInstanceOf[V[X]]
 
-  def update[X](x: Expr[X], v: V[X]) = map.update(x, v)
+  def update[X](e: Expr[X], v: V[X]) = map.update(e, v)
 
   def iterator: Iterator[ExprValuePair[V]] = map.iterator.map {
     case (e: Expr[eX], v) =>

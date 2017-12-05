@@ -1,18 +1,22 @@
 package nexus.op
 
 import nexus._
-import nexus.func._
-
+import nexus.algebra._
+import nexus.algebra.syntax._
 
 /**
  * Rectified linear unit.
- * - Shape: `RealTensor[As] => RealTensor[As]`
- * - Input: Real tensor 「bb"x"」 with axes `As`.
- * - Output: Real tensor 「bb"y」, axes `As`, computed as.
+ * - Shape: `RealTensor[Axes] => RealTensor[Axes]`
+ * - Input: Real tensor 「bb"x"」 with axes `Axes`.
+ * - Output: Real tensor 「bb"y」, axes `Axes`, computed as.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object ReLU extends PolyDOp1[ReLUF.Op]
+object ReLU extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  def name = "ReLU"
+  def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.relu(x)
+  def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| T.pos(x)
+}
 
 /**
  * Sigmoid (a.k.a. logistic) activation function that maps any real output to the interval (0, 1).
@@ -24,7 +28,11 @@ object ReLU extends PolyDOp1[ReLUF.Op]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sigmoid extends PolyDOp1[SigmoidF.Op]
+object Sigmoid extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  def name = "Sigmoid"
+  def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.sigmoid(x)
+  def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| y |*| T.addS(-y, T.R.one)
+}
 
 /**
  * Softplus activation function.
@@ -36,7 +44,11 @@ object Sigmoid extends PolyDOp1[SigmoidF.Op]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object SoftPlus extends PolyDOp1[SoftPlusF.Op]
+object SoftPlus extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  def name = "SoftPlus"
+  def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.eLog1p(T.eExp(x))
+  def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| T.sigmoid(x)
+}
 
 /**
  * Softmax activation function.
@@ -48,4 +60,16 @@ object SoftPlus extends PolyDOp1[SoftPlusF.Op]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Softmax extends PolyDOp1[SoftmaxF.Op]
+object Softmax extends VaVaPolyDOp1 {
+  def name = "Softmax"
+  def forward[T[_ <: $$], E, A](x: T[A::$])(implicit T: IsTypedRealTensor[T, E]) = {
+    import T._
+    val expX = eExp(x) // TODO: a numerically stabler algorithm
+    expX :* R.inv(sum(expX))
+  }
+  def backward[T[_ <: $$], E, A](dy: T[A::$], y: T[A::$], x: T[A::$])(implicit T: IsTypedRealTensor[T, E]) = {
+    import T._
+    val dyy = dy |*| y
+    dyy - (y :* sum(dyy))
+  }
+}

@@ -16,27 +16,20 @@ sealed trait Expr[X] {
   def value[F[_]](implicit f: Expr ~> F) = f(this)
 
   /** Passes this expression through any function. */
-  def |>[Y]
-  (f: Expr[X] => Expr[Y]): Expr[Y] =
+  def |>[Y](f: Expr[X] => Expr[Y]): Expr[Y] =
     f(this)
 
-  def |>[Y]
-  (f: DModule[X, Y]): DExpr[Y] =
+  def |>[Y](f: DModule[X, Y]): DExpr[Y] =
     f(this)
 
-  def |>[Y]
-  (f: Op1[X, Y]): Expr[Y] = f(this)
+  def |>[Y](f: Op1[X, Y]): Expr[Y] = f(this)
 
   /** Passes this expression through any polymorphic neural function. */
-  def |>[F[X, Y] <: Op1[X, Y], Y]
-  (op: PolyOp1[F])
-  (implicit f: F[X, Y]): Expr[Y] =
+  def |>[Y](op: PolyOp1)(implicit f: op.Op[X, Y]): Expr[Y] =
     f(this)
 
   /** Passes this expression through any parametrized polymorphic neural function. */
-  def |>[F[P, X, Y] <: (P => Op1[X, Y]), P, Y]
-  (op: ParaPolyOp1[P, F])
-  (implicit f: F[P, X, Y]): Expr[Y] =
+  def |>[P, Y](op: ParaPolyOp1[P])(implicit f: op.POp[P, X, Y]): Expr[Y] =
     f(op.parameter)(this)
 
   /**
@@ -71,14 +64,14 @@ sealed trait DExpr[X] extends Expr[X] {
   def |>[Y]
   (f: DOp1[X, Y]): DExpr[Y] = f(this)
 
-  def |>[F[X, Y] <: DOp1[X, Y], Y]
-  (op: PolyDOp1[F])
-  (implicit f: F[X, Y]): DExpr[Y] =
+  def |>[Y]
+  (op: PolyDOp1)
+  (implicit f: op.Op[X, Y]): DExpr[Y] =
     f(this)
 
-  def |>[F[P, X, Y] <: (P => DOp1[X, Y]), P, Y]
-  (op: ParaPolyDOp1[P, F])
-  (implicit f: F[P, X, Y]): DExpr[Y] =
+  def |>[P, Y]
+  (op: ParaPolyDOp1[P])
+  (implicit f: op.POp[P, X, Y]): DExpr[Y] =
     f(op.parameter)(this)
 
 }

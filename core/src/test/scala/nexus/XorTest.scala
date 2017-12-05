@@ -7,17 +7,21 @@ import nexus.layer._
 import nexus.op._
 import nexus.optimizer._
 
+// Define names of axes (an empty class and an object with the same name)
+class Batch
+class In
+class Hidden
+class Out
 /**
  * Neural network 101: XOR network.
  * @author Tongfei Chen
  */
 object XorTest extends App {
 
-  // Define names of axes (an empty class and an object with the same name)
-  class Batch; val Batch = new Batch
-  class In; val In = new In
-  class Hidden; val Hidden = new Hidden
-  class Out; val Out = new Out
+  val Batch = new Batch
+  val In = new In
+  val Hidden = new Hidden
+  val Out = new Out
 
   /* Prepare the data. */
   val X = DenseTensor.fromNestedArray(Batch::In::$)(Array(
@@ -48,7 +52,7 @@ object XorTest extends App {
   val opt = new AdamOptimizer(0.1)
 
   /** Start running! */
-  for (epoch <- 0 until 10000) {
+  for (epoch <- 0 until 2000) {
     var averageLoss = 0f
 
     // For each sample

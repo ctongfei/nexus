@@ -14,7 +14,7 @@ import scala.annotation._
 trait IsTypedRealTensor[T[_ <: $$], R] extends IsTypedTensor[T, R] with AxisTyping[T] with GradH[T] { self =>
 
   val H: IsUntypedRealTensor[H, R]
-  val R: IsReal[R]
+  implicit val R: IsReal[R]
 
   def zeroBy[A <: $$](x: T[A]): T[A]
 

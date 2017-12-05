@@ -12,7 +12,7 @@ trait ExprRealMixin {
 
   implicit class ExprRealOps[R](val x: Expr[R])(implicit R: IsReal[R]) {
 
-    def +(y: DExpr[R]): Expr[R] = Add(x, y)
+    def +(y: Expr[R]): Expr[R] = Add(x, y)
 
     def -(y: Expr[R]): Expr[R] = Sub(x, y)
 

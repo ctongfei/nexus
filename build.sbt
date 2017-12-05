@@ -1,5 +1,6 @@
 import scala.io._
 
+scalaVersion := "2.12.4"
 enablePlugins(ScalaUnidocPlugin)
 
 // credit to http://stackoverflow.com/a/32114551/2990673
@@ -10,7 +11,7 @@ lazy val commonSettings = Seq(
   organization := "me.tongfei",
   version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.12.3",
+  scalaVersion := "2.12.4",
 
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
   libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0",

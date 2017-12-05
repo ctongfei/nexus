@@ -1,7 +1,8 @@
 package nexus.op
 
 import nexus._
-import nexus.func._
+import nexus.algebra._
+import nexus.algebra.syntax._
 
 
 /**
@@ -15,10 +16,27 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Exp extends PolyDOp1[ExpF.Op] {
-  object Elementwise extends PolyDOp1[ExpF.Elementwise.Op]
+object Exp extends TypeInvariantPolyDOp1[IsReal] {
+
+  def name = "Exp"
+  def forward[R](x: R)(implicit R: IsReal[R]) = R.exp(x)
+  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * y
+
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+    def name = "Exp.Elementwise"
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eExp(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| y
+  }
 }
 
-object Log extends PolyDOp1[LogF.Op] {
-  object Elementwise extends PolyDOp1[LogF.Elementwise.Op]
+object Log extends TypeInvariantPolyDOp1[IsReal] {
+  def name = "Log"
+  def forward[R](x: R)(implicit R: IsReal[R]) = R.log(x)
+  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy / x
+
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+    def name = "Log.Elementwise"
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eLog(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |/| x
+  }
 }
