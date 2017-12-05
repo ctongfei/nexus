@@ -3,92 +3,36 @@ package nexus.func
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
-import nexus.op._
+import nexus.func.factory._
 
-@implicitNotFound("Cannot apply ReLU to ${X}.")
-trait ReLUF[X, Y] extends DOp1[X, Y] {
+object ReLUF extends AxesInvariantTensorOp1Factory[IsTypedRealTensor] {
   def name = "ReLU"
+  def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.relu(x)
+  def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| T.pos(x)
 }
 
-object ReLUF {
-
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]): ReLUF[T[A], T[A]] =
-    new ReLUF[T[A], T[A]] {
-      import T._
-      def tag = T.ground[A]
-      def forward(x: T[A]) = relu(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| pos(x)
-    }
-
-}
-
-@implicitNotFound("Cannot apply Sigmoid to ${X}.")
-trait SigmoidF[X, Y] extends DOp1[X, Y] {
+object SigmoidF extends AxesInvariantTensorOp1Factory[IsTypedRealTensor] {
   def name = "Sigmoid"
+  def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.sigmoid(x)
+  def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| y |*| T.addS(-y, T.R.one)
 }
 
-object SigmoidF {
-
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new SigmoidF[T[A], T[A]] {
-    import T._
-    def tag = T.ground[A]
-    def forward(x: T[A]) = sigmoid(x)
-    def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y |*| addS(-y, R.one)
-  }
-
-}
-
-@implicitNotFound("Cannot apply SoftPlus to ${X}.")
-trait SoftPlusF[X, Y] extends DOp1[X, Y] {
+object SoftPlusF extends AxesInvariantTensorOp1Factory[IsTypedRealTensor] {
   def name = "SoftPlus"
+  def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.eLog1p(T.eExp(x))
+  def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| T.sigmoid(x)
 }
 
-object SoftPlusF {
-
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]): SoftPlusF[T[A], T[A]] =
-    new SoftPlusF[T[A], T[A]] {
-      import T._
-      def tag = T.ground[A]
-      def forward(x: T[A]) = eLog1p(eExp(x))
-      def backward(dy: T[A], y: T[A], x: T[A]) = sigmoid(x)
-    }
-
-}
-
-@implicitNotFound("Cannot apply Softmax to ${X}.")
-trait SoftmaxF[X, Y] extends DOp1[X, Y] {
+object SoftmaxF extends AxesInvariantVectorOp1Factory[IsTypedRealTensor] {
   def name = "Softmax"
-}
-
-object SoftmaxF {
-
-  implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) = new SoftmaxF[T[A::$], T[A::$]] {
+  def forward[T[_ <: $$], E, A](x: T[A::$])(implicit T: IsTypedRealTensor[T, E]) = {
     import T._
-    def tag = T.ground[A::$]
-    def forward(x: T[A::$]) = { // TODO: numerical stable algorithm: first scale by max
-      val expX = eExp(x)
-      expX :* R.inv(sum(expX))
-    }
-    def backward(dy: T[A::$], y: T[A::$], x: T[A::$]) = {
-      val dyy = dy |*| y
-      dyy - (y :* sum(dyy))
-    }
+    val expX = eExp(x) // TODO: a numerically stabler algorithm
+    expX :* R.inv(sum(expX))
   }
-
-}
-
-trait SoftmaxWithTemperatureF[X, T, Y] extends DOp2[X, T, Y]
-
-object SoftmaxWithTemperatureF {
-
-  implicit def vector[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) = new SoftmaxWithTemperatureF[T[A::$], R, T[A::$]] {
+  def backward[T[_ <: $$], E, A](dy: T[A::$], y: T[A::$], x: T[A::$])(implicit T: IsTypedRealTensor[T, E]) = {
     import T._
-    def name = "SoftmaxWithTemperature"
-    def tag = T.ground[A::$]
-    def forward(x: T[A::$], t: R) = ???
-    def backward1(dy: T[A::$], y: T[A::$], x: T[A::$], t: R) = ???
-    def backward2(dy: T[A::$], y: T[A::$], x: T[A::$], t: R) = ???
-
+    val dyy = dy |*| y
+    dyy - (y :* sum(dyy))
   }
-
 }

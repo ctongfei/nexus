@@ -8,5 +8,5 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class SumAlong[U](parameter: U) extends ParaPolyDOp1[U, SumAlongF]
+case class SumAlong[U](parameter: U) extends ParaPolyDOp1[U, SumAlongF.Op]
 

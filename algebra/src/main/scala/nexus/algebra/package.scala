@@ -10,6 +10,8 @@ import shapeless._
  */
 package object algebra {
 
+  type AdditiveSemigroup[X] = _root_.algebra.ring.AdditiveSemigroup[X]
+
   private[algebra] type ::[+H, +T <: HList] = shapeless.::[H, T]
   private[algebra] type $$ = HList
   private[algebra] type $ = HNil

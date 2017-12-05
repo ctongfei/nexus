@@ -13,10 +13,8 @@ import nexus.algebra.syntax._
 class GradientDescentOptimizer(η: => Double) extends FirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X) = {
-    implicit val ops = p.tag
-
+    implicit val tag = p.tag
     p -= g :* η
-
   }
 
 }

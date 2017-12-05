@@ -31,14 +31,12 @@ object Dot extends PolyDOp2[DotF]
  */
 object MatMul extends PolyDOp2[MatMulF]
 
-
 /**
  * Transposition of a matrix (2-D tensor).
  * @author Tongfei Chen
  * @since 0.1.0
  */
 object Transpose extends PolyDOp1[TransposeF]
-
 
 /**
  * Matrix-vector multiplication.

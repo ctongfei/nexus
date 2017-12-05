@@ -22,17 +22,6 @@ trait ExprValuePair[V[_]] extends Product2[Expr[_], V[_]] {
   def _1 = expr
   def _2 = value
   def canEqual(that: Any) = false
-}
 
-trait Assignment extends ExprValuePair[Id]
-
-object Assignment {
-
-  def apply[X](x: Expr[X], v: X): Assignment = new Assignment {
-    type Data = X
-    val expr = x
-    val value = v
-  }
-
-
+  override def toString = s"$expr : $value"
 }

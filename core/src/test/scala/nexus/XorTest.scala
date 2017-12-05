@@ -2,7 +2,7 @@ package nexus
 
 import nexus.algebra._
 import nexus.exec._
-import nexus.impl.cpu._
+import nexus.impl.jvm._
 import nexus.layer._
 import nexus.op._
 import nexus.optimizer._
@@ -45,10 +45,10 @@ object XorTest extends App {
   val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
-  val opt = new GradientDescentOptimizer(0.1)
+  val opt = new AdamOptimizer(0.1)
 
   /** Start running! */
-  for (epoch <- 0 until 1000) {
+  for (epoch <- 0 until 10000) {
     var averageLoss = 0f
 
     // For each sample

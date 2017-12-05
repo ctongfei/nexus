@@ -1,4 +1,4 @@
-package nexus.impl.cpu
+package nexus.impl.jvm
 
 import nexus._
 import nexus.algebra.typelevel.util._

@@ -1,7 +1,8 @@
 package nexus
 
 import nexus.exec._
-import nexus.impl.cpu.DenseTensor
+import nexus.func._
+import nexus.impl.jvm.DenseTensor
 import nexus.op._
 import nexus.syntax._
 import nexus.optimizer._
@@ -16,11 +17,11 @@ object Test0 extends App {
 
   val q = Param(DenseTensor.fill(0f, ()::$, Array(1)), name = "q")
 
-  val t = Abs.Elementwise.apply(q)
+  val t = Exp(p)
 
   val l = Abs(p)
 
-  val sgd = new GradientDescentOptimizer(0.2)
+  val sgd = new BackstitchOptimizer(0.1)
 
   for (i <- 0 until 100) {
     println(s"Iteration $i: p = ${p.value}")

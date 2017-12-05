@@ -6,11 +6,13 @@ import nexus.func._
 
 /**
  * Rectified linear unit.
- *
+ * - Shape: `RealTensor[As] => RealTensor[As]`
+ * - Input: Real tensor 「bb"x"」 with axes `As`.
+ * - Output: Real tensor 「bb"y」, axes `As`, computed as.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object ReLU extends PolyDOp1[ReLUF]
+object ReLU extends PolyDOp1[ReLUF.Op]
 
 /**
  * Sigmoid (a.k.a. logistic) activation function that maps any real output to the interval (0, 1).
@@ -22,7 +24,7 @@ object ReLU extends PolyDOp1[ReLUF]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sigmoid extends PolyDOp1[SigmoidF]
+object Sigmoid extends PolyDOp1[SigmoidF.Op]
 
 /**
  * Softplus activation function.
@@ -34,7 +36,7 @@ object Sigmoid extends PolyDOp1[SigmoidF]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object SoftPlus extends PolyDOp1[SoftPlusF]
+object SoftPlus extends PolyDOp1[SoftPlusF.Op]
 
 /**
  * Softmax activation function.
@@ -46,4 +48,4 @@ object SoftPlus extends PolyDOp1[SoftPlusF]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Softmax extends PolyDOp1[SoftmaxF]
+object Softmax extends PolyDOp1[SoftmaxF.Op]

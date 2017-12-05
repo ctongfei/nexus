@@ -8,8 +8,8 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Abs extends PolyDOp1[AbsF] {
-  object Elementwise extends PolyDOp1[EAbsU.F]
+object Abs extends PolyDOp1[AbsF.Op] {
+  object Elementwise extends PolyDOp1[AbsF.Elementwise.Op]
 }
 
 /**

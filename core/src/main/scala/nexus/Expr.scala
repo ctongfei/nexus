@@ -122,7 +122,6 @@ case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X]
   override def toString = name
 }
 
-//TODO: make X types below existential?
 /**
  * The result of the application of a unary function to an expression.
  */

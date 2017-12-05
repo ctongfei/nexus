@@ -8,8 +8,11 @@ import nexus.op._
  * The Adaptive Moment Estimation ('''Adam''') optimizer.
  *
  * Reference:
- * D P Kingma, J Ba (2015): Adam: A Method for Stochastic Optimization. ICLR.
+ * <p>
+ * D P Kingma, J Ba (2015):
+ * Adam: A Method for Stochastic Optimization. ICLR.
  * [[https://arxiv.org/pdf/1412.6980.pdf]]
+ * </p>
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -21,8 +24,8 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
 
   def updateParam[X](p: Param[X], g: X) = {
 
-    implicit val ops = p.tag
-    import ops._
+    implicit val tag = p.tag
+    import tag._
 
     if (history contains p) {
 

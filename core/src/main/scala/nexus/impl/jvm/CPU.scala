@@ -1,4 +1,4 @@
-package nexus.impl.cpu
+package nexus.impl.jvm
 
 import nexus._
 import nexus.algebra._
@@ -36,9 +36,7 @@ object TypedCPUFloat32 extends IsTypedRealTensor[DenseTensor, Float] with AxisTy
   def fromDouble(d: Double) = d.toFloat
   def fromFloat(f: Float) = f
 
-
 }
-
 
 object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedDenseTensor, Float] {
 
@@ -236,9 +234,6 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedDenseTensor, Float] 
   def sigmoid(x: UntypedDenseTensor) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
   def reLU(x: UntypedDenseTensor) = map(x)(a => if (a > 0) a else 0f)
   def isPos(x: UntypedDenseTensor) = map(x)(a => if (a > 0) 1f else 0f)
-
-
-
 
   def sum(x: UntypedDenseTensor) = x.handle.sum  // TODO: wrong!
 

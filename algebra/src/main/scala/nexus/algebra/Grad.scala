@@ -17,6 +17,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Type ${X} is not differentiable with respect to.")
+//TODO: extends VectorSpace
 trait Grad[@specialized(Float, Double) X] extends Type[X] {
 
   def mutable: Boolean
@@ -45,15 +46,17 @@ trait Grad[@specialized(Float, Double) X] extends Type[X] {
 
 object Grad extends ProductTypeClassCompanion[Grad] {
 
+  /** Summons the implicit `Grad` instance of a type. */
   @inline def apply[X](implicit X: Grad[X]) = X
-  
+
+  /** Grounds from a higher-kinded `GradH`. */
   implicit def ground[T[_ <: $$], A <: $$](implicit T: GradH[T]): Grad[T[A]] = T.ground[A]
 
   /**
    * Automatic typeclass derivation on product types using `Shapeless`.
    */
   object typeClass extends ProductTypeClass[Grad] {
-    
+
     class Product[H, T <: $$](H: Grad[H], T: Grad[T]) extends Grad[H :: T] {
       def mutable = H.mutable && T.mutable
       def zeroBy(x: H :: T) = H.zeroBy(x.head) :: T.zeroBy(x.tail)

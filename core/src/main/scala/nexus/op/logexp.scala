@@ -15,10 +15,10 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Exp extends PolyDOp1[ExpF] {
-  object Elementwise extends PolyDOp1[EExpF]
+object Exp extends PolyDOp1[ExpF.Op] {
+  object Elementwise extends PolyDOp1[ExpF.Elementwise.Op]
 }
 
-object Log extends PolyDOp1[LogF] {
-  object Elementwise extends PolyDOp1[ELogF]
+object Log extends PolyDOp1[LogF.Op] {
+  object Elementwise extends PolyDOp1[LogF.Elementwise.Op]
 }

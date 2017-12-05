@@ -1,9 +1,9 @@
 package nexus.op
 
 import nexus._
-import nexus.impl.cpu._
+import nexus.impl.jvm._
 import nexus.exec._
-import nexus.impl.cpu.DenseTensor
+import nexus.impl.jvm.DenseTensor
 import nexus.op._
 
 /**

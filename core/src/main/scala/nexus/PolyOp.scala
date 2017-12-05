@@ -34,8 +34,6 @@ trait PolyOp2[F[X1, X2, Y] <: Op2[X1, X2, Y]] {
 
 }
 
-
-
 /**
  * Any generic ternary neural (differential) function whose type parameters (axes, etc.) are not yet grounded:
  * itself can be applied to variables of different types constrained by the type parameter [[F]].

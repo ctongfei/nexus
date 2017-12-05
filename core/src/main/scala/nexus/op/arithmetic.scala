@@ -8,36 +8,32 @@ import nexus.func._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Id extends PolyFOp1[IdF, IdNF]
+object Id extends PolyDOp1[IdF.Op]
 
 /**
  * Adds two scalars or two scalars of the same axes/shape.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Add extends PolyDOp2[AddF] {
-  val Elementwise = Add
-}
+object Add extends PolyDOp2[AddF.Op]
 
 /**
  * Subtracts two scalars or two tensors of the same axes/shape.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sub extends PolyDOp2[SubF] {
-  val Elementwise = Sub
-}
+object Sub extends PolyDOp2[SubF.Op]
 
 /**
  * Scalar multiplication.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Mul extends PolyDOp2[MulF] {
+object Mul extends PolyDOp2[MulF.Op] {
   /**
    * Element-wise multiplication (a.k.a. Hadamard product) between two tensors.
    */
-  object Elementwise extends PolyDOp2[EMulF]
+  object Elementwise extends PolyDOp2[MulF.Elementwise.Op]
 }
 
 /**
@@ -45,11 +41,11 @@ object Mul extends PolyDOp2[MulF] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Div extends PolyDOp2[DivF] {
+object Div extends PolyDOp2[DivF.Op] {
   /**
    * Element-wise division between two tensors.
    */
-  object Elementwise extends PolyDOp2[EDivF]
+  object Elementwise extends PolyDOp2[DivF.Elementwise.Op]
 }
 
 /**
@@ -57,7 +53,7 @@ object Div extends PolyDOp2[DivF] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Neg extends PolyDOp1[NegF] {
+object Neg extends PolyDOp1[NegF.Op] {
   val Elementwise = Neg
 }
 
@@ -66,10 +62,10 @@ object Neg extends PolyDOp1[NegF] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Inv extends PolyDOp1[InvF] {
+object Inv extends PolyDOp1[InvF.Op] {
 
   /**
    * Element-wise multiplicative inverse.
    */
-  object Elementwise extends PolyDOp1[EInvF]
+  object Elementwise extends PolyDOp1[InvF.Elementwise.Op]
 }

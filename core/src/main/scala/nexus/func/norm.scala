@@ -3,30 +3,19 @@ package nexus.func
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
-import nexus.op.batch._
+import nexus.func.factory._
+import nexus.op._
 
-/**
- * @author Tongfei Chen
- */
-trait AbsF[X, Y] extends DOp1[X, Y] {
+object AbsF extends TypeInvariantDOp1Factory[IsReal] {
   def name = "Abs"
-}
+  def forward[R](x: R)(implicit R: IsReal[R]) = R.abs(x)
+  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.sgn(x)
 
-object AbsF {
-
-  implicit def scalar[R](implicit R: IsReal[R]): AbsF[R, R] =
-    new AbsF[R, R] {
-      def tag = R
-      def backward(dy: R, y: R, x: R) = dy * R.sgn(x)
-      def forward(x: R) = R.abs(x)
-    }
-
-}
-
-object EAbsU extends RealElementwiseDOp1 {
-  def name = "Abs.Elementwise"
-  def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eAbs(x)
-  def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| T.eSgn(x)
+  object Elementwise extends AxesInvariantTensorOp1Factory[IsTypedRealTensor] {
+    def name = "Abs.Elementwise"
+    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.eAbs(x)
+    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| T.eSgn(x)
+  }
 }
 
 
