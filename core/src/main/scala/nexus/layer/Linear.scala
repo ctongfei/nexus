@@ -12,7 +12,7 @@ import nexus.op._
 class Linear[T[_ <: $$], R, A, B] private(
   val weight: Param[T[B::A::$]]
 )(implicit T: IsTypedRealTensor[T, R])
-  extends DModule[T[A::$], T[B::$]]
+  extends Module[T[A::$], T[B::$]]
 {
 
   type Input = A
@@ -21,7 +21,7 @@ class Linear[T[_ <: $$], R, A, B] private(
   type Output = B
   val Output = T.typeOf(weight.value).head
 
-  def apply(x: Expr[T[A::$]]): DExpr[T[B::$]] = MVMul(weight, x)
+  def apply(x: Expr[T[A::$]]): Expr[T[B::$]] = MVMul(weight, x)
 }
 
 object Linear {

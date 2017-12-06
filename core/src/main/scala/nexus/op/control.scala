@@ -36,12 +36,13 @@ object If extends PolyDOp3 {
  */
 object StopGrad extends PolyOp1 {
 
-  trait Op[X, Y] extends Op1[X, Y] {
+  trait F[X, Y] extends Op1[X, Y] {
     def name = "StopGrad"
   }
 
-  object Op {
-    implicit def any[X]: Op[X, X] = new Op[X, X] {
+  object F {
+    implicit def any[X]: F[X, X] = new F[X, X] {
+      def tag = Type.empty[X]
       def forward(x: X) = x
     } // stop gradient propagation!
   }

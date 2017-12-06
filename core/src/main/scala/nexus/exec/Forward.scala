@@ -28,15 +28,6 @@ object Forward {
         case Apply3(o, x1, x2, x3) =>
           val y = o.forward(apply(x1), apply(x2), apply(x3))
           values(e) = y; y
-        case DApply1(o, x) =>
-          val y = o.forward(apply(x))
-          values(e) = y; y
-        case DApply2(o, x1, x2) =>
-          val y = o.forward(apply(x1), apply(x2))
-          values(e) = y; y
-        case DApply3(o, x1, x2, x3) =>
-          val y = o.forward(apply(x1), apply(x2), apply(x3))
-          values(e) = y; y
       }
     }
   }

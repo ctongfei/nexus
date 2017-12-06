@@ -1,5 +1,6 @@
 package nexus
 
+import nexus.algebra._
 import nexus.op._
 import nexus.optimizer._
 import nexus.exec._

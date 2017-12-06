@@ -16,13 +16,13 @@ import scala.annotation._
 object Scale extends PolyDOp2 {
 
   @implicitNotFound("Cannot apply Scale to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y] {
+  trait F[X1, X2, Y] extends DOp2[X1, X2, Y] {
     def name = "Scale"
   }
 
-  object DOp {
+  object F {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new DOp[R, T[A], T[A]] {
+    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new F[R, T[A], T[A]] {
       def tag = T.ground[A]
       def forward(x1: R, x2: T[A]) = x2 :* x1
       def backward1(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy ⋅ x2
@@ -110,14 +110,14 @@ object Transpose extends PolyDOp1 {
  */
 object MVMul extends PolyDOp2 {
   @implicitNotFound("Cannot apply MVMul to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y] {
+  trait F[X1, X2, Y] extends DOp2[X1, X2, Y] {
     def name = "MVMul"
   }
 
-  object DOp {
+  object F {
 
-    implicit def mv[T[_ <: $$], R, A, B](implicit T: IsTypedRealTensor[T, R]): Op[T[B::A::$], T[A::$], T[B::$]] =
-      new DOp[T[B::A::$], T[A::$], T[B::$]] {
+    implicit def mv[T[_ <: $$], R, A, B](implicit T: IsTypedRealTensor[T, R]): F[T[B::A::$], T[A::$], T[B::$]] =
+      new F[T[B::A::$], T[A::$], T[B::$]] {
         import T._
         def tag = T.ground[B::$]
         def forward(x1: T[B::A::$], x2: T[A::$]) = mvMul(x1, x2)
@@ -136,14 +136,14 @@ object MVMul extends PolyDOp2 {
  */
 object Contract extends PolyDOp2 {
   @implicitNotFound("Cannot apply Contract to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y] {
+  trait F[X1, X2, Y] extends DOp2[X1, X2, Y] {
     def name = "Contract"
   }
 
-  object DOp {
+  object F {
 
     implicit def tensor[T[_ <: $$], R, A <: $$, B <: $$, C <: $$](implicit T: IsTypedRealTensor[T, R], sd: SymDiff.Aux[A, B, C]) =
-      new DOp[T[A], T[B], T[C]] {
+      new F[T[A], T[B], T[C]] {
         import T._
         def tag = T.ground[C]
         def forward(x1: T[A], x2: T[B]) = contract(x1, x2)(sd)

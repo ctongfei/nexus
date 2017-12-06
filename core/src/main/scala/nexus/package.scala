@@ -44,9 +44,6 @@ package object nexus extends ExprTensorMixin {
   type Module4[X1, X2, X3, X4, Y]     = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4]) => Expr[Y])
   type Module5[X1, X2, X3, X4, X5, Y] = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4], Expr[X5]) => Expr[Y])
 
-  type DModule[X, Y]           = (Expr[X] => DExpr[Y])
-  type DModule2[X1, X2, Y]     = ((Expr[X1], Expr[X2]) => DExpr[Y])
-  type DModule3[X1, X2, X3, Y] = ((Expr[X1], Expr[X2], Expr[X3]) => DExpr[Y])
 
 
   private[nexus] def objTypeName(a: Any) = {

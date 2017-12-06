@@ -15,12 +15,12 @@ trait TupleExprOpsMixin {
 
     def |>[Y]
     (op: PolyOp2)
-    (implicit f: op.Op[X1, X2, Y]): Expr[Y] =
+    (implicit f: op.F[X1, X2, Y]): Expr[Y] =
       f(p._1, p._2)
 
     def |>[P, Y]
     (op: ParaPolyOp2[P])
-    (implicit f: op.POp[P, X1, X2, Y]): Expr[Y] =
+    (implicit f: op.F[P, X1, X2, Y]): Expr[Y] =
       f(op.parameter)(p._1, p._2)
 
   }
@@ -34,12 +34,12 @@ trait TupleExprOpsMixin {
 
     def |>[Y]
     (op: PolyOp3)
-    (implicit f: op.Op[X1, X2, X3, Y]): Expr[Y] =
+    (implicit f: op.F[X1, X2, X3, Y]): Expr[Y] =
       f(t._1, t._2, t._3)
 
     def |>[P, Y]
     (op: ParaPolyOp3[P])
-    (implicit f: op.POp[P, X1, X2, X3, Y]): Expr[Y] =
+    (implicit f: op.F[P, X1, X2, X3, Y]): Expr[Y] =
       f(op.parameter)(t._1, t._2, t._3)
 
   }

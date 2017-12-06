@@ -20,16 +20,16 @@ abstract class TypeInvariantPolyDOp1[Ev[X] <: Grad[X]] extends PolyDOp1 { self =
   def backward[R](dy: R, y: R, x: R)(implicit R: Ev[R]): R
 
   @implicitNotFound("Cannot apply this operator to ${X}.")
-  trait DOp[X, Y] extends DOp1[X, Y]
+  trait F[X, Y] extends DOp1[X, Y]
 
-  object DOp {
+  object F {
     /**
      * Synthesizes an operator for type [[X]].
      */
-    implicit def synthesize[X](implicit X: Ev[X]): Op[X, X] = new OpImpl[X]
+    implicit def synthesize[X](implicit X: Ev[X]): F[X, X] = new OpImpl[X]
   }
 
-  class OpImpl[X](implicit X: Ev[X]) extends DOp[X, X] {
+  class OpImpl[X](implicit X: Ev[X]) extends F[X, X] {
     def tag = X
     def name = self.name
     def forward(x: X) = self.forward(x)
@@ -47,13 +47,13 @@ abstract class TypeInvariantPolyDOp2[Ev[X] <: Grad[X]] extends PolyDOp2 { self =
   def backward2[R](dy: R, y: R, x1: R, x2: R)(implicit R: Ev[R]): R
 
   @implicitNotFound("Cannot apply this operator to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y]
+  trait F[X1, X2, Y] extends DOp2[X1, X2, Y]
 
-  object DOp {
+  object F {
     implicit def synthesize[X](implicit X: Ev[X]) = new OpImpl[X]
   }
 
-  class OpImpl[X](implicit X: Ev[X]) extends Op[X, X, X] {
+  class OpImpl[X](implicit X: Ev[X]) extends F[X, X, X] {
     def name = self.name
     def tag = X
     def forward(x1: X, x2: X) = self.forward(x1, x2)

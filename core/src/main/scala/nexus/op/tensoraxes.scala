@@ -14,7 +14,7 @@ import scala.annotation._
  */
 case class Rename[U, V](parameter: (U, V)) extends ParaPolyDOp1[(U, V)] {
 
-  type POp[P, X, Y] = Rename.POp[P, X, Y]
+  type F[P, X, Y] = Rename.POp[P, X, Y]
 
 }
 

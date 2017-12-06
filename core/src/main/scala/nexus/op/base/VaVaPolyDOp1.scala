@@ -17,16 +17,16 @@ abstract class VaVaPolyDOp1 extends PolyDOp1 { self =>
   def backward[T[_ <: $$], R, A](dy: T[A::$], y: T[A::$], x: T[A::$])(implicit T: IsTypedRealTensor[T, R]): T[A::$]
 
   @implicitNotFound("Cannot apply this operator to ${X}.")
-  trait DOp[X, Y] extends DOp1[X, Y]
+  trait F[X, Y] extends DOp1[X, Y]
 
-  object DOp {
+  object F {
     /**
      * Synthesizes an operator for tensor type [[T]] with element type [[E]] and axes [[A]].
      */
     implicit def synthesize[T[_ <: $$], E, A](implicit T: IsTypedRealTensor[T, E]) = new OpImpl[T, E, A]
   }
 
-  class OpImpl[T[_ <: $$], E, A](implicit T: IsTypedRealTensor[T, E]) extends DOp[T[A::$], T[A::$]] {
+  class OpImpl[T[_ <: $$], E, A](implicit T: IsTypedRealTensor[T, E]) extends F[T[A::$], T[A::$]] {
     def name = self.name
     def tag = T.ground[A::$]
     def forward(x: T[A::$]) = self.forward(x)
@@ -45,13 +45,13 @@ abstract class VaVaSPolyDOp2 extends PolyDOp2 { self =>
   def backward2[T[_ <: $$], R, A](dy: R, y: R, x1: T[A::$], x2: T[A::$])(implicit T: IsTypedRealTensor[T, R]): T[A::$]
 
   @implicitNotFound("Cannot apply this operator to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y]
+  trait F[X1, X2, Y] extends DOp2[X1, X2, Y]
 
-  object DOp {
+  object F {
     implicit def synthesize[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) = new OpImpl[T, R, A]
   }
 
-  class OpImpl[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) extends DOp[T[A::$], T[A::$], R] {
+  class OpImpl[T[_ <: $$], R, A](implicit T: IsTypedRealTensor[T, R]) extends F[T[A::$], T[A::$], R] {
     def name = self.name
     def tag = T.R
     def forward(x1: T[A::$], x2: T[A::$]) = self.forward(x1, x2)
@@ -67,10 +67,10 @@ abstract class TaSPolyDOp1 extends PolyDOp1 { self =>
   def backward[T[_ <: $$], R, As <: $$](dy: R, y: R, x: T[As])(implicit T: IsTypedRealTensor[T, R]): T[As]
 
   @implicitNotFound("Cannot apply this operator to ${X}.")
-  trait DOp[X, Y] extends DOp1[X, Y]
+  trait F[X, Y] extends DOp1[X, Y]
 
-  object DOp {
-    implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): DOp[T[As], R] = new DOp[T[As], R] {
+  object F {
+    implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], R] = new F[T[As], R] {
       def name = self.name
       def tag = T.R
       def forward(x: T[As]) = self.forward(x)
@@ -90,13 +90,13 @@ abstract class TaTaSPolyDOp2 extends PolyDOp2 { self =>
   def backward2[T[_ <: $$], R, As <: $$](dy: R, y: R, x1: T[As], x2: T[As])(implicit T: IsTypedRealTensor[T, R]): T[As]
 
   @implicitNotFound("Cannot apply this operator to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y]
+  trait F[X1, X2, Y] extends DOp2[X1, X2, Y]
 
-  object DOp {
+  object F {
     implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) = new OpImpl[T, R, As]
   }
 
-  class OpImpl[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) extends DOp[T[As], T[As], R] {
+  class OpImpl[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) extends F[T[As], T[As], R] {
     def name = self.name
     def tag = T.R
     def forward(x1: T[As], x2: T[As]) = self.forward(x1, x2)

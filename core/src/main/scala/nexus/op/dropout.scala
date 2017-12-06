@@ -10,7 +10,7 @@ import nexus.algebra._
  */
 case class Dropout(parameter: Double) extends ParaPolyDOp1[Double] {
 
-  type POp[P, X, Y] = Dropout.POp[P, X, Y]
+  type F[P, X, Y] = Dropout.POp[P, X, Y]
 
 }
 

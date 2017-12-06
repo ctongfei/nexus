@@ -13,7 +13,7 @@ class Affine[T[_ <: $$], R, A, B] private(
   val weight: Param[T[B::A::$]],
   val bias: Param[T[B::$]]
 )(implicit T: IsTypedRealTensor[T, R])
-  extends DModule[T[A::$], T[B::$]]
+  extends Module[T[A::$], T[B::$]]
 {
 
   type Input = A
@@ -22,7 +22,7 @@ class Affine[T[_ <: $$], R, A, B] private(
   type Output = B
   val Output = T.typeOf(weight.value).head
 
-  def apply(x: Expr[T[A::$]]): DExpr[T[B::$]] =
+  def apply(x: Expr[T[A::$]]): Expr[T[B::$]] =
     Add(MVMul(weight, x), bias)
 
 }
