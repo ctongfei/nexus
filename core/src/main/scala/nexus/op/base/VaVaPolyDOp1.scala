@@ -1,6 +1,8 @@
-package nexus
+package nexus.op.base
 
 import nexus.algebra._
+import nexus.{$, $$, ::, DOp1, DOp2, PolyDOp1, PolyDOp2}
+
 import scala.annotation._
 
 /**
@@ -56,6 +58,26 @@ abstract class VaVaSPolyDOp2 extends PolyDOp2 { self =>
     def backward1(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = self.backward1(dy, y, x1, x2)
     def backward2(dy: R, y: R, x1: T[A::$], x2: T[A::$]) = self.backward2(dy, y, x1, x2)
   }
+}
+
+abstract class TaSPolyDOp1 extends PolyDOp1 { self =>
+
+  def name: String
+  def forward[T[_ <: $$], R, As <: $$](x: T[As])(implicit T: IsTypedRealTensor[T, R]): R
+  def backward[T[_ <: $$], R, As <: $$](dy: R, y: R, x: T[As])(implicit T: IsTypedRealTensor[T, R]): T[As]
+
+  @implicitNotFound("Cannot apply this operator to ${X}.")
+  trait DOp[X, Y] extends DOp1[X, Y]
+
+  object DOp {
+    implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): DOp[T[As], R] = new DOp[T[As], R] {
+      def name = self.name
+      def tag = T.R
+      def forward(x: T[As]) = self.forward(x)
+      def backward(dy: R, y: R, x: T[As]) = self.backward(dy, y, x)
+    }
+  }
+
 }
 
 abstract class TaTaSPolyDOp2 extends PolyDOp2 { self =>

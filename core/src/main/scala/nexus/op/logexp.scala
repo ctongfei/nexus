@@ -3,6 +3,7 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
+import nexus.op.base._
 
 
 /**

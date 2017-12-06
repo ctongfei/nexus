@@ -4,6 +4,7 @@ import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
 import nexus.algebra.typelevel._
+import nexus.op.base._
 
 import scala.annotation._
 

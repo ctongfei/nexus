@@ -1,6 +1,7 @@
-package nexus
+package nexus.op.base
 
 import nexus.algebra._
+import nexus.{DOp1, DOp2, PolyDOp1, PolyDOp2}
 
 import scala.annotation._
 

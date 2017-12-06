@@ -1,7 +1,6 @@
 package nexus
 
 import nexus.exec._
-import nexus.func._
 import nexus.impl.jvm.DenseTensor
 import nexus.op._
 import nexus.syntax._

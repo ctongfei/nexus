@@ -16,6 +16,10 @@ object RenameTest extends App {
 
   val b = a |> Rename(B -> C)
 
+
+  val x = DenseTensor.fromFlatArray(Array(3f, 4f), A::$, Array(2))
+  val y = L2Norm(x)
+
   val bp = 0
 
 }
