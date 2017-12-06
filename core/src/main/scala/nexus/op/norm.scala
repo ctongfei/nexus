@@ -36,3 +36,14 @@ object L2Norm extends TaSPolyDOp1 {
   def backward[T[_ <: $$], R, As <: $$](dy: R, y: R, x: T[As])(implicit T: IsTypedRealTensor[T, R]) = x :* (dy / y)
 }
 
+object L1Distance extends PolyModule2 {
+  implicit def instance[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) = new F[T[As], T[As], R] {
+    def apply(x1: Expr[T[As]], x2: Expr[T[As]]) = L1Norm(x1 - x2)
+  }
+}
+
+object L2Distance extends PolyModule2 {
+  implicit def instance[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) = new F[T[As], T[As], R] {
+    def apply(x1: Expr[T[As]], x2: Expr[T[As]]) = L2Norm(x1 - x2)
+  }
+}

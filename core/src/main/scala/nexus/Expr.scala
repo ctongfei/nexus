@@ -29,6 +29,9 @@ sealed trait Expr[X] {
   def |>[Y](op: PolyOp1)(implicit f: op.F[X, Y]): Expr[Y] =
     f(this)
 
+  def |>[Y](op: PolyDOp1)(implicit f: op.F[X, Y]): Expr[Y] =
+    f(this)
+
   /** Passes this expression through any parametrized polymorphic neural function. */
   def |>[P, Y](op: ParaPolyOp1[P])(implicit f: op.F[P, X, Y]): Expr[Y] =
     f(op.parameter)(this)
