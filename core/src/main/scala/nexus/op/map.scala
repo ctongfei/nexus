@@ -12,7 +12,7 @@ import scala.annotation._
  */
 case class Map[X](parameter: DOp1[X, X]) extends ParaPolyDOp1[DOp1[X, X]] {
 
-  type POp[P, X, Y] = Map.POp[P, X, Y]
+  type F[P, X, Y] = Map.POp[P, X, Y]
 
 }
 

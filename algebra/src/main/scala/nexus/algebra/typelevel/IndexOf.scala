@@ -3,7 +3,7 @@ package nexus.algebra.typelevel
 import shapeless._
 
 /**
- * Typelevel function that gets the index of type [[X]] in [[L]].
+ * Typelevel function that gets the index of the first occurrence of type [[X]] in [[L]].
  * @author Tongfei Chen
  */
 trait IndexOf[L <: HList, X] extends DepFn0 {

@@ -8,6 +8,14 @@ package nexus.algebra
  */
 trait Type[X]
 
+object Type {
+
+  private[this] val singleton = new Type[Nothing] {}
+
+  def empty[X]: Type[X] = singleton.asInstanceOf[Type[X]]
+
+}
+
 trait TypeH[T[_ <: $$]] {
   def ground[A <: $$]: Type[T[A]]
 }

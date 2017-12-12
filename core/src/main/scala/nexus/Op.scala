@@ -1,5 +1,7 @@
 package nexus
 
+import nexus.algebra._
+
 /**
  * A unary function in computational graphs.
  * @author Tongfei Chen
@@ -9,6 +11,9 @@ trait Op1[X, Y] extends Module[X, Y] {
 
   /** Name of this operation. */
   def name: String
+
+  /** Type tag of the output type. */
+  def tag: Type[Y]
 
   /** Applies this operation to a symbolic expression. */
   def apply(x: Expr[X]): Expr[Y] = Apply1(this, x)
@@ -21,6 +26,7 @@ trait Op1[X, Y] extends Module[X, Y] {
 
 /**
  * A binary function in computational graphs.
+ * @see [[Op1]]
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -28,6 +34,9 @@ trait Op2[X1, X2, Y] extends Module2[X1, X2, Y] {
 
   /** Name of this operation. */
   def name: String
+
+  /** Type tag of the output type. */
+  def tag: Type[Y]
 
   /** Applies this operation to two symbolic expressions. */
   def apply(x1: Expr[X1], x2: Expr[X2]) = Apply2(this, x1, x2)
@@ -40,6 +49,7 @@ trait Op2[X1, X2, Y] extends Module2[X1, X2, Y] {
 
 /**
  * A ternary function in computational graphs.
+ * @see [[Op1]], [[Op2]]
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -47,6 +57,9 @@ trait Op3[X1, X2, X3, Y] extends Module3[X1, X2, X3, Y] {
 
   /** Name of this operation. */
   def name: String
+
+  /** Type tag of the output type. */
+  def tag: Type[Y]
 
   /** Applies this operation to three symbolic expressions. */
   def forward(x1: X1, x2: X2, x3: X3): Y
@@ -56,4 +69,3 @@ trait Op3[X1, X2, X3, Y] extends Module3[X1, X2, X3, Y] {
 
   override def toString() = name
 }
-

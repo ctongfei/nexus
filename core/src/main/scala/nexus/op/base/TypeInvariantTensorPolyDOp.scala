@@ -1,7 +1,7 @@
-package nexus
+package nexus.op.base
 
+import nexus._
 import nexus.algebra._
-import scala.annotation._
 
 /**
  * Base class for unary polymorphic functions with the following groundings:
@@ -17,17 +17,9 @@ abstract class TypeInvariantTensorPolyDOp1[Ev[T[_ <: $$], R] <: GradH[T]] extend
 
   def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: Ev[T, R]): T[A]
 
-  @implicitNotFound("Cannot apply this operator to ${X}.")
-  trait DOp[X, Y] extends DOp1[X, Y]
+  implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: Ev[T, R]): F[T[A], T[A]] = new OpImpl[T, R, A]
 
-  object DOp {
-    /**
-     * Synthesizes an operator for tensor type [[T]] and axes [[A]].
-     */
-    implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: Ev[T, R]): Op[T[A], T[A]] = new OpImpl[T, R, A]
-  }
-
-  class OpImpl[T[_ <: $$], R, A <: $$](implicit T: Ev[T, R]) extends DOp[T[A], T[A]] {
+  class OpImpl[T[_ <: $$], R, A <: $$](implicit T: Ev[T, R]) extends F[T[A], T[A]] {
     def name = self.name
     def tag = T.ground[A]
     def forward(x: T[A]) = self.forward(x)
@@ -49,15 +41,10 @@ abstract class TypeInvariantTensorPolyDOp2[Ev[T[_ <: $$], R] <: GradH[T]] extend
   def backward1[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x1: T[A], x2: T[A])(implicit T: Ev[T, R]): T[A]
   def backward2[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x1: T[A], x2: T[A])(implicit T: Ev[T, R]): T[A]
 
-  @implicitNotFound("Cannot apply this operator to ${X1} and ${X2}.")
-  trait DOp[X1, X2, Y] extends DOp2[X1, X2, Y]
+  implicit def synthesize[T[_ <: $$], E, A <: $$](implicit T: Ev[T, E]): F[T[A], T[A], T[A]] =
+    new OpImpl[T, E, A]
 
-  object DOp {
-    implicit def synthesize[T[_ <: $$], E, A <: $$](implicit T: Ev[T, E]): Op[T[A], T[A], T[A]] =
-      new OpImpl[T, E, A]
-  }
-
-  class OpImpl[T[_ <: $$], E, A <: $$](implicit T: Ev[T, E]) extends DOp[T[A], T[A], T[A]] {
+  class OpImpl[T[_ <: $$], E, A <: $$](implicit T: Ev[T, E]) extends F[T[A], T[A], T[A]] {
     def name = self.name
     def tag = T.ground[A]
     def forward(x1: T[A], x2: T[A]) = self.forward(x1, x2)

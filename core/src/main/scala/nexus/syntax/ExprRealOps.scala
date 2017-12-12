@@ -9,7 +9,6 @@ import nexus.op._
  */
 trait ExprRealMixin {
 
-
   implicit class ExprRealOps[R](val x: Expr[R])(implicit R: IsReal[R]) {
 
     def +(y: Expr[R]): Expr[R] = Add(x, y)

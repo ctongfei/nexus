@@ -1,7 +1,7 @@
 package nexus.impl.jvm
 
 import nexus._
-import nexus.algebra.typelevel._
+import nexus.algebra.typelevel.{Nest, _}
 import nexus.algebra.typelevel.util._
 import shapeless._
 import shapeless.ops.hlist._

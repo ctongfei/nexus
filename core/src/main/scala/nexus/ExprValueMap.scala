@@ -1,6 +1,8 @@
 package nexus
 
 import cats._
+import nexus.algebra._
+import nexus.exception._
 
 import scala.collection._
 
@@ -12,14 +14,15 @@ import scala.collection._
  */
 class ExprValueMap extends ExprMap[Id] with Iterable[Assignment] {
 
-  def increment[X](e: DExpr[X], v: X) = {
-    if (contains(e)) {
-      val X = e.tag
-      if (X.mutable)
-        X.addI(this(e), v)
-      else this(e) = X.add(this(e), v)
-    }
-    else update(e, v)
+  def increment[X](e: Expr[X], v: X) = e.tag match {
+    case gX: Grad[X] => // if differentiable
+      if (contains(e)) {
+        if (gX.mutable)
+          gX.addI(this (e), v)
+        else this (e) = gX.add(this (e), v)
+      }
+      else update(e, v)
+    case _ => throw new ExpressionNotDifferentiableException(e)
   }
 
   override def iterator: Iterator[Assignment] = map.iterator.map {

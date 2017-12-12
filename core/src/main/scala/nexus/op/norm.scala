@@ -3,6 +3,7 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
+import nexus.op.base._
 
 /**
  * Absolute value.
@@ -23,32 +24,44 @@ object Abs extends TypeInvariantPolyDOp1[IsReal] {
 
 }
 
-/**
- * 「L_1」 (Manhattan) normalization.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object L1Normalize extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
-  def name = "L1Normalize"
-  def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = x :* T.R.inv(T.sum(x))
-  def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = ???
+object L1Norm extends TaSPolyDOp1 {
+  def name = "L1Norm"
+  def forward[T[_ <: $$], R, As <: $$](x: T[As])(implicit T: IsTypedRealTensor[T, R]) = T.sum(T.eAbs(x))
+  def backward[T[_ <: $$], R, As <: $$](dy: R, y: R, x: T[As])(implicit T: IsTypedRealTensor[T, R]) = T.eSgn(x) :* dy
 }
 
-/**
- * 「L_2」 (Euclidean) distance between two vectors.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object L2Distance extends VaVaSPolyDOp2 {
-  def name = "L2Distance"
-  def forward[T[_ <: $$], R, A](x1: T[::[A, $]], x2: T[::[A, $]])(implicit T: IsTypedRealTensor[T, R]) = T.R.eSqrt(T.sum(T.eSqr(x1 - x2)))
-  def backward1[T[_ <: $$], R, A](dy: R, y: R, x1: T[::[A, $]], x2: T[::[A, $]])(implicit T: IsTypedRealTensor[T, R]) = (x1 - x2) :* (dy / y)
-  def backward2[T[_ <: $$], R, A](dy: R, y: R, x1: T[::[A, $]], x2: T[::[A, $]])(implicit T: IsTypedRealTensor[T, R]) = (x2 - x1) :* (dy / y)
+object L2Norm extends TaSPolyDOp1 {
+  def name = "L2Norm"
+  def forward[T[_ <: $$], R, As <: $$](x: T[As])(implicit T: IsTypedRealTensor[T, R]) = T.R.sqrt(T.dot(x, x))
+  def backward[T[_ <: $$], R, As <: $$](dy: R, y: R, x: T[As])(implicit T: IsTypedRealTensor[T, R]) = x :* (dy / y)
 }
 
-object CosineSimilarity extends VaVaSPolyDOp2 {
-  def name = "CosineSimilarity"
-  def forward[T[_ <: $$], R, A](x1: T[::[A, $]], x2: T[::[A, $]])(implicit T: IsTypedRealTensor[T, R]) = ???
-  def backward1[T[_ <: $$], R, A](dy: R, y: R, x1: T[::[A, $]], x2: T[::[A, $]])(implicit T: IsTypedRealTensor[T, R]) = ???
-  def backward2[T[_ <: $$], R, A](dy: R, y: R, x1: T[::[A, $]], x2: T[::[A, $]])(implicit T: IsTypedRealTensor[T, R]) = ???
+object L1Distance extends PolyModule2 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As], R] = F {
+    (x1, x2) => L1Norm(x1 - x2)
+  }
+}
+
+object L2Distance extends PolyModule2 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As], R] = F {
+    (x1, x2) => L2Norm(x1 - x2)
+  }
+}
+
+object L1Normalize extends PolyModule1 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As]] = F {
+    x => Scale(Inv(L1Norm(x)), x)
+  }
+}
+
+object L2Normalize extends PolyModule1 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As]] = F {
+    x => Scale(Inv(L2Norm(x)), x)
+  }
+}
+
+object CosineSimilarity extends PolyModule2 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As], R] = F {
+    (x1, x2) => Dot(x1, x2) / L2Norm(x1) / L2Norm(x2)
+  }
 }

@@ -1,7 +1,8 @@
-package nexus
+package nexus.algebra.typelevel
 
 import shapeless._
 import shapeless.nat._
+
 import scala.annotation._
 import scala.reflect._
 
