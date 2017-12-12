@@ -7,10 +7,8 @@ import nexus.op.base._
 
 /**
  * The cross entropy function.
- *
- * The two inputs are
- *  - the predicted probability of labels (\(\mathbf{\hat y}\)), which should be a rank-1 tensor;
- *  - the gold labels (\(\mathbf{y}\)), which should be a rank-1 tensor.
+ *  - Input 1: the predicted probability of labels (\(\mathbf{\hat y}\)), which should be a rank-1 tensor;
+ *  - Input 2: the gold labels (\(\mathbf{y}\)), which should be a rank-1 tensor.
  *
  * The output is the loss function value, which is a scalar value, computed as
  *

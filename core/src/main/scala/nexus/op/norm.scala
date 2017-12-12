@@ -37,13 +37,31 @@ object L2Norm extends TaSPolyDOp1 {
 }
 
 object L1Distance extends PolyModule2 {
-  implicit def instance[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) = new F[T[As], T[As], R] {
-    def apply(x1: Expr[T[As]], x2: Expr[T[As]]) = L1Norm(x1 - x2)
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As], R] = F {
+    (x1, x2) => L1Norm(x1 - x2)
   }
 }
 
 object L2Distance extends PolyModule2 {
-  implicit def instance[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]) = new F[T[As], T[As], R] {
-    def apply(x1: Expr[T[As]], x2: Expr[T[As]]) = L2Norm(x1 - x2)
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As], R] = F {
+    (x1, x2) => L2Norm(x1 - x2)
+  }
+}
+
+object L1Normalize extends PolyModule1 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As]] = F {
+    x => Scale(Inv(L1Norm(x)), x)
+  }
+}
+
+object L2Normalize extends PolyModule1 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As]] = F {
+    x => Scale(Inv(L2Norm(x)), x)
+  }
+}
+
+object CosineSimilarity extends PolyModule2 {
+  implicit def synthesize[T[_ <: $$], R, As <: $$](implicit T: IsTypedRealTensor[T, R]): F[T[As], T[As], R] = F {
+    (x1, x2) => Dot(x1, x2) / L2Norm(x1) / L2Norm(x2)
   }
 }

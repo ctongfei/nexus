@@ -10,17 +10,17 @@ import nexus.algebra._
  */
 case class Dropout(parameter: Double) extends ParaPolyDOp1[Double] {
 
-  type F[P, X, Y] = Dropout.POp[P, X, Y]
+  type F[P, X, Y] = Dropout.F[P, X, Y]
 
 }
 
 object Dropout {
 
-  trait POp[P, X, Y] extends (P => DOp1[X, Y])
+  trait F[P, X, Y] extends (P => DOp1[X, Y])
 
-  object POp {
+  object F {
 
-    implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: IsTypedRealTensor[T, D]) = new POp[Double, T[A], T[A]] {
+    implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: IsTypedRealTensor[T, D]) = new F[Double, T[A], T[A]] {
       def apply(rate: Double) = new DOp1[T[A], T[A]] {
         def name = s"Dropout[$rate]"
         def tag = T.ground[A]

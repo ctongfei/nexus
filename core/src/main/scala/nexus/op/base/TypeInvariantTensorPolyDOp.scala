@@ -1,9 +1,7 @@
 package nexus.op.base
 
+import nexus._
 import nexus.algebra._
-import nexus.{$$, DOp1, DOp2, PolyDOp1, PolyDOp2}
-
-import scala.annotation._
 
 /**
  * Base class for unary polymorphic functions with the following groundings:

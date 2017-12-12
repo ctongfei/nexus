@@ -77,7 +77,7 @@ trait IsTypedRealTensor[T[_ <: $$], R] extends IsTypedTensor[T, R] with AxisTypi
 
   def pos[A <: $$](x: T[A]): T[A] = typeWith(H.isPos(untype(x)), typeOf(x))
 
-  def sum[A <: $$](x: T[A]): R = H.sum(untype(x))
+  def sum(x: T[_]): R = H.sum(untype(x))
 
   def mmMul[A, B, C](x: T[A::B::$], y: T[B::C::$]): T[A::C::$] =
     typeWith(H.mmMul(untype(x), untype(y)), AxesUtils.mmMul(typeOf(x), typeOf(y)))

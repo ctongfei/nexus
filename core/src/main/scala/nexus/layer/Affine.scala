@@ -10,9 +10,17 @@ import nexus.op._
  * @since 0.1.0
  */
 class Affine[T[_ <: $$], R, A, B] private(
-  val weight: Param[T[B::A::$]],
-  val bias: Param[T[B::$]]
-)(implicit T: IsTypedRealTensor[T, R])
+                                           /**
+                                            * The linear transformation matrix of this layer.
+                                             */
+                                           val weight: Param[T[B::A::$]],
+
+                                           /**
+                                            * The additive bias of this layer.
+                                            */
+                                           val bias: Param[T[B::$]]
+                                         )
+                                         (implicit T: IsTypedRealTensor[T, R])
   extends Module[T[A::$], T[B::$]]
 {
 
@@ -37,14 +45,14 @@ object Affine {
    * @param b Bias vector (axes B::$)
    */
   def from[T[_ <: $$], R, A, B]
-  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit ops: IsTypedRealTensor[T, R]) = new Affine[T, R, A, B](W, b)
+  (W: Param[T[B::A::$]], b: Param[T[B::$]])(implicit T: IsTypedRealTensor[T, R]) = new Affine[T, R, A, B](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.
    * @example `Affine(In -> 784, Out -> 300)`
    */
-  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit ops: IsTypedRealTensor[T, D]) = {
-    import ops._
+  def apply[T[_ <: $$], D, A, B](in: (A, Int), out: (B, Int))(implicit T: IsTypedRealTensor[T, D]) = {
+    import T._
     val (aA, nA) = in
     val (aB, nB) = out
     val W = Param(newGaussianTensor(0f, 1f, aB::aA::$, Array(nB, nA)), name = s"Affine$i.weight")

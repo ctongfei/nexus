@@ -7,7 +7,7 @@ import shapeless._
  * '''Nexus''': Typeful & typesafe deep learning.
  * @author Tongfei Chen
  */
-package object nexus extends ExprTensorMixin {
+package object nexus extends ExprTensorMixin with ExprRealMixin with TupleExprOpsMixin {
 
   type ::[+H, +T <: HList] = shapeless.::[H, T]
   type $$ = HList

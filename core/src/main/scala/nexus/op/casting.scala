@@ -9,8 +9,6 @@ case class CastTo[T](parameter: T) extends ParaPolyDOp1[T] {
   @implicitNotFound("Cannot cast ${S} to ${T}.")
   trait F[TT, S, T] extends (TT => DOp1[S, T])
 
-  object POp {
-
     implicit def scalar[S, T](implicit cast: BidiCasting[S, T]): F[Grad[T], S, T] =
       new F[Grad[T], S, T] {
         def apply(Y: Grad[T]) = new DOp1[S, T] {
@@ -30,8 +28,6 @@ case class CastTo[T](parameter: T) extends ParaPolyDOp1[T] {
           def backward(dy: T[A], y: T[A], x: S[A]) = cast.invert(dy)
         }
       }
-
-  }
 
 
 }

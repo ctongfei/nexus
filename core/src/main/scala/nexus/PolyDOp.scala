@@ -1,8 +1,21 @@
 package nexus
 
-
+/**
+ * Any generic unary function whose type parameters (axes, etc.) are not yet grounded:
+ * itself can be applied to variables of different types constrained by the type member `Op`.
+ *
+ * Essentially, this function can be applied to a symbolic expression of type [[Expr]]`[X]` '''if and only if''' an
+ * implicit `Op[X, Y]` is found, and the application returns a symbolic expression of type [[Expr]]`[Y]`.
+ *
+ * @author Tongfei Chen
+ * @since 0.1.0
+ */
 abstract class PolyDOp1 {
 
+  /**
+   * Type of the actual grounded operator.
+   * This acts as a type constraint expressing what type of variables this polymorphic operation can apply to.
+   */
   trait F[X, Y] extends DOp1[X, Y]
 
   /** Applies this operation to a concrete value (forward computation). */
@@ -10,8 +23,15 @@ abstract class PolyDOp1 {
 
   /** Applies this operation to a symbolic expression. */
   def apply[X, Y](x: Expr[X])(implicit f: F[X, Y]): Expr[Y] = Apply1(f, x)
+
 }
 
+/**
+ * Any generic binary neural (differential) function whose type parameters (axes, etc.) are not yet grounded:
+ * itself can be applied to variables of different types constrained by the type member `Op`.
+ * @see [[PolyOp1]]
+ * @since 0.1.0
+ */
 abstract class PolyDOp2 {
 
   trait F[X1, X2, Y] extends DOp2[X1, X2, Y]
@@ -24,6 +44,12 @@ abstract class PolyDOp2 {
 
 }
 
+/**
+ * Any generic ternary neural (differential) function whose type parameters (axes, etc.) are not yet grounded:
+ * itself can be applied to variables of different types constrained by the type member `Op`.
+ * @see [[PolyOp1]]
+ * @since 0.1.0
+ */
 abstract class PolyDOp3 {
 
   trait F[X1, X2, X3, Y] extends DOp3[X1, X2, X3, Y]

@@ -5,7 +5,8 @@ import shapeless.ops.hlist._
 import shapeless.ops.nat._
 
 /**
- * Typelevel function that performs symmetric differences on two [[HList]]s. This is used in tensor multiplication ([[nexus.op.TMul]]).
+ * Typelevel function that performs symmetric differences on two [[HList]]s.
+ * This is used in tensor multiplication ([[nexus.op.Contract]]).
  * @author Tongfei Chen
  */
 trait SymDiff[A <: HList, B <: HList] extends DepFn2[A, B] {
@@ -13,8 +14,8 @@ trait SymDiff[A <: HList, B <: HList] extends DepFn2[A, B] {
   def matchedIndices: List[(Int, Int)]
   def lhsRetainedIndices: List[(Int, Int)]
   def rhsRetainedIndices: List[(Int, Int)]
-  //def recoverLeft: SymDiff.Aux[Out, B, A]
-  //def recoverRight: SymDiff.Aux[Out, A, B]
+  def recoverLeft: SymDiff.Aux[Out, B, A]
+  def recoverRight: SymDiff.Aux[Out, A, B]
 }
 
 object SymDiff {
@@ -30,6 +31,8 @@ object SymDiff {
       def matchedIndices = Nil
       def lhsRetainedIndices = Nil
       def rhsRetainedIndices = (0 until bln()).map(i => (i, i)).toList
+      def recoverLeft = ???
+      def recoverRight = ???
     }
 
   // A.head ∉ B => A.head ∈ C
@@ -41,6 +44,8 @@ object SymDiff {
       def matchedIndices = s.matchedIndices map { case (i, j) => (i + 1, j) }
       def lhsRetainedIndices = (0, 0) :: (s.lhsRetainedIndices map { case (i, j) => (i + 1, j + 1) })
       def rhsRetainedIndices = s.rhsRetainedIndices
+      def recoverLeft = ???
+      def recoverRight = ???
     }
 
   // A.head ∈ B => A.head ∉ C
@@ -52,6 +57,8 @@ object SymDiff {
       def matchedIndices = (0, i.toInt) :: (s.matchedIndices map { case (i, j) => (i + 1, j + 1) })
       def lhsRetainedIndices = s.lhsRetainedIndices
       def rhsRetainedIndices = s.rhsRetainedIndices map { case (i, j) => (i + 1, if (j >= i.toInt) j + 1 else j) }
+      def recoverLeft = ???
+      def recoverRight = ???
     }
 
 }

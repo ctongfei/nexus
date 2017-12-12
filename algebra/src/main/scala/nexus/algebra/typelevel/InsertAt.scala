@@ -6,7 +6,9 @@ import shapeless._
  * Typelevel function that inserts type [[X]] at the [[I]]-th position in [[L]].
  * @author Tongfei Chen
  */
-trait InsertAt[L <: HList, I <: Nat, X] extends DepFn2[L, X] { type Out <: HList }
+trait InsertAt[L <: HList, I <: Nat, X] extends DepFn2[L, X] {
+  type Out <: HList
+}
 
 object InsertAt {
 
