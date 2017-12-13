@@ -10,7 +10,7 @@ import scala.util._
 /**
  * @author Tongfei Chen
  */
-object TypedCPUFloat32 extends IsTypedRealTensor[DenseTensor, Float] with AxisTyping[DenseTensor] {
+object CPUFloat32$ extends IsRealTensor[DenseTensor, Float] with AxisTyping[DenseTensor] {
   type H = UntypedDenseTensor
   val H = UntypedCPUFloat32
 

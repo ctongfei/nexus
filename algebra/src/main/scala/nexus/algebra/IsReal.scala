@@ -58,6 +58,6 @@ trait IsReal[@specialized(Float, Double) R] extends algebra.ring.Field[R] with c
 
 object IsReal {
 
-  implicit def extract[T[_ <: $$], R](implicit T: IsTypedRealTensor[T, R]): IsReal[R] = T.R
+  implicit def extract[T[_ <: $$], R](implicit T: IsRealTensor[T, R]): IsReal[R] = T.R
 
 }

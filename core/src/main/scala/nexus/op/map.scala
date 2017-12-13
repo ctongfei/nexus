@@ -12,17 +12,17 @@ import scala.annotation._
  */
 case class Map[X](parameter: DOp1[X, X]) extends ParaPolyDOp1[DOp1[X, X]] {
 
-  type F[P, X, Y] = Map.POp[P, X, Y]
+  type F[P, X, Y] = Map.F[P, X, Y]
 
 }
 
 object Map {
   @implicitNotFound("Cannot apply Map[${P}] to ${X}.")
-  trait POp[P, X, Y] extends (P => DOp1[X, Y])
+  trait F[O, X, Y] extends (O => DOp1[X, Y])
 
-  object POp {
+  object F {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new POp[DOp1[R, R], T[A], T[A]] {
+    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensor[T, R]) = new F[DOp1[R, R], T[A], T[A]] {
       def apply(f: DOp1[R, R]) = new DOp1[T[A], T[A]] {
         import T._
         def name = s"Map[${f.name}]"

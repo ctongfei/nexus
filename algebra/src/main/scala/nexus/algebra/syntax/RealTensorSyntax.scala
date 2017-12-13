@@ -8,9 +8,9 @@ import nexus.algebra.typelevel._
  */
 trait RealTensorSyntax {
 
-  implicit class RealTensorOps[T[_ <: $$], R, A <: $$](val a: T[A])(implicit ops: IsTypedRealTensor[T, R]) {
+  implicit class RealTensorOps[T[_ <: $$], R, A <: $$](val a: T[A])(implicit T: IsRealTensor[T, R]) {
 
-    import ops._
+    import T._
 
     def +(b: T[A]): T[A] = add(a, b)
     def -(b: T[A]): T[A] = sub(a, b)

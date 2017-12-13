@@ -5,4 +5,6 @@ import nexus._
 /**
  * @author Tongfei Chen
  */
-trait RecurrentUnit[S, I] extends ((Expr[S], Expr[I]) => Expr[S])
+trait RecurrentUnit[S, X] extends ((Expr[S], Expr[X]) => Expr[S])
+
+trait RecurrentUnitWithOutput[S, X, Y] extends ((Expr[S], Expr[X]) => (Expr[S], Expr[Y]))

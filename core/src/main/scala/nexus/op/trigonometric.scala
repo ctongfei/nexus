@@ -19,10 +19,10 @@ object Sin extends TypeInvariantPolyDOp1[IsReal] {
   /**
    * Elementwise sine on a tensor.
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Sin.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eSin(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| T.eCos(x)
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eSin(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |*| T.eCos(x)
   }
 }
 
@@ -39,10 +39,10 @@ object Cos extends TypeInvariantPolyDOp1[IsReal] {
   /**
    * Elementwise cosine on a tensor.
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Cos.Elementwise"
-    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.eCos(x)
-    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = -dy |*| T.eSin(x)
+    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsRealTensor[T, E]) = T.eCos(x)
+    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, E]) = -dy |*| T.eSin(x)
   }
 }
 
@@ -59,9 +59,9 @@ object Tan extends TypeInvariantPolyDOp1[IsReal] {
   /**
    * Elementwise tangent on a tensor.
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Tan.Elementwise"
-    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, E]) = T.eTan(x)
-    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, E]) = dy |*| T.addS(T.eSqr(y), T.R.one)
+    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsRealTensor[T, E]) = T.eTan(x)
+    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, E]) = dy |*| T.addS(T.eSqr(y), T.R.one)
   }
 }

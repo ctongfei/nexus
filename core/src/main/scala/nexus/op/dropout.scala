@@ -20,7 +20,7 @@ object Dropout {
 
   object F {
 
-    implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: IsTypedRealTensor[T, D]) = new F[Double, T[A], T[A]] {
+    implicit def tensor[T[_ <: $$], D, A <: $$](implicit T: IsRealTensor[T, D]) = new F[Double, T[A], T[A]] {
       def apply(rate: Double) = new DOp1[T[A], T[A]] {
         def name = s"Dropout[$rate]"
         def tag = T.ground[A]

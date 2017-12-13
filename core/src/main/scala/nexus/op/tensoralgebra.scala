@@ -15,7 +15,7 @@ import scala.annotation._
  */
 object Scale extends PolyDOp2 {
 
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsTypedRealTensor[T, R]) = new F[R, T[A], T[A]] {
+  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensor[T, R]) = new F[R, T[A], T[A]] {
     def tag = T.ground[A]
     def name = "Scale"
     def forward(x1: R, x2: T[A]) = x2 :* x1
@@ -35,9 +35,9 @@ object Scale extends PolyDOp2 {
  */
 object Dot extends TaTaSPolyDOp2 {
   def name = "Dot"
-  def forward[T[_ <: $$], R, As <: $$](x1: T[As], x2: T[As])(implicit T: IsTypedRealTensor[T, R]) = T.dot(x1, x2)
-  def backward1[T[_ <: $$], R, As <: $$](dy: R, y: R, x1: T[As], x2: T[As])(implicit T: IsTypedRealTensor[T, R]) = x2 :* dy
-  def backward2[T[_ <: $$], R, As <: $$](dy: R, y: R, x1: T[As], x2: T[As])(implicit T: IsTypedRealTensor[T, R]) = x1 :* dy
+  def forward[T[_ <: $$], R, As <: $$](x1: T[As], x2: T[As])(implicit T: IsRealTensor[T, R]) = T.dot(x1, x2)
+  def backward1[T[_ <: $$], R, As <: $$](dy: R, y: R, x1: T[As], x2: T[As])(implicit T: IsRealTensor[T, R]) = x2 :* dy
+  def backward2[T[_ <: $$], R, As <: $$](dy: R, y: R, x1: T[As], x2: T[As])(implicit T: IsRealTensor[T, R]) = x1 :* dy
 }
 
 /**
@@ -48,7 +48,7 @@ object Dot extends TaTaSPolyDOp2 {
  */
 object MatMul extends PolyDOp2 {
 
-  implicit def matrix[T[_ <: $$], R, A, B, C](implicit T: IsTypedRealTensor[T, R]): F[T[A::B::$], T[B::C::$], T[A::C::$]] =
+  implicit def matrix[T[_ <: $$], R, A, B, C](implicit T: IsRealTensor[T, R]): F[T[A::B::$], T[B::C::$], T[A::C::$]] =
     new F[T[A::B::$], T[B::C::$], T[A::C::$]] {
       import T._
       def name = "MatMul"
@@ -65,7 +65,7 @@ object MatMul extends PolyDOp2 {
  * @since 0.1.0
  */
 object Transpose extends PolyDOp1 {
-  implicit def matrix[T[_ <: $$], R, A, B](implicit T: IsTypedRealTensor[T, R]) = new F[T[A::B::$], T[B::A::$]] {
+  implicit def matrix[T[_ <: $$], R, A, B](implicit T: IsRealTensor[T, R]) = new F[T[A::B::$], T[B::A::$]] {
     import T._
     def tag = T.ground[B::A::$]
     def name = "Transpose"
@@ -90,7 +90,7 @@ object Transpose extends PolyDOp1 {
  */
 object MVMul extends PolyDOp2 {
 
-  implicit def mv[T[_ <: $$], R, A, B](implicit T: IsTypedRealTensor[T, R]): F[T[B::A::$], T[A::$], T[B::$]] =
+  implicit def mv[T[_ <: $$], R, A, B](implicit T: IsRealTensor[T, R]): F[T[B::A::$], T[A::$], T[B::$]] =
     new F[T[B::A::$], T[A::$], T[B::$]] {
       import T._
       def name = "MVMul"
@@ -109,7 +109,7 @@ object MVMul extends PolyDOp2 {
  * @since 0.1.0
  */
 object Contract extends PolyDOp2 {
-  implicit def tensor[T[_ <: $$], R, A <: $$, B <: $$, C <: $$](implicit T: IsTypedRealTensor[T, R], sd: SymDiff.Aux[A, B, C]) =
+  implicit def tensor[T[_ <: $$], R, A <: $$, B <: $$, C <: $$](implicit T: IsRealTensor[T, R], sd: SymDiff.Aux[A, B, C]) =
     new F[T[A], T[B], T[C]] {
       import T._
       def name = "Contract"

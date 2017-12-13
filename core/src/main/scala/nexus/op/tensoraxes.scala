@@ -3,6 +3,8 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.typelevel._
+import shapeless.Nat
+
 import scala.annotation._
 
 /**
@@ -24,7 +26,7 @@ object Rename {
   trait F[P, X, Y] extends (P => DOp1[X, Y])
 
   implicit def instance[T[_ <: $$], R, A <: $$, U, V, B <: $$]
-  (implicit r: Replace.Aux[A, U, V, B], T: IsTypedRealTensor[T, R]) =
+  (implicit r: Replace.Aux[A, U, V, B], T: IsRealTensor[T, R]) =
     new F[(U, V), T[A], T[B]] {
       def apply(p: (U, V)) = new DOp1[T[A], T[B]] {
         val (u, v) = p
@@ -37,3 +39,27 @@ object Rename {
     }
 
 }
+
+
+case class Concat[U](parameter: U) extends ParaPolyDOp2[U] {
+  type F[P, X1, X2, Y] = Concat.F[P, X1, X2, Y]
+}
+
+object Concat {
+
+  trait F[P, X1, X2, Y] extends (P => DOp2[X1, X2, Y])
+
+  implicit def instance[T[_ <: $$], R, A <: $$, U, N <: Nat]
+  (implicit n: IndexOf.Aux[A, U, N], T: IsRealTensor[T, R]) =
+    new F[U, T[A], T[A], T[A]] {
+      def apply(u: U) = new DOp2[T[A], T[A], T[A]] {
+        def name = s"Concat[${objTypeName(u)}]"
+        def tag = T.ground[A]
+        def forward(x1: T[A], x2: T[A]) = ???
+        def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = ???
+        def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = ???
+      }
+    }
+
+}
+

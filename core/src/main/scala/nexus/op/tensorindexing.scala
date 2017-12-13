@@ -11,22 +11,14 @@ import scala.annotation._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object WrapScalar extends PolyDOp1 {
-  @implicitNotFound("Cannot apply WrapScalar to ${X}.")
-  trait DOp[X, Y] extends DOp1[X, Y] {
-  def name = "WrapScalar"
-}
-
-  object DOp {
-
-    implicit def scalar[T[_ <: $$], R](implicit T: IsTypedRealTensor[T, R]): DOp[R, T[$]] =
-      new DOp[R, T[$]] {
-        def tag = T.ground[$]
-        def forward(x: R) = T.wrapScalar(x)
-        def backward(dy: T[$], y: T[$], x: R) = T.unwrapScalar(dy)
-      }
-
-  }
+object ScalarToTensor0 extends PolyDOp1 {
+  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensor[T, R]): F[R, T[$]] =
+    new F[R, T[$]] {
+      def name = "ScalarToTensor0"
+      def tag = T.ground[$]
+      def forward(x: R) = T.wrapScalar(x)
+      def backward(dy: T[$], y: T[$], x: R) = T.unwrapScalar(dy)
+    }
 }
 
 /**
@@ -34,22 +26,14 @@ object WrapScalar extends PolyDOp1 {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object UnwrapScalar extends PolyDOp1 {
+object Tensor0ToScalar extends PolyDOp1 {
 
-  @implicitNotFound("Cannot apply UnwrapScalar to ${X}.")
-  trait DOp[X, Y] extends DOp1[X, Y] {
-    def name = "UnwrapScalar"
-  }
-
-  object DOp {
-
-    implicit def scalar[T[_ <: $$], R](implicit T: IsTypedRealTensor[T, R]): DOp[T[$], R] =
-      new DOp[T[$], R] {
-        def tag = T.R
-        def forward(x: T[$]) = T.unwrapScalar(x)
-        def backward(dy: R, y: R, x: T[$]) = T.wrapScalar(dy)
-      }
-
+  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensor[T, R]): F[T[$], R] =
+    new F[T[$], R] {
+      def name = "Tensor0ToTensor"
+      def tag = T.R
+      def forward(x: T[$]) = T.unwrapScalar(x)
+      def backward(dy: R, y: R, x: T[$]) = T.wrapScalar(dy)
   }
 
 }

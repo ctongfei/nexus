@@ -7,7 +7,7 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait IsTypedTensor[T[_ <: $$], E] extends TypeH[T] with AxisTyping[T] { self =>
+trait IsTensor[T[_ <: $$], E] extends TypeH[T] with AxisTyping[T] { self =>
 
   val H: IsUntypedTensor[H, E]
 

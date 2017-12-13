@@ -18,19 +18,19 @@ import nexus.op.base._
  */
 object CrossEntropy extends VaVaSPolyDOp2 {
   def name = "CrossEntropy"
-  def forward[T[_ <: $$], R, A](p: T[A::$], q: T[A::$])(implicit T: IsTypedRealTensor[T, R]) = {
+  def forward[T[_ <: $$], R, A](p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = {
     import T._
     -(T.sum(p |*| T.eLog(q)))
   }
-  def backward1[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsTypedRealTensor[T, R]) =
+  def backward1[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) =
     -T.eLog(q) :* dy
-  def backward2[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsTypedRealTensor[T, R]) =
+  def backward2[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) =
     -(p |/| q) :* dy
 }
 
 object KullbackLeiblerDivergence extends VaVaSPolyDOp2 {
   def name = "KullbackLeiblerDivergence"
-  def forward[T[_ <: $$], R, A](p: T[A::$], q: T[A::$])(implicit T: IsTypedRealTensor[T, R]) = ???
-  def backward1[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsTypedRealTensor[T, R]) = ???
-  def backward2[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsTypedRealTensor[T, R]) = ???
+  def forward[T[_ <: $$], R, A](p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = ???
+  def backward1[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = ???
+  def backward2[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = ???
 }

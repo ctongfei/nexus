@@ -3,7 +3,7 @@ package nexus.algebra
 /**
  * @author Tongfei Chen
  */
-trait IsTypedIntTensor[T[_ <: $$], I] extends IsTypedTensor[T, I] with AxisTyping[T] { self =>
+trait IsIntTensor[T[_ <: $$], I] extends IsTensor[T, I] with AxisTyping[T] { self =>
 
   val I: IsInt[I]
 

@@ -19,10 +19,10 @@ object Sqr extends TypeInvariantPolyDOp1[IsReal] {
   /**
    * Elementwise square.
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Sqr.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eSqr(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| x :* 2
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eSqr(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |*| x :* 2
   }
 }
 
@@ -32,10 +32,10 @@ object Sqrt extends TypeInvariantPolyDOp1[IsReal] {
   def forward[R](x: R)(implicit R: IsReal[R]) = R.sqrt(x)
   def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(y) * 0.5
 
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Sqrt.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eSqrt(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| T.eInv(y) :* 0.5
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eSqrt(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |*| T.eInv(y) :* 0.5
   }
 }
 

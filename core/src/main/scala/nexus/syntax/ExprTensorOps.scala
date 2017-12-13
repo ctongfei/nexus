@@ -9,7 +9,7 @@ import nexus.{$$, Expr}
  */
 trait ExprTensorMixin {
 
-  implicit class ExprTensorOps[T[_ <: $$], R, A <: $$](val x: Expr[T[A]])(implicit T: IsTypedRealTensor[T, R]) {
+  implicit class ExprTensorOps[T[_ <: $$], R, A <: $$](val x: Expr[T[A]])(implicit T: IsRealTensor[T, R]) {
 
     def +(y: Expr[T[A]]): Expr[T[A]] = Add(x, y)
     def -(y: Expr[T[A]]): Expr[T[A]] = Sub(x, y)

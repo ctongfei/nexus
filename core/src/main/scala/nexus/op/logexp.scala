@@ -29,10 +29,10 @@ object Exp extends TypeInvariantPolyDOp1[IsReal] {
    * @author Tongfei Chen
    * @since 0.1.0
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Exp.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eExp(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |*| y
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eExp(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |*| y
   }
 }
 
@@ -46,9 +46,9 @@ object Log extends TypeInvariantPolyDOp1[IsReal] {
   def forward[R](x: R)(implicit R: IsReal[R]) = R.log(x)
   def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy / x
 
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsTypedRealTensor] {
+  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
     def name = "Log.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsTypedRealTensor[T, R]) = T.eLog(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsTypedRealTensor[T, R]) = dy |/| x
+    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eLog(x)
+    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |/| x
   }
 }

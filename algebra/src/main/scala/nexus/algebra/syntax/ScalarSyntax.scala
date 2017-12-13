@@ -19,9 +19,7 @@ trait ScalarSyntax {
 
     def *(y: Float) = mul(x, fromFloat(y))
     def /(y: Float) = div(x, fromFloat(y))
-
-
-
+    
   }
 
 }

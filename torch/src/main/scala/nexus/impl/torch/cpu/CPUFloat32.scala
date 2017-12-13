@@ -10,7 +10,7 @@ import nexus.algebra._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object CPUFloat32 extends IsTypedRealTensor[FloatDenseTensor, Float] with AxisTyping[FloatDenseTensor] {
+object CPUFloat32 extends IsRealTensor[FloatDenseTensor, Float] with AxisTyping[FloatDenseTensor] {
   type H = THFloatTensor
   val R = nexus.algebra.instances.Float32
   def untype(x: FloatDenseTensor[_]) = ???
