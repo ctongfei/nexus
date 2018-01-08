@@ -3,6 +3,7 @@ import scala.io._
 scalaVersion := "2.12.4"
 enablePlugins(ScalaUnidocPlugin)
 
+
 // credit to http://stackoverflow.com/a/32114551/2990673
 lazy val mathFormulaInDoc = taskKey[Unit]("add MathJax script import in scaladoc html to display LaTeX formula")
 
@@ -14,9 +15,8 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.4",
 
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
-  libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0",
-  libraryDependencies += "org.typelevel" %% "cats-core" % "0.9.0",
-  libraryDependencies += "org.typelevel" %% "cats-free" % "0.9.0",
+  libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0",
+  libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
 
   libraryDependencies += "me.tongfei" %% "poly-io" % "0.3.2" % Test,
 
@@ -68,6 +68,14 @@ lazy val torch = (project in file("torch"))
   .settings(
     name := "nexus-torch"
   )
+
+lazy val cuda = (project in file("cuda"))
+  .settings(commonSettings: _*)
+  .dependsOn(core)
+  .settings(
+    name := "nexus-cuda",
+    libraryDependencies += "org.bytedeco.javacpp-presets" % "cuda-platform" % "9.0-7.0-1.3"
+)
 
 lazy val vision = (project in file("vision"))
   .settings(commonSettings: _*)

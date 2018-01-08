@@ -1,6 +1,6 @@
 package nexus.impl.torch.cpu
 
-import jtorch._
+import jtorch.cpu._
 import nexus._
 import nexus.algebra.typelevel.util._
 import shapeless._
@@ -15,10 +15,10 @@ object THFloatTensorSyntax {
     def get(i: Int) = TH.floatArray_getitem(a.getStorage.getData, i)
     def set(i: Int, v: Float) = TH.floatArray_setitem(a.getStorage.getData, i, v)
 
-    def shape = nativeLongArrayToJvm(a.getSize, a.getNDimension).map(_.toInt)
+    def shape = nativeI64ArrayToJvm(a.getSize, a.getNDimension).map(_.toInt)
     def shape_=(s: Array[Int]) = a.setSize(jvmLongArrayToNative(s.map(_.toLong)))
 
-    def strides = nativeLongArrayToJvm(a.getStride, a.getNDimension).map(_.toInt)
+    def strides = nativeI64ArrayToJvm(a.getStride, a.getNDimension).map(_.toInt)
     def strides_=(s: Array[Int]) = a.setStride(jvmLongArrayToNative(s.map(_.toLong)))
 
     def offset = a.getStorageOffset
@@ -37,7 +37,8 @@ object THFloatTensorSyntax {
 
     def -(b: THFloatTensor): THFloatTensor = {
       val c = a.copy
-      ???
+      TH.THFloatTensor_cadd(c, a, -1f, b)
+      c
     }
 
     def slice(n: Int, i: Int): THFloatTensor = {
@@ -51,8 +52,6 @@ object THFloatTensorSyntax {
     }
 
     def stringRepr: String = rank match {
-      case 0 =>
-        a.asInstanceOf[FloatDenseTensor.ZeroDim].value.toString
       case 1 =>
         (0 until shape(0)).map { i => get(offset + i * strides(0)) }.mkString("[", ", \t", "]")
       case _ =>

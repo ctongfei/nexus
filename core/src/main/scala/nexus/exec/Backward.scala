@@ -23,7 +23,7 @@ object Backward {
     def eval[Y](e: Expr[Y]): Unit = e match {
 
       case e @ Apply1(o, x) => o match {
-        case o: DOp1[e.Input, Y] if x.requireGrad =>
+        case o: Op1[e.Input, Y] if x.requireGrad =>
           val g = o.backward(∇(e), values(e), values(x))
           ∇.increment(x, g)
           eval(x)
@@ -31,7 +31,7 @@ object Backward {
       }
 
       case e @ Apply2(o, x1, x2) => o match {
-        case o: DOp2[e.Input1, e.Input2, Y] =>
+        case o: Op2[e.Input1, e.Input2, Y] =>
           if (x1.requireGrad) {
             val g1 = o.backward1(∇(e), values(e), values(x1), values(x2))
             ∇.increment(x1, g1)
@@ -46,7 +46,7 @@ object Backward {
       }
 
       case e @ Apply3(o, x1, x2, x3) => o match {
-        case o: DOp3[e.Input1, e.Input2, e.Input3, Y] =>
+        case o: Op3[e.Input1, e.Input2, e.Input3, Y] =>
           if (x1.requireGrad) {
             val g1 = o.backward1(∇(e), values(e), values(x1), values(x2), values(x3))
             ∇.increment(x1, g1)

@@ -5,7 +5,7 @@ import shapeless._
 import scala.annotation._
 
 /**
- * Typeclass witnessing that the specific type with respect to which an expression is differentiable.
+ * Typeclass witnessing that the specific type which an expression is differentiable with respect to.
  *
  * An instance of this typeclass should be attached to differentiable expressions ([[nexus.DExpr]])
  * or differentiable operators ([[nexus.DOp1]] etc.).
@@ -89,8 +89,6 @@ object Grad extends ProductTypeClassCompanion[Grad] {
       def mutable = true
       def addS(x1: $, x2: Double) = $
     }
-
-    // TODO: Coproduct?
 
     def project[F, G](G: => Grad[G], fg: F => G, gf: G => F): Grad[F] = new Grad[F] {
       def mutable = G.mutable

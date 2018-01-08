@@ -4,7 +4,6 @@ import nexus._
 
 /**
  * Exception thrown when attempting to differentiate an expression w.r.t. a non-differentiable variable.
- *
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -17,5 +16,4 @@ class OperatorNotDifferentiableException(name: String, ordinal: Int)
     case 2 => "2nd"
     case 3 => "3rd"
     case n => s"${n}th" // actually will never happen: nexus only allows operators with maximum arity 3
-  }} parameter.")
-
+  }} argument.")

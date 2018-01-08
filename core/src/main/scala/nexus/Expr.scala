@@ -20,34 +20,28 @@ sealed trait Expr[X] {
   def requireGrad = tag.isInstanceOf[Grad[X]]
 
   /** Passes this expression through any function. */
-  def |>[Y](f: Expr[X] => Expr[Y]): Expr[Y] =
+  def |>[Y](f: Func1[X, Y]): Expr[Y] =
     f(this)
-
-  def |>[Y](f: Op1[X, Y]): Expr[Y] = f(this)
 
   /** Passes this expression through any polymorphic neural function. */
-  def |>[Y](op: PolyOp1)(implicit f: op.F[X, Y]): Expr[Y] =
-    f(this)
-
-  def |>[Y](op: PolyDOp1)(implicit f: op.F[X, Y]): Expr[Y] =
+  def |>[Y](op: PolyFunc1)(implicit f: op.F[X, Y]): Expr[Y] =
     f(this)
 
   /** Passes this expression through any parametrized polymorphic neural function. */
-  def |>[P, Y](op: ParaPolyOp1[P])(implicit f: op.F[P, X, Y]): Expr[Y] =
-    f(op.parameter)(this)
+  def |>[P, Y](op: ParamPolyOp1Proxy[P])(implicit f: op.F[P, X, Y]): Expr[Y] =
+    op(this)
 
-  /**
-   * Creates an assignment to this expression.
-   */
+  /** Creates an assignment to this expression. */
   def <<-(value: X): Assignment = Assignment(this, value)
 
-  def substitute[A](ax: Input[A], a: Expr[A]): Expr[X] = this match {
-    case x: Input[X] => if (x eq ax) a.asInstanceOf[Expr[X]] else x
+  /** Substitutes an input to an expression in this expression. */
+  def substitute[E](ex: Input[E], e: Expr[E]): Expr[X] = this match {
+    case x: Input[X] => if (x eq ex) e.asInstanceOf[Expr[X]] else x
     case x: Const[X] => x
     case x: Param[X] => x
-    case Apply1(op, x) => Apply1(op, x.substitute(ax, a))
-    case Apply2(op, x1, x2) => Apply2(op, x1.substitute(ax, a), x2.substitute(ax, a))
-    case Apply3(op, x1, x2, x3) => Apply3(op, x1.substitute(ax, a), x2.substitute(ax, a), x3.substitute(ax, a))
+    case Apply1(op, x) => Apply1(op, x.substitute(ex, e))
+    case Apply2(op, x1, x2) => Apply2(op, x1.substitute(ex, e), x2.substitute(ex, e))
+    case Apply3(op, x1, x2, x3) => Apply3(op, x1.substitute(ex, e), x2.substitute(ex, e), x3.substitute(ex, e))
   }
 }
 
@@ -56,11 +50,11 @@ sealed trait Expr[X] {
  */
 case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
 
-  def tag = Type.empty[X]
+  def tag = Type.nonDifferentiable[X]
   override def toString = name
 
   /** Constructs a neural function (lambda expression). */
-  def =>>[Y](y: Expr[Y]): Module[X, Y] = new Module[X, Y] {
+  def =>>[Y](y: Expr[Y]): Func1[X, Y] = new Func1[X, Y] {
     def apply(x: Expr[X]) = y.substitute(self, x)
   }
 
@@ -95,7 +89,7 @@ case class Const[X](value: X, name: String = ExprName.nextConst)(implicit val ta
  */
 case class Apply1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
   type Input = X
-  def tag = op.tag
+  val tag = op.tag(x.tag)
   override def toString = s"${op.name}($x)"
 }
 
@@ -105,7 +99,7 @@ case class Apply1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
 case class Apply2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends Expr[Y] {
   type Input1 = X1
   type Input2 = X2
-  def tag = op.tag
+  val tag = op.tag(x1.tag, x2.tag)
   override def toString = s"${op.name}($x1, $x2)"
 }
 
@@ -116,6 +110,6 @@ case class Apply3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[
   type Input1 = X1
   type Input2 = X2
   type Input3 = X3
-  def tag = op.tag
+  val tag = op.tag(x1.tag, x2.tag, x3.tag)
   override def toString = s"${op.name}($x1, $x2, $x3)"
 }

@@ -2,7 +2,6 @@ package nexus.algebra
 
 import scala.annotation._
 
-
 /**
  * Encapsulates mathematical operations on integers.
  *
@@ -23,4 +22,5 @@ trait IsInt[@specialized(Int, Long) I] extends algebra.ring.CommutativeRing[I] w
 
   def mul(x: I, y: I): I
   override def times(x: I, y: I) = mul(x, y)
+
 }

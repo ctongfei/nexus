@@ -5,5 +5,5 @@ package nexus.algebra
  */
 package object syntax extends
   GradSyntax with
-  ScalarSyntax with
+  RealSyntax with
   RealTensorSyntax

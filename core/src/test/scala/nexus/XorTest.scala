@@ -24,31 +24,29 @@ object XorTest extends App {
   val Out = new Out
 
   /* Prepare the data. */
-  val X = DenseTensor.fromNestedArray(Batch::In::$)(Array(
+  val X = FloatTensor.fromNestedArray(Batch::In::$)(Array(
     Array(0f, 0f),
     Array(1f, 0f),
     Array(0f, 1f),
     Array(1f, 1f)
   ))
 
-  val Y = DenseTensor.fromNestedArray(Batch::Out::$)(
+  val Y = FloatTensor.fromNestedArray(Batch::Out::$)(
     Array(0, 1, 1, 0).map(i => if (i == 0) Array(1f, 0f) else Array(0f, 1f))
   )
 
   val xs = X along Batch
   val ys = Y along Batch
 
-  val x = Input[DenseTensor[In::$]]()
-  val y = Input[DenseTensor[Out::$]]()
+  val x = Input[FloatTensor[In::$]]()
+  val y = Input[FloatTensor[Out::$]]()
 
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val w = Layer1.weight
-
   val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
-  val loss = CrossEntropy(y, ŷ)
+  val loss = (y, ŷ) |> CrossEntropy
 
   /** Declare an optimizer. */
   val opt = new AdamOptimizer(0.1)

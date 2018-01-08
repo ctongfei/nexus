@@ -3,7 +3,6 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
-import nexus.op.base._
 
 /**
  * The cross entropy function.
@@ -16,21 +15,21 @@ import nexus.op.base._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object CrossEntropy extends VaVaSPolyDOp2 {
-  def name = "CrossEntropy"
-  def forward[T[_ <: $$], R, A](p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = {
-    import T._
-    -(T.sum(p |*| T.eLog(q)))
-  }
-  def backward1[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) =
-    -T.eLog(q) :* dy
-  def backward2[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) =
-    -(p |/| q) :* dy
+object CrossEntropy extends PolyOp2 {
+
+  implicit def instance[T[_ <: $$], R, A](implicit T: IsRealTensorH[T, R]): F[T[A::$], T[A::$], R] =
+    new F[T[A::$], T[A::$], R] {
+      import T._
+      def name = "CrossEntropy"
+      def tag(tx1: Type[T[A::$]], tx2: Type[T[A::$]]) = T.R
+      def differentiable = true
+      def forward(p: T[A::$], q: T[A::$]) = -(sum(p |*| eLog(q)))
+      def backward1(dy: R, y: R, p: T[A::$], q: T[A::$]) = -eLog(q) :* dy
+      def backward2(dy: R, y: R, p: T[A::$], q: T[A::$]) = -(p |/| q) :* dy
+    }
+
 }
 
-object KullbackLeiblerDivergence extends VaVaSPolyDOp2 {
-  def name = "KullbackLeiblerDivergence"
-  def forward[T[_ <: $$], R, A](p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = ???
-  def backward1[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = ???
-  def backward2[T[_ <: $$], R, A](dy: R, y: R, p: T[A::$], q: T[A::$])(implicit T: IsRealTensor[T, R]) = ???
+object KullbackLeiblerDivergence extends PolyOp2 {
+
 }

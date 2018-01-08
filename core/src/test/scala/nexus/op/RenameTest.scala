@@ -13,16 +13,16 @@ object RenameTest extends App {
   class B; val B = new B
   class C; val C = new C
 
-  val a = Input[DenseTensor[A::B::$]]()
+  val a = Input[FloatTensor[A::B::$]]()
 
   val b = a |> Rename(B -> C)
 
 
-  val x = DenseTensor.fromFlatArray(Array(3f, 4f), A::$, Array(2))
-  val y = DenseTensor.fromFlatArray(Array(0f, 0f), A::$, Array(2))
+  val x = FloatTensor.fromFlatArray[A::$](Array(3f, 4f), Array(2))
+  val y = FloatTensor.fromFlatArray[A::$](Array(0f, 0f), Array(2))
 
-  val xi = Input[DenseTensor[A::$]]()
-  val yi = Input[DenseTensor[A::$]]()
+  val xi = Input[FloatTensor[A::$]]()
+  val yi = Input[FloatTensor[A::$]]()
   val zi = L2Distance(Scale(Const(3.0f), xi), yi)
 
   val (z, _) = Forward.compute(zi)(xi <<- x, yi <<- y)

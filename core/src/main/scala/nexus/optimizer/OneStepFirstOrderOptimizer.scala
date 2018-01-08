@@ -8,7 +8,7 @@ import nexus.exec._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-abstract class FirstOrderOptimizer {
+abstract class OneStepFirstOrderOptimizer {
 
   protected var t = 0
 

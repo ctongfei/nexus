@@ -16,7 +16,7 @@ import nexus.op._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.999, ε: Double = 1e-8) extends FirstOrderOptimizer {
+class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.999, ε: Double = 1e-8) extends OneStepFirstOrderOptimizer {
 
   case class AdamHistory[X](var m: X, var v: X)
 

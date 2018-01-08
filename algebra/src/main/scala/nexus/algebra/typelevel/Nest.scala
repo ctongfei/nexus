@@ -24,6 +24,7 @@ trait Nest[T, A, N <: Nat] {
 
 object Nest {
 
+  // A <: AnyVal => Nest[Array[A], A, _1]
   implicit def case1[A <: AnyVal](implicit ct: ClassTag[A]): Nest[Array[A], A, _1] = new Nest[Array[A], A, _1] {
     def classTagA = ct
     def classTagT = ct.wrap
@@ -34,6 +35,7 @@ object Nest {
     def shape(a: Array[A]) = Array(a.length)
   }
 
+  // Nest[T, A, N] => Nest[Array[T], A, Succ[N]]
   implicit def caseN[T, A, N <: Nat](implicit t: Nest[T, A, N]): Nest[Array[T], A, Succ[N]] = new Nest[Array[T], A, Succ[N]] {
     def classTagA = t.classTagA
     def classTagT = t.classTagT.wrap

@@ -22,4 +22,6 @@ object Assignment {
     val value = v
   }
 
+  //TODO: should have unapply[A]
+
 }

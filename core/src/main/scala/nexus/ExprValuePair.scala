@@ -1,7 +1,5 @@
 package nexus
 
-import shapeless._
-
 /**
  * Object holding some information associated with a symbolic expression.
  * @tparam V Higher-kinded type that defines the type of information stored for a specific type of expression
@@ -10,7 +8,7 @@ import shapeless._
  */
 trait ExprValuePair[V[_]] extends Product2[Expr[_], V[_]] {
 
-  /** Existential type for the data held in the expression. */
+  /** Existential type for the data held in this expression. */
   type Data
 
   /** The symbolic expression of this object. */
@@ -21,7 +19,9 @@ trait ExprValuePair[V[_]] extends Product2[Expr[_], V[_]] {
 
   def _1 = expr
   def _2 = value
-  def canEqual(that: Any) = false
+
+  final def canEqual(that: Any) = false
 
   override def toString = s"$expr : $value"
+
 }

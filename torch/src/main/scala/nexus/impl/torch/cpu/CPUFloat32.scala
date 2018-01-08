@@ -1,26 +1,27 @@
 package nexus.impl.torch.cpu
 
 import nexus._
-import nexus.impl.torch._
-import jtorch._
+import jtorch.cpu._
 import nexus.algebra._
 
 /**
- * Runtime environment for Float32 tensors that is backed by Torch.
+ * Runtime environment for Float32 tensors that is backed by Torch on CPU.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object CPUFloat32 extends IsRealTensor[FloatDenseTensor, Float] with AxisTyping[FloatDenseTensor] {
+object CPUFloat32 extends IsRealTensorH[Float32Tensor, Float] {
   type H = THFloatTensor
   val R = nexus.algebra.instances.Float32
-  def untype(x: FloatDenseTensor[_]) = ???
-  def typeOf[A <: $$](x: FloatDenseTensor[A]) = ???
-  def typeWith[A <: $$](x: THFloatTensor, a: A) = ???
-  val H = ???
-  def newTensor[A <: $$](axes: A, shape: Array[Int]) = ???
-  def newGaussianTensor[A <: $$](μ: Double, σ2: Double, axes: A, shape: Array[Int]) = ???
 
-  def zeroBy[A <: $$](x: FloatDenseTensor[A]) = ???
-  def fromDouble(d: Double) = ???
-  def fromFloat(f: Float) = ???
+  def untype(x: Float32Tensor[_]) = x.handle
+  def typeWith[A <: $$](x: THFloatTensor) = new Float32Tensor[A](x)
+  val H = UntypedFloat32Tensor
+  def newTensor[A <: $$](shape: Array[Int]) = ???
+  def newGaussianTensor[A <: $$](μ: Double, σ2: Double, shape: Array[Int]) = ???
+
+  def zeroBy[A <: $$](x: Float32Tensor[A]) = ???
+
+
+  def fromDouble(d: Double) = d.toFloat
+  def fromFloat(f: Float) = f
 }

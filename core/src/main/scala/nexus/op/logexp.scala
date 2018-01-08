@@ -3,7 +3,6 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
-import nexus.op.base._
 
 /**
  * Exponentiation of a real number.
@@ -12,11 +11,15 @@ import nexus.op.base._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Exp extends TypeInvariantPolyDOp1[IsReal] {
+object Exp extends PolyOp1 {
 
-  def name = "Exp"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.exp(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * y
+  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+    def name = "Exp"
+    def tag(tx: Type[R]) = tx
+    def differentiable = true
+    def forward(x: R) = R.exp(x)
+    def backward(dy: R, y: R, x: R) = dy * y
+  }
 
   /**
    * Element-wise exponentiation.
@@ -29,10 +32,16 @@ object Exp extends TypeInvariantPolyDOp1[IsReal] {
    * @author Tongfei Chen
    * @since 0.1.0
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
-    def name = "Exp.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eExp(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |*| y
+  object Elementwise extends PolyOp1 {
+
+    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+      def name = "Exp.Elementwise"
+      def tag(tx: Type[T[A]]) = tx
+      def differentiable = true
+      def forward(x: T[A]) = T.eExp(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y
+    }
+
   }
 }
 
@@ -41,14 +50,25 @@ object Exp extends TypeInvariantPolyDOp1[IsReal] {
  * - Input: A real number \(x\).
  *
  */
-object Log extends TypeInvariantPolyDOp1[IsReal] {
-  def name = "Log"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.log(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy / x
+object Log extends PolyOp1 {
 
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
-    def name = "Log.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eLog(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |/| x
+  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+    def name = "Log"
+    def tag(tx: Type[R]) = tx
+    def differentiable = true
+    def forward(x: R) = R.log(x)
+    def backward(dy: R, y: R, x: R) = dy / x
+  }
+
+  object Elementwise extends PolyOp1 {
+
+    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+      def name = "Log.Elementwise"
+      def tag(tx: Type[T[A]]) = tx
+      def differentiable = true
+      def forward(x: T[A]) = T.eLog(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = dy |/| x
+    }
+
   }
 }

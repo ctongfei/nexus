@@ -11,11 +11,12 @@ import scala.annotation._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object ScalarToTensor0 extends PolyDOp1 {
-  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensor[T, R]): F[R, T[$]] =
+object ScalarToTensor0 extends PolyOp1 {
+  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensorH[T, R]): F[R, T[$]] =
     new F[R, T[$]] {
       def name = "ScalarToTensor0"
-      def tag = T.ground[$]
+      def tag(tx: Type[R]) = T.ground[$]
+      def differentiable = true
       def forward(x: R) = T.wrapScalar(x)
       def backward(dy: T[$], y: T[$], x: R) = T.unwrapScalar(dy)
     }
@@ -26,12 +27,13 @@ object ScalarToTensor0 extends PolyDOp1 {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Tensor0ToScalar extends PolyDOp1 {
+object Tensor0ToScalar extends PolyOp1 {
 
-  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensor[T, R]): F[T[$], R] =
+  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensorH[T, R]): F[T[$], R] =
     new F[T[$], R] {
       def name = "Tensor0ToTensor"
-      def tag = T.R
+      def tag(tx: Type[T[$]]) = T.R
+      def differentiable = true
       def forward(x: T[$]) = T.unwrapScalar(x)
       def backward(dy: R, y: R, x: T[$]) = T.wrapScalar(dy)
   }
@@ -43,7 +45,7 @@ object Tensor0ToScalar extends PolyDOp1 {
  * Transforms each
  * @author Tongfei Chen
  */
-case class OneHot[U](parameter: (U, Int)) extends ParaPolyOp1[(U, Int)]
+object OneHot extends ParamPolyOp1
 
 /**
  * Slices a tensor along a specific axis.
@@ -51,4 +53,4 @@ case class OneHot[U](parameter: (U, Int)) extends ParaPolyOp1[(U, Int)]
  * @author Tongfei Chen
  * @since 0.1.0
  */
-case class SliceAlong[U](parameter: (U, Int)) extends ParaPolyDOp1[(U, Int)]
+object SliceAlong extends ParamPolyOp1

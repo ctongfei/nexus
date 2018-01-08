@@ -19,7 +19,7 @@ class ExprValueMap extends ExprMap[Id] with Iterable[Assignment] {
       if (contains(e)) {
         if (gX.mutable)
           gX.addI(this (e), v)
-        else this (e) = gX.add(this (e), v)
+        else this (e) = gX.add(this(e), v)
       }
       else update(e, v)
     case _ => throw new ExpressionNotDifferentiableException(e)

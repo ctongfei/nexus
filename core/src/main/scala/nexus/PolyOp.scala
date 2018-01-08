@@ -1,4 +1,5 @@
 package nexus
+import nexus.algebra._
 
 /**
  * Any generic unary function whose type parameters (axes, etc.) are not yet grounded:
@@ -10,7 +11,7 @@ package nexus
  * @author Tongfei Chen
  * @since 0.1.0
  */
-abstract class PolyOp1 {
+abstract class PolyOp1 extends PolyFunc1 {
 
   /**
    * Type of the actual grounded operator.
@@ -19,10 +20,7 @@ abstract class PolyOp1 {
   trait F[X, Y] extends Op1[X, Y]
 
   /** Applies this operation to a concrete value (forward computation). */
-  def apply[X, Y](x: X)(implicit f: F[X, Y]): Y = f.forward(x)
-
-  /** Applies this operation to a symbolic expression. */
-  def apply[X, Y](x: Expr[X])(implicit f: F[X, Y]): Expr[Y] = Apply1(f, x)
+  //override def apply[X, Y](x: X)(implicit f: F[X, Y]): Y = f.forward(x)
 
 }
 
@@ -32,15 +30,36 @@ abstract class PolyOp1 {
  * @see [[PolyOp1]]
  * @since 0.1.0
  */
-abstract class PolyOp2 {
+abstract class PolyOp2 extends PolyFunc2 { self =>
 
   trait F[X1, X2, Y] extends Op2[X1, X2, Y]
 
   /** Applies this operation to concrete values (forward computation). */
-  def apply[X1, X2, Y](x1: X1, x2: X2)(implicit f: F[X1, X2, Y]): Y = f.forward(x1, x2)
+  //override def apply[X1, X2, Y](x1: X1, x2: X2)(implicit f: F[X1, X2, Y]): Y = f.forward(x1, x2)
 
-  /** Applies this operation to symbolic expressions. */
-  def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]): Expr[Y] = Apply2(f, x1, x2)
+  object Curried1 extends ParamPolyOp1 {
+    implicit def curried1[X1, X2, Y](implicit f: self.F[X1, X2, Y], tx1: Type[X1]): F[X1, X2, Y] = new F[X1, X2, Y] {
+      def apply(x1: X1) = new Op1[X2, Y] {
+        def name = s"$f.curried1($x1)"
+        def tag(tx2: Type[X2]) = f.tag(tx1, tx2)
+        def differentiable = f.differentiable
+        def forward(x2: X2) = f.forward(x1, x2)
+        def backward(dy: Y, y: Y, x2: X2) = f.backward2(dy, y, x1, x2)
+      }
+    }
+  }
+
+  object Curried2 extends ParamPolyOp1 {
+    implicit def curried2[X1, X2, Y](implicit f: self.F[X1, X2, Y], tx2: Type[X2]): F[X2, X1, Y] = new F[X2, X1, Y] {
+      def apply(x2: X2) = new Op1[X1, Y] {
+        def name = s"$f.curried2($x2)"
+        def tag(tx1: Type[X1]) = f.tag(tx1, tx2)
+        def differentiable = f.differentiable
+        def forward(x1: X1) = f.forward(x1, x2)
+        def backward(dy: Y, y: Y, x1: X1) = f.backward1(dy, y, x1, x2)
+      }
+    }
+  }
 
 }
 
@@ -50,12 +69,10 @@ abstract class PolyOp2 {
  * @see [[PolyOp1]]
  * @since 0.1.0
  */
-abstract class PolyOp3 {
+abstract class PolyOp3 extends PolyFunc3 {
 
   trait F[X1, X2, X3, Y] extends Op3[X1, X2, X3, Y]
 
-  def apply[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): Y = f.forward(x1, x2, x3)
-
-  def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[X1, X2, X3, Y]): Expr[Y] = Apply3(f, x1, x2, x3)
+  //override def apply[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): Y = f.forward(x1, x2, x3)
 
 }

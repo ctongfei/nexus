@@ -4,11 +4,13 @@ import nexus._
 import nexus.algebra.typelevel.util._
 import shapeless._
 
-trait UntypedDenseTensor extends UntypedTensorLike[Float, UntypedDenseTensor] { self =>
+trait UntypedFloatTensor { self =>
   val handle: Array[Float]
   val stride: Array[Int]
   val offset: Int
   val shape: Array[Int]
+
+  def rank = shape.length
 
   def index(indices: Seq[Int]) = {
     var i = offset
@@ -20,19 +22,21 @@ trait UntypedDenseTensor extends UntypedTensorLike[Float, UntypedDenseTensor] { 
     i
   }
 
+  def size = shape.product
+
   def apply(indices: Int*) = handle(index(indices))
 
   def update(indices: Int*)(value: Float) = handle(index(indices)) = value
 
-  def sliceUntyped(n: Int, i: Int): UntypedDenseTensor =
-    new UntypedDenseTensor.View(
+  def sliceUntyped(n: Int, i: Int): UntypedFloatTensor =
+    new UntypedFloatTensor.View(
       handle = self.handle,
       shape = ShapeUtils.removeAt(self.shape, n),
       offset = self.offset + self.stride(n) * i,
       stride = ShapeUtils.removeAt(self.stride, n)
     )
 
-  def typeWith[A <: HList](axes: A): DenseTensor[A]
+  def typeWith[A <: HList]: FloatTensor[A]
 
   def stringBody: String = rank match {
     case 0 =>
@@ -45,16 +49,16 @@ trait UntypedDenseTensor extends UntypedTensorLike[Float, UntypedDenseTensor] { 
 
 }
 
-object UntypedDenseTensor {
+object UntypedFloatTensor {
 
-  class Contiguous(val handle: Array[Float], val shape: Array[Int]) extends UntypedDenseTensor { self =>
+  class Contiguous(val handle: Array[Float], val shape: Array[Int]) extends UntypedFloatTensor { self =>
     val stride = shape.scanRight(1)(_ * _).tail
     val offset = 0
-    def typeWith[A <: HList](axes: A) = new DenseTensor.Contiguous[A](handle, axes, shape)
+    def typeWith[A <: $$] = new FloatTensor.Contiguous[A](handle, shape)
   }
 
-  class View(val handle: Array[Float], val shape: Array[Int], val offset: Int, val stride: Array[Int]) extends UntypedDenseTensor {
-    def typeWith[A <: HList](axes: A) = new DenseTensor.View[A](handle, axes, shape, offset, stride)
+  class View(val handle: Array[Float], val shape: Array[Int], val offset: Int, val stride: Array[Int]) extends UntypedFloatTensor {
+    def typeWith[A <: $$] = new FloatTensor.View[A](handle, shape, offset, stride)
   }
 
 

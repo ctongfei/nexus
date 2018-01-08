@@ -1,7 +1,8 @@
 package nexus
 
 import nexus.exec._
-import nexus.impl.jvm.DenseTensor
+import nexus.impl.jvm.FloatTensor
+import nexus.layer._
 import nexus.op._
 import nexus.syntax._
 import nexus.optimizer._
@@ -14,17 +15,19 @@ object Test0 extends App {
 
   val p = Param(3.0f, name = "p")
 
-  val q = Param(DenseTensor.fill(0f, ()::$, Array(1)), name = "q")
+  val q = Param(FloatTensor.fill(0f, ()::$, Array(1)), name = "q")
+
+  val z = q |> Dropout(0.3)
 
   val t = Exp(p)
 
-  val l = Abs(p)
+  val l = p |> Sqr |> Add.Curried1(1f)
 
-  val sgd = new BackstitchOptimizer(0.1)
+  val sgd = new GradientDescentOptimizer(0.01)
 
-  for (i <- 0 until 100) {
-    println(s"Iteration $i: p = ${p.value}")
+  for (i <- 0 until 1000) {
     val (lv, values) = Forward.compute(l)()
+    println(s"$i: p = ${p.value}; Value = $lv")
     val gradients = Backward.compute(l, values)
     sgd.update(gradients)
   }

@@ -5,6 +5,7 @@ import shapeless._
 /**
  * Typelevel function that replaces type [[U]] in [[L]] to [[V]].
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 trait Replace[L <: HList, U, V] extends DepFn2[L, V] {
   type Out <: HList

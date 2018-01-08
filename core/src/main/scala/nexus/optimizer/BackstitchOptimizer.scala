@@ -18,17 +18,23 @@ import nexus.algebra.syntax._
  * @param n One negative step every ''n'' steps
  * @author Tongfei Chen
  */
-class BackstitchOptimizer(ν: Double, α: Double = 0.3, n: Int = 2) extends FirstOrderOptimizer {
+class BackstitchOptimizer(ν: Double, α: Double = 0.3, n: Int = 1) extends TwoStepFirstOrderOptimizer {
 
-  def updateParam[X](p: Param[X], g: X) = {
-    implicit val ops = p.tag
+  def updateParamStep1[X](p: Param[X], g: X) = {
+    implicit val tag = p.tag
 
-    if (t % n == 0) { // negative step!
-      p += g :* ((n - 1) * α * ν)
-    }
-    else {
-      p -= g :* ((1 + α) * ν)
-    }
+    if (t % n == 0) // backstitch step!
+      p += g :* (n * α * ν)
+    else { /* do not perform backstitch step */ }
+  }
+
+  def updateParamStep2[X](p: Param[X], g: X) = {
+    implicit val tag = p.tag
+
+    if (t % n == 0)
+      p -= g :* ((1 + n * α) * ν)
+    else
+      p -= g :* ν
   }
 
 }

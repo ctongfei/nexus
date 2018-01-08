@@ -3,26 +3,35 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
-import nexus.op.base._
 
 /**
  * Sine on a scalar.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sin extends TypeInvariantPolyDOp1[IsReal] {
+object Sin extends PolyOp1 {
 
-  def name = "Sin"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.sin(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.cos(x)
+  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+    def name = "Sin"
+    def tag(tx: Type[R]) = tx
+    def differentiable = true
+    def forward(x: R) = R.sin(x)
+    def backward(dy: R, y: R, x: R) = dy * R.cos(x)
+  }
 
   /**
    * Elementwise sine on a tensor.
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
-    def name = "Sin.Elementwise"
-    def forward[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensor[T, R]) = T.eSin(x)
-    def backward[T[_ <: $$], R, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, R]) = dy |*| T.eCos(x)
+  object Elementwise extends PolyOp1 {
+
+    implicit def tensor[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+      def name = "Sin.Elementwise"
+      def tag(tx: Type[T[A]]) = tx
+      def differentiable = true
+      def forward(x: T[A]) = T.eSin(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.eCos(x)
+    }
+
   }
 }
 
@@ -32,36 +41,28 @@ object Sin extends TypeInvariantPolyDOp1[IsReal] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Cos extends TypeInvariantPolyDOp1[IsReal] {
-  def name = "Cos"
-  def forward[X](x: X)(implicit X: IsReal[X]) = X.cos(x)
-  def backward[X](dy: X, y: X, x: X)(implicit X: IsReal[X]) = -dy * X.sin(x)
+object Cos extends PolyOp1 {
+
+  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+    def name = "Cos"
+    def tag(tx: Type[R]) = tx
+    def differentiable = true
+    def forward(x: R) = R.cos(x)
+    def backward(dy: R, y: R, x: R) = -dy * R.sin(x)
+  }
+
   /**
    * Elementwise cosine on a tensor.
    */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
-    def name = "Cos.Elementwise"
-    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsRealTensor[T, E]) = T.eCos(x)
-    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, E]) = -dy |*| T.eSin(x)
-  }
-}
+  object Elementwise extends PolyOp1 {
 
-/**
- * Tangent on a scalar.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object Tan extends TypeInvariantPolyDOp1[IsReal] {
-  def name = "Tan"
-  def forward[X](x: X)(implicit X: IsReal[X]) = X.tan(x)
-  def backward[X](dy: X, y: X, x: X)(implicit X: IsReal[X]) = dy * (X.sqr(y) + X.one)
+    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]) = new F[T[A], T[A]] {
+      def name = "Cos.Elementwise"
+      def tag(tx: Type[T[A]]) = tx
+      def differentiable = true
+      def forward(x: T[A]) = T.eCos(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = -dy |*| T.eSin(x)
+    }
 
-  /**
-   * Elementwise tangent on a tensor.
-   */
-  object Elementwise extends TypeInvariantTensorPolyDOp1[IsRealTensor] {
-    def name = "Tan.Elementwise"
-    def forward[T[_ <: $$], E, A <: $$](x: T[A])(implicit T: IsRealTensor[T, E]) = T.eTan(x)
-    def backward[T[_ <: $$], E, A <: $$](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensor[T, E]) = dy |*| T.addS(T.eSqr(y), T.R.one)
   }
 }

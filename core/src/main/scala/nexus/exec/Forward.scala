@@ -10,6 +10,10 @@ import nexus._
  */
 object Forward {
 
+  /**
+   * An instance of a forward computation.
+   * @param values Cache for computed values of expressions in this instance
+   */
   class Instance(val values: ExprValueMap) extends (Expr ~> Id) {
     def apply[A](e: Expr[A]) = {
       if (values contains e) values(e)
