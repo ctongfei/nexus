@@ -1,7 +1,6 @@
 package nexus.algebra
 
 import shapeless._
-
 import scala.annotation._
 
 /**
@@ -50,7 +49,7 @@ object Grad extends ProductTypeClassCompanion[Grad] {
   @inline def apply[X](implicit X: Grad[X]) = X
 
   /** Grounds from a higher-kinded `GradH`. */
-  implicit def ground[T[_ <: $$], A <: $$](implicit T: GradH[T]): Grad[T[A]] = T.ground[A]
+  implicit def ground[T[_], A](implicit T: GradH[T]): Grad[T[A]] = T.ground[A]
 
   /**
    * Automatic typeclass derivation on product types using `Shapeless`.
@@ -106,6 +105,6 @@ object Grad extends ProductTypeClassCompanion[Grad] {
   }
 }
 
-trait GradH[T[_ <: $$]] extends TypeH[T] {
-  def ground[A <: $$]: Grad[T[A]]
+trait GradH[T[_]] extends TypeH[T] {
+  def ground[A]: Grad[T[A]]
 }

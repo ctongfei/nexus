@@ -7,7 +7,7 @@ import shapeless.Nat
 
 object SumAlong extends ParamPolyOp1 {
 
-  implicit def tensor[T[_ <: $$], R, A <: $$, X, N <: Nat, B <: $$]
+  implicit def tensor[T[_], R, A, X: Label, N <: Nat, B]
     (implicit T: IsRealTensorH[T, R], ix: IndexOf.Aux[A, X, N], ra: RemoveAt.Aux[A, N, B]):
   F[X, T[A], T[B]] = (x: X) => new Op1[T[A], T[B]] {
     def name = s"SumAlong[${objTypeName(x)}]"
@@ -21,7 +21,7 @@ object SumAlong extends ParamPolyOp1 {
 
 object ArgMaxAlong extends ParamPolyOp1 {
 
-  implicit def tensor[TR[_ <: $$], R, TI[_ <: $$], I, A <: $$, X, N <: Nat, B <: $$]
+  implicit def tensor[TR[_], R, TI[_], I, A, X: Label, N <: Nat, B]
   (implicit TR: IsRealTensorH[TR, R], TI: IsIntTensorH[TI, I], ix: IndexOf.Aux[A, X, N], ra: RemoveAt.Aux[A, N, B]):
   F[X, TR[A], TI[B]] = ???
 

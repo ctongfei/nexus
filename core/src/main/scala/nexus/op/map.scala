@@ -12,7 +12,7 @@ import scala.annotation._
  */
 object Map extends ParamPolyOp1 {
 
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]) = new F[Op1[R, R], T[A], T[A]] {
+  implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]) = new F[Op1[R, R], T[A], T[A]] {
     def apply(f: Op1[R, R]) = new Op1[T[A], T[A]] {
       import T._
       def name = s"Map[${f.name}]"

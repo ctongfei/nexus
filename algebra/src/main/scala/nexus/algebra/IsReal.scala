@@ -60,6 +60,6 @@ object IsReal {
 
   def apply[R](implicit R: IsReal[R]) = R
 
-  implicit def extract[T[_ <: $$], R](implicit T: IsRealTensorH[T, R]): IsReal[R] = T.R
+  implicit def extract[T[_], R](implicit T: IsRealTensorH[T, R]): IsReal[R] = T.R
 
 }

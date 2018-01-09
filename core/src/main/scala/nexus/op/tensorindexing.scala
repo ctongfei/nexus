@@ -12,13 +12,13 @@ import scala.annotation._
  * @since 0.1.0
  */
 object ScalarToTensor0 extends PolyOp1 {
-  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensorH[T, R]): F[R, T[$]] =
-    new F[R, T[$]] {
+  implicit def scalar[T[_], R](implicit T: IsRealTensorH[T, R]): F[R, T[Unit]] =
+    new F[R, T[Unit]] {
       def name = "ScalarToTensor0"
-      def tag(tx: Type[R]) = T.ground[$]
+      def tag(tx: Type[R]) = T.ground[Unit]
       def differentiable = true
       def forward(x: R) = T.wrapScalar(x)
-      def backward(dy: T[$], y: T[$], x: R) = T.unwrapScalar(dy)
+      def backward(dy: T[Unit], y: T[Unit], x: R) = T.unwrapScalar(dy)
     }
 }
 
@@ -29,13 +29,13 @@ object ScalarToTensor0 extends PolyOp1 {
  */
 object Tensor0ToScalar extends PolyOp1 {
 
-  implicit def scalar[T[_ <: $$], R](implicit T: IsRealTensorH[T, R]): F[T[$], R] =
-    new F[T[$], R] {
+  implicit def scalar[T[_], R](implicit T: IsRealTensorH[T, R]): F[T[Unit], R] =
+    new F[T[Unit], R] {
       def name = "Tensor0ToTensor"
-      def tag(tx: Type[T[$]]) = T.R
+      def tag(tx: Type[T[Unit]]) = T.R
       def differentiable = true
-      def forward(x: T[$]) = T.unwrapScalar(x)
-      def backward(dy: R, y: R, x: T[$]) = T.wrapScalar(dy)
+      def forward(x: T[Unit]) = T.unwrapScalar(x)
+      def backward(dy: R, y: R, x: T[Unit]) = T.wrapScalar(dy)
   }
 
 }

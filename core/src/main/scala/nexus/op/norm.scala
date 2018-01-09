@@ -21,7 +21,7 @@ object Abs extends PolyOp1 {
 
   object Elementwise extends PolyOp1 {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Abs.Elementwise"
       def tag(tx: Type[T[A]]) = tx
       def differentiable = true
@@ -35,7 +35,7 @@ object Abs extends PolyOp1 {
 
 object L1Norm extends PolyOp1 {
 
-  implicit def instance[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], R] =
+  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], R] =
     new F[T[A], R] {
       def name = "L1Norm"
       def tag(tx: Type[T[A]]) = T.R
@@ -47,7 +47,7 @@ object L1Norm extends PolyOp1 {
 
 object L2Norm extends PolyOp1 {
 
-  implicit def instance[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], R] =
+  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], R] =
     new F[T[A], R] {
       def name = "L2Norm"
       def tag(tx: Type[T[A]]) = T.R
@@ -58,31 +58,31 @@ object L2Norm extends PolyOp1 {
 }
 
 object L1Distance extends PolyModule2 {
-  implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] = F {
+  implicit def synthesize[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] = F {
     (x1, x2) => L1Norm(x1 - x2)
   }
 }
 
 object L2Distance extends PolyModule2 {
-  implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] = F {
+  implicit def synthesize[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] = F {
     (x1, x2) => L2Norm(x1 - x2)
   }
 }
 
 object L1Normalize extends PolyModule1 {
-  implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = F {
+  implicit def synthesize[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = F {
     x => Scale(Inv(L1Norm(x)), x)
   }
 }
 
 object L2Normalize extends PolyModule1 {
-  implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = F {
+  implicit def synthesize[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = F {
     x => Scale(Inv(L2Norm(x)), x)
   }
 }
 
 object CosineSimilarity extends PolyModule2 {
-  implicit def synthesize[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] = F {
+  implicit def synthesize[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] = F {
     (x1, x2) => Dot(x1, x2) / L2Norm(x1) / L2Norm(x2)
   }
 }

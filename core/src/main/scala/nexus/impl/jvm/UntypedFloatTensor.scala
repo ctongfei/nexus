@@ -36,7 +36,7 @@ trait UntypedFloatTensor { self =>
       stride = ShapeUtils.removeAt(self.stride, n)
     )
 
-  def typeWith[A <: HList]: FloatTensor[A]
+  def typeWith[A]: FloatTensor[A]
 
   def stringBody: String = rank match {
     case 0 =>
@@ -54,11 +54,11 @@ object UntypedFloatTensor {
   class Contiguous(val handle: Array[Float], val shape: Array[Int]) extends UntypedFloatTensor { self =>
     val stride = shape.scanRight(1)(_ * _).tail
     val offset = 0
-    def typeWith[A <: $$] = new FloatTensor.Contiguous[A](handle, shape)
+    def typeWith[A] = new FloatTensor.Contiguous[A](handle, shape)
   }
 
   class View(val handle: Array[Float], val shape: Array[Int], val offset: Int, val stride: Array[Int]) extends UntypedFloatTensor {
-    def typeWith[A <: $$] = new FloatTensor.View[A](handle, shape, offset, stride)
+    def typeWith[A] = new FloatTensor.View[A](handle, shape, offset, stride)
   }
 
 

@@ -14,10 +14,10 @@ trait BidiCasting[S, T] extends Casting[S, T] {
   def invert(t: T): S
 }
 
-trait CastingH[S[_ <: $$], T[_ <: $$]] {
-  def cast[A <: $$](s: S[A]): T[A]
+trait CastingH[S[_], T[_]] {
+  def cast[A](s: S[A]): T[A]
 }
 
-trait BidiCastingH[S[_ <: $$], T[_ <: $$]] extends CastingH[S, T] {
-  def invert[A <: $$](t: T[A]): S[A]
+trait BidiCastingH[S[_], T[_]] extends CastingH[S, T] {
+  def invert[A](t: T[A]): S[A]
 }

@@ -76,7 +76,7 @@ object Mul extends PolyOp2 {
    * Element-wise multiplication (a.k.a. Hadamard product) between two tensors.
    */
   object Elementwise extends PolyOp2 {
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], T[A]] = new F[T[A], T[A], T[A]] {
+    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], T[A]] = new F[T[A], T[A], T[A]] {
       def name = "Mul.Elementwise"
       def tag(tx1: Type[T[A]], tx2: Type[T[A]]) = tx1
       def differentiable = true
@@ -109,7 +109,7 @@ object Div extends PolyOp2 {
    */
   object Elementwise extends PolyOp2 {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], T[A]] = new F[T[A], T[A], T[A]] {
+    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], T[A]] = new F[T[A], T[A], T[A]] {
       def name = "Div.Elementwise"
       def tag(tx1: Type[T[A]], tx2: Type[T[A]]) = tx1
       def differentiable = true
@@ -158,7 +158,7 @@ object Inv extends PolyOp1 {
    */
   object Elementwise extends PolyOp1 {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Inv.Elementwise"
       def tag(tx: Type[T[A]]) = tx
       def differentiable = true

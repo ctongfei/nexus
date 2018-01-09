@@ -17,7 +17,7 @@ object CastTo extends ParamPolyOp1 {
       }
     }
 
-  implicit def tensor[S[_ <: $$], T[_ <: $$], A <: $$](implicit cast: BidiCastingH[S, T]): F[GradH[T], S[A], T[A]] =
+  implicit def tensor[S[_], T[_], A](implicit cast: BidiCastingH[S, T]): F[GradH[T], S[A], T[A]] =
     new F[GradH[T], S[A], T[A]] {
       def apply(T: GradH[T]) = new Op1[S[A], T[A]] {
         def name = s"CastTo[$T]"

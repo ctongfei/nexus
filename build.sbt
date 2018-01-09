@@ -18,6 +18,7 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0",
   libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
 
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
   libraryDependencies += "me.tongfei" %% "poly-io" % "0.3.2" % Test,
 
   mathFormulaInDoc := {

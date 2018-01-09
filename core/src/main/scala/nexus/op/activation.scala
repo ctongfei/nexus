@@ -3,6 +3,7 @@ package nexus.op
 import nexus._
 import nexus.algebra._
 import nexus.algebra.syntax._
+import nexus.algebra.typelevel._
 
 /**
  * Rectified linear unit.
@@ -12,7 +13,7 @@ import nexus.algebra.syntax._
  * @since 0.1.0
  */
 object ReLU extends PolyOp1 {
-  implicit def instance[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "ReLU"
       def tag(tx: Type[T[A]]) = tx
@@ -31,7 +32,7 @@ object ReLU extends PolyOp1 {
  * @since 0.1.0
  */
 object Sigmoid extends PolyOp1 {
-  implicit def instance[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "Sigmoid"
       def tag(tx: Type[T[A]]) = tx
@@ -50,7 +51,7 @@ object Sigmoid extends PolyOp1 {
  * @since 0.1.0
  */
 object SoftPlus extends PolyOp1 {
-  implicit def instance[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "SoftPlus"
       def tag(tx: Type[T[A]]) = tx
@@ -69,17 +70,17 @@ object SoftPlus extends PolyOp1 {
  * @since 0.1.0
  */
 object Softmax extends PolyOp1 {
-  implicit def instance[T[_ <: $$], R, A](implicit T: IsRealTensorH[T, R]): F[T[A::$], T[A::$]] =
-    new F[T[A::$], T[A::$]] {
+  implicit def instance[T[_], R, A: Label](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+    new F[T[A], T[A]] {
       def name = "Softmax"
-      def tag(tx: Type[T[A::$]]) = tx
+      def tag(tx: Type[T[A]]) = tx
       def differentiable = true
-      def forward(x: T[A::$]) = {
+      def forward(x: T[A]) = {
         import T._
         val expX = eExp(x)
         expX :* R.inv(sum(expX)) //TODO: numerical stability
       }
-      def backward(dy: T[A::$], y: T[A::$], x: T[A::$]) = {
+      def backward(dy: T[A], y: T[A], x: T[A]) = {
         import T._
         val dyy = dy |*| y
         dyy - (y :* sum(dyy))

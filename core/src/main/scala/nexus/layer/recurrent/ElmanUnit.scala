@@ -2,6 +2,7 @@ package nexus.layer.recurrent
 
 import nexus._
 import nexus.algebra._
+import nexus.algebra.typelevel._
 import nexus.layer._
 import nexus.syntax._
 import nexus.op._
@@ -11,19 +12,19 @@ import nexus.util._
  * Elman recurrent unit.
  * @author Tongfei Chen
  */
-class ElmanUnit[T[_ <: $$], R, X, S, Y] private(
+class ElmanUnit[T[_], R, X: Label, S: Label, Y: Label] private(
   val inputLayer: Affine[T, R, X, S],
   val outputLayer: Affine[T, R, S, Y],
-  val stateActivation: Op1[T[S::$], T[S::$]],
-  val outputActivation: Op1[T[Y::$], T[Y::$]],
+  val stateActivation: Op1[T[S], T[S]],
+  val outputActivation: Op1[T[Y], T[Y]],
   val inputAxis: X,
   val stateAxis: S,
   val outputAxis: Y
 )
 (implicit T: IsRealTensorH[T, R])
-  extends RecurrentUnitWithOutput[T[S::$], T[X::$], T[Y::$]]
+  extends RecurrentUnitWithOutput[T[S], T[X], T[Y]]
 {
-  def apply(s: Expr[T[S::$]], x: Expr[T[X::$]]) = {
+  def apply(s: Expr[T[S]], x: Expr[T[X]]) = {
 
     val sʹ =
       ((s |> Rename(stateAxis -> inputAxis)), x) |> Concat(inputAxis) |> inputLayer |> stateActivation
@@ -54,7 +55,7 @@ object ElmanUnit {
    * @tparam Y
    * @return
    */
-  def apply[T[_ <: $$], R, X, S, Y](
+  def apply[T[_], R, X: Label, S: Label, Y: Label](
                                    inputAxisAndSize: (X, Int),
                                    stateAxisAndSize: (S, Int),
                                    outputAxisAndSize: (Y, Int),
@@ -64,8 +65,8 @@ object ElmanUnit {
                                    )
                                    (implicit
                                     T: IsRealTensorH[T, R],
-                                    saf: stateActivation.F[T[S::$], T[S::$]],
-                                    oaf: outputActivation.F[T[Y::$], T[Y::$]]
+                                    saf: stateActivation.F[T[S], T[S]],
+                                    oaf: outputActivation.F[T[Y], T[Y]]
                                    ) = {
     val (inputAxis, inputSize) = inputAxisAndSize
     val (stateAxis, stateSize) = stateAxisAndSize

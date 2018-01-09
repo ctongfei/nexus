@@ -21,7 +21,7 @@ trait ExprRealMixin {
 
   }
 
-  implicit class ExprRealOps2[T[_ <: $$], R, A <: $$](val x: Expr[R])(implicit T: IsRealTensorH[T, R]) {
+  implicit class ExprRealOps2[T[_], R, A](val x: Expr[R])(implicit T: IsRealTensorH[T, R]) {
 
     def *:(y: Expr[T[A]]): Expr[T[A]] = Scale(x, y)
 

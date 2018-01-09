@@ -17,20 +17,20 @@ object CPUFloat32 extends IsRealTensorH[FloatTensor, Float] {
 
   val R = H.R
 
-  def newTensor[A <: HList](shape: Array[Int]) =
+  def newTensor[A](shape: Array[Int]) =
     FloatTensor.fromFlatArray[A](Array.ofDim[Float](ShapeUtils.product(shape)), shape)
 
-  def newGaussianTensor[A <: $$](μ: Double, σ2: Double, shape: Array[Int]) = {
+  def newGaussianTensor[A](μ: Double, σ2: Double, shape: Array[Int]) = {
     val r = new Random()
     val σ = math.sqrt(σ2)
     FloatTensor.fromFlatArray(Array.fill(ShapeUtils.product(shape))(((r.nextGaussian() - μ) * σ).toFloat), shape)
   }
 
 
-  def zeroBy[A <: $$](x: FloatTensor[A]) = newTensor(x.shape)
+  def zeroBy[A](x: FloatTensor[A]) = newTensor(x.shape)
 
   def untype(x: FloatTensor[_]) = x
-  def typeWith[A <: $$](x: UntypedFloatTensor) = x.typeWith[A]
+  def typeWith[A](x: UntypedFloatTensor) = x.typeWith[A]
 
   def fromDouble(d: Double) = d.toFloat
   def fromFloat(f: Float) = f

@@ -25,7 +25,7 @@ object Sqr extends PolyOp1 {
    */
   object Elementwise extends PolyOp1 {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](x: T[A])(implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+    implicit def tensor[T[_], R, A](x: T[A])(implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Sqr.Elementwise"
       def tag(tx: Type[T[A]]) = tx
       def differentiable = true
@@ -49,7 +49,7 @@ object Sqrt extends PolyOp1 {
 
   object Elementwise extends PolyOp1 {
 
-    implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Sqrt.Elementwise"
       def tag(tx: Type[T[A]]) = tx
       def differentiable = true

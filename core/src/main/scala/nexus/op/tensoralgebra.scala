@@ -13,7 +13,7 @@ object Scale extends PolyOp2 {
 
   val By = Curried1
 
-  implicit def tensor[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]) = new F[R, T[A], T[A]] {
+  implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]) = new F[R, T[A], T[A]] {
     def name = "Scale"
     def tag(tx1: Type[R], tx2: Type[T[A]]) = tx2
     def differentiable = true
@@ -33,7 +33,7 @@ object Scale extends PolyOp2 {
  * @since 0.1.0
  */
 object Dot extends PolyOp2 {
-  implicit def instance[T[_ <: $$], R, A <: $$](implicit T: IsRealTensorH[T, R]) = new F[T[A], T[A], R] {
+  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]) = new F[T[A], T[A], R] {
     def name = "Dot"
     def tag(tx1: Type[T[A]], tx2: Type[T[A]]) = T.R
     def differentiable = true
@@ -51,15 +51,16 @@ object Dot extends PolyOp2 {
  */
 object MatMul extends PolyOp2 {
 
-  implicit def matrix[T[_ <: $$], R, A, B, C](implicit T: IsRealTensorH[T, R]): F[T[A::B::$], T[B::C::$], T[A::C::$]] =
-    new F[T[A::B::$], T[B::C::$], T[A::C::$]] {
+  implicit def matrix[T[_], R, A: Label, B: Label, C: Label]
+  (implicit T: IsRealTensorH[T, R]): F[T[(A, B)], T[(B, C)], T[(A, C)]] =
+    new F[T[(A, B)], T[(B, C)], T[(A, C)]] {
       import T._
       def name = "MatMul"
-      def tag(tx1: Type[T[A::B::$]], tx2: Type[T[B::C::$]]) = T.ground[A::C::$]
+      def tag(tx1: Type[T[(A, B)]], tx2: Type[T[(B, C)]]) = T.ground[(A, C)]
       def differentiable = true
-      def forward(x1: T[A::B::$], x2: T[B::C::$]) = mmMul(x1, x2)
-      def backward1(dy: T[A::C::$], y: T[A::C::$], x1: T[A::B::$], x2: T[B::C::$]) = mmMul(dy, transpose(x2))
-      def backward2(dy: T[A::C::$], y: T[A::C::$], x1: T[A::B::$], x2: T[B::C::$]) = mmMul(transpose(x1), dy)
+      def forward(x1: T[(A, B)], x2: T[(B, C)]) = mmMul(x1, x2)
+      def backward1(dy: T[(A, C)], y: T[(A, C)], x1: T[(A, B)], x2: T[(B, C)]) = mmMul(dy, transpose(x2))
+      def backward2(dy: T[(A, C)], y: T[(A, C)], x1: T[(A, B)], x2: T[(B, C)]) = mmMul(transpose(x1), dy)
     }
 }
 
@@ -69,12 +70,12 @@ object MatMul extends PolyOp2 {
  * @since 0.1.0
  */
 object Transpose extends PolyOp1 {
-  implicit def matrix[T[_ <: $$], R, A, B](implicit T: IsRealTensorH[T, R]) = new F[T[A::B::$], T[B::A::$]] {
+  implicit def matrix[T[_], R, A: Label, B: Label](implicit T: IsRealTensorH[T, R]) = new F[T[(A, B)], T[(B, A)]] {
     def name = "Transpose"
-    def tag(tx: Type[T[A::B::$]]) = T.ground[B::A::$]
+    def tag(tx: Type[T[(A, B)]]) = T.ground[(B, A)]
     def differentiable = true
-    def forward(x: T[A::B::$]) = T.transpose(x)
-    def backward(dy: T[B::A::$], y: T[B::A::$], x: T[A::B::$]) = T.transpose(dy)
+    def forward(x: T[(A, B)]) = T.transpose(x)
+    def backward(dy: T[(B, A)], y: T[(B, A)], x: T[(A, B)]) = T.transpose(dy)
   }
 
 }
@@ -94,15 +95,15 @@ object Transpose extends PolyOp1 {
  */
 object MVMul extends PolyOp2 {
 
-  implicit def mv[T[_ <: $$], R, A, B](implicit T: IsRealTensorH[T, R]): F[T[B::A::$], T[A::$], T[B::$]] =
-    new F[T[B::A::$], T[A::$], T[B::$]] {
+  implicit def mv[T[_], R, A: Label, B: Label](implicit T: IsRealTensorH[T, R]): F[T[(B, A)], T[A], T[B]] =
+    new F[T[(B, A)], T[A], T[B]] {
       import T._
       def name = "MVMul"
-      def tag(tx1: Type[T[B::A::$]], tx2: Type[T[A::$]]) = T.ground[B::$]
+      def tag(tx1: Type[T[(B, A)]], tx2: Type[T[A]]) = T.ground[B]
       def differentiable = true
-      def forward(x1: T[B::A::$], x2: T[A::$]) = mvMul(x1, x2)
-      def backward1(dy: T[B::$], y: T[B::$], x1: T[B::A::$], x2: T[A::$]) = vvMul(dy, x2)
-      def backward2(dy: T[B::$], y: T[B::$], x1: T[B::A::$], x2: T[A::$]) = mvMul(transpose(x1), dy)
+      def forward(x1: T[(B, A)], x2: T[A]) = mvMul(x1, x2)
+      def backward1(dy: T[B], y: T[B], x1: T[(B, A)], x2: T[A]) = vvMul(dy, x2)
+      def backward2(dy: T[B], y: T[B], x1: T[(B, A)], x2: T[A]) = mvMul(transpose(x1), dy)
     }
 
 }
@@ -114,7 +115,7 @@ object MVMul extends PolyOp2 {
  * @since 0.1.0
  */
 object Contract extends PolyOp2 {
-  implicit def tensor[T[_ <: $$], R, A <: $$, B <: $$, C <: $$](implicit T: IsRealTensorH[T, R], sd: SymDiff.Aux[A, B, C]) =
+  implicit def tensor[T[_], R, A, B, C](implicit T: IsRealTensorH[T, R], sd: SymDiff.Aux[A, B, C]) =
     new F[T[A], T[B], T[C]] {
       def name = "Contract"
       def tag(tx1: Type[T[A]], tx2: Type[T[B]]) = T.ground[C]

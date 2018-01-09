@@ -8,7 +8,7 @@ import nexus.algebra._
  */
 package object cpu {
 
-  implicit val cpuFloat32: IsRealTensorH[Float32Tensor, Float] = CPUFloat32
+  implicit val implicitFloat32Tensor = Float32Tensor
 
   System.loadLibrary("jnitorchcpu")
   System.loadLibrary("TH.1")

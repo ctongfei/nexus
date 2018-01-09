@@ -16,7 +16,7 @@ import scala.annotation._
  */
 object Rename extends ParamPolyOp1 {
 
-  implicit def instance[T[_ <: $$], R, A <: $$, U, V, B <: $$]
+  implicit def instance[T[_], R, A, U: Label, V: Label, B]
   (implicit r: Replace.Aux[A, U, V, B], T: IsRealTensorH[T, R]) =
     new F[(U, V), T[A], T[B]] {
       def apply(p: (U, V)) = new Op1[T[A], T[B]] {
@@ -35,7 +35,7 @@ object Rename extends ParamPolyOp1 {
 
 object Concat extends ParamPolyOp2 {
 
-  implicit def instance[T[_ <: $$], R, A <: $$, U, N <: Nat]
+  implicit def instance[T[_], R, A, U: Label, N <: Nat]
   (implicit n: IndexOf.Aux[A, U, N], T: IsRealTensorH[T, R]) =
     new F[U, T[A], T[A], T[A]] {
       def apply(u: U) = new Op2[T[A], T[A], T[A]] {
@@ -53,7 +53,7 @@ object Concat extends ParamPolyOp2 {
 
 object ExpandDim extends ParamPolyOp1 {
 
-  implicit def instance[T[_ <: $$], R, A <: $$, N <: Nat, U, B <: $$]
+  implicit def instance[T[_], R, A, N <: Nat, U: Label, B]
   (implicit ia: InsertAt.Aux[A, N, U, B], T: IsRealTensorH[T, R]) =
     new F[(N, U), T[A], T[B]] {
       def apply(nu: (N, U)) = new Op1[T[A], T[B]] {
@@ -70,7 +70,7 @@ object ExpandDim extends ParamPolyOp1 {
 
 object Squeeze extends ParamPolyOp1 {
 
-  implicit def instance[T[_ <: $$], R, A <: $$, N <: Nat, U, B <: $$]
+  implicit def instance[T[_], R, A, N <: Nat, U: Label, B]
   (implicit ix: IndexOf.Aux[A, U, N], rx: RemoveAt.Aux[A, N, B], T: IsRealTensorH[T, R]) =
     new F[U, T[A], T[B]] {
       def apply(u: U) = new Op1[T[A], T[B]] {
