@@ -33,8 +33,8 @@ object MeanAlong extends ParameterizedPolyOp1 {
 
 object ArgMaxAlong extends ParameterizedPolyOp1 {
 
-  implicit def argmaxAlongF[TR[_], R, TI[_], I, A, X: Label, N <: Nat, B]
-  (implicit TR: IsRealTensorK[TR, R], TI: IsIntTensorK[TI, I], ix: IndexOf.Aux[A, X, N], ra: RemoveAt.Aux[A, N, B]) = (u: U) =>
+  implicit def argmaxAlongF[TR[_], R, TI[_], I, A, U: Label, N <: Nat, B]
+  (implicit TR: IsRealTensorK[TR, R], TI: IsIntTensorK[TI, I], ix: IndexOf.Aux[A, U, N], ra: RemoveAt.Aux[A, N, B]) = (u: U) =>
     new F[TR[A], TI[B]] {
       def name = s"ArgMaxAlong[${objTypeName(u)}"
       def tag(tx: Type[TR[A]]) = TI.ground[B]

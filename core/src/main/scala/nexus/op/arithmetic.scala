@@ -15,7 +15,6 @@ object Id extends PolyOp1 {
   implicit def idF[X]: F[X, X] = new F[X, X] {
     def name = "Id"
     def tag(tx: Type[X]) = tx
-    def differentiable = true
     def forward(x: X) = x
     def backward(dy: X, y: X, x: X) = dy
   }
@@ -32,7 +31,6 @@ object Add extends PolyOp2 {
   implicit def addF[X: Grad]: F[X, X, X] = new F[X, X, X] {
     def name = "Add"
     def tag(tx1: Type[X], tx2: Type[X]) = tx1
-    def differentiable = true
     def forward(x1: X, x2: X): X = x1 + x2
     def backward1(dy: X, y: X, x1: X, x2: X): X = dy
     def backward2(dy: X, y: X, x1: X, x2: X): X = dy
@@ -49,7 +47,6 @@ object Sub extends PolyOp2 {
   implicit def subF[X: Grad]: F[X, X, X] = new F[X, X, X] {
     def name = "Sub"
     def tag(tx1: Type[X], tx2: Type[X]) = tx1
-    def differentiable = true
     def forward(x1: X, x2: X) = x1 - x2
     def backward1(dy: X, y: X, x1: X, x2: X) = dy
     def backward2(dy: X, y: X, x1: X, x2: X) = -dy

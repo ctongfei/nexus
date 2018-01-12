@@ -3,6 +3,7 @@ package nexus.impl.jvm
 import nexus._
 import nexus.algebra.typelevel._
 import nexus.algebra.typelevel.util._
+import shapeless._
 import shapeless.ops.hlist._
 import shapeless.ops.nat._
 
@@ -51,7 +52,7 @@ trait FloatTensor[A] extends UntypedFloatTensor { self =>
 
 object FloatTensor {
 
-  def scalar(value: Float): FloatTensor[$] =
+  def scalar(value: Float): FloatTensor[Unit] =
     new Contiguous(Array(value), Array())
 
   def fill[A](value: => Float, axes: A, shape: Array[Int]): FloatTensor[A] =
@@ -74,9 +75,9 @@ object FloatTensor {
 }
 
 object Scalar {
-  def apply(x: Float) = FloatTensor.fromFlatArray[$](Array(x), Array())
+  def apply(x: Float) = FloatTensor.fromFlatArray[Unit](Array(x), Array())
 }
 
 object Vector {
-  def apply[A](A: A)(array: Array[Float]) = FloatTensor.fromFlatArray[A::$](array, Array(array.length))
+  def apply[A](A: A)(array: Array[Float]) = FloatTensor.fromFlatArray[A](array, Array(array.length))
 }

@@ -30,7 +30,7 @@ class ElmanUnit[T[_], R, X: Label, S: Label, Y: Label] private(
 
     val y = sʹ |> outputLayer |> outputActivation
 
-    (sʹ, y)
+    (sʹ, y) |> Tuple2
   }
 }
 

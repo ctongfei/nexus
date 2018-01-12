@@ -187,7 +187,7 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedFloatTensor, Float] 
 
 
   def unwrapScalar(x: UntypedFloatTensor) = x.handle(0)
-  def wrapScalar(x: Float): UntypedFloatTensor = FloatTensor.fill(x, $, Array())
+  def wrapScalar(x: Float): UntypedFloatTensor = FloatTensor.fill(x, (), Array())
 
   def addS(x: UntypedFloatTensor, u: Float) = map(x)(a => a + u)
 

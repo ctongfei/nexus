@@ -1,7 +1,7 @@
 package nexus
 
 import nexus.exec._
-import nexus.impl.jvm.FloatTensor
+import nexus.impl.jvm._
 import nexus.layer._
 import nexus.layer.recurrent._
 import nexus.op._
@@ -24,7 +24,7 @@ object Test0 extends App {
 
   val p = Param(3.0f, name = "p")
 
-  val q = Param(FloatTensor.fill(0f, ()::$, Array(1)), name = "q")
+  val q = Param(FloatTensor.fill(0f, (), Array(1)), name = "q")
 
   val z = q |> Dropout(0.3)
 

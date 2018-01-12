@@ -19,7 +19,7 @@ object MapTest extends App {
     def backward(dy: Float, y: Float, x: Float) = dy * math.cos(x).toFloat
   }
 
-  val a = Input[FloatTensor[$]]()
+  val a = Input[FloatTensor[Unit]]()
 
   val b = a |> Map(f)
 
