@@ -8,7 +8,7 @@ import shapeless._
  */
 package object jvm {
 
-  implicit val cpuFloat32: IsRealTensorH[FloatTensor, Float] = CPUFloat32
+  implicit val cpuFloat32: IsRealTensorK[FloatTensor, Float] = CPUFloat32
 
   type DenseVector[A] = FloatTensor[A :: HNil]
   type DenseMatrix[A, B] = FloatTensor[A :: B :: HNil]

@@ -29,17 +29,6 @@ object THFloatTensorSyntax {
 
     def copy: THFloatTensor = TH.THFloatTensor_newClone(a)
 
-    def +(b: THFloatTensor): THFloatTensor = {
-      val c = a.copy
-      TH.THFloatTensor_cadd(c, a, 1f, b)
-      c
-    }
-
-    def -(b: THFloatTensor): THFloatTensor = {
-      val c = a.copy
-      TH.THFloatTensor_cadd(c, a, -1f, b)
-      c
-    }
 
     def slice(n: Int, i: Int): THFloatTensor = {
       val c = new THFloatTensor

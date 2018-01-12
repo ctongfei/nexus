@@ -12,11 +12,10 @@ import scala.annotation._
  * @since 0.1.0
  */
 object ScalarToTensor0 extends PolyOp1 {
-  implicit def scalar[T[_], R](implicit T: IsRealTensorH[T, R]): F[R, T[Unit]] =
+  implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[R, T[Unit]] =
     new F[R, T[Unit]] {
       def name = "ScalarToTensor0"
       def tag(tx: Type[R]) = T.ground[Unit]
-      def differentiable = true
       def forward(x: R) = T.wrapScalar(x)
       def backward(dy: T[Unit], y: T[Unit], x: R) = T.unwrapScalar(dy)
     }
@@ -29,11 +28,10 @@ object ScalarToTensor0 extends PolyOp1 {
  */
 object Tensor0ToScalar extends PolyOp1 {
 
-  implicit def scalar[T[_], R](implicit T: IsRealTensorH[T, R]): F[T[Unit], R] =
+  implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[T[Unit], R] =
     new F[T[Unit], R] {
       def name = "Tensor0ToTensor"
       def tag(tx: Type[T[Unit]]) = T.R
-      def differentiable = true
       def forward(x: T[Unit]) = T.unwrapScalar(x)
       def backward(dy: R, y: R, x: T[Unit]) = T.wrapScalar(dy)
   }
@@ -45,7 +43,7 @@ object Tensor0ToScalar extends PolyOp1 {
  * Transforms each
  * @author Tongfei Chen
  */
-object OneHot extends ParamPolyOp1
+object OneHot extends ParameterizedPolyOp1
 
 /**
  * Slices a tensor along a specific axis.
@@ -53,4 +51,4 @@ object OneHot extends ParamPolyOp1
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object SliceAlong extends ParamPolyOp1
+object SliceAlong extends ParameterizedPolyOp1

@@ -18,12 +18,11 @@ import nexus.algebra.typelevel._
  */
 object CrossEntropy extends PolyOp2 {
 
-  implicit def instance[T[_], R, A: Label](implicit T: IsRealTensorH[T, R]): F[T[A], T[A], R] =
+  implicit def crossEntropyF[T[_], R, A: Label](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
     new F[T[A], T[A], R] {
       import T._
       def name = "CrossEntropy"
       def tag(tx1: Type[T[A]], tx2: Type[T[A]]) = T.R
-      def differentiable = true
       def forward(p: T[A], q: T[A]) = -(sum(p |*| eLog(q)))
       def backward1(dy: R, y: R, p: T[A], q: T[A]) = -eLog(q) :* dy
       def backward2(dy: R, y: R, p: T[A], q: T[A]) = -(p |/| q) :* dy

@@ -12,7 +12,6 @@ object Tuple2 extends PolyOp2 {
   implicit def instance[X1, X2]: F[X1, X2, (X1, X2)] = new F[X1, X2, (X1, X2)] {
     def name = "Tuple2"
     def tag(tx1: Type[X1], tx2: Type[X2]) = Type.Tuple2(tx1, tx2)
-    def differentiable = true
     def forward(x1: X1, x2: X2) = (x1, x2)
     def backward1(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._1
     def backward2(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._2
@@ -28,7 +27,6 @@ object Tuple2First extends PolyOp1 {
   implicit def instance[X1: Grad, X2: Grad]: F[(X1, X2), X1] = new F[(X1, X2), X1] {
     def name = "Tuple2First"
     def tag(tx: Type[(X1, X2)]) = tx.asInstanceOf[Type.Tuple2[X1, X2]]._1
-    def differentiable = true
     def forward(x: (X1, X2)) = x._1
     def backward(dy: X1, y: X1, x: (X1, X2)) = (dy, Grad[X2].zeroBy(x._2))
   }
@@ -43,7 +41,6 @@ object Tuple2Second extends PolyOp1 {
   implicit def instance[X1: Grad, X2: Grad]: F[(X1, X2), X2] = new F[(X1, X2), X2] {
     def name = "Tuple2Second"
     def tag(tx: Type[(X1, X2)]) = tx.asInstanceOf[Type.Tuple2[X1, X2]]._2
-    def differentiable = ???
     def forward(x: (X1, X2)) = x._2
     def backward(dy: X2, y: X2, x: (X1, X2)) = (Grad[X1].zeroBy(x._1), dy)
   }

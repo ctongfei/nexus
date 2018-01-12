@@ -30,7 +30,7 @@ object RemoveAt {
   (implicit lh: ToHList.Aux[L, Lh], r: RemoveAt.Aux[Lh, I, Rh], rh: ToHList.Aux[R, Rh]): Aux[L, I, R] =
     new RemoveAt[L, I] {
       type Out = R
-      def apply(t: L): R = rh.inverse(r(lh(t)))
+      def apply(t: L): R = rh.invert(r(lh(t)))
     }
 
 }

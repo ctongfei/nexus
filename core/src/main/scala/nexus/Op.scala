@@ -7,7 +7,7 @@ import nexus.algebra._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Op1[X, Y] extends Func1[X, Y] {
+trait Op1[X, Y] <: Func1[X, Y] {
 
   /** Name of this operation. */
   def name: String
@@ -15,7 +15,7 @@ trait Op1[X, Y] extends Func1[X, Y] {
   /** Type tag of the output type. */
   def tag(tx: Type[X]): Type[Y]
 
-  def differentiable: Boolean
+  def differentiable: Boolean = true
 
   /** Applies this operation to a symbolic expression. */
   def apply(x: Expr[X]): Expr[Y] = Apply1(this, x)
@@ -41,7 +41,7 @@ trait Op1[X, Y] extends Func1[X, Y] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Op2[X1, X2, Y] extends Func2[X1, X2, Y] {
+trait Op2[X1, X2, Y] <: Func2[X1, X2, Y] {
 
   /** Name of this operation. */
   def name: String
@@ -49,7 +49,7 @@ trait Op2[X1, X2, Y] extends Func2[X1, X2, Y] {
   /** Type tag of the output type. */
   def tag(tx1: Type[X1], tx2: Type[X2]): Type[Y]
 
-  def differentiable: Boolean
+  def differentiable: Boolean = true
 
   /** Applies this operation to two symbolic expressions. */
   def apply(x1: Expr[X1], x2: Expr[X2]) = Apply2(this, x1, x2)
@@ -86,7 +86,7 @@ trait Op2[X1, X2, Y] extends Func2[X1, X2, Y] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Op3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] {
+trait Op3[X1, X2, X3, Y] <: Func3[X1, X2, X3, Y] {
 
   /** Name of this operation. */
   def name: String
@@ -94,7 +94,7 @@ trait Op3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] {
   /** Type tag of the output type. */
   def tag(tx1: Type[X1], tx2: Type[X2], tx3: Type[X3]): Type[Y]
 
-  def differentiable: Boolean
+  def differentiable: Boolean = true
 
   /** Applies this operation to three symbolic expressions. */
   def forward(x1: X1, x2: X2, x3: X3): Y

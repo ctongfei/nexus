@@ -3,7 +3,7 @@ package nexus.algebra
 /**
  * @author Tongfei Chen
  */
-trait IsIntTensorH[T[_], I] extends IsTensorH[T, I] { self =>
+trait IsIntTensorK[T[_], I] extends IsTensorK[T, I] { self =>
 
   val I: IsInt[I]
   def elementType = I

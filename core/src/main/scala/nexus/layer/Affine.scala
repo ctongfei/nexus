@@ -15,7 +15,7 @@ class Affine[T[_], R, X: Label, Y: Label] private(
                                            val W: Param[T[(Y, X)]],
                                            val b: Param[T[Y]]
                                          )
-                                         (implicit T: IsRealTensorH[T, R])
+                                         (implicit T: IsRealTensorK[T, R])
   extends Func1[T[X], T[Y]]
 {
 
@@ -42,7 +42,7 @@ object Affine {
    * @param b Bias vector (axes B::$)
    */
   def from[T[_], R, A: Label, B: Label]
-  (W: Param[T[(B, A)]], b: Param[T[B]])(implicit T: IsRealTensorH[T, R]) = new Affine[T, R, A, B](W, b)
+  (W: Param[T[(B, A)]], b: Param[T[B]])(implicit T: IsRealTensorK[T, R]) = new Affine[T, R, A, B](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.
@@ -53,7 +53,7 @@ object Affine {
                                           out: (B, Int),
                                           name: String = ExprName.nextId("Affine")
                                         )
-                                        (implicit T: IsRealTensorH[T, R]) = {
+                                        (implicit T: IsRealTensorK[T, R]) = {
     import T._
     val (aA, nA) = in
     val (aB, nB) = out

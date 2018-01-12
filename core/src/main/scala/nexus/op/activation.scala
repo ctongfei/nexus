@@ -13,11 +13,10 @@ import nexus.algebra.typelevel._
  * @since 0.1.0
  */
 object ReLU extends PolyOp1 {
-  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def reLUF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "ReLU"
       def tag(tx: Type[T[A]]) = tx
-      def differentiable = true
       def forward(x: T[A]) = T.relu(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.pos(x)
     }
@@ -32,11 +31,10 @@ object ReLU extends PolyOp1 {
  * @since 0.1.0
  */
 object Sigmoid extends PolyOp1 {
-  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def sigmoidF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "Sigmoid"
       def tag(tx: Type[T[A]]) = tx
-      def differentiable = true
       def forward(x: T[A]) = T.sigmoid(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y |*| T.addS(-y, T.R.one) // TODO: inplace
     }
@@ -51,11 +49,10 @@ object Sigmoid extends PolyOp1 {
  * @since 0.1.0
  */
 object SoftPlus extends PolyOp1 {
-  implicit def instance[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def softPlusF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "SoftPlus"
       def tag(tx: Type[T[A]]) = tx
-      def differentiable = true
       def forward(x: T[A]) = T.eLog1p(T.eExp(x))
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.sigmoid(x)
     }
@@ -70,11 +67,10 @@ object SoftPlus extends PolyOp1 {
  * @since 0.1.0
  */
 object Softmax extends PolyOp1 {
-  implicit def instance[T[_], R, A: Label](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] =
+  implicit def softmaxF[T[_], R, A: Label](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
       def name = "Softmax"
       def tag(tx: Type[T[A]]) = tx
-      def differentiable = true
       def forward(x: T[A]) = {
         import T._
         val expX = eExp(x)

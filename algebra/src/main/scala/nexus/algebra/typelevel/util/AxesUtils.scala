@@ -1,6 +1,7 @@
 package nexus.algebra.typelevel.util
 
 import nexus.algebra._
+import shapeless._
 
 /**
  * Contains routines that manipulates axis HLists.

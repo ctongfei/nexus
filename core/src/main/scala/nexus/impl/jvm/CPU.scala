@@ -10,7 +10,7 @@ import scala.util._
 /**
  * @author Tongfei Chen
  */
-object CPUFloat32 extends IsRealTensorH[FloatTensor, Float] {
+object CPUFloat32 extends IsRealTensorK[FloatTensor, Float] {
   type H = UntypedFloatTensor
   val H = UntypedCPUFloat32
 

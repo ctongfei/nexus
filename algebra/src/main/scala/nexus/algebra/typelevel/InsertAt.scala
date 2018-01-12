@@ -31,6 +31,6 @@ object InsertAt {
   (implicit l: ToHList.Aux[L, Lh], h: InsertAt.Aux[Lh, I, X, Rh], r: ToHList.Aux[R, Rh]): Aux[L, I, X, R] =
     new InsertAt[L, I, X] {
       type Out = R
-      def apply(t: L, x: X): R = r.inverse(h(l(t), x))
+      def apply(t: L, x: X): R = r.invert(h(l(t), x))
     }
 }

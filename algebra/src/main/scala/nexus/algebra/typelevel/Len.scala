@@ -1,7 +1,7 @@
 package nexus.algebra.typelevel
 
 import nexus.algebra._
-import shapeless.{HNil, HList, Nat, Succ, _0}
+import shapeless._
 
 /**
  * A simpler [[shapeless.ops.hlist.Length]] without using the `Aux` pattern.
@@ -14,7 +14,8 @@ trait Len[L] {
 }
 
 object Len {
-  def apply[L](implicit l: Len[L]): Len[L] = l
+
+  def apply[L](implicit l: Len[L]): Aux[L, l.Out] = l
   type Aux[L, N <: Nat] = Len[L] { type Out = N }
 
   implicit def lenHListCase0: Len.Aux[HNil, _0] = new Len[HNil] {

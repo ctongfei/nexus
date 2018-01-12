@@ -1,66 +1,51 @@
 package nexus
 
 /**
+ * Represents a type-polymorphic unary operator that is parameterized.
  * @author Tongfei Chen
+ * @since 0.1.0
  */
-abstract class ParamPolyOp1 { self =>
+abstract class ParameterizedPolyOp1 { self =>
 
-  trait F[-P, X, Y] <: (P => Op1[X, Y])
+  trait F[X, Y] <: Op1[X, Y]
 
-  class Proxy[P](val parameter: P) extends ParamPolyOp1Proxy[P](parameter) {
-    type F[-P, X, Y] = self.F[P, X, Y]
+  class Proxy[P](val parameter: P) extends PolyFunc1 {
+    type F[X, Y] = P => self.F[X, Y]
+    def ground[X, Y](implicit f: F[X, Y]) = f(parameter)
   }
 
   def apply[P](parameter: P) = new Proxy(parameter)
 
 }
 
-abstract class ParamPolyOp1Proxy[P](parameter: P) {
+/**
+ * Represents a type-polymorphic binary operator that is parameterized.
+ */
+abstract class ParameterizedPolyOp2 { self =>
 
-  type F[-P, X, Y] <: (P => Op1[X, Y])
+  trait F[X1, X2, Y] <: Op2[X1, X2, Y]
 
-  def apply[X, Y](x: Expr[X])(implicit f: F[P, X, Y]): Expr[Y] = Apply1(f(parameter), x)
-
-}
-
-
-abstract class ParamPolyOp2 { self =>
-
-  trait F[-P, X1, X2, Y] <: (P => Op2[X1, X2, Y])
-
-  class Proxy[P](val parameter: P) extends ParamPolyOp2Proxy[P](parameter) {
-    type F[-P, X1, X2, Y] = self.F[P, X1, X2, Y]
+  class Proxy[P](val parameter: P) extends PolyFunc2 {
+    type F[X1, X2, Y] = P => self.F[X1, X2, Y]
+    def ground[X1, X2, Y](implicit f: F[X1, X2, Y]) = f(parameter)
   }
 
   def apply[P](parameter: P) = new Proxy(parameter)
 
 }
 
-abstract class ParamPolyOp2Proxy[P](parameter: P) {
-
-  type F[-P, X1, X2, Y] <: (P => Op2[X1, X2, Y])
-
-  def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[P, X1, X2, Y]): Expr[Y] = Apply2(f(parameter), x1, x2)
-
-}
-
-abstract class ParamPolyOp3 { self =>
+/**
+ * Represents a type-polymorphic ternary operator that is parameterized.
+ */
+abstract class ParameterizedPolyOp3 { self =>
 
   trait F[-P, X1, X2, X3, Y] <: (P => Op3[X1, X2, X3, Y])
 
-  class Proxy[P](val parameter: P) extends ParamPolyOp3Proxy[P](parameter) {
-    type F[-P, X1, X2, X3, Y] <: (P => Op3[X1, X2, X3, Y])
+  class Proxy[P](val parameter: P) extends PolyFunc3 {
+    type F[X1, X2, X3, Y] = self.F[P, X1, X2, X3, Y]
+    override def ground[X1, X2, X3, Y](implicit f: F[X1, X2, X3, Y]) = f(parameter)
   }
 
   def apply[P](parameter: P) = new Proxy(parameter)
-
-}
-
-abstract class ParamPolyOp3Proxy[P](parameter: P) {
-
-  type F[-P, X1, X2, X3, Y] <: (P => Op3[X1, X2, X3, Y])
-
-  def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[P, X1, X2, X3, Y]): Expr[Y] =
-    Apply3(f(parameter), x1, x2, x3)
 
 }

@@ -13,10 +13,9 @@ import nexus.algebra.syntax._
  */
 object Exp extends PolyOp1 {
 
-  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+  implicit def expF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Exp"
     def tag(tx: Type[R]) = tx
-    def differentiable = true
     def forward(x: R) = R.exp(x)
     def backward(dy: R, y: R, x: R) = dy * y
   }
@@ -34,10 +33,9 @@ object Exp extends PolyOp1 {
    */
   object Elementwise extends PolyOp1 {
 
-    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+    implicit def expElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Exp.Elementwise"
       def tag(tx: Type[T[A]]) = tx
-      def differentiable = true
       def forward(x: T[A]) = T.eExp(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y
     }
@@ -52,20 +50,18 @@ object Exp extends PolyOp1 {
  */
 object Log extends PolyOp1 {
 
-  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+  implicit def logF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Log"
     def tag(tx: Type[R]) = tx
-    def differentiable = true
     def forward(x: R) = R.log(x)
     def backward(dy: R, y: R, x: R) = dy / x
   }
 
   object Elementwise extends PolyOp1 {
 
-    implicit def tensor[T[_], R, A](implicit T: IsRealTensorH[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+    implicit def logElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Log.Elementwise"
       def tag(tx: Type[T[A]]) = tx
-      def differentiable = true
       def forward(x: T[A]) = T.eLog(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |/| x
     }

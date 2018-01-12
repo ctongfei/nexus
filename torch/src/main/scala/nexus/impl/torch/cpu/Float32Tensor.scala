@@ -39,13 +39,13 @@ class Float32Tensor[A](val handle: THFloatTensor) {
 
 }
 
-object Float32Tensor extends IsRealTensorH[Float32Tensor, Float] {
+object Float32Tensor extends IsRealTensorK[Float32Tensor, Float] {
 
   type H = THFloatTensor
 
   object H extends IsUntypedRealTensor[THFloatTensor, Float] {
 
-    val R = Float32
+    val R = Float
 
     def copy(a: THFloatTensor) = TH.THFloatTensor_newClone(a)
 
@@ -72,13 +72,40 @@ object Float32Tensor extends IsRealTensorH[Float32Tensor, Float] {
       c
     }
 
-    def neg(x: THFloatTensor) = ???
-    def eMul(x1: THFloatTensor, x2: THFloatTensor) = ???
-    def eDiv(x1: THFloatTensor, x2: THFloatTensor) = ???
-    def scale(x: THFloatTensor, k: Float32) = ???
+    def neg(a: THFloatTensor) = {
+      val c = zeroBy(a)
+      TH.THFloatTensor_neg(c, a)
+      c
+    }
+
+    def eMul(a: THFloatTensor, b: THFloatTensor) = {
+      val c = copy(a)
+      TH.THFloatTensor_mul(c, b, 1f)
+      c
+    }
+
+    def eDiv(a: THFloatTensor, b: THFloatTensor) = {
+      val c = copy(a)
+      TH.THFloatTensor_div(c, b, 1f)
+      c
+    }
+
+    def scale(x: THFloatTensor, k: Float) = {
+      val c = copy(x)
+      TH.THFloatTensor_mul(c, c, k)
+      c
+    }
+
     def eInv(x: THFloatTensor) = ???
-    def eSqr(x: THFloatTensor) = ???
-    def eSqrt(x: THFloatTensor) = ???
+
+    def eSqr(x: THFloatTensor) = eMul(x, x)
+
+    def eSqrt(x: THFloatTensor) = {
+      val c = copy(x)
+      TH.THFloatTensor_sqrt(c, x)
+      c
+    }
+
     def log(x: THFloatTensor) = ???
     def exp(x: THFloatTensor) = ???
     def log1p(x: THFloatTensor) = ???
@@ -87,7 +114,11 @@ object Float32Tensor extends IsRealTensorH[Float32Tensor, Float] {
     def cos(x: THFloatTensor) = ???
     def tan(x: THFloatTensor) = ???
     def sum(x: THFloatTensor) = ???
-    def sigmoid(x: THFloatTensor) = ???
+    def sigmoid(x: THFloatTensor) = {
+      val c = copy(x)
+      TH.THFloatTensor_sigmoid(c, x)
+      c
+    }
     def reLU(x: THFloatTensor) = ???
     def abs(x: THFloatTensor) = ???
     def sgn(x: THFloatTensor) = ???
@@ -111,7 +142,7 @@ object Float32Tensor extends IsRealTensorH[Float32Tensor, Float] {
 
 
 
-  def newDim0Tensor(x: Float): Float32Tensor[$] = ???
+  def newDim0Tensor(x: Float): Float32Tensor[Unit] = ???
 
   def fill[A](value: => Float, axes: A, shape: Array[Int]) = ???
 

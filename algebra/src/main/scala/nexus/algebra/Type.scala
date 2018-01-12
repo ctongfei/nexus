@@ -26,7 +26,7 @@ object Type {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait TypeH[T[_]] {
+trait TypeK[T[_]] {
 
   /** Given axes information `A`, returns type tag for grounded type `T[A]`. */
   def ground[A]: Type[T[A]]

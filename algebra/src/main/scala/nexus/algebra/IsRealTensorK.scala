@@ -14,7 +14,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that ${T} is a typed tensor of ${R}.")
-trait IsRealTensorH[T[_], R] extends IsTensorH[T, R] with GradH[T] { self =>
+trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
 
   val H: IsUntypedRealTensor[H, R]
 

@@ -70,7 +70,7 @@ object SymDiff {
       def rhsRetainedIndices = sd.rhsRetainedIndices
       def recoverLeft = ???
       def recoverRight = ???
-      def apply(t: A, u: B): C = ch.inverse(sd(ah(t), bh(u)))
+      def apply(t: A, u: B): C = ch.invert(sd(ah(t), bh(u)))
     }
 
 }

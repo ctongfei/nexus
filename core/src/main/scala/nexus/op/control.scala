@@ -12,10 +12,9 @@ import nexus.exception._
  */
 object If extends PolyOp3 {
 
-  implicit def instance[X](implicit X: Grad[X]): F[Boolean, X, X, X] = new F[Boolean, X, X, X] {
+  implicit def ifF[X](implicit X: Grad[X]): F[Boolean, X, X, X] = new F[Boolean, X, X, X] {
     def name = "If"
     def tag(tx1: Type[Boolean], tx2: Type[X], tx3: Type[X]) = tx2
-    def differentiable = true
     def forward(c: Boolean, t: X, f: X) = if (c) t else f
     def backward1(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(name, 1)
     def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = if (c) dy else X.zeroBy(t)
@@ -30,10 +29,10 @@ object If extends PolyOp3 {
  * @since 0.1.0
  */
 object StopGrad extends PolyOp1 {
-  implicit def any[X]: F[X, X] = new F[X, X] {
+  implicit def stopGradF[X]: F[X, X] = new F[X, X] {
     def name = "StopGrad"
     def tag(tx: Type[X]) = tx
-    def differentiable = false // !
+    override def differentiable = false // !
     def forward(x: X) = x
     def backward(dy: X, y: X, x: X) = throw new OperatorNotDifferentiableException(name, 1)
   }

@@ -28,7 +28,6 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
     import tag._
 
     if (history contains p) {
-
       val h = history(p)
       h.m = (h.m :* β1) + (g :* (1 - β1))
       h.v = (h.v :* β2) + ((g |*| g) :* (1 - β2))

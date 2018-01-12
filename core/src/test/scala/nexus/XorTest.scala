@@ -44,7 +44,7 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  val ŷ = x |> Layer1 |> Sigmoid |> Dropout(0.2) |> Layer2 |> Softmax
 
   val loss = (y, ŷ) |> CrossEntropy
 

@@ -20,16 +20,10 @@ sealed trait Expr[X] {
   def requireGrad = tag.isInstanceOf[Grad[X]]
 
   /** Passes this expression through any function. */
-  def |>[Y](f: Func1[X, Y]): Expr[Y] =
-    f(this)
+  def |>[Y](f: Func1[X, Y]): Expr[Y] = f(this)
 
   /** Passes this expression through any polymorphic neural function. */
-  def |>[Y](op: PolyFunc1)(implicit f: op.F[X, Y]): Expr[Y] =
-    f(this)
-
-  /** Passes this expression through any parametrized polymorphic neural function. */
-  def |>[P, Y](op: ParamPolyOp1Proxy[P])(implicit f: op.F[P, X, Y]): Expr[Y] =
-    op(this)
+  def |>[Y](f: PolyFunc1)(implicit ff: f.F[X, Y]): Expr[Y] = f(this)
 
   /** Creates an assignment to this expression. */
   def <<-(value: X): Assignment = Assignment(this, value)

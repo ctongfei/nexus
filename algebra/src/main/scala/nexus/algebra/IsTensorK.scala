@@ -11,7 +11,7 @@ import shapeless.ops.nat._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait IsTensorH[T[_], E] extends TypeH[T] { self =>
+trait IsTensorK[T[_], E] extends TypeK[T] { self =>
 
   /** Type of untyped handle. */
   type H

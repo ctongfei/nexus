@@ -1,4 +1,4 @@
-package nexus.layer.recurrent
+package nexus.op
 
 import nexus._
 

@@ -7,14 +7,7 @@ import nexus.syntax._
  * @author Tongfei Chen
  */
 package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleExprOpsMixin {
-
-  // EXPORT SHAPELESS TYPES
-  type Nat = shapeless.Nat
-  type $$ = shapeless.HList
-  type $ = shapeless.HNil
-  val  $: $ = shapeless.HNil // explicit type annotation to avoid some implicit search bugs
-  type ::[+H, +T <: $$] = shapeless.::[H, T]
-
+  
   val _0 = shapeless.nat._0
   val _1 = shapeless.nat._1
   val _2 = shapeless.nat._2
