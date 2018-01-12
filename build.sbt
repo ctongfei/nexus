@@ -63,6 +63,7 @@ lazy val core = (project in file("core"))
     name := "nexus-core"
   )
 
+/*
 lazy val torch = (project in file("torch"))
   .settings(commonSettings: _*)
   .dependsOn(core)
@@ -83,6 +84,7 @@ lazy val vision = (project in file("vision"))
   .settings(
     name := "nexus-vision"
   )
+*/
 
 // function that find html files recursively
 def listHtmlFile(dir: java.io.File): List[java.io.File] = {
