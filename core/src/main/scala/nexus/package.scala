@@ -52,7 +52,7 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
 
 
 
-  private[nexus] def objTypeName(o: Any) = {
+  private[nexus] def typeName(o: Any) = {
     val raw = o.getClass.getTypeName
     val last = raw.split('.').last
     if (last endsWith "$") last.init else last

@@ -9,8 +9,8 @@ Building a typesafe XOR network:
   class Hidden; val Hidden = new Hidden
   class Out;    val Out = new Out      // tensor axis labels declared as types and singletons
 
-  val x = Input[FloatTensor[In]]()  // input vectors
-  val y = Input[FloatTensor[Out]]() // gold labels
+  val x = Input[FloatTensor[In]]()     // input vectors
+  val y = Input[FloatTensor[Out]]()    // gold labels
 
   val ŷ = x                       |>   // type: Expr[FloatTensor[In]]
     Affine(In -> 2, Hidden -> 2)  |>   // type: Expr[FloatTensor[Hidden]]
@@ -27,6 +27,7 @@ Design goals:
  - **Never, ever specify axis index again**. For things like `reduce_sum(x, axis=1)`, write `x |> SumAlong(AxisName)`.
  - **Mixing differentiable code with non-differentiable code**.
  - **Automatic typeclass derivation**: Differentiation through any case class (product type).
+ - **Versatile switching between eager and lazy evaluation**.
  - **[TODO] Automatic batching over sequences/trees** (Neubig, Goldberg, Dyer, NIPS 2017). Free programmers from the pain of manual batching.
  - **[TODO] GPU Acceleration**. Reuse `Torch` C++ core through Swig [(bindings)](https://github.com/ctongfei/torch-swig-java).
  - **[TODO] Multiple backends**. Torch / MXNet / ?

@@ -3,13 +3,13 @@ package nexus
 import shapeless.Id
 
 /**
- * Represents an assignment of the form `Expr[X] <- X`.
+ * Represents an assignment of the form `Expr[X] := X`.
  * @author Tongfei Chen
  * @since 0.1.0
  */
 trait Assignment extends ExprValuePair[Id] {
 
-  override def toString = s"$expr <- $value"
+  override def toString = s"$expr := $value"
 
 }
 
@@ -22,6 +22,6 @@ object Assignment {
     val value = v
   }
 
-  //TODO: should have unapply[A]
+  def unapply(a: Assignment): Option[(Expr[a.Data], a.Data)] = Some(a.expr, a.value)
 
 }

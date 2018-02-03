@@ -32,4 +32,13 @@ object CrossEntropy extends PolyOp2 {
 
 object KullbackLeiblerDivergence extends PolyOp2 {
 
+  implicit def kullbackLeiblerDivergenceF[T[_], R, A: Label](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
+    new F[T[A], T[A], R] {
+      def name = "KullbackLeiblerDivergence"
+      def tag(tx1: Type[T[A]], tx2: Type[T[A]]) = T.R
+      def forward(x1: T[A], x2: T[A]) = ???
+      def backward1(dy: R, y: R, x1: T[A], x2: T[A]) = ???
+      def backward2(dy: R, y: R, x1: T[A], x2: T[A]) = ???
+    }
+
 }

@@ -8,9 +8,9 @@ import nexus.algebra._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Tuple2 extends PolyOp2 {
+object AsTuple2 extends PolyOp2 {
   implicit def instance[X1, X2]: F[X1, X2, (X1, X2)] = new F[X1, X2, (X1, X2)] {
-    def name = "Tuple2"
+    def name = "AsTuple2"
     def tag(tx1: Type[X1], tx2: Type[X2]) = Type.Tuple2(tx1, tx2)
     def forward(x1: X1, x2: X2) = (x1, x2)
     def backward1(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._1

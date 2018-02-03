@@ -1,6 +1,7 @@
 package nexus.optimizer
 
 import nexus._
+import nexus.algebra._
 import nexus.exec._
 
 /**
@@ -16,7 +17,7 @@ abstract class OneStepFirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X): Unit
 
-  def update(gradients: ExprValueMap): Unit = {
+  def update(gradients: WengertList): Unit = {
     t += 1
     for (item <- gradients) {
       item.expr match {
@@ -25,6 +26,12 @@ abstract class OneStepFirstOrderOptimizer {
         case _ =>
       }
     }
+  }
+
+  def step[R: IsReal](loss: Expr[R])(implicit comp: Forward) = {
+    val lossValue = loss.value
+    val gradients = Backward.compute(loss)
+    update(gradients)
   }
 
 }

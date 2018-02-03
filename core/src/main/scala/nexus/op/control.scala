@@ -2,6 +2,7 @@ package nexus.op
 
 import nexus._
 import nexus.algebra._
+import nexus.exec._
 import nexus.exception._
 
 /**
@@ -37,4 +38,3 @@ object StopGrad extends PolyOp1 {
     def backward(dy: X, y: X, x: X) = throw new OperatorNotDifferentiableException(name, 1)
   }
 }
-

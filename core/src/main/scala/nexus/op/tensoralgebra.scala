@@ -11,8 +11,6 @@ import nexus.algebra.typelevel._
  */
 object Scale extends PolyOp2 {
 
-  val By = Curried1
-
   implicit def scaleF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[R, T[A], T[A]] {
     def name = "Scale"
     def tag(tx1: Type[R], tx2: Type[T[A]]) = tx2
@@ -20,6 +18,9 @@ object Scale extends PolyOp2 {
     def backward1(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy ⋅ x2
     def backward2(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy :* x1
   }
+
+  val By = Curried1
+
 }
 
 /**

@@ -1,6 +1,8 @@
 package nexus
 import nexus.algebra._
 
+import scala.annotation._
+
 /**
  * Any generic unary function whose type parameters (axes, etc.) are not yet grounded:
  * itself can be applied to variables of different types constrained by the type member `Op`.
@@ -17,7 +19,8 @@ abstract class PolyOp1 extends PolyFunc1 {
    * Type of the actual grounded operator.
    * This acts as a type constraint expressing what type of variables this polymorphic operation can apply to.
    */
-  trait F[X, Y] <: Op1[X, Y]
+  @implicitNotFound("This operator cannot be applied to an argument of type ${X}.")
+  trait F[X, Y] extends Op1[X, Y]
 
   override def apply[X, Y](x: Expr[X])(implicit f: F[X, Y]) = f(x)
 
@@ -36,7 +39,8 @@ abstract class PolyOp1 extends PolyFunc1 {
  */
 abstract class PolyOp2 extends PolyFunc2 { self =>
 
-  trait F[X1, X2, Y] <: Op2[X1, X2, Y]
+  @implicitNotFound("This operator cannot be applied to arguments of type ${X1} and ${X2}.")
+  trait F[X1, X2, Y] extends Op2[X1, X2, Y]
 
   override def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]) = f(x1, x2)
 
@@ -78,7 +82,8 @@ abstract class PolyOp2 extends PolyFunc2 { self =>
  */
 abstract class PolyOp3 extends PolyFunc3 {
 
-  trait F[X1, X2, X3, Y] <: Op3[X1, X2, X3, Y]
+  @implicitNotFound("This operator cannot be applied to arguments of type ${X1}, ${X2} and ${X3}.")
+  trait F[X1, X2, X3, Y] extends Op3[X1, X2, X3, Y]
 
   override def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[X1, X2, X3, Y]) = f(x1, x2, x3)
   //override def apply[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): Y = f.forward(x1, x2, x3)

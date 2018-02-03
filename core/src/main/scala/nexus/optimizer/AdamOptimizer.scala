@@ -9,7 +9,7 @@ import nexus.op._
  *
  * Reference:
  * <p>
- * D P Kingma, J Ba (2015):
+ * D P Kingma, J L Ba (2015):
  * Adam: A Method for Stochastic Optimization. ICLR.
  * [[https://arxiv.org/pdf/1412.6980.pdf]]
  * </p>
@@ -20,7 +20,7 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
 
   case class AdamHistory[X](var m: X, var v: X)
 
-  val history = new ExprMap[AdamHistory]()
+  val history = ExprMap[AdamHistory]()
 
   def updateParam[X](p: Param[X], g: X) = {
 

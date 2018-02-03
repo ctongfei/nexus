@@ -37,9 +37,9 @@ object Test0 extends App {
   val sgd = new GradientDescentOptimizer(0.01)
 
   for (i <- 0 until 1000) {
-    val (lv, values) = Forward.compute(l)()
-    println(s"$i: p = ${p.value}; Value = $lv")
-    val gradients = Backward.compute(l, values)
+    implicit val forward = Forward.given()
+    println(s"$i: p = ${p.value}; Value = ${l.value}")
+    val gradients = Backward.compute(l)
     sgd.update(gradients)
   }
 

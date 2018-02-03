@@ -10,20 +10,25 @@ import nexus.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Convolution1D[T[_], R, W: Label, X: Label, Y: Label] private(
-  val window: Int,
+class Convolution1D[
+  T[_], R,
+  W: Label,
+  X: Label,
+  Y: Label
+] private(val window: Int,
   val stride: Int,
   val weight: Param[T[(Y, X)]]
 )(implicit T: IsRealTensorK[T, R])
-  extends Func1[T[(W, X)], T[(W, Y)]]
+  extends Module1[T[(W, X)], T[(W, Y)]]
 {
+
+  def parameters = Set(weight)
+
   def apply(x: Expr[T[(W, X)]]) = ???
 }
 
 
 object Convolution1D {
-
-  private var i = 0
 
   def apply[T[_], R, W, X, Y](
                                        widthAxis: W,

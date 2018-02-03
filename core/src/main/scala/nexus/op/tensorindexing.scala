@@ -52,3 +52,16 @@ object OneHot extends ParameterizedPolyOp1
  * @since 0.1.0
  */
 object SliceAlong extends ParameterizedPolyOp1
+
+object Select extends PolyOp2 {
+
+  implicit def selectF[TE[_], E, TI[_], I, A](implicit TE: IsTensorK[TE, E], TI: IsIntTensorK[TI, I]) =
+    new F[TE[A], TI[A], TE[A]] {
+      def name = ???
+      def tag(tx1: Type[TE[A]], tx2: Type[TI[A]]) = ???
+      def forward(x1: TE[A], x2: TI[A]) = ???
+      def backward1(dy: TE[A], y: TE[A], x1: TE[A], x2: TI[A]) = ???
+      def backward2(dy: TE[A], y: TE[A], x1: TE[A], x2: TI[A]) = ???
+    }
+
+}

@@ -14,7 +14,12 @@ import nexus.op._
  */
 class ResidualUnit[X](val residual: Func1[X, X])
   (implicit X: Grad[X])
-extends Func1[X, X] {
+extends Module1[X, X] {
+
+  def parameters = residual match {
+    case residual: Module1[X, X] => residual.parameters
+    case _ => Set()
+  }
 
   def apply(x: Expr[X]): Expr[X] = {
     val r = residual(x)

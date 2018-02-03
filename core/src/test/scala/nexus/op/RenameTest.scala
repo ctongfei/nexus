@@ -24,9 +24,9 @@ object RenameTest extends App {
   val xi = Input[FloatTensor[A]]()
   val yi = Input[FloatTensor[A]]()
 
-  val zi = L2Distance(Scale.By(3f)(xi), yi)
+  val zi = (xi |> Scale.By(3f), yi) |> L2Distance
 
-  val (z, _) = Forward.compute(zi)(xi <<- x, yi <<- y)
+  val (z, _) = Forward.compute(zi)(xi := x, yi := y)
 
   val bp = 0
 

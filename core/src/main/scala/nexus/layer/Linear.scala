@@ -14,12 +14,14 @@ import nexus.util._
 class Linear[T[_], R, A: Label, B: Label] private(
   val weight: Param[T[(B, A)]]
 )(implicit T: IsRealTensorK[T, R])
-  extends Func1[T[A], T[B]]
+  extends Module1[T[A], T[B]]
 {
 
   type Input = A
 
   type Output = B
+
+  def parameters = Set(weight)
 
   def apply(x: Expr[T[A]]): Expr[T[B]] = MVMul(weight, x)
 }

@@ -14,7 +14,6 @@ object CPUFloat32 extends IsRealTensorK[FloatTensor, Float] {
   type H = UntypedFloatTensor
   val H = UntypedCPUFloat32
 
-
   val R = H.R
 
   def newTensor[A](shape: Array[Int]) =

@@ -20,6 +20,8 @@ trait ExprValuePair[V[_]] extends Product2[Expr[_], V[_]] {
   def _1 = expr
   def _2 = value
 
+  // Conforms to Scala idioms
+
   final def canEqual(that: Any) = false
 
   override def toString = s"$expr : $value"

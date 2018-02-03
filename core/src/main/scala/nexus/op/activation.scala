@@ -7,8 +7,14 @@ import nexus.algebra.typelevel._
 
 /**
  * Rectified linear unit.
- * - Input: Real tensor 「bb"x"」 with axes `Axes`.
- * - Output: Real tensor 「bb"y」, axes `Axes`, computed as.
+ *
+ * References:
+ *  - R Hahnloser, R Sarpeshkar, M A Mahowald, R J Douglas, H S Seung (2000):
+ *    Digital selection and analogue amplification coexist in a cortex-inspired silicon cicuit. Nature. 405.
+ *  - R Hahnloser, H S Seung (2001):
+ *    Permitted and forbidden sets in symmetric threshold-linear networks. NIPS.
+ *  - X Glorot, A Bordes, Y Bengio (2011):
+ *    Deep sparse rectifier neural networks. AISTATS.
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -19,6 +25,22 @@ object ReLU extends PolyOp1 {
       def tag(tx: Type[T[A]]) = tx
       def forward(x: T[A]) = T.relu(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.pos(x)
+    }
+}
+
+/**
+ * Scaled exponential linear units.
+ *
+ * Reference:
+ *  - G Klambauer, T Unterthiner, A Mayr, S Hochreiter (2017): Self-normalizing neural networks. NIPS.
+ */
+object SELU extends PolyOp1 {
+  implicit def seluF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
+    new F[T[A], T[A]] {
+      def name = "SELU"
+      def tag(tx: Type[T[A]]) = tx
+      def forward(x: T[A]) = ???
+      def backward(dy: T[A], y: T[A], x: T[A]) = ???
     }
 }
 

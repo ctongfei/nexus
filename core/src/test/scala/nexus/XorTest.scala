@@ -44,26 +44,27 @@ object XorTest extends App {
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
 
-  val ŷ = x |> Layer1 |> Sigmoid |> Dropout(0.2) |> Layer2 |> Softmax
+  val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
   val loss = (y, ŷ) |> CrossEntropy
 
   /** Declare an optimizer. */
-  val opt = new AdamOptimizer(0.1)
+  val opt = new AdamOptimizer(0.01)
 
   /** Start running! */
-  for (epoch <- 0 until 2000) {
+  for (epoch <- 0 until 4000) {
     var averageLoss = 0f
 
     // For each sample
     for ((xv, yv) <- xs zip ys) {
 
-      val (lossValue, values) =  Forward .compute(loss)(x <<- xv, y <<- yv) // feed
-      val gradients           =  Backward.compute(loss, values)
+      given (x := xv, y := yv) { implicit comp =>
 
-      averageLoss += lossValue
+        val lossValue = loss.value
+        averageLoss += lossValue
+        opt.step(loss)
 
-      opt.update(gradients)
+      }
 
     }
 

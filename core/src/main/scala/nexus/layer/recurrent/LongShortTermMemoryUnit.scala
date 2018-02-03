@@ -15,7 +15,7 @@ class LongShortTermMemoryUnit[T[_], R, X: Label, C: Label, H: Label]()(implicit 
     val c = ch |> Tuple2First
     val h = ch |> Tuple2Second
 
-    (c, h) |> Tuple2
+    (c, h) |> AsTuple2
   }
 }
 

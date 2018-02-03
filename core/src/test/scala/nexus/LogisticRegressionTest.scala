@@ -43,8 +43,9 @@ object LogisticRegressionTest extends App {
 
   for (i <- 0 until 100) {
     for ((xv, yv) <- xs zip ys) {
-      val (lossValue, values) = Forward.compute(loss)(x <<- xv, y <<- yv)
-      val grads = Backward.compute(loss, values)
+      implicit val forward = Forward.given(x := xv, y := yv)
+      val lossValue = loss.value
+      val grads = Backward.compute(loss)
       println(s"Iteration $i: loss = ${lossValue}")
       sgd.update(grads)
     }

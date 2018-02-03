@@ -21,7 +21,8 @@ object MapTest extends App {
 
   val a = Input[FloatTensor[Unit]]()
 
-  val b = a |> Map(f)
+  val b = a |> Elementwise(f)
+
 
   val bp = 0
 

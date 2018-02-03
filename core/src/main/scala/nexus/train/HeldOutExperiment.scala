@@ -1,7 +1,7 @@
 package nexus.train
 
 import nexus._
-import nexus.algebra.IsRealTensorK
+import nexus.algebra._
 import nexus.exec._
 
 /**
@@ -16,6 +16,7 @@ abstract class HeldOutExperiment {
   type R
 
   implicit val T: IsRealTensorK[T, R]
+  implicit val R: IsReal[R] = T.R
 
   type TrainingInput
 
@@ -25,17 +26,13 @@ abstract class HeldOutExperiment {
 
   type ValidationOutput
 
-  def trainingSet: Iterable[(TrainingInput, TrainingOutput)]
+  val trainingSet: Iterable[(TrainingInput, TrainingOutput)]
 
-  def validationSet: Iterable[(ValidationInput, ValidationOutput)]
+  val validationSet: Iterable[(ValidationInput, ValidationOutput)]
 
-  def trainingLoss: Func2[TrainingInput, TrainingOutput, R]
+  val trainingLoss: Func2[TrainingInput, TrainingOutput, R]
 
-  def validationLoss: Func2[ValidationInput, ValidationOutput, R]
-
-  def trainingMetric: Func1[TrainingOutput, R]
-
-  def validationMetric: Func1[ValidationOutput, R]
+  val validationLoss: Func2[ValidationInput, ValidationOutput, R]
 
 
   def trainEpoch() = {
@@ -44,8 +41,10 @@ abstract class HeldOutExperiment {
       val x = Input[TrainingInput]()
       val y = Input[TrainingOutput]()
       val l = trainingLoss(x, y)
-      val (lv, values) = Forward.compute(l)(x <<- xv, y <<- yv)
-      val gradients = Backward.compute(l, values)
+
+      implicit val forward = Forward.given(x := xv, y := yv)
+      val lv = l.value
+      val gradients = Backward.compute(l)
 
     }
 

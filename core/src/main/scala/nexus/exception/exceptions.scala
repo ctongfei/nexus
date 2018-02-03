@@ -15,5 +15,8 @@ class OperatorNotDifferentiableException(name: String, ordinal: Int)
     case 1 => "1st"
     case 2 => "2nd"
     case 3 => "3rd"
-    case n => s"${n}th" // actually will never happen: nexus only allows operators with maximum arity 3
+    case n => s"${n}th" // actually will never happen: Nexus only allows operators with maximum arity 3
   }} argument.")
+
+class InputNotGivenException(e: Input[_])
+  extends Exception(s"Value of input $e to the computation graph is not specified.")
