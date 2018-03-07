@@ -3,13 +3,13 @@ package nexus.exec
 import nexus._
 import nexus.algebra._
 import nexus.op._
-import nexus.op.seq._
 
 /**
  * @author Tongfei Chen
  */
 class Batch
 
+/*
 object StaticBatching {
 
   val Batch = new Batch
@@ -29,3 +29,4 @@ object StaticBatching {
 
 
 }
+*/
