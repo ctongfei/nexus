@@ -32,9 +32,6 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
   type         Int64   = Long
   implicit val Int64   = nxai.Int64
 
-  type         Float16 = Half
-  implicit val Float16 = nxai.Float16
-
   type         Float32 = Float
   implicit val Float32 = nxai.Float32
 
@@ -50,7 +47,17 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
   type Func4[X1, X2, X3, X4, Y]     = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4]) => Expr[Y])
   type Func5[X1, X2, X3, X4, X5, Y] = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4], Expr[X5]) => Expr[Y])
 
+  trait Module1[X, Y] extends (Expr[X] => Expr[Y]) {
+    def parameters: Set[Any]
+  }
 
+  trait Module2[X1, X2, Y] extends ((Expr[X1], Expr[X2]) => Expr[Y]) {
+    def parameters: Set[Any]
+  }
+
+  trait Module3[X1, X2, X3, Y] extends ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y]) {
+    def parameters: Set[Any]
+  }
 
   private[nexus] def typeName(o: Any) = {
     val raw = o.getClass.getTypeName
