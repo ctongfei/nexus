@@ -3,7 +3,7 @@ package nexus
 import shapeless.Id
 
 /**
- * Represents an assignment of the form `Expr[X] := X`.
+ * Represents an assignment to a symbolic expression, which takes the form `Expr[X] := X`.
  * @author Tongfei Chen
  * @since 0.1.0
  */

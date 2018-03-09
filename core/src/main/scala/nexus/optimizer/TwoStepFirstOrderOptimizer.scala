@@ -1,7 +1,7 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.exec._
+import nexus.execution._
 
 /**
  * @author Tongfei Chen

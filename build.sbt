@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
   isSnapshot := true,
   scalaVersion := "2.12.4",
 
-  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.2",
+  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3",
   libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0",
   libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
 
@@ -63,14 +63,16 @@ lazy val core = (project in file("core"))
     name := "nexus-core"
   )
 
-/*
+
 lazy val torch = (project in file("torch"))
   .settings(commonSettings: _*)
   .dependsOn(core)
   .settings(
-    name := "nexus-torch"
+    name := "nexus-torch",
+    libraryDependencies += "me.tongfei" % "jtorch-cpu" % "0.3.0-SNAPSHOT"
   )
 
+/*
 lazy val cuda = (project in file("cuda"))
   .settings(commonSettings: _*)
   .dependsOn(core)

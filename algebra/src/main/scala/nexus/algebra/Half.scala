@@ -38,6 +38,7 @@ import java.lang.{Float => JFloat}
  *
  * @since 0.1.0
  * @author Erik Osheim
+ * @author Tongfei Chen
  * @note Adapted from https://gist.github.com/non/29f8d66036afca402f96.
  */
 class Half(val raw: Short) extends AnyVal { lhs =>

@@ -26,7 +26,6 @@ object Rename extends ParameterizedPolyOp1 {
 
 }
 
-
 object Concat extends ParameterizedPolyOp2 {
 
   implicit def concatF[T[_], E, A, U: Label, N <: Nat]
@@ -74,6 +73,11 @@ object Squeeze extends ParameterizedPolyOp1 {
     }
 
 }
+
+/**
+ * @example {{{ a |> SwapAxes(Batch, Length) }}}
+ */
+object SwapAxes extends ParameterizedPolyOp1
 
 /**
  * @example {{{ a |> MergeAxes((Layer, Embedding) -> Embedding) }}}

@@ -77,12 +77,6 @@ object Transpose extends PolyOp1 {
 
 }
 
-object SwapAxes extends ParameterizedPolyOp1 {
-
-
-
-}
-
 /**
  * Matrix-vector multiplication.
  *

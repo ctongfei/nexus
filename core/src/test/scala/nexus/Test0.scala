@@ -1,8 +1,7 @@
 package nexus
 
-import nexus.exec._
+import nexus.execution._
 import nexus.impl.jvm._
-import nexus.layer._
 import nexus.layer.recurrent._
 import nexus.op._
 import nexus.syntax._
@@ -32,12 +31,11 @@ object Test0 extends App {
 
   val l = p |> Sqr |> Add.Curried1(1f)
 
-  val eu = ElmanUnit(a -> 100, b -> 100, c -> 100, Sigmoid, Dropout(0.3))
 
   val sgd = new GradientDescentOptimizer(0.01)
 
   for (i <- 0 until 1000) {
-    implicit val forward = Forward.given()
+    implicit val forward = SimpleForward.given()
     println(s"$i: p = ${p.value}; Value = ${l.value}")
     val gradients = Backward.compute(l)
     sgd.update(gradients)

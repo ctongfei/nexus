@@ -1,7 +1,7 @@
 package nexus.op
 
 import nexus._
-import nexus.exec._
+import nexus.execution._
 import nexus.impl.jvm._
 class A;
 class B;
@@ -26,7 +26,7 @@ object RenameTest extends App {
 
   val zi = (xi |> Scale.By(3f), yi) |> L2Distance
 
-  val (z, _) = Forward.compute(zi)(xi := x, yi := y)
+  val (z, _) = SimpleForward.compute(zi)(xi := x, yi := y)
 
   val bp = 0
 

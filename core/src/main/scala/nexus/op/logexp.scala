@@ -68,3 +68,9 @@ object Log extends PolyOp1 {
 
   }
 }
+
+object Log1p extends PolyOp1
+object Expm1 extends PolyOp1
+
+object LogSumExp extends PolyOp1
+

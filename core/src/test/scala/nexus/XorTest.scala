@@ -1,7 +1,7 @@
 package nexus
 
 import nexus.algebra._
-import nexus.exec._
+import nexus.execution._
 import nexus.impl.jvm._
 import nexus.layer._
 import nexus.op._
@@ -58,13 +58,14 @@ object XorTest extends App {
     // For each sample
     for ((xv, yv) <- xs zip ys) {
 
-      given (x := xv, y := yv) { implicit comp =>
+      given (x := xv, y := yv) { implicit computation =>
 
         val lossValue = loss.value
         averageLoss += lossValue
         opt.step(loss)
 
       }
+
 
     }
 

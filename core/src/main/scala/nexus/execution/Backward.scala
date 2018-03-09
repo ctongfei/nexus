@@ -1,4 +1,4 @@
-package nexus.exec
+package nexus.execution
 
 import cats._
 import nexus._
@@ -11,7 +11,7 @@ import nexus.algebra._
  */
 object Backward {
 
-  def compute[R](e: Expr[R])(implicit R: IsReal[R], forward: Forward): WengertList = {
+  def compute[R](e: Expr[R])(implicit R: IsReal[R], forward: SimpleForward): ExprMap[Id] = {
 
     val ∇ = WengertList(e := R.one) // gradient of loss is 1
     val values = forward.values

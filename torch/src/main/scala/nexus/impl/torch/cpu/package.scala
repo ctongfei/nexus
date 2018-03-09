@@ -10,8 +10,6 @@ package object cpu {
 
   implicit val implicitFloat32Tensor = Float32Tensor
 
-  System.loadLibrary("jnitorchcpu")
-  System.loadLibrary("TH.1")
 
   type F32_* = SWIGTYPE_p_float
   type F64_* = SWIGTYPE_p_double

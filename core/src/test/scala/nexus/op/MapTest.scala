@@ -3,7 +3,7 @@ package nexus.op
 import nexus._
 import nexus.algebra.Type
 import nexus.impl.jvm._
-import nexus.exec._
+import nexus.execution._
 import nexus.impl.jvm.FloatTensor
 import nexus.op._
 

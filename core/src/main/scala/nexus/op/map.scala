@@ -22,6 +22,4 @@ object Elementwise extends ParameterizedPolyOp1 {
       def backward(dy: T[A], y: T[A], x: T[A]) = map3(dy, y, x)(f.backward)
     }
 
-
-
 }

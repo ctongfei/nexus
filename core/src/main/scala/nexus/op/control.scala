@@ -2,7 +2,7 @@ package nexus.op
 
 import nexus._
 import nexus.algebra._
-import nexus.exec._
+import nexus.execution._
 import nexus.exception._
 
 /**
@@ -33,7 +33,7 @@ object StopGrad extends PolyOp1 {
   implicit def stopGradF[X]: F[X, X] = new F[X, X] {
     def name = "StopGrad"
     def tag(tx: Type[X]) = tx
-    override def differentiable = false // !
+    override def differentiable = false
     def forward(x: X) = x
     def backward(dy: X, y: X, x: X) = throw new OperatorNotDifferentiableException(name, 1)
   }

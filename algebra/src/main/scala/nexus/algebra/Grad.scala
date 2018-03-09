@@ -6,8 +6,8 @@ import scala.annotation._
 /**
  * Typeclass witnessing that the specific type which an expression is differentiable with respect to.
  *
- * An instance of this typeclass should be attached to differentiable expressions ([[nexus.DExpr]])
- * or differentiable operators ([[nexus.DOp1]] etc.).
+ * An instance of this typeclass should be attached to differentiable expressions ([[nexus.Expr]])
+ * or differentiable operators ([[nexus.Op1]] etc.).
  *
  * This typeclass contains basic math operations on gradients that are used by optimizers
  * ([[nexus.optimizer.FirstOrderOptimizer]]).
@@ -16,7 +16,6 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Type ${X} is not differentiable with respect to.")
-//TODO: extends VectorSpace
 trait Grad[@specialized(Float, Double) X] extends Type[X] {
 
   def mutable: Boolean

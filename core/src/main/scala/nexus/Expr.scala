@@ -7,23 +7,24 @@ import nexus.util._
 
 /**
  * Represents a symbolic expression in a computational graph.
+ * This is the core type in Nexus.
  * @tparam X Type of data that it conceptually holds
  * @since 0.1.0
  * @author Tongfei Chen
  */
 sealed trait Expr[X] {
 
+  /** Type tag of this expression. */
+  def tag: Type[X]
+
+  def requireGrad: Boolean
+
   /**
    * Gets the value of this expression given an implicit computation instance,
    * while forcing this expression to be evaluated strictly in that specific
    * computation instance.
    */
-  def value[F[_]](implicit comp: Expr ~> F): F[X] = comp(this)
-
-  /** Type tag of this expression. */
-  def tag: Type[X]
-
-  def requireGrad: Boolean
+  def value(implicit comp: Expr ~> Id): X = comp(this)
 
   def !>[Y](f: X => Y): Expr[Y] = Op1.fromFunction(f)(this)
 

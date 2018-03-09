@@ -6,7 +6,7 @@ import scala.annotation._
 
 object CastTo extends ParameterizedPolyOp1 {
 
-  implicit def castToScalarF[S, T](implicit c: BidiCasting[S, T]) = (T: Type[T]) =>
+  implicit def castToF[S, T](implicit c: BidiCasting[S, T]) = (T: Type[T]) =>
     new F[S, T] {
         def name = s"CastTo[$T]"
         def tag(tx: Type[S]) = T
@@ -14,7 +14,7 @@ object CastTo extends ParameterizedPolyOp1 {
         def backward(dy: T, y: T, x: S) = c.invert(dy)
       }
 
-  implicit def castToTensorF[S[_], T[_], A](implicit c: BidiCastingK[S, T]) = (T: TypeK[T]) =>
+  implicit def castToKF[S[_], T[_], A](implicit c: BidiCastingK[S, T]) = (T: TypeK[T]) =>
     new F[S[A], T[A]] {
       def name = s"CastTo[$T]"
       def tag(tx: Type[S[A]]) = T.ground[A] // TODO: shape copying

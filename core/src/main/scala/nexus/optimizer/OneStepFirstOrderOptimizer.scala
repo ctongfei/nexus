@@ -1,8 +1,9 @@
 package nexus.optimizer
 
+import cats._
 import nexus._
 import nexus.algebra._
-import nexus.exec._
+import nexus.execution._
 
 /**
  * Base abstract class for optimizers.
@@ -17,7 +18,7 @@ abstract class OneStepFirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X): Unit
 
-  def update(gradients: WengertList): Unit = {
+  def update(gradients: ExprMap[Id]): Unit = {
     t += 1
     for (item <- gradients) {
       item.expr match {
@@ -28,7 +29,7 @@ abstract class OneStepFirstOrderOptimizer {
     }
   }
 
-  def step[R: IsReal](loss: Expr[R])(implicit comp: Forward) = {
+  def step[R: IsReal](loss: Expr[R])(implicit comp: SimpleForward) = {
     val lossValue = loss.value
     val gradients = Backward.compute(loss)
     update(gradients)

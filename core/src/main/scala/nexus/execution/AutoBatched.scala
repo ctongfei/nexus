@@ -1,4 +1,4 @@
-package nexus.exec
+package nexus.execution
 
 import nexus._
 
@@ -9,7 +9,7 @@ import nexus._
  * [https://arxiv.org/pdf/1705.07860.pdf]
  * @author Tongfei Chen
  */
-object DynamicBatching {
-
-
+class AutoBatched(val batchSize: Int) extends ForwardInterpreter {
+  def values = ???
+  def apply[Y](e: Expr[Y]) = ???
 }

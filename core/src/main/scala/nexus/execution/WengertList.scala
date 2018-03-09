@@ -1,4 +1,4 @@
-package nexus.exec
+package nexus.execution
 
 import cats._
 import nexus.algebra._

@@ -19,4 +19,4 @@ class OperatorNotDifferentiableException(name: String, ordinal: Int)
   }} argument.")
 
 class InputNotGivenException(e: Input[_])
-  extends Exception(s"Value of input $e to the computation graph is not specified.")
+  extends Exception(s"Value of input $e is not specified.")
