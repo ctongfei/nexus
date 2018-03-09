@@ -32,9 +32,6 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
   type         Int64   = Long
   implicit val Int64   = nxai.Int64
 
-  type         Float16 = Half
-  implicit val Float16 = nxai.Float16
-
   type         Float32 = Float
   implicit val Float32 = nxai.Float32
 
