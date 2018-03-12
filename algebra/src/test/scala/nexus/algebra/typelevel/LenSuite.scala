@@ -1,16 +1,16 @@
 package nexus.algebra.typelevel
 
-import org.scalatest.FlatSpec
+import org.scalatest.FunSuite
 import shapeless._
 
-class LenSpec extends FlatSpec {
+class LenSuite extends FunSuite {
 
-  "Len" should "calculate length of HList" in {
+  test("Len should calculate length of HList") {
     val len = Len[Int :: String :: HNil]
     assert(len() == 2)
   }
 
-  it should "calculate length of Tuple" in {
+  test("Len should calculate length of Tuple") {
     val len = Len[(Int, String, Boolean)]
     assert(len() == 3)
   }

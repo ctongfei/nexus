@@ -1,11 +1,11 @@
 package nexus.algebra.typelevel
 
-import org.scalatest.FlatSpec
+import org.scalatest.FunSuite
 import shapeless._
 
-class SymmDiffSpec extends FlatSpec {
+class SymmDiffSuite extends FunSuite {
 
-  "SymmDiff of HNil and any type" should "retain all rhs types" in {
+  test("SymDiff of HNil and any type should retain all rhs types") {
     class A
     val a = new A
     val symdiff = SymDiff[HNil, A :: HNil]
@@ -13,10 +13,10 @@ class SymmDiffSpec extends FlatSpec {
     assert(symdiff(HNil, a :: HNil) == a :: HNil)
     assert(symdiff.matchedIndices == Nil)
     assert(symdiff.lhsRetainedIndices == Nil)
-    assert(symdiff.rhsRetainedIndices == List((0,0)))
+    assert(symdiff.rhsRetainedIndices == List((0, 0)))
   }
 
-  it should "find common types" in {
+  test("SymDiff finds common types") {
     class A
     val a = new A
     class B

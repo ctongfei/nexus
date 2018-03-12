@@ -1,18 +1,18 @@
 package nexus.algebra.typelevel
 
-import org.scalatest.FlatSpec
+import org.scalatest.FunSuite
 import shapeless._
 
-class IndexAtSpec extends FlatSpec {
+class InsertAtSuite extends FunSuite {
 
-  "The IndexAt typelevel function" should "insert a type in an HList" in {
+  test("InsertAt should insert a type in an HList") {
     type X = Int :: String :: HNil
     val insertAt = InsertAt[X, Nat._1, Boolean]
     val out = insertAt(1 :: "two" :: HNil, true)
     assert(out == 1 :: true :: "two" :: HNil)
   }
 
-  it should "insert a type in a Tuple" in {
+  test("InsertAt should insert a type in a Tuple") {
     type X = (Int, String)
 
     // FIXME: can this implicit val be replaced by an import?
