@@ -116,7 +116,7 @@ object Contract extends PolyOp2 {
       def name = "Contract"
       def tag(tx1: Type[T[A]], tx2: Type[T[B]]) = T.ground[C]
       def forward(x1: T[A], x2: T[B]) = T.contract(x1, x2)(sd)
-      def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = T.contract(dy, x2)(sd.recoverLeft)
+      def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = T.contract(x2, dy)(sd.recoverLeft)
       def backward2(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = T.contract(dy, x1)(sd.recoverRight)
     }
 
