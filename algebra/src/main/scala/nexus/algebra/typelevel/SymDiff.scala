@@ -43,20 +43,20 @@ object SymDiff {
       def apply(a: H :: T, b: B): Out = a.head :: s(a.tail, b)
       def matchedIndices = s.matchedIndices map { case (i, j) => (i + 1, j) }
       def lhsRetainedIndices = (0, 0) :: (s.lhsRetainedIndices map { case (i, j) => (i + 1, j + 1) })
-      def rhsRetainedIndices = s.rhsRetainedIndices
+      def rhsRetainedIndices = s.rhsRetainedIndices.map { case (i, j) => (i + 1, j) }
       def recoverLeft = ???
       def recoverRight = ???
     }
 
   // A.head ∈ B => A.head ∉ C
   implicit def symDiffCase2[H, T <: HList, B <: HList, R <: HList, N <: Nat, C <: HList]
-  (implicit i: IndexOf.Aux[B, H, N], r: RemoveAt.Aux[B, N, R], s: SymDiff.Aux[T, R, C]): Aux[H :: T, B, C] =
+  (implicit idx: IndexOf.Aux[B, H, N], r: RemoveAt.Aux[B, N, R], s: SymDiff.Aux[T, R, C]): Aux[H :: T, B, C] =
     new SymDiff[H :: T, B] {
       type Out = C
       def apply(a: H :: T, b: B): Out = s(a.tail, r(b))
-      def matchedIndices = (0, i.toInt) :: (s.matchedIndices map { case (i, j) => (i + 1, j + 1) })
+      def matchedIndices = (0, idx.toInt) :: (s.matchedIndices map { case (i, j) => (i + 1, j) })
       def lhsRetainedIndices = s.lhsRetainedIndices
-      def rhsRetainedIndices = s.rhsRetainedIndices map { case (i, j) => (i + 1, if (j >= i.toInt) j + 1 else j) }
+      def rhsRetainedIndices = s.rhsRetainedIndices map { case (i, j) => (i, if (j >= idx.toInt) j + 1 else j) }
       def recoverLeft = ???
       def recoverRight = ???
     }
