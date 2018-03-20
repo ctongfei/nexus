@@ -13,8 +13,8 @@ object SumAlong extends ParameterizedPolyOp1 {
     new F[T[A], T[B]] {
       def name = s"SumAlong[${typeName(u)}]"
       def tag(tx: Type[T[A]]) = T.ground[B]
-      def forward(x: T[A]) = T.sumAlong(x, ix.toInt)
-      def backward(dy: T[B], y: T[B], x: T[A]) = T.expandDim(dy, ix.toInt, T.size(x, ix.toInt))
+      def forward(x: T[A]) = ??? // T.sumAlong(x, ix.toInt)
+      def backward(dy: T[B], y: T[B], x: T[A]) = ??? //T.expandDim(dy, ix.toInt, T.size(x, ix.toInt))
     }
 
 }

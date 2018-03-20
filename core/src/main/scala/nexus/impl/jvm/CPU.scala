@@ -26,6 +26,9 @@ object CPUFloat32 extends IsRealTensorK[FloatTensor, Float] {
     FloatTensor.fromFlatArray(Array.fill(ShapeUtils.product(shape))(((r.nextGaussian() - μ) * σ).toFloat), shape)
   }
 
+
+  def get(x: FloatTensor[_], is: Array[Int]) = x.handle(x.index(is))
+  def set(x: FloatTensor[_], is: Array[Int], v: Float) = x.update(is: _*)(v)
   def zeroBy[A](x: FloatTensor[A]) = newTensor(x.shape)
 
   def untype(x: FloatTensor[_]) = x
@@ -46,30 +49,33 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedFloatTensor, Float] 
 
   def mutable = true
 
+  def rank(x: UntypedFloatTensor) = x.rank
+  def shape(x: UntypedFloatTensor) = x.shape
+  def slice(x: UntypedFloatTensor, dim: Int, i: Int) = x.sliceUntyped(dim, i)
+
   def map(x: UntypedFloatTensor)(f: Float => Float): UntypedFloatTensor = {
-    import x._
     if (x.rank == 0) return wrapScalar(f(x()))
-    val y = new Array[Float](size)
+    val y = new Array[Float](x.size)
     var yi = 0
-    var xi = offset
-    var d = rank - 1
-    val indices = Array.fill(rank)(0)
-    while (yi < size) {
-      y(yi) = f(handle(xi))
-      xi += stride(d)
+    var xi = x.offset
+    var d = x.rank - 1
+    val indices = Array.fill(x.rank)(0)
+    while (yi < x.size) {
+      y(yi) = f(x.handle(xi))
+      xi += x.stride(d)
       indices(d) += 1
-      if (indices(d) >= shape(d) && d > 0) {
-        while (indices(d) >= shape(d) && d > 0) {
+      if (indices(d) >= x.shape(d) && d > 0) {
+        while (indices(d) >= x.shape(d) && d > 0) {
           indices(d) = 0
           d -= 1
           indices(d) += 1
-          xi += stride(d) - (stride(d + 1) * shape(d + 1))
+          xi += x.stride(d) - (x.stride(d + 1) * x.shape(d + 1))
         }
-        d = rank - 1
+        d = x.rank - 1
       }
       yi += 1
     }
-    new UntypedFloatTensor.Contiguous(y, shape)
+    new UntypedFloatTensor.Contiguous(y, x.shape)
   }
 
   def map2(x1: UntypedFloatTensor, x2: UntypedFloatTensor)(f: (Float, Float) => Float): UntypedFloatTensor = {

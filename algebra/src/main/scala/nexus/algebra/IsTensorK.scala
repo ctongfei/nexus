@@ -33,9 +33,9 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
 
   def size(x: T[_]) = H.size(untype(x))
 
-  def get(is: Array[Int]): E
+  def get(x: T[_], is: Array[Int]): E
 
-  def set(is: Array[Int], v: E): Unit
+  def set(x: T[_], is: Array[Int], v: E): Unit
 
   def newTensor[A](shape: Array[Int]): T[A]
 

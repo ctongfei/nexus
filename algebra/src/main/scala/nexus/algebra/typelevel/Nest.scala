@@ -12,7 +12,7 @@ import scala.reflect._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-@implicitNotFound("${T} is not the ${N}-dimensional JVM array of ${A}.")
+@implicitNotFound("${T} is not the ${N}-dimensional JVM array of ${E}.")
 trait Nest[T, E, N <: Nat] {
 
   /** ClassTag of the element type. */

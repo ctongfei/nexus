@@ -15,6 +15,8 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
 
   val R = nexus.algebra.instances.Float32
 
+  def mutable = true
+
   case class Dim0(var value: Float) extends UntypedFloatTensor {
     def get(i: Int) =
       if (i == 0) value
@@ -306,14 +308,9 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
 
   def expandDim(x: UntypedFloatTensor, i: Int32) = ???
 
-  def slice(x: UntypedFloatTensor, dim: Int, i: Int) = x match {
-    case Dim0(_) =>
-    case Dense(x) =>
-      val c = new THFloatTensor()
-      c.setNDimension(x.getNDimension - 1)
-  }
+  def slice(x: UntypedFloatTensor, dim: Int, i: Int) = ???
 
-  def expandDim(x: UntypedFloatTensor, i: Int32) = ???
+
   def addS(x1: UntypedFloatTensor, x2: Float64) = addS(x1, x2.toFloat)
 
 }

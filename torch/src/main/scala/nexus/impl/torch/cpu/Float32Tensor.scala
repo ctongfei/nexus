@@ -41,10 +41,10 @@ object Float32Tensor extends IsRealTensorK[Float32Tensor, Float] {
 
   implicit val R = Float32
 
-  def newDim0Tensor(x: Float): Float32Tensor[Unit] = ???
+  def get(x: Float32Tensor[_], is: Array[Int32]) = ???
+  def set(x: Float32Tensor[_], is: Array[Int32], v: Float32): Unit = ???
 
-  def get(is: Array[Int32]) = ???
-  def set(is: Array[Int32], v: Float32): Unit = ???
+  def newDim0Tensor(x: Float): Float32Tensor[Unit] = ???
 
   def fill[A](value: => Float, axes: A, shape: Array[Int]) = ???
 
