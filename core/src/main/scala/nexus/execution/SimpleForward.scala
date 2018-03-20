@@ -1,6 +1,5 @@
 package nexus.execution
 
-import cats._
 import nexus._
 import nexus.exception._
 
@@ -29,7 +28,8 @@ class SimpleForward private(val values: WengertList) extends ForwardInterpreter 
         val y = o.forward(apply(x1), apply(x2), apply(x3))
         values(e) = y; y
 
-      case e @ Input(_) => throw new InputNotGivenException(e) // should already be in `values`
+      case e @ Input(_) =>
+        throw new InputNotGivenException(e) // should already be in `values`
     }
   }
 

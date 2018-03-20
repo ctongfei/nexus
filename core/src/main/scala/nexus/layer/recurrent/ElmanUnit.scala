@@ -27,6 +27,7 @@ class ElmanUnit[T[_], R, X: Label, S: Label] private(
 
 }
 
+
 object ElmanUnit {
 
   /**

@@ -9,51 +9,48 @@ import nexus.algebra._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Float32Tensor[A](val handle: THFloatTensor) {
+class Float32Tensor[A](val untyped: UntypedFloatTensor) {
 
   import THFloatTensorSyntax._
+  import UntypedFloatTensor._
+  import Float32Tensor._
 
-  def rank = handle.rank
+  def rank = Float32Tensor.rank(this)
 
-  def shape = handle.shape
+  def shape = Float32Tensor.shape(this)
 
-  def apply(indices: Int*) = indices.length match {
-    case 0 => ???
-    case 1 => TH.THFloatTensor_get1d(handle, indices(0))
-    case 2 => TH.THFloatTensor_get2d(handle, indices(0), indices(1))
-    case 3 => TH.THFloatTensor_get3d(handle, indices(0), indices(1), indices(2))
-    case 4 => TH.THFloatTensor_get4d(handle, indices(0), indices(1), indices(2), indices(3))
-    case _ => ???
+  def apply(indices: Int*) = untyped match {
+    case Dim0(x) if indices.length == 0 => x
+    case Dense(x) =>
+      indices.length match {
+        case 0 => ???
+        case 1 => TH.THFloatTensor_get1d(x, indices(0))
+        case 2 => TH.THFloatTensor_get2d(x, indices(0), indices(1))
+        case 3 => TH.THFloatTensor_get3d(x, indices(0), indices(1), indices(2))
+        case 4 => TH.THFloatTensor_get4d(x, indices(0), indices(1), indices(2), indices(3))
+        case _ => ???
+      }
   }
-
-  def stringPrefix = "TorchCPUFloatTensor"
-
-  def stringBody = handle.stringRepr
-
-  override def finalize() = {
-    TH.THFloatTensor_free(handle)
-    super.finalize()
-  }
-
-  override def toString = stringPrefix + "\n" + stringBody
 
 }
 
 object Float32Tensor extends IsRealTensorK[Float32Tensor, Float] {
 
-  type H = THFloatTensor
+  type H = UntypedFloatTensor
+  val H = UntypedFloatTensor
 
-  val H = UntypedFloat32Tensor
+  implicit val R = Float32
 
   def newDim0Tensor(x: Float): Float32Tensor[Unit] = ???
+
+  def get(is: Array[Int32]) = ???
+  def set(is: Array[Int32], v: Float32): Unit = ???
 
   def fill[A](value: => Float, axes: A, shape: Array[Int]) = ???
 
 
-  implicit val R: IsReal[Float] = nexus.algebra.instances.Float32
-
-  def untype(x: Float32Tensor[_]) = x.handle
-  def typeWith[A](x: THFloatTensor) = new Float32Tensor[A](x)
+  def untype(x: Float32Tensor[_]) = x.untyped
+  def typeWith[A](x: UntypedFloatTensor) = new Float32Tensor[A](x)
 
   def zeroBy[A](x: Float32Tensor[A]) = ???
   def newGaussianTensor[A](μ: Double, σ2: Double, shape: Array[Int]) = ???

@@ -11,6 +11,7 @@ import scala.util._
  * @author Tongfei Chen
  */
 object CPUFloat32 extends IsRealTensorK[FloatTensor, Float] {
+
   type H = UntypedFloatTensor
   val H = UntypedCPUFloat32
 
@@ -24,7 +25,6 @@ object CPUFloat32 extends IsRealTensorK[FloatTensor, Float] {
     val σ = math.sqrt(σ2)
     FloatTensor.fromFlatArray(Array.fill(ShapeUtils.product(shape))(((r.nextGaussian() - μ) * σ).toFloat), shape)
   }
-
 
   def zeroBy[A](x: FloatTensor[A]) = newTensor(x.shape)
 
@@ -40,7 +40,6 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedFloatTensor, Float] 
 
   type R = Float
   val R = nexus.algebra.instances.Float32
-
 
   def fromFlatArray(array: Array[R], shape: Array[Int]) =
     new UntypedFloatTensor.Contiguous(array, shape)
@@ -100,7 +99,6 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedFloatTensor, Float] 
     }
     new UntypedFloatTensor.Contiguous(y, x1.shape)
   }
-
 
   def map3(x1: UntypedFloatTensor, x2: UntypedFloatTensor, x3: UntypedFloatTensor)(f: (Float, Float, Float) => Float): UntypedFloatTensor = {
     if (x1.rank == 0 && x2.rank == 0 && x3.rank == 0) return wrapScalar(f(x1(), x2(), x3()))

@@ -14,7 +14,10 @@ abstract class ParameterizedPolyOp1 { self =>
     def ground[X, Y](implicit f: F[X, Y]) = f(parameter)
   }
 
-  def apply[P](parameter: P) = new Proxy(parameter)
+  /**
+   * Constructs a polymorphic operator given the required parameter.
+   */
+  def apply[P](parameter: P): Proxy[P] = new Proxy(parameter)
 
 }
 

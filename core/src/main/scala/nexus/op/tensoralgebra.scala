@@ -50,7 +50,7 @@ object Dot extends PolyOp2 {
  */
 object MatMul extends PolyOp2 {
 
-  implicit def matMulF[T[_], R, A: Label, B: Label, C: Label]
+  implicit def matMulF[T[_], R, A, B, C]
   (implicit T: IsRealTensorK[T, R]): F[T[(A, B)], T[(B, C)], T[(A, C)]] =
     new F[T[(A, B)], T[(B, C)], T[(A, C)]] {
       import T._

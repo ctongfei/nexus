@@ -12,9 +12,10 @@ package nexus
 trait PolyFunc1 {
 
   /**
-   * <p> Type constraint expressing what type of variables this polymorphic operation can apply to. </p>
-   * <p> Presence of an implicit `F[X, Y]` encodes (by Curry-Howard correspondence) the predicate
-   * "This function can be applied on `X`, and the result type is `Y`." </p>
+   * Type constraint expressing what type of variables this polymorphic operation can apply to.
+   *
+   * Presence of an implicit `F[X, Y]` encodes (by Curry-Howard correspondence) the predicate
+   * "This function can be applied on `X`, and the result type is `Y`."
    */
   type F[X, Y]
 

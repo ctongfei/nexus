@@ -6,7 +6,13 @@ import nexus.algebra.typelevel._
 import nexus.op._
 
 /**
+ * A recurrent unit used in long short-term memory networks.
+ *
+ * Reference:
+ *  - S Hochreiter, J Schmidhuber (1997): Long short-term memory. Neural Computation. '''9''' (8): 1735-1780.
+ *  - F A Gers, J Schmidhuber, F Cummins (2000): Learning to forget: continual prediction with LSTM. Neural Computation '''12''' (10): 2451-2471.
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 class LongShortTermMemoryUnit[T[_], R, X: Label, C: Label, H: Label]()(implicit T: IsRealTensorK[T, R])
   extends RecurrentUnit[(T[C], T[H]), T[X]]

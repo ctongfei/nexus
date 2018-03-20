@@ -8,16 +8,15 @@ import nexus.util._
 
 /**
  * A fully-connected neural layer (affine transformation).
- * Variously known as `Dense` or `FullyConnected`.
+ * Variously known as `Dense` or `FullyConnected` in other libraries.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Affine[
-  T[_], R,
-  X: Label,
-  Y: Label
-] private(val W: Param[T[(Y, X)]], val b: Param[T[Y]])
-         (implicit T: IsRealTensorK[T, R])
+class Affine[T[_], R, X: Label, Y: Label] private(
+                                                   val W: Param[T[(Y, X)]],
+                                                   val b: Param[T[Y]]
+                                                 )
+                                                 (implicit T: IsRealTensorK[T, R])
   extends Module1[T[X], T[Y]]
 {
 
@@ -33,6 +32,7 @@ class Affine[
     Add(MVMul(W, x), b)
 
 }
+
 
 object Affine {
 

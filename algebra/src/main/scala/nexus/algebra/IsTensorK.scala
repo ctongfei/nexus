@@ -27,6 +27,16 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
   /** Attaches axis information (an HList) to an untyped handle. */
   def typeWith[A](x: H): T[A]
 
+  def rank(x: T[_]) = H.rank(untype(x))
+
+  def shape(x: T[_]) = H.shape(untype(x))
+
+  def size(x: T[_]) = H.size(untype(x))
+
+  def get(is: Array[Int]): E
+
+  def set(is: Array[Int], v: E): Unit
+
   def newTensor[A](shape: Array[Int]): T[A]
 
   def fromFlatArray[A](array: Array[E], shape: Array[Int]): T[A] =

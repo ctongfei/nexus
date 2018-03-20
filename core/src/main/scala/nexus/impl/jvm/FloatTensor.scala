@@ -45,10 +45,7 @@ trait FloatTensor[A] extends UntypedFloatTensor { self =>
 
   def asSeq: Seq[Float] = ???
 
-
 }
-
-
 
 object FloatTensor {
 

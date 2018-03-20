@@ -3,7 +3,6 @@ package nexus
 import nexus.algebra._
 import nexus.exception._
 
-
 /**
  * A unary function in computational graphs.
  * @author Tongfei Chen

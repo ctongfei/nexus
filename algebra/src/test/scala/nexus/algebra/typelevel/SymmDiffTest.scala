@@ -3,7 +3,10 @@ package nexus.algebra.typelevel
 import org.scalatest.FunSuite
 import shapeless._
 
-class SymmDiffSuite extends FunSuite {
+/**
+ * @author Frank van Lankvelt
+ */
+class SymmDiffTest extends FunSuite {
 
   test("SymDiff of HNil and any type should retain all rhs types") {
     class A

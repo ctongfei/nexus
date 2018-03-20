@@ -3,7 +3,10 @@ package nexus.algebra.typelevel
 import org.scalatest.FunSuite
 import shapeless._
 
-class IndexOfSuite extends FunSuite {
+/**
+ * @author Frank van Lankvelt
+ */
+class IndexOfTest extends FunSuite {
 
   test("IndexOf should find the index of a type in an HList") {
     type X = Int :: String :: HNil

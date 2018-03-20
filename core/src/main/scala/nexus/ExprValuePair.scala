@@ -17,11 +17,9 @@ trait ExprValuePair[V[_]] extends Product2[Expr[_], V[_]] {
   /** The stored information assigned to the specific expression. */
   val value: V[Data]
 
+  // Conforms to Scala idioms
   def _1 = expr
   def _2 = value
-
-  // Conforms to Scala idioms
-
   final def canEqual(that: Any) = false
   override def toString = s"$expr : $value"
 

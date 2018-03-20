@@ -1,6 +1,6 @@
 package nexus
 
-import shapeless.Id
+import shapeless._
 
 /**
  * Represents an assignment to a symbolic expression, which takes the form `Expr[X] := X`.

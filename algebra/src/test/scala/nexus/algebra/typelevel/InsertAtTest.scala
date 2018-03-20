@@ -3,7 +3,7 @@ package nexus.algebra.typelevel
 import org.scalatest.FunSuite
 import shapeless._
 
-class InsertAtSuite extends FunSuite {
+class InsertAtTest extends FunSuite {
 
   test("InsertAt should insert a type in an HList") {
     type X = Int :: String :: HNil

@@ -17,6 +17,7 @@ sealed trait Expr[X] {
   /** Type tag of this expression. */
   def tag: Type[X]
 
+  /** Will the gradient of this expression be computed when performing backward computation? */
   def requireGrad: Boolean
 
   /**
@@ -48,7 +49,6 @@ sealed trait Expr[X] {
   }
 }
 
-
 /**
  * A placeholder for inputs to a computation graph.
  */
@@ -64,6 +64,7 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
 
 }
 
+
 /**
  * A parameter of a model.
  * @param value Initial value of this parameter
@@ -71,7 +72,7 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
  */
 case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) extends Expr[X] {
 
-  def requireGrad = true // or else, how could it be updated?
+  final def requireGrad = true // or else, how could it be updated?
 
   def +=(g: X) = if (tag.mutable)
     tag.addI(value, g)
@@ -82,6 +83,7 @@ case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) exten
   override def toString = name
 
 }
+
 
 /**
  * A constant value in a computational graph.
@@ -107,6 +109,7 @@ case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
   override def toString = s"${op.name}($x)"
 }
 
+
 /**
  * The result of the application of a binary function to two expressions.
  */
@@ -118,6 +121,7 @@ case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) exten
   val tag = op.tag(x1.tag, x2.tag)
   override def toString = s"${op.name}($x1, $x2)"
 }
+
 
 /**
  * The result of the application of a ternary function to three expressions.

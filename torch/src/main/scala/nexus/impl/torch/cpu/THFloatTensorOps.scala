@@ -15,11 +15,11 @@ object THFloatTensorSyntax {
     def get(i: Int) = TH.floatArray_getitem(a.getStorage.getData, i)
     def set(i: Int, v: Float) = TH.floatArray_setitem(a.getStorage.getData, i, v)
 
-    def shape = nativeI64ArrayToJvm(a.getSize, a.getNDimension).map(_.toInt)
-    def shape_=(s: Array[Int]) = a.setSize(jvmLongArrayToNative(s.map(_.toLong)))
+    def shape = Util.nativeI64ArrayToJvm(a.getSize, a.getNDimension).map(_.toInt)
+    def shape_=(s: Array[Int]) = a.setSize(Util.jvmLongArrayToNative(s.map(_.toLong)))
 
-    def strides = nativeI64ArrayToJvm(a.getStride, a.getNDimension).map(_.toInt)
-    def strides_=(s: Array[Int]) = a.setStride(jvmLongArrayToNative(s.map(_.toLong)))
+    def strides = Util.nativeI64ArrayToJvm(a.getStride, a.getNDimension).map(_.toInt)
+    def strides_=(s: Array[Int]) = a.setStride(Util.jvmLongArrayToNative(s.map(_.toLong)))
 
     def offset = a.getStorageOffset
     def offset_=(o: Int) = a.setStorageOffset(o)

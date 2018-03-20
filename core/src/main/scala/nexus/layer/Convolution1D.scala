@@ -10,15 +10,12 @@ import nexus.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Convolution1D[
-  T[_], R,
-  W: Label,
-  X: Label,
-  Y: Label
-] private(val window: Int,
-  val stride: Int,
-  val weight: Param[T[(Y, X)]]
-)(implicit T: IsRealTensorK[T, R])
+class Convolution1D[T[_], R, W: Label, X: Label, Y: Label] private(
+                                                                    val window: Int,
+                                                                    val stride: Int,
+                                                                    val weight: Param[T[(Y, X)]]
+                                                                  )
+                                                                  (implicit T: IsRealTensorK[T, R])
   extends Module1[T[(W, X)], T[(W, Y)]]
 {
 

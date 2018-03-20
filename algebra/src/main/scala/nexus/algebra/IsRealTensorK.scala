@@ -1,11 +1,6 @@
 package nexus.algebra
 
-import nexus.algebra.typelevel.util._
 import nexus.algebra.typelevel._
-import shapeless._
-import shapeless.ops.hlist.Length
-import shapeless.ops.nat._
-
 import scala.annotation._
 
 /**
@@ -22,7 +17,6 @@ trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
   def elementType = R
 
   def newGaussianTensor[A](μ: Double, σ2: Double, shape: Array[Int]): T[A]
-
 
   def zeroBy[A](x: T[A]): T[A]
 
@@ -97,8 +91,6 @@ trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
 
   def contract[A, B, C](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] =
     typeWith[C](H.tMul(untype(x), untype(y), sd.matchedIndices))
-
-
 
   def ground[A]: IsAxisGroundedRealTensor[T, R, A] =
     new IsAxisGroundedRealTensor[T, R, A] {

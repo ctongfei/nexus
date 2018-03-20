@@ -24,11 +24,10 @@ class Linear[T[_], R, A: Label, B: Label] private(
   def parameters = Set(weight)
 
   def apply(x: Expr[T[A]]): Expr[T[B]] = MVMul(weight, x)
+
 }
 
 object Linear {
-
-  @volatile private var i = 0
 
   def from[T[_], R, A, B]
   (W: Param[T[(B, A)]])(implicit T: IsRealTensorK[T, R]) = new Linear[T, R, A, B](W)
@@ -45,4 +44,5 @@ object Linear {
     val W = Param(newGaussianTensor[(B, A)](0f, 1f, Array(nB, nA)), name = s"$key.weight")
     from[T, R, A, B](W)
   }
+
 }

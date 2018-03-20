@@ -12,6 +12,7 @@ object given {
 
   /**
    * User-friendly syntax for creating a forward computation context.
+   * @param as A list of assignments
    */
   def apply(as: Assignment*) = new {
 
@@ -20,12 +21,11 @@ object given {
       op(comp)
     }
 
-    def using[F <: (Expr ~> Id)](factory: ForwardInterpreterFactory[F])(op: F => Any) = {
+    def using[F <: ForwardInterpreter](factory: ForwardInterpreterFactory[F])(op: F => Any) = {
       implicit val comp = factory.given(as: _*)
       op(comp)
     }
 
   }
-
 
 }
