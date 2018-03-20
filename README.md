@@ -1,4 +1,6 @@
-### nexus
+<img align="right" src="nexus-logo.svg" height="150px" style="padding-left: 20px"/>
+
+## Nexus
 A prototype of a typeful & typesafe deep learning system that strives to be different
 
 A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/core/src/test/scala/nexus/XorTest.scala).
