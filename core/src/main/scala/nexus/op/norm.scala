@@ -11,7 +11,7 @@ import nexus.algebra.syntax._
  */
 object Abs extends PolyOp1 {
 
-  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+  implicit def absF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Abs"
     def tag(tx: Type[R]) = tx
     def forward(x: R) = R.abs(x)

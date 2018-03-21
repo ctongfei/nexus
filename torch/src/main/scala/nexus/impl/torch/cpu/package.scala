@@ -7,6 +7,6 @@ import jtorch.cpu._
  */
 package object cpu {
 
-  implicit val implicitFloat32Tensor = Float32Tensor
+  implicit val implicitFloat32Tensor = FloatTensor
 
 }

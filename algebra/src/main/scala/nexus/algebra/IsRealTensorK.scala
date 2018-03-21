@@ -59,23 +59,23 @@ trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
   def transpose[A, B](x: T[(A, B)]): T[(B, A)] =
     typeWith[(B, A)](H.transpose(untype(x)))
 
-  def eLog[A](x: T[A]): T[A] = typeWith[A](H.log(untype(x)))
-  def eExp[A](x: T[A]): T[A] = typeWith[A](H.exp(untype(x)))
-  def eLog1p[A](x: T[A]): T[A] = typeWith[A](H.log1p(untype(x)))
-  def eExpm1[A](x: T[A]): T[A] = typeWith[A](H.expm1(untype(x)))
+  def eLog[A](x: T[A]): T[A] = typeWith[A](H.eLog(untype(x)))
+  def eExp[A](x: T[A]): T[A] = typeWith[A](H.eExp(untype(x)))
+  def eLog1p[A](x: T[A]): T[A] = typeWith[A](H.eLog1p(untype(x)))
+  def eExpm1[A](x: T[A]): T[A] = typeWith[A](H.eExpm1(untype(x)))
 
-  def eSin[A](x: T[A]): T[A] = typeWith[A](H.sin(untype(x)))
-  def eCos[A](x: T[A]): T[A] = typeWith[A](H.cos(untype(x)))
-  def eTan[A](x: T[A]): T[A] = typeWith[A](H.tan(untype(x)))
+  def eSin[A](x: T[A]): T[A] = typeWith[A](H.eSin(untype(x)))
+  def eCos[A](x: T[A]): T[A] = typeWith[A](H.eCos(untype(x)))
+  def eTan[A](x: T[A]): T[A] = typeWith[A](H.eTan(untype(x)))
 
-  def sigmoid[A](x: T[A]): T[A] = typeWith[A](H.sigmoid(untype(x)))
+  def sigmoid[A](x: T[A]): T[A] = typeWith[A](H.eSigmoid(untype(x)))
 
-  def relu[A](x: T[A]): T[A] = typeWith[A](H.reLU(untype(x)))
+  def relu[A](x: T[A]): T[A] = typeWith[A](H.eReLU(untype(x)))
 
-  def eAbs[A](x: T[A]): T[A] = typeWith[A](H.abs(untype(x)))
-  def eSgn[A](x: T[A]): T[A] = typeWith[A](H.sgn(untype(x)))
+  def eAbs[A](x: T[A]): T[A] = typeWith[A](H.eAbs(untype(x)))
+  def eSgn[A](x: T[A]): T[A] = typeWith[A](H.eSgn(untype(x)))
 
-  def pos[A](x: T[A]): T[A] = typeWith[A](H.isPos(untype(x)))
+  def pos[A](x: T[A]): T[A] = typeWith[A](H.eIsPos(untype(x)))
 
   def sum(x: T[_]): R = H.sum(untype(x))
 

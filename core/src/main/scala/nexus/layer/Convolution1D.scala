@@ -28,14 +28,14 @@ class Convolution1D[T[_], R, W: Label, X: Label, Y: Label] private(
 object Convolution1D {
 
   def apply[T[_], R, W, X, Y](
-                                       widthAxis: W,
-                                       inputAxisSize: (X, Int),
-                                       outputAxisSize: (Y, Int),
-                                       window: Int,
-                                       stride: Int = 1
-                                     )
-                                     (implicit T: IsRealTensorK[T, R]):
-  Convolution1D[T, R, W, X, Y] = {
+    widthAxis: W,
+    inputAxisSize: (X, Int),
+    outputAxisSize: (Y, Int),
+    window: Int,
+    stride: Int = 1,
+    name: String = ExprName.nextId("Convolution1D")
+  )
+  (implicit T: IsRealTensorK[T, R]): Convolution1D[T, R, W, X, Y] = {
     val (inputAxis, inputSize) = inputAxisSize
     val (outputAxis, outputSize) = outputAxisSize
     val key = ExprName.nextId("Convolution1D")

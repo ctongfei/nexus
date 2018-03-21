@@ -19,6 +19,7 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
+  libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.13.4" % Test,
   libraryDependencies += "me.tongfei" %% "poly-io" % "0.3.2" % Test,
 
   mathFormulaInDoc := {
@@ -63,10 +64,9 @@ lazy val core = (project in file("core"))
     name := "nexus-core"
   )
 
-
 lazy val torch = (project in file("torch"))
   .settings(commonSettings: _*)
-  .dependsOn(core)
+  .dependsOn(core % "compile->compile;test->test")
   .settings(
     name := "nexus-torch",
     libraryDependencies += "me.tongfei" % "jtorch-cpu" % "0.3.0-SNAPSHOT"

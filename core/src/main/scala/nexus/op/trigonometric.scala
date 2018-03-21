@@ -11,7 +11,7 @@ import nexus.algebra.syntax._
  */
 object Sin extends PolyOp1 {
 
-  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+  implicit def sinF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Sin"
     def tag(tx: Type[R]) = tx
     def forward(x: R) = R.sin(x)
@@ -41,7 +41,7 @@ object Sin extends PolyOp1 {
  */
 object Cos extends PolyOp1 {
 
-  implicit def scalar[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+  implicit def cosF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Cos"
     def tag(tx: Type[R]) = tx
     def forward(x: R) = R.cos(x)

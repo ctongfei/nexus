@@ -33,23 +33,23 @@ trait IsUntypedRealTensor[T, @specialized(Float, Double) R] extends IsUntypedTen
   def eSqr(x: T): T
   def eSqrt(x: T): T
 
-  def log(x: T): T
-  def exp(x: T): T
-  def log1p(x: T): T
-  def expm1(x: T): T
+  def eLog(x: T): T
+  def eExp(x: T): T
+  def eLog1p(x: T): T
+  def eExpm1(x: T): T
 
-  def sin(x: T): T
-  def cos(x: T): T
-  def tan(x: T): T
+  def eSin(x: T): T
+  def eCos(x: T): T
+  def eTan(x: T): T
 
   def sum(x: T): R
 
-  def sigmoid(x: T): T
-  def reLU(x: T): T
+  def eSigmoid(x: T): T
+  def eReLU(x: T): T
 
-  def abs(x: T): T
-  def sgn(x: T): T
-  def isPos(x: T): T
+  def eAbs(x: T): T
+  def eSgn(x: T): T
+  def eIsPos(x: T): T
 
   def transpose(x: T): T
 

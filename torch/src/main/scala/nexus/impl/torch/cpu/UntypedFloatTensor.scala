@@ -5,7 +5,19 @@ import nexus._
 import nexus.algebra._
 import nexus.exception._
 
-sealed abstract class UntypedFloatTensor extends UntypedTensor[Float]
+sealed abstract class UntypedFloatTensor extends UntypedTensor[Float] {
+  import UntypedFloatTensor._
+  def stringRepr: String = rank match {
+    case 0 =>
+      this match {
+        case Dim0(x) => x.toString
+      }
+    case 1 =>
+      (0 until shape(0)).map { i => get(offset + i * strides(0)) }.mkString("[", ", \t", "]")
+    case _ =>
+      (0 until shape(0)).map { i => slice(this, 0, i).stringRepr }.mkString("[", "\n", "]")
+  }
+}
 
 /**
  * Wraps around Torch native CPU tensor operations.
@@ -171,7 +183,9 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
     case Dim0(x) => Dim0(x * k)
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
-      ???
+      TH.THFloatTensor_zero(y)
+      TH.THFloatTensor_add(y, x, k)
+      Dense(y)
   }
 
   def eInv(x: UntypedFloatTensor) = ???
@@ -189,7 +203,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def log(x: UntypedFloatTensor) = x match {
+  def eLog(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.log(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -197,7 +211,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def exp(x: UntypedFloatTensor) = x match {
+  def eExp(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.exp(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -205,7 +219,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def log1p(x: UntypedFloatTensor) = x match {
+  def eLog1p(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.log1p(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -213,7 +227,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def expm1(x: UntypedFloatTensor) = x match {
+  def eExpm1(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.expm1(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -221,7 +235,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def sin(x: UntypedFloatTensor) = x match {
+  def eSin(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.sin(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -229,7 +243,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def cos(x: UntypedFloatTensor) = x match {
+  def eCos(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.cos(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -237,14 +251,13 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def tan(x: UntypedFloatTensor) = x match {
+  def eTan(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.tan(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
       TH.THFloatTensor_tan(y, x)
       Dense(y)
   }
-
 
   def sum(x: UntypedFloatTensor) = x match {
     case Dim0(x) => x
@@ -253,7 +266,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       y.toFloat
   }
 
-  def sigmoid(x: UntypedFloatTensor) = x match {
+  def eSigmoid(x: UntypedFloatTensor) = x match {
     case Dim0(x) => ???
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -261,12 +274,12 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def reLU(x: UntypedFloatTensor) = x match {
+  def eReLU(x: UntypedFloatTensor) = x match {
     case Dim0(x) => ???
     case Dense(x) => ???
   }
 
-  def abs(x: UntypedFloatTensor) = x match {
+  def eAbs(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.abs(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -274,7 +287,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def sgn(x: UntypedFloatTensor) = x match {
+  def eSgn(x: UntypedFloatTensor) = x match {
     case Dim0(x) => Dim0(R.sgn(x))
     case Dense(x) =>
       val y = TH.THFloatTensor_newClone(x)
@@ -282,13 +295,31 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       Dense(y)
   }
 
-  def isPos(x: UntypedFloatTensor) = ???
+  def eIsPos(x: UntypedFloatTensor) = ???
 
-  def mmMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = ???
+  def mmMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = (x, y) match {
+    case (Dense(tx), Dense(ty)) =>
+      val z = TH.THFloatTensor_newWithSize2d(x.shape(0), y.shape(1))
+      TH.THFloatTensor_zero(z)
+      TH.THFloatTensor_addmm(z, 1f, z, 1f, tx, ty)
+      Dense(z)
+  }
 
-  def mvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = ???
+  def mvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = (x, y) match {
+    case (Dense(tx), Dense(ty)) =>
+      val z = TH.THFloatTensor_newWithSize1d(x.shape(0))
+      TH.THFloatTensor_zero(z)
+      TH.THFloatTensor_addmv(z, 1f, z, 1f, tx, ty)
+      Dense(z)
+  }
 
-  def vvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = ???
+  def vvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = (x, y) match {
+    case (Dense(tx), Dense(ty)) =>
+      val z = TH.THFloatTensor_newWithSize2d(x.shape(0), y.shape(0))
+      TH.THFloatTensor_zero(z)
+      TH.THFloatTensor_addr(z, 1f, z, 1f, tx, ty)
+      Dense(z)
+  }
 
   def dot(x: UntypedFloatTensor, y: UntypedFloatTensor) = (x, y) match {
     case (Dim0(x), Dim0(y)) => x * y
@@ -308,7 +339,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
 
   def expandDim(x: UntypedFloatTensor, i: Int32) = ???
 
-  def slice(x: UntypedFloatTensor, dim: Int, i: Int) = ???
+  def slice(x: UntypedFloatTensor, dim: Int, i: Int): UntypedFloatTensor = ???
 
 
   def addS(x1: UntypedFloatTensor, x2: Float64) = addS(x1, x2.toFloat)

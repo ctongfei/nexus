@@ -225,21 +225,21 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedFloatTensor, Float] 
 
   def dot(x: UntypedFloatTensor, y: UntypedFloatTensor): R = sum(eMul(x, y))
 
-  def exp(x: UntypedFloatTensor) = map(x)(a => Math.exp(a).toFloat)
-  def log(x: UntypedFloatTensor) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
-  def log1p(x: UntypedFloatTensor) = map(x)(x => Math.log1p(x).toFloat)
-  def expm1(x: UntypedFloatTensor) = map(x)(x => Math.expm1(x).toFloat)
+  def eExp(x: UntypedFloatTensor) = map(x)(a => Math.exp(a).toFloat)
+  def eLog(x: UntypedFloatTensor) = map(x)(x => if (x == 0f) 0f else math.log(x).toFloat)
+  def eLog1p(x: UntypedFloatTensor) = map(x)(x => Math.log1p(x).toFloat)
+  def eExpm1(x: UntypedFloatTensor) = map(x)(x => Math.expm1(x).toFloat)
 
-  def sin(x: UntypedFloatTensor) = map(x)(a => Math.sin(a).toFloat)
-  def cos(x: UntypedFloatTensor) = map(x)(a => Math.cos(a).toFloat)
-  def tan(x: UntypedFloatTensor) = map(x)(a => Math.tan(a).toFloat)
+  def eSin(x: UntypedFloatTensor) = map(x)(a => Math.sin(a).toFloat)
+  def eCos(x: UntypedFloatTensor) = map(x)(a => Math.cos(a).toFloat)
+  def eTan(x: UntypedFloatTensor) = map(x)(a => Math.tan(a).toFloat)
 
 
-  def abs(x: UntypedFloatTensor) = map(x)(Math.abs)
-  def sgn(x: UntypedFloatTensor) = map(x)(Math.signum)
-  def sigmoid(x: UntypedFloatTensor) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
-  def reLU(x: UntypedFloatTensor) = map(x)(a => if (a > 0) a else 0f)
-  def isPos(x: UntypedFloatTensor) = map(x)(a => if (a > 0) 1f else 0f)
+  def eAbs(x: UntypedFloatTensor) = map(x)(Math.abs)
+  def eSgn(x: UntypedFloatTensor) = map(x)(Math.signum)
+  def eSigmoid(x: UntypedFloatTensor) = map(x)(a => 1f / (1f + math.exp(-a).toFloat))
+  def eReLU(x: UntypedFloatTensor) = map(x)(a => if (a > 0) a else 0f)
+  def eIsPos(x: UntypedFloatTensor) = map(x)(a => if (a > 0) 1f else 0f)
 
   def sum(x: UntypedFloatTensor) = x.handle.sum  // TODO: wrong!
 

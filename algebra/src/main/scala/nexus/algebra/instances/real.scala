@@ -42,6 +42,8 @@ object Float32 extends IsReal[Float] {
   def toFloat(x: R) = x
 
   def addI(x1: R, x2: R) = x1 + x2
+
+  override def toString = "Float"
 }
 
 object Float64 extends IsReal[Double] {
@@ -84,4 +86,6 @@ object Float64 extends IsReal[Double] {
   def toFloat(x: Double) = x.toFloat
 
   def addI(x1: Double, x2: Double) = x1 + x2
+
+  override def toString = "Double"
 }
