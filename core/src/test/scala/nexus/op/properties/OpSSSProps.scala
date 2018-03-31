@@ -13,7 +13,7 @@ class OpSSSProps[R](op: Op2[R, R, R],
                     numSamples: Int = 100,
                     relativeDiff: Double = 0.001,
                     tolerableError: Double = 0.01,
-                    tolerablePassedRatio: Double = 0.95,
+                    tolerablePassedRatio: Double = 0.95
                   )(implicit R: IsReal[R]) {
 
   import R._

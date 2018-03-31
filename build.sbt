@@ -1,6 +1,7 @@
 import scala.io._
+import nexus.builds.Libs
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.11.8"
 enablePlugins(ScalaUnidocPlugin)
 
 
@@ -12,7 +13,7 @@ lazy val commonSettings = Seq(
   organization := "me.tongfei",
   version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.11.8",
 
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3",
   libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0",
@@ -62,6 +63,20 @@ lazy val core = (project in file("core"))
   .dependsOn(algebra)
   .settings(
     name := "nexus-core"
+  )
+
+
+lazy val nd4jBackend = Libs.nd4jNativePlatform
+
+lazy val nd4j = (project in file("nd4j"))
+  .settings(commonSettings: _*)
+  .dependsOn(core % "compile->compile;test->test")
+  .settings(
+    name := "nexus-nd4j",
+    libraryDependencies ++= Seq(
+      nd4jBackend,
+      Libs.nd4s
+    )
   )
 
 lazy val torch = (project in file("torch"))
