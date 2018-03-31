@@ -15,13 +15,13 @@ import shapeless.ops.nat._
   * @author Andrey Romanov
   * @since 0.1.0
   */
-trait ND4JTensor[A] extends UntypedND4JTensor { self =>
+trait FloatTensor[A] extends UntypedFloatTensor { self =>
 
   //def update(indices: Int*)(newValue: Float) = handle(index(indices)) = newValue
 
   protected def slice0[N <: Nat, T]
   (axis: N, i: Int)
-  (implicit t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): ND4JTensor[T] =
+  (implicit t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): FloatTensor[T] =
     sliceUntyped(nn(), i).typeWith[T]
 
 
@@ -31,7 +31,7 @@ trait ND4JTensor[A] extends UntypedND4JTensor { self =>
 
   def along[X, N <: Nat, T]
   (axis: X)
-  (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): Seq[ND4JTensor[T]] =
+  (implicit n: IndexOf.Aux[A, X, N], t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): Seq[FloatTensor[T]] =
     (0 until shape(nn())) map { i => slice0(n(), i) }
 
   def expandDim[X, N <: Nat, T]
@@ -43,18 +43,18 @@ trait ND4JTensor[A] extends UntypedND4JTensor { self =>
 
 }
 
-object ND4JTensor {
+object FloatTensor {
 
-  def scalar(value: Float): ND4JTensor[Unit] =
+  def scalar(value: Float): FloatTensor[Unit] =
     new Tensor(Nd4j.scalar(value))
 
-  def scalar(value: Double): ND4JTensor[Unit] =
+  def scalar(value: Double): FloatTensor[Unit] =
     new Tensor(Nd4j.scalar(value))
 
-  def fill[A](value: => Float, axes: A, shape: Array[Int]): ND4JTensor[A] =
+  def fill[A](value: => Float, axes: A, shape: Array[Int]): FloatTensor[A] =
     new Tensor(Nd4j.ones(shape: _*) * value)
 
-  def fromFlatArray[A](array: Array[Float], shape: Array[Int]): ND4JTensor[A] =
+  def fromFlatArray[A](array: Array[Float], shape: Array[Int]): FloatTensor[A] =
     new Tensor(array.asNDArray(shape: _*))
 
   def fromNestedArray[A, N <: Nat, T]
@@ -63,13 +63,13 @@ object ND4JTensor {
     fromFlatArray[A](nest.flatten(array), nest.shape(array))
 
   class Tensor[A](handle: INDArray)
-    extends UntypedND4JTensor.Tensor(handle) with ND4JTensor[A]
+    extends UntypedFloatTensor.Tensor(handle) with FloatTensor[A]
 }
 
 object Scalar {
-  def apply(x: Float) = ND4JTensor.fromFlatArray[Unit](Array(x), Array())
+  def apply(x: Float) = FloatTensor.fromFlatArray[Unit](Array(x), Array())
 }
 
 object Vector {
-  def apply[A](A: A)(array: Array[Float]) = ND4JTensor.fromFlatArray[A](array, Array(array.length))
+  def apply[A](A: A)(array: Array[Float]) = FloatTensor.fromFlatArray[A](array, Array(array.length))
 }

@@ -4,7 +4,7 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4s.Implicits._
 
 
-trait UntypedND4JTensor { self =>
+trait UntypedFloatTensor { self =>
   val handle: INDArray
   val stride: Array[Int] = handle.stride()
   val offset: Int = handle.offset().toInt
@@ -28,10 +28,10 @@ trait UntypedND4JTensor { self =>
 
   def update(indices: Int*)(value: Float) = handle(index(indices)) = value
 
-  def sliceUntyped(n: Int, i: Int): UntypedND4JTensor =
-    new UntypedND4JTensor.Tensor(handle.slice(i, n))
+  def sliceUntyped(n: Int, i: Int): UntypedFloatTensor =
+    new UntypedFloatTensor.Tensor(handle.slice(i, n))
 
-  def typeWith[A]: ND4JTensor[A]
+  def typeWith[A]: FloatTensor[A]
 
   def stringBody: String = rank match {
     case 0 =>
@@ -45,10 +45,10 @@ trait UntypedND4JTensor { self =>
 }
 
 
-object UntypedND4JTensor {
+object UntypedFloatTensor {
 
-  class Tensor(val handle: INDArray) extends UntypedND4JTensor {
-    def typeWith[A] = new ND4JTensor.Tensor[A](handle)
+  class Tensor(val handle: INDArray) extends UntypedFloatTensor {
+    def typeWith[A] = new FloatTensor.Tensor[A](handle)
   }
 
 }
