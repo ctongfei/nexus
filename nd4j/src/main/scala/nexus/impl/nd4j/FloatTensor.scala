@@ -3,7 +3,6 @@ package nexus.impl.nd4j
 import nexus.algebra.typelevel._
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
-import org.nd4s.Implicits._
 import shapeless._
 import shapeless.ops.nat._
 
@@ -55,10 +54,10 @@ object FloatTensor {
     new Tensor(Nd4j.scalar(value))
 
   def fill[A](value: => Float, axes: A, shape: Array[Int]): FloatTensor[A] =
-    new Tensor(Nd4j.ones(convertShape(shape): _*) * value)
+    new Tensor(Nd4j.ones(convertShape(shape): _*).mul(value))
 
   def fromFlatArray[A](array: Array[Float], shape: Array[Int]): FloatTensor[A] =
-    new Tensor(array.asNDArray(convertShape(shape): _*))
+    new Tensor(Nd4j.create(array, convertShape(shape)))
 
   def fromNestedArray[A, N <: Nat, T]
   (axes: A)(array: T)

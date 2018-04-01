@@ -9,6 +9,4 @@ object Libs {
 
   val nd4jCuda80Platform = "org.nd4j" % "nd4j-cuda-8.0-platform" % dl4jVer
 
-  val nd4s = "org.nd4j" %% "nd4s" % dl4jVer
-
 }

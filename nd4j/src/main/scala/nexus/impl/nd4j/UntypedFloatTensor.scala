@@ -1,7 +1,6 @@
 package nexus.impl.nd4j
 
 import org.nd4j.linalg.api.ndarray.INDArray
-import org.nd4s.Implicits._
 
 
 trait UntypedFloatTensor { self =>
@@ -24,9 +23,9 @@ trait UntypedFloatTensor { self =>
 
   def size = handle.length
 
-  def apply(indices: Int*) = handle(indices: _*)
+  def apply(indices: Int*) = handle.getFloat(index(indices))
 
-  def update(indices: Int*)(value: Float) = handle(index(indices)) = value
+  def update(indices: Int*)(value: Float) = handle.putScalar(index(indices), value)
 
   def sliceUntyped(n: Int, i: Int): UntypedFloatTensor =
     new UntypedFloatTensor.Tensor(handle.slice(i, n))
@@ -35,9 +34,9 @@ trait UntypedFloatTensor { self =>
 
   def stringBody: String = rank match {
     case 0 =>
-      handle(offset).toString
+      handle.getFloat(offset).toString
     case 1 =>
-      (0 until shape(0)).map { i => handle(offset + i * stride(0)) }.mkString("[", ", \t", "]")
+      (0 until shape(0)).map { i => handle.getFloat(offset + i * stride(0)) }.mkString("[", ", \t", "]")
     case _ =>
       (0 until shape(0)).map { i => sliceUntyped(0, i).stringBody }.mkString("[", "\n", "]")
   }

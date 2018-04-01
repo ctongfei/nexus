@@ -66,17 +66,14 @@ lazy val core = (project in file("core"))
   )
 
 
-lazy val nd4jBackend = Libs.nd4jNativePlatform
+lazy val nd4jBackend = Libs.nd4jNativePlatform  // Libs.nd4jCuda80Platform
 
 lazy val nd4j = (project in file("nd4j"))
   .settings(commonSettings: _*)
   .dependsOn(core % "compile->compile;test->test")
   .settings(
     name := "nexus-nd4j",
-    libraryDependencies ++= Seq(
-      nd4jBackend,
-      Libs.nd4s
-    )
+    libraryDependencies += nd4jBackend
   )
 
 lazy val torch = (project in file("torch"))
