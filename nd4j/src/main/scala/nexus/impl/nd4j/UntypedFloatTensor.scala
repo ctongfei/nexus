@@ -24,7 +24,7 @@ trait UntypedFloatTensor { self =>
 
   def size = handle.length
 
-  def apply(indices: Int*) = handle(index(indices))
+  def apply(indices: Int*) = handle(indices: _*)
 
   def update(indices: Int*)(value: Float) = handle(index(indices)) = value
 

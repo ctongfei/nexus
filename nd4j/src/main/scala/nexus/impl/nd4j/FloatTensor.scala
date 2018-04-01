@@ -17,8 +17,6 @@ import shapeless.ops.nat._
   */
 trait FloatTensor[A] extends UntypedFloatTensor { self =>
 
-  //def update(indices: Int*)(newValue: Float) = handle(index(indices)) = newValue
-
   protected def slice0[N <: Nat, T]
   (axis: N, i: Int)
   (implicit t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): FloatTensor[T] =
@@ -44,6 +42,11 @@ trait FloatTensor[A] extends UntypedFloatTensor { self =>
 }
 
 object FloatTensor {
+  private def convertShape(shape: Array[Int]) = shape match {
+    case Array() => Array(1, 1)
+    case Array(d) => Array(d, 1)
+    case s => s
+  }
 
   def scalar(value: Float): FloatTensor[Unit] =
     new Tensor(Nd4j.scalar(value))
@@ -52,10 +55,10 @@ object FloatTensor {
     new Tensor(Nd4j.scalar(value))
 
   def fill[A](value: => Float, axes: A, shape: Array[Int]): FloatTensor[A] =
-    new Tensor(Nd4j.ones(shape: _*) * value)
+    new Tensor(Nd4j.ones(convertShape(shape): _*) * value)
 
   def fromFlatArray[A](array: Array[Float], shape: Array[Int]): FloatTensor[A] =
-    new Tensor(array.asNDArray(shape: _*))
+    new Tensor(array.asNDArray(convertShape(shape): _*))
 
   def fromNestedArray[A, N <: Nat, T]
   (axes: A)(array: T)

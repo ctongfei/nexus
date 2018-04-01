@@ -1,4 +1,4 @@
-package nexus.impl.nd4j
+package nexus.impl
 
 import nexus.algebra._
 import shapeless._
