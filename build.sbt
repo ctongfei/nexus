@@ -1,7 +1,7 @@
 import scala.io._
 import nexus.builds.Libs
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.4"
 enablePlugins(ScalaUnidocPlugin)
 
 
@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
   organization := "me.tongfei",
   version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.4",
 
   libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3",
   libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0",
