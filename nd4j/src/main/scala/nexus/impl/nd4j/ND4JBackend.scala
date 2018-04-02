@@ -2,6 +2,7 @@ package nexus.impl.nd4j
 
 import nexus.algebra._
 import nexus.algebra.typelevel.util._
+import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.ops.transforms.Transforms
 
@@ -12,7 +13,7 @@ import scala.util._
   * @author Andrey Romanov
   */
 object ND4JTensor extends IsRealTensorK[FloatTensor, Float]{
-  type H = UntypedFloatTensor
+  type H = INDArray
   val H = UntypedND4JTensor
 
   val R = H.R
@@ -32,137 +33,105 @@ object ND4JTensor extends IsRealTensorK[FloatTensor, Float]{
   def set(x: FloatTensor[_], is: Array[Int], v: Float) = x.update(is: _*)(v)
   def zeroBy[A](x: FloatTensor[A]) = newTensor(x.shape)
 
-  def untype(x: FloatTensor[_]) = x
-  def typeWith[A](x: UntypedFloatTensor) = x.typeWith[A]
+  def untype(x: FloatTensor[_]) = x.handle
+  def typeWith[A](x: INDArray) = new FloatTensor.Tensor(x)
 
   def fromDouble(d: Double) = d.toFloat
   def fromFloat(f: Float) = f
 }
 
 
-object UntypedND4JTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float] {
+object UntypedND4JTensor extends IsUntypedRealTensor[INDArray, Float] {
 
   type R = Float
   val R = nexus.algebra.instances.Float32
 
-  def fromFlatArray(array: Array[R], shape: Array[Int]) =
-    new UntypedFloatTensor.Tensor(Nd4j.create(array, shape))
+  def fromFlatArray(array: Array[R], shape: Array[Int]) = Nd4j.create(array, shape)
 
   def mutable = true
 
-  def rank(x: UntypedFloatTensor) = x.rank
-  def shape(x: UntypedFloatTensor) = x.shape
-  def slice(x: UntypedFloatTensor, dim: Int, i: Int) = x.sliceUntyped(dim, i)
-
+  def rank(x: INDArray) = x.rank
+  def shape(x: INDArray) = x.shape
+  def slice(x: INDArray, dim: Int, i: Int) = x.slice(i, dim)
 
   /*
   we could use nd4s collection-like ops but it's broken
   https://github.com/deeplearning4j/nd4s/issues/91
    */
-  def map(x: UntypedFloatTensor)(f: Float => Float): UntypedFloatTensor = {
+  def map(x: INDArray)(f: Float => Float): INDArray = {
     ???
   }
 
-  def map2(x1: UntypedFloatTensor, x2: UntypedFloatTensor)(f: (Float, Float) => Float): UntypedFloatTensor = {
+  def map2(x1: INDArray, x2: INDArray)(f: (Float, Float) => Float): INDArray = {
     ???
   }
 
-  def map3(x1: UntypedFloatTensor, x2: UntypedFloatTensor, x3: UntypedFloatTensor)(f: (Float, Float, Float) => Float): UntypedFloatTensor = {
+  def map3(x1: INDArray, x2: INDArray, x3: INDArray)(f: (Float, Float, Float) => Float): INDArray = {
     ???
   }
 
-  def inplace2(x1: UntypedFloatTensor, x2: UntypedFloatTensor)(f: (Float, Float) => Float): Unit = {
+  def inplace2(x1: INDArray, x2: INDArray)(f: (Float, Float) => Float): Unit = {
     ???
   }
 
+  def zeroBy(x: INDArray) = Nd4j.zeros(x.shape: _*)
 
-  def zeroBy(x: UntypedFloatTensor) = new UntypedFloatTensor.Tensor(Nd4j.zeros(x.shape: _*))
+  // Here and after we rely on build in Nd4j Ops instead of `map/map2/inplace2` implementations
+  def neg(x: INDArray) = x.mul(-1)
+  // TODO remove `reshape`s to handle dimentions properly
+  def add(x1: INDArray, x2: INDArray) = x1.add(x2.reshape(x1.shape: _*))
+  def sub(x1: INDArray, x2: INDArray) = x1.sub(x2.reshape(x1.shape: _*))
+  def eMul(x1: INDArray, x2: INDArray) = x1.mul(x2.reshape(x1.shape: _*))
+  def eDiv(x1: INDArray, x2: INDArray) = x1.div(x2.reshape(x1.shape: _*))
 
+  def addS(x1: INDArray, s: Double) = x1.add(s)
 
-  // Here and after we rely on build in Nd4j Ops instead of inefficient `map/map2/inplace2` implementation
-  def neg(x: UntypedFloatTensor) = new UntypedFloatTensor.Tensor(x.handle.mul(-1))
-  def add(x1: UntypedFloatTensor, x2: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x1.handle.add(x2.handle.reshape(x1.handle.shape: _*)))
-  def sub(x1: UntypedFloatTensor, x2: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x1.handle.sub(x2.handle.reshape(x1.handle.shape: _*)))
-  def eMul(x1: UntypedFloatTensor, x2: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x1.handle.mul(x2.handle.reshape(x1.handle.shape: _*)))
-  def eDiv(x1: UntypedFloatTensor, x2: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x1.handle.div(x2.handle.reshape(x1.handle.shape: _*)))
+  def ePow(x: INDArray, p: Number) = Transforms.pow(x, p)
 
+  def eSqr(x: INDArray) = ePow(x, 2)
+  def eSqrt(x: INDArray) = ePow(x, 0.5)
 
-  def addS(x1: UntypedFloatTensor, s: Double) =
-    new UntypedFloatTensor.Tensor(x1.handle.add(s))
+  def eInv(x: INDArray) = ePow(x, -1)
 
-  def ePow(x: UntypedFloatTensor, p: Number) =
-    new UntypedFloatTensor.Tensor(Transforms.pow(x.handle, p))
+  def scale(x: INDArray, u: Float) = x.mul(u)
 
-  def eSqr(x: UntypedFloatTensor) = ePow(x, 2)
-  def eSqrt(x: UntypedFloatTensor) = ePow(x, 0.5)
+  def addI(x: INDArray, d: INDArray): Unit = x.addi(d.reshape(x.shape: _*))
 
-  def eInv(x: UntypedFloatTensor) = ePow(x, -1)
+  def unwrapScalar(x: INDArray) = x.getFloat(0)
+  def wrapScalar(x: Float): INDArray = Nd4j.ones(1, 1).mul(x)
 
+  def addS(x: INDArray, u: Float) = x.add(u)
 
-  def scale(x: UntypedFloatTensor, u: Float) =
-    new UntypedFloatTensor.Tensor(x.handle.mul(u))
+  def transpose(x: INDArray) = x.transpose()
 
-  def addI(x: UntypedFloatTensor, d: UntypedFloatTensor): Unit =
-    x.handle.addi(d.handle.reshape(x.handle.shape: _*))
+  def mmMul(x: INDArray, y: INDArray) = x.mmul(y)
 
-  def unwrapScalar(x: UntypedFloatTensor) = x.handle.getFloat(0)
-  def wrapScalar(x: Float): UntypedFloatTensor = FloatTensor.fill(x, (), Array())
+  def mvMul(x: INDArray, y: INDArray) = x.mmul(y.reshape(y.length, 1))
 
-  def addS(x: UntypedFloatTensor, u: Float) =
-    new UntypedFloatTensor.Tensor(x.handle.add(u))
-
-  def transpose(x: UntypedFloatTensor) = new UntypedFloatTensor.Tensor(x.handle.transpose())
+  def vvMul(x: INDArray, y: INDArray) = x.reshape(x.length, 1).mmul(y.reshape(1, y.length))
 
 
-  def mmMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = new UntypedFloatTensor.Tensor(x.handle.mmul(y.handle))
+  def dot(x: INDArray, y: INDArray): R = sum(eMul(x, y))
 
-  def mvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x.handle.mmul(y.handle.reshape(y.size, 1)))
+  def eExp(x: INDArray) = Transforms.exp(x)
+  def eLog(x: INDArray) = Transforms.log(x) // TODO handle 0F values
+  def eLog1p(x: INDArray) = Transforms.log(x.add(1))
+  def eExpm1(x: INDArray) = Transforms.exp(x).add(-1)
 
-  def vvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x.handle.reshape(x.size, 1).mmul(y.handle.reshape(1, y.size)))
+  def eSin(x: INDArray) = Transforms.sin(x)
+  def eCos(x: INDArray) = Transforms.cos(x)
+  def eTan(x: INDArray) = ???
 
+  def eAbs(x: INDArray) = Transforms.abs(x)
+  def eSgn(x: INDArray) = Transforms.sign(x)
+  def eSigmoid(x: INDArray) = Transforms.sigmoid(x)
+  def eReLU(x: INDArray) = Transforms.relu(x)
+  def eIsPos(x: INDArray) = x.gt(0)
 
-  def dot(x: UntypedFloatTensor, y: UntypedFloatTensor): R = sum(eMul(x, y))
+  def sum(x: INDArray) = x.sum((0 until x.rank): _*).getFloat(0)
 
-  def eExp(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.exp(x.handle))
-  def eLog(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.log(x.handle)) // TODO handle 0F values
-  def eLog1p(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.log(x.handle.add(1)))
-  def eExpm1(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.exp(x.handle).add(-1))
+  def tMul(x: INDArray, y: INDArray, matchedIndices: Seq[(Int, Int)]) = ???
 
-  def eSin(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.sin(x.handle))
-  def eCos(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.cos(x.handle))
-  def eTan(x: UntypedFloatTensor) = ???
-  def eTanh(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.tanh(x.handle))
-
-
-  def eAbs(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.abs(x.handle))
-  def eSgn(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.sign(x.handle))
-  def eSigmoid(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.sigmoid(x.handle))
-  def eReLU(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(Transforms.relu(x.handle))
-  def eIsPos(x: UntypedFloatTensor) =
-    new UntypedFloatTensor.Tensor(x.handle.gt(0))
-
-  def sum(x: UntypedFloatTensor) =
-    x.handle.sum((0 until x.handle.rank): _*).getFloat(0)
-
-  def tMul(x: UntypedFloatTensor, y: UntypedFloatTensor, matchedIndices: Seq[(Int, Int)]) = ???
-
-  def expandDim(x: UntypedFloatTensor, i: Int) = ???
+  def expandDim(x: INDArray, i: Int) = ???
 }
 

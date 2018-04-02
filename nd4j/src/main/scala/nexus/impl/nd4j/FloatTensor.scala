@@ -14,13 +14,41 @@ import shapeless.ops.nat._
   * @author Andrey Romanov
   * @since 0.1.0
   */
-trait FloatTensor[A] extends UntypedFloatTensor { self =>
+trait FloatTensor[A] { self =>
+
+  val handle: INDArray
+  val stride: Array[Int] = handle.stride()
+  val offset: Int = handle.offset().toInt
+  val shape: Array[Int] = handle.shape()
+
+  def rank = shape.length
+
+  def index(indices: Seq[Int]): Int = {
+    var i = offset
+    var k = 0
+    while (k < rank) {
+      i += indices(k) * stride(k)
+      k += 1
+    }
+    i
+  }
+
+  def size = handle.length
+
+  def apply(indices: Int*) = handle.getFloat(index(indices))
+
+  def update(indices: Int*)(value: Float) = handle.putScalar(index(indices), value)
+
+  def sliceUntyped(n: Int, i: Int): INDArray = handle.slice(i, n)
+
+  def typeWith[A]: FloatTensor[A]
+
+  def stringBody: String = handle.toString
 
   protected def slice0[N <: Nat, T]
   (axis: N, i: Int)
   (implicit t: RemoveAt.Aux[A, N, T], nn: ToInt[N]): FloatTensor[T] =
-    sliceUntyped(nn(), i).typeWith[T]
-
+    new FloatTensor.Tensor[T](sliceUntyped(nn(), i))
 
   def sliceAlong[X, N <: Nat, T]
   (axis: X, i: Int)
@@ -64,8 +92,9 @@ object FloatTensor {
   (implicit nest: Nest[T, Float, N], nn: Len.Aux[A, N]) =
     fromFlatArray[A](nest.flatten(array), nest.shape(array))
 
-  class Tensor[A](handle: INDArray)
-    extends UntypedFloatTensor.Tensor(handle) with FloatTensor[A]
+  class Tensor[A](val handle: INDArray) extends FloatTensor[A] {
+    def typeWith[A] = new FloatTensor.Tensor[A](handle)
+  }
 }
 
 object Scalar {
