@@ -11,9 +11,9 @@ import scala.util._
 /**
   * @author Andrey Romanov
   */
-object ND4JBackendTensor extends IsRealTensorK[FloatTensor, Float]{
+object ND4JTensor extends IsRealTensorK[FloatTensor, Float]{
   type H = UntypedFloatTensor
-  val H = UntypedND4JBackendTensor
+  val H = UntypedND4JTensor
 
   val R = H.R
 
@@ -40,7 +40,7 @@ object ND4JBackendTensor extends IsRealTensorK[FloatTensor, Float]{
 }
 
 
-object UntypedND4JBackendTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float] {
+object UntypedND4JTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float] {
 
   type R = Float
   val R = nexus.algebra.instances.Float32
