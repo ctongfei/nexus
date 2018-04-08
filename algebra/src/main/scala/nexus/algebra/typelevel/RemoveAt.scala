@@ -13,6 +13,7 @@ object RemoveAt {
   def apply[L, I <: Nat](implicit o: RemoveAt[L, I]): Aux[L, I, o.Out] = o
   type Aux[L, I <: Nat, Out0] = RemoveAt[L, I] { type Out = Out0 }
 
+
   implicit def removeAtHListCase0[T <: HList, H]: Aux[H :: T, _0, T] =
     new RemoveAt[H :: T, _0] {
       type Out = T

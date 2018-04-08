@@ -1,6 +1,8 @@
 package nexus.algebra
 
 import scala.annotation._
+import cats.kernel._
+import algebra.ring._
 
 /**
  * Encapsulates mathematical operations on real numbers.
@@ -9,7 +11,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that type ${R} is a real number.")
-trait IsReal[@specialized(Float, Double) R] extends algebra.ring.Field[R] with cats.Order[R] with Grad[R] {
+trait IsReal[@specialized(Float, Double) R] extends Field[R] with Order[R] with Grad[R] {
 
   def mutable = false
 

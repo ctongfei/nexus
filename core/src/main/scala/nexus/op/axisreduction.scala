@@ -4,12 +4,12 @@ import nexus._
 import nexus.algebra._
 import nexus.algebra.typelevel._
 import nexus.exception._
-import shapeless.Nat
+import shapeless._
 
 object SumAlong extends ParameterizedPolyOp1 {
 
-  implicit def sumAlongF[T[_], R, A, U: Label, N <: Nat, B]
-    (implicit T: IsRealTensorK[T, R], ix: IndexOf.Aux[A, U, N], ra: RemoveAt.Aux[A, N, B]) = (u: U) =>
+  implicit def sumAlongF[T[_], R, A, U: Label, B]
+    (implicit T: IsRealTensorK[T, R], r: Remove.Aux[A, U, B]) = (u: U) =>
     new F[T[A], T[B]] {
       def name = s"SumAlong[${typeName(u)}]"
       def tag(tx: Type[T[A]]) = T.ground[B]
@@ -19,9 +19,13 @@ object SumAlong extends ParameterizedPolyOp1 {
 
 }
 
+object ProdAlong extends ParameterizedPolyOp1 {
+
+}
+
 object MeanAlong extends ParameterizedPolyOp1 {
-  implicit def meanAlongF[T[_], R, A, U: Label, N <: Nat, B]
-  (implicit T: IsRealTensorK[T, R], ix: IndexOf.Aux[A, U, N], ra: RemoveAt.Aux[A, N, B]) = (u: U) =>
+  implicit def meanAlongF[T[_], R, A, U: Label, B]
+  (implicit T: IsRealTensorK[T, R], r: Remove.Aux[A, U, B]) = (u: U) =>
     new F[T[A], T[B]] {
       def name = s"MeanAlong[${typeName(u)}]"
       def tag(tx: Type[T[A]]) = T.ground[B]
@@ -32,19 +36,21 @@ object MeanAlong extends ParameterizedPolyOp1 {
 
 object ArgMaxAlong extends ParameterizedPolyOp1 {
 
-  implicit def argmaxAlongF[TR[_], R, TI[_], I, A, U: Label, N <: Nat, B]
-  (implicit
-   TR: IsRealTensorK[TR, R],
-   TI: IsIntTensorK[TI, I],
-   ix: IndexOf.Aux[A, U, N],
-   ra: RemoveAt.Aux[A, N, B]
-  ) = (u: U) =>
-    new F[TR[A], TI[B]] {
+  implicit def argmaxAlongF[TR[_], R, TZ[_], Z, A, U: Label, B]
+  (implicit TR: IsRealTensorK[TR, R], TZ: IsIntTensorK[TZ, Z], r: Remove.Aux[A, U, B]) = (u: U) =>
+    new F[TR[A], TZ[B]] {
       def name = s"ArgMaxAlong[${typeName(u)}"
-      def tag(tx: Type[TR[A]]) = TI.ground[B]
+      def tag(tx: Type[TR[A]]) = TZ.ground[B]
       override def differentiable = false
       def forward(x: TR[A]) = ???
-      def backward(dy: TI[B], y: TI[B], x: TR[A]) = throw new OperatorNotDifferentiableException(name, 1)
+      def backward(dy: TZ[B], y: TZ[B], x: TR[A]) = throw new OperatorNotDifferentiableException(name, 1)
     }
 
 }
+
+object ArgMinAlong extends ParameterizedPolyOp1
+
+object MaxAlong extends ParameterizedPolyOp1
+
+object MinAlong extends ParameterizedPolyOp1
+

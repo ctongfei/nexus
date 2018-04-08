@@ -1,6 +1,8 @@
 package nexus.algebra
 
 import nexus.algebra.typelevel._
+import nexus.algebra.util._
+
 import scala.annotation._
 
 /**
@@ -92,10 +94,25 @@ trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
   def contract[A, B, C](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] =
     typeWith[C](H.tMul(untype(x), untype(y), sd.matchedIndices))
 
-  def ground[A]: IsAxisGroundedRealTensor[T, R, A] =
-    new IsAxisGroundedRealTensor[T, R, A] {
-      def parent = self
+  def ground[A]: IsRealTensor[T[A], R] =
+    new IsRealTensor[T[A], R] {
+      def elementType = self.elementType
       def mutable = true
+      def zeroBy(x: T[A]) = self.zeroBy(x)
+      def add(x1: T[A], x2: T[A]) = self.add(x1, x2)
+      def addS(x1: T[A], x2: Double) = self.addS(x1, R.fromDouble(x2))
+      def addI(x1: T[A], x2: T[A]): Unit = self.addI(x1, x2)
+      def sub(x1: T[A], x2: T[A]) = self.sub(x1, x2)
+      def neg(x: T[A]) = self.neg(x)
+      def eMul(x1: T[A], x2: T[A]) = self.eMul(x1, x2)
+      def eDiv(x1: T[A], x2: T[A]) = self.eDiv(x1, x2)
+      def scale(x: T[A], k: Double) = self.scale(x, R.fromDouble(k))
+      def eSqrt(x: T[A]) = self.eSqrt(x)
     }
 
+}
+
+
+trait IsRealTensor[T, R] extends IsTensor[T, R] with Grad[T] {
+  def elementType: IsReal[R]
 }

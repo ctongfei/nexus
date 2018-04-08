@@ -55,3 +55,9 @@ object Sqrt extends PolyOp1 {
 
   }
 }
+
+object Power extends PolyOp2 {
+
+
+}
+

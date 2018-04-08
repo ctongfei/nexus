@@ -1,6 +1,6 @@
 import scala.io._
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.5"
 enablePlugins(ScalaUnidocPlugin)
 
 
@@ -14,13 +14,12 @@ lazy val commonSettings = Seq(
   isSnapshot := true,
   scalaVersion := "2.12.4",
 
-  libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3",
-  libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0",
+  libraryDependencies += "com.chuusai"   %% "shapeless" % "2.3.3",
+  libraryDependencies += "org.typelevel" %% "algebra"   % "0.7.0",
   libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
-  libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.13.4" % Test,
-  libraryDependencies += "me.tongfei" %% "poly-io" % "0.3.2" % Test,
+  libraryDependencies += "me.tongfei"    %% "poly-io"   % "0.3.2" % Test,
 
   mathFormulaInDoc := {
     val apiDir = (doc in Compile).value

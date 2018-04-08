@@ -47,7 +47,7 @@ object FloatTensor extends IsRealTensorK[FloatTensor, Float] {
 
   implicit val R = Float32
 
-  def get(x: FloatTensor[_], is: Array[Int]) = ???
+  def tabulate[A](shape: Array[Int])(f: Array[Int] => Int) = ???
   def set(x: FloatTensor[_], is: Array[Int], v: Float): Unit = ???
 
   def newDim0Tensor(x: Float): FloatTensor[Unit] = new FloatTensor[Unit](UntypedFloatTensor.Dim0(x))

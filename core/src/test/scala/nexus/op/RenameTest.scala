@@ -3,6 +3,7 @@ package nexus.op
 import nexus._
 import nexus.execution._
 import nexus.impl.jvm._
+import nexus.layer._
 class A;
 class B;
 class C;

@@ -2,8 +2,8 @@ package nexus.algebra
 
 import nexus._
 import nexus.algebra.typelevel._
-import shapeless.Nat
-import shapeless.ops.hlist._
+import nexus.algebra.util._
+import shapeless._
 import shapeless.ops.nat._
 
 /**
@@ -34,6 +34,7 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
   def size(x: T[_]) = H.size(untype(x))
 
   def get(x: T[_], is: Array[Int]): E
+    = H.get(untype(x), is)
 
   def set(x: T[_], is: Array[Int], v: E): Unit
 
@@ -48,6 +49,21 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
   def wrapScalar(x: E): T[Unit] = typeWith[Unit](H.wrapScalar(x))
 
   def unwrapScalar(x: T[Unit]): E = H.unwrapScalar(untype(x))
+
+  def tabulate[A](shape: Array[Int])(f: Array[Int] => E): T[A] = {
+    val flatArray = Indices.indices(shape).map(f).toArray(H.elementTypeClassTag)
+    fromFlatArray(flatArray, shape)
+  }
+
+  def tabulate[A](n: Int)(f: Int => E): T[A] =
+    tabulate(Array(n))((a: Array[Int]) => f(a(0)))
+
+  def tabulate[A, B](m: Int, n: Int)(f: (Int, Int) => E): T[(A, B)] =
+    tabulate(Array(m, n))((a: Array[Int]) => f(a(0), a(1)))
+
+  def tabulate[A, B, C](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(A, B, C)] =
+    tabulate(Array(n0, n1, n2))((a: Array[Int]) => f(a(0), a(1), a(2)))
+
 
   def map[A](x: T[A])(f: E => E): T[A] =
     typeWith[A](H.map(untype(x))(f))
@@ -65,4 +81,8 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
 
 }
 
-trait IsTensor[T, E] extends Type[T]
+trait IsTensor[T, E] extends Type[T] {
+
+  /** Returns the type tag associated with the element type of this tensor. */
+  def elementType: Type[E]
+}

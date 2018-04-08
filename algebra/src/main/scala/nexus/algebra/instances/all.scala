@@ -3,7 +3,7 @@ package nexus.algebra.instances
 /**
  * @author Tongfei Chen
  */
-private[algebra] object all {
+object all {
 
   import nexus.algebra.{instances => nxai}
 

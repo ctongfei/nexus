@@ -3,6 +3,7 @@ package nexus.optimizer
 import nexus._
 import nexus.algebra.syntax._
 import nexus.op._
+import java.lang.Math._
 
 /**
  * The Adaptive Moment Estimation ('''Adam''') optimizer.
@@ -16,7 +17,7 @@ import nexus.op._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.999, ε: Double = 1e-6) extends OneStepFirstOrderOptimizer {
+class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.999, ε: Double = 1e-6) extends FirstOrderOptimizer {
 
   case class AdamHistory[X](var m: X, var v: X)
 
@@ -34,8 +35,8 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
       val h = history(p)
       h.m = (h.m :* β1) + (g :* (1 - β1))
       h.v = (h.v :* β2) + ((g |*| g) :* (1 - β2))
-      val m̂ = h.m :/ (1 - Math.pow(β1, t))
-      val v̂ = h.v :/ (1 - Math.pow(β2, t))
+      val m̂ = h.m :/ (1 - pow(β1, t))
+      val v̂ = h.v :/ (1 - pow(β2, t))
       val Δp = (m̂ |/| (eSqrt(v̂) +# ε)) :* α
       p -= Δp
     }

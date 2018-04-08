@@ -9,7 +9,7 @@ import java.util._
  * Represents the uniform distribution Uniform(l, r).
  * @author Tongfei Chen
  */
-class Uniform[R](val l: R, r: R)(implicit R: IsReal[R]) extends Gen[R] {
+class Uniform[R](val l: R, r: R)(implicit R: IsReal[R]) extends Stochastic[R] {
 
   private[this] val standardUniform = new Random(GlobalSettings.seed)
   private[this] val d = r - l

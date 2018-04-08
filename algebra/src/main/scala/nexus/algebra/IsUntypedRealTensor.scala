@@ -10,6 +10,7 @@ trait IsUntypedRealTensor[T, @specialized(Float, Double) R] extends IsUntypedTen
 
   val R: IsReal[R]
 
+
   def zeroBy(x: T): T
 
   def add(x1: T, x2: T): T

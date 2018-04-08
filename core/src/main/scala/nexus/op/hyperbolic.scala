@@ -11,8 +11,8 @@ object Cosh extends PolyOp1
 
 object Tanh extends PolyOp1
 
-object Arsinh extends PolyOp1
+object ArSinh extends PolyOp1
 
-object Arcosh extends PolyOp1
+object ArCosh extends PolyOp1
 
-object Artanh extends PolyOp1
+object ArTanh extends PolyOp1

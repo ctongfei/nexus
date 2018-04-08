@@ -33,22 +33,22 @@ object ElmanUnit {
   /**
    * Constructs an Elman recurrent unit -- the simplest recurrent unit.
    * @example {{{
-   *   ElmanUnit(Input -> 200, State -> 300, Tanh)
+   *   ElmanUnit(Input -> 200, State -> 300, activation = Tanh)
    * }}}
    * @param inputAxisAndSize
    * @param stateAxisAndSize
-   * @param stateActivation
+   * @param activation
    * @return
    */
   def apply[T[_], R, X: Label, S: Label, Y: Label](
-                                   inputAxisAndSize: (X, Int),
-                                   stateAxisAndSize: (S, Int),
-                                   stateActivation: PolyFunc1 = Tanh,
-                                   name: String = ExprName.nextId("ElmanUnit")
+                                                    inputAxisAndSize: (X, Int),
+                                                    stateAxisAndSize: (S, Int),
+                                                    activation: PolyFunc1 = Tanh,
+                                                    name: String = ExprName.nextId("ElmanUnit")
                                    )
                                    (implicit
                                     T: IsRealTensorK[T, R],
-                                    saf: stateActivation.F[T[S], T[S]]
+                                    saf: activation.F[T[S], T[S]]
                                    ) = {
     val (inputAxis, inputSize) = inputAxisAndSize
     val (stateAxis, stateSize) = stateAxisAndSize
@@ -59,7 +59,7 @@ object ElmanUnit {
     )
     new ElmanUnit[T, R, X, S](
       inputLayer,
-      stateActivation.ground(saf),
+      activation.ground(saf),
       inputAxis,
       stateAxis
     )

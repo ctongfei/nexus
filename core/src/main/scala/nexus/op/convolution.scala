@@ -40,4 +40,3 @@ object Convolution2D extends ParameterizedPolyOp1 {
     }
 
 }
-

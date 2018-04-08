@@ -5,6 +5,18 @@ import nexus.algebra._
 import nexus.algebra.syntax._
 import nexus.algebra.typelevel._
 
+object Entropy extends PolyOp1 {
+
+  implicit def entropyF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[T[A], R] {
+    import T._
+    def name = "Entropy"
+    def tag(tx: Type[T[A]]) = T.R
+    def forward(x: T[A]) = -sum(x |*| eLog(x))
+    def backward(dy: R, y: R, x: T[A]) = (eLog(x) +# 1) :* (-dy)
+  }
+
+}
+
 /**
  * The cross entropy function.
  *  - Input 1: the predicted probability of labels (\(\mathbf{\hat y}\)), which should be a rank-1 tensor;

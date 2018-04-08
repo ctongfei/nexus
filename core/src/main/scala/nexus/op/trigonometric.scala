@@ -62,3 +62,14 @@ object Cos extends PolyOp1 {
 
   }
 }
+
+object Tan extends PolyOp1
+
+object ArcSin extends PolyOp1
+
+object ArcCos extends PolyOp1
+
+object ArcTan extends PolyOp1
+
+object ATan2 extends PolyOp2
+

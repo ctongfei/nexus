@@ -107,6 +107,8 @@ object MVMul extends PolyOp2 {
 /**
  * General tensor multiplication (contraction) that marginalizes out all axes between two tensors that match.
  * Einstein summation
+ * References:
+ *  - T Chen (2017): Typesafe abstractions for tensor operations. SCALA.
  * @author Tongfei Chen
  * @since 0.1.0
  */

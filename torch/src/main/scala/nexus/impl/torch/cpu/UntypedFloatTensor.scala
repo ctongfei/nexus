@@ -5,6 +5,8 @@ import nexus._
 import nexus.algebra._
 import nexus.exception._
 
+import scala.reflect._
+
 sealed abstract class UntypedFloatTensor extends UntypedTensor[Float] {
   import UntypedFloatTensor._
   def stringRepr: String = rank match {
@@ -77,6 +79,12 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
 
   //TODO: Sparse tensor support through Torch
   //TODO: case class Sparse(th: THSFloatTensor) extends UntypedFloat32Tensor
+
+
+
+  implicit val elementTypeClassTag = ClassTag.Float
+
+  def get(x: UntypedFloatTensor, is: Array[Int]) = ???
 
   def fromFlatArray(array: Array[Float], shape: Array[Int]): UntypedFloatTensor = {
     if (array.length == 1 && shape.length == 0)
@@ -303,6 +311,7 @@ object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float]
       TH.THFloatTensor_zero(z)
       TH.THFloatTensor_addmm(z, 1f, z, 1f, tx, ty)
       Dense(z)
+    case _ => throw new RankMismatchException
   }
 
   def mvMul(x: UntypedFloatTensor, y: UntypedFloatTensor) = (x, y) match {

@@ -55,7 +55,7 @@ object Grad extends ProductTypeClassCompanion[Grad] {
    */
   object typeClass extends ProductTypeClass[Grad] {
 
-    class Product[H, T <: $$](H: Grad[H], T: Grad[T]) extends Grad[H :: T] {
+    class Product[H, T <: HList](H: Grad[H], T: Grad[T]) extends Grad[H :: T] {
       def mutable = H.mutable && T.mutable
       def zeroBy(x: H :: T) = H.zeroBy(x.head) :: T.zeroBy(x.tail)
       def add(x1: H :: T, x2: H :: T) = H.add(x1.head, x2.head) :: T.add(x1.tail, x2.tail)
@@ -72,20 +72,20 @@ object Grad extends ProductTypeClassCompanion[Grad] {
       def eSqrt(x: H :: T) = H.eSqrt(x.head) :: T.eSqrt(x.tail)
     }
 
-    def product[H, T <: $$](H: Grad[H], T: Grad[T]) = new Product(H, T)
+    def product[H, T <: HList](H: Grad[H], T: Grad[T]) = new Product(H, T)
 
-    object emptyProduct extends Grad[$] {
-      def add(x1: $, x2: $) = $
-      def sub(x1: $, x2: $) = $
-      def eDiv(x1: $, x2: $) = $
-      def addI(x1: $, x2: $) = ()
-      def scale(x: $, k: Double) = $
-      def zeroBy(x: $) = $
-      def eMul(x1: $, x2: $) = $
-      def neg(x: $) = $
-      def eSqrt(x: $) = $
+    object emptyProduct extends Grad[HNil] {
+      def add(x1: HNil, x2: HNil) = HNil
+      def sub(x1: HNil, x2: HNil) = HNil
+      def eDiv(x1: HNil, x2: HNil) = HNil
+      def addI(x1: HNil, x2: HNil) = ()
+      def scale(x: HNil, k: Double) = HNil
+      def zeroBy(x: HNil) = HNil
+      def eMul(x1: HNil, x2: HNil) = HNil
+      def neg(x: HNil) = HNil
+      def eSqrt(x: HNil) = HNil
       def mutable = true
-      def addS(x1: $, x2: Double) = $
+      def addS(x1: HNil, x2: Double) = HNil
     }
 
     def project[F, G](G: => Grad[G], fg: F => G, gf: G => F): Grad[F] = new Grad[F] {

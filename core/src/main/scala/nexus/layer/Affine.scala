@@ -7,7 +7,7 @@ import nexus.op._
 import nexus.util._
 
 /**
- * A fully-connected neural layer (affine transformation).
+ * A fully-connected neural layer (i.e., affine transformation).
  * Variously known as `Dense` or `FullyConnected` in other libraries.
  * @author Tongfei Chen
  * @since 0.1.0

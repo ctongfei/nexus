@@ -12,7 +12,7 @@ package nexus
 trait PolyFunc1 {
 
   /**
-   * Type constraint expressing what type of variables this polymorphic operation can apply to.
+   * Type constraint / proof expressing what type of variables this polymorphic operation can apply to.
    *
    * Presence of an implicit `F[X, Y]` encodes (by Curry-Howard correspondence) the predicate
    * "This function can be applied on `X`, and the result type is `Y`."
@@ -25,9 +25,7 @@ trait PolyFunc1 {
    */
   def ground[X, Y](implicit f: F[X, Y]): Func1[X, Y]
 
-  /**
-   * Given input expression, constructs the output expression.
-   */
+  /** Given input expression, constructs the output expression. */
   def apply[X, Y](x: Expr[X])(implicit f: F[X, Y]): Expr[Y] =
     ground(f)(x)
 

@@ -1,6 +1,7 @@
 package nexus.algebra
 
 import scala.annotation._
+import algebra.ring._
 
 /**
  * Encapsulates mathematical operations on integers.
@@ -8,19 +9,19 @@ import scala.annotation._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-@implicitNotFound("Cannot prove that type ${I} is an integer.")
-trait IsInt[@specialized(Int, Long) I] extends algebra.ring.CommutativeRing[I] with Type[I] {
+@implicitNotFound("Cannot prove that type ${Z} is an integer.")
+trait IsInt[@specialized(Byte, Short, Int, Long) Z] extends CommutativeRing[Z] with Type[Z] {
 
-  def add(x: I, y: I): I
-  override def plus(x: I, y: I) = add(x, y)
+  def add(x: Z, y: Z): Z
+  override def plus(x: Z, y: Z) = add(x, y)
 
-  def neg(x: I): I
-  override def negate(x: I) = neg(x)
+  def neg(x: Z): Z
+  override def negate(x: Z) = neg(x)
 
-  def sub(x: I, y: I): I
-  override def minus(x: I, y: I) = sub(x, y)
+  def sub(x: Z, y: Z): Z
+  override def minus(x: Z, y: Z) = sub(x, y)
 
-  def mul(x: I, y: I): I
-  override def times(x: I, y: I) = mul(x, y)
+  def mul(x: Z, y: Z): Z
+  override def times(x: Z, y: Z) = mul(x, y)
 
 }

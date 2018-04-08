@@ -7,7 +7,6 @@ import scala.annotation._
 
 /**
  * Wraps a scalar to a 0-dim tensor.
- *
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -55,13 +54,17 @@ object SliceAlong extends ParameterizedPolyOp1
 
 object Select extends PolyOp2 {
 
-  implicit def selectF[TE[_], E, TI[_], I, A](implicit TE: IsTensorK[TE, E], TI: IsIntTensorK[TI, I]) =
-    new F[TE[A], TI[A], TE[A]] {
-      def name = ???
-      def tag(tx1: Type[TE[A]], tx2: Type[TI[A]]) = ???
-      def forward(x1: TE[A], x2: TI[A]) = ???
-      def backward1(dy: TE[A], y: TE[A], x1: TE[A], x2: TI[A]) = ???
-      def backward2(dy: TE[A], y: TE[A], x1: TE[A], x2: TI[A]) = ???
+  implicit def selectF[TX[_], X, TZ[_], Z, A](implicit TE: IsTensorK[TX, X], TZ: IsIntTensorK[TZ, Z]) =
+    new F[TX[A], TZ[A], TX[A]] {
+      def name = "Select"
+      def tag(tx1: Type[TX[A]], tx2: Type[TZ[A]]) = ???
+      def forward(x1: TX[A], x2: TZ[A]) = ???
+      def backward1(dy: TX[A], y: TX[A], x1: TX[A], x2: TZ[A]) = ???
+      def backward2(dy: TX[A], y: TX[A], x1: TX[A], x2: TZ[A]) = ???
     }
 
 }
+
+object Diag
+
+object Trace

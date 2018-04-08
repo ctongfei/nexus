@@ -1,11 +1,24 @@
 package nexus.algebra
 
+import nexus.algebra.util._
+
+import scala.reflect._
+
 /**
  * @author Tongfei Chen
  */
 trait IsUntypedTensor[T, @specialized(Float, Double, Boolean, Int, Long) E] {
 
+  implicit val elementTypeClassTag: ClassTag[E]
+
+  def tabulate(shape: Array[Int])(f: Array[Int] => E): T = {
+    val flatArray = Indices.indices(shape).map(f).toArray(elementTypeClassTag)
+    fromFlatArray(flatArray, shape)
+  }
+
   def fromFlatArray(array: Array[E], shape: Array[Int]): T
+
+  def get(x: T, is: Array[Int]): E
 
   def unwrapScalar(x: T): E
 

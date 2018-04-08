@@ -18,7 +18,7 @@ extends Module1[X, X] {
 
   def parameters = residual match {
     case residual: Module1[X, X] => residual.parameters
-    case _ => Set()
+    case _ => Set[Param[_]]()
   }
 
   def apply(x: Expr[X]): Expr[X] = {

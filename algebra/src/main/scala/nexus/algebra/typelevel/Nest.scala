@@ -17,22 +17,30 @@ trait Nest[T, E, N <: Nat] {
 
   /** ClassTag of the element type. */
   def elementClassTag: ClassTag[E]
+
   /** ClassTag of the nested array type. */
   def arrayClassTag: ClassTag[T]
+
   /** Creates new nested array by the given shape. */
   def newArray(ns: Int*): T
+
   /** Returns the rank of the nested array. */
   def rank: Int
+
   /** Flattens the nested array to a 1-dimensional array. */
   def flatten(a: T): Array[E]
+
   /** Nests a 1-dimensional array to a nested array by the given shape. */
   def nest(a: Array[E], ns: Int*): T
+
   /** Returns the shape of this nested array. */
   def shape(a: T): Array[Int]
+
 }
 
 object Nest {
 
+  //TODO: principled 0-dim array?
   /*
   implicit def case0[E <: AnyVal](implicit ctE: ClassTag[E]): Nest[E, E, _0] = new Nest[E, E, _0] {
     def elementClassTag = ctE

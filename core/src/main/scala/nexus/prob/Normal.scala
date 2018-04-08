@@ -8,8 +8,9 @@ import nexus.algebra.syntax._
 /**
  * Represents the normal distribution N(μ, σ^2^).
  * @author Tongfei Chen
+ * @since 0.1.0
  */
-class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends Gen[R] {
+class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends Stochastic[R] {
 
   private[this] val standardNormal = new Random(GlobalSettings.seed)
   private[this] val σ = R.sqrt(σ2)

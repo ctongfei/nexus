@@ -3,8 +3,10 @@ package nexus.impl.jvm
 import nexus._
 import nexus.algebra._
 import nexus.algebra.typelevel.util._
+import nexus.util._
 import shapeless._
 
+import scala.reflect._
 import scala.util._
 
 /**
@@ -27,7 +29,6 @@ object CPUFloat32 extends IsRealTensorK[FloatTensor, Float] {
   }
 
 
-  def get(x: FloatTensor[_], is: Array[Int]) = x.handle(x.index(is))
   def set(x: FloatTensor[_], is: Array[Int], v: Float) = x.update(is: _*)(v)
   def zeroBy[A](x: FloatTensor[A]) = newTensor(x.shape)
 
@@ -49,6 +50,10 @@ object UntypedCPUFloat32 extends IsUntypedRealTensor[UntypedFloatTensor, Float] 
 
   def mutable = true
 
+  implicit val elementTypeClassTag = ClassTag.Float
+
+
+  def get(x: UntypedFloatTensor, is: Array[Int]) = x.apply(is: _*)
   def rank(x: UntypedFloatTensor) = x.rank
   def shape(x: UntypedFloatTensor) = x.shape
   def slice(x: UntypedFloatTensor, dim: Int, i: Int) = x.sliceUntyped(dim, i)
