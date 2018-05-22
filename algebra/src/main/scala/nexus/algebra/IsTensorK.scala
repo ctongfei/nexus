@@ -43,7 +43,7 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
   def fromFlatArray[A](array: Array[E], shape: Array[Int]): T[A] =
     typeWith[A](H.fromFlatArray(array, shape))
 
-  def fromNestedArray[A, N <: Nat, Arr](axes: A)(array: Arr)(implicit nest: Nest[Arr, E, N], len: Len.Aux[A, N]) =
+  def fromNestedArray[A, N <: Nat, Arr](axes: A)(array: Arr)(implicit nest: Nest.Aux[Arr, E, N], len: Len.Aux[A, N]) =
     fromFlatArray[A](nest.flatten(array), nest.shape(array))
 
   def wrapScalar(x: E): T[Unit] = typeWith[Unit](H.wrapScalar(x))
@@ -63,7 +63,6 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
 
   def tabulate[A, B, C](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(A, B, C)] =
     tabulate(Array(n0, n1, n2))((a: Array[Int]) => f(a(0), a(1), a(2)))
-
 
   def map[A](x: T[A])(f: E => E): T[A] =
     typeWith[A](H.map(untype(x))(f))

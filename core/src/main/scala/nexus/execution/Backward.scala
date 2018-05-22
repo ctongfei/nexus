@@ -9,7 +9,7 @@ import nexus.algebra._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Backward {
+object Backward extends Backpropagation[SimpleForward] {
 
   def compute[R](e: Expr[R])(implicit R: IsReal[R], forward: SimpleForward): ExprMap[Id] = {
 

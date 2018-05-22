@@ -5,7 +5,7 @@ package nexus
  * @author Tongfei Chen
  * @since 0.1.0
  */
-abstract class ParameterizedPolyOp1 { self: Singleton =>
+abstract class ParameterizedPolyOp1 { self =>
 
   trait F[X, Y] extends Op1[X, Y]
 
@@ -24,7 +24,7 @@ abstract class ParameterizedPolyOp1 { self: Singleton =>
 /**
  * Represents a type-polymorphic binary operator that is parameterized.
  */
-abstract class ParameterizedPolyOp2 { self: Singleton =>
+abstract class ParameterizedPolyOp2 { self =>
 
   trait F[X1, X2, Y] extends Op2[X1, X2, Y]
 
@@ -40,7 +40,7 @@ abstract class ParameterizedPolyOp2 { self: Singleton =>
 /**
  * Represents a type-polymorphic ternary operator that is parameterized.
  */
-abstract class ParameterizedPolyOp3 { self: Singleton =>
+abstract class ParameterizedPolyOp3 { self =>
 
   trait F[X1, X2, X3, Y] extends Op3[X1, X2, X3, Y]
 

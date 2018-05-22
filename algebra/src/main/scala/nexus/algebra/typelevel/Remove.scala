@@ -7,15 +7,15 @@ import shapeless._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Remove[L, X] extends DepFn1[L] {
+trait Remove[A, X] extends DepFn1[A] {
   type Out
   def index: Int
 }
 
 object Remove {
 
-  def apply[L, X, O](implicit o: Remove.Aux[L, X, O]) = o
-  type Aux[L, X, O] = Remove[L, X] { type Out = O }
+  def apply[A, X, B](implicit o: Remove.Aux[A, X, B]) = o
+  type Aux[A, X, B] = Remove[A, X] { type Out = B }
 
   implicit def removeHListCase0[T <: HList, H]: Aux[H :: T, H, T] =
     new Remove[H :: T, H] {

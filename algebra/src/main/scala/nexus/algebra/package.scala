@@ -17,7 +17,11 @@ package object algebra {
   private[algebra] type $ = HNil
   private[algebra] val  $: $ = HNil // explicit type annotation to avoid some implicit search bugs
 
+  sealed class ?
+  val ? : ? = new ?
+
   sealed class Batch
   object Batch extends Batch
+
 
 }

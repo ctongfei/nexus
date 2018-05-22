@@ -30,6 +30,7 @@ Design goals:
  - **Mixing differentiable code with non-differentiable code**.
  - **Automatic typeclass derivation**: Differentiation through any case class (product type).
  - **Versatile switching between eager and lazy evaluation**.
+ - **[TODO] Typesafe tensor sizes using literal singleton types (Scala 2.13+)**. 
  - **[TODO] Automatic batching over sequences/trees** (Neubig, Goldberg, Dyer, NIPS 2017). Free programmers from the pain of manual batching.
  - **[TODO] GPU Acceleration**. Reuse `Torch` C++ core through Swig [(bindings)](https://github.com/ctongfei/torch-swig-java).
  - **[TODO] Multiple backends**. Torch / MXNet / ?

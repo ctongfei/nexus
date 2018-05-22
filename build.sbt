@@ -12,7 +12,7 @@ lazy val commonSettings = Seq(
   organization := "me.tongfei",
   version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.5",
 
   libraryDependencies += "com.chuusai"   %% "shapeless" % "2.3.3",
   libraryDependencies += "org.typelevel" %% "algebra"   % "0.7.0",
@@ -56,9 +56,15 @@ lazy val algebra = (project in file("algebra"))
     name := "nexus-algebra"
   )
 
+lazy val tensor = (project in file("tensor"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "nexus-tensor"
+  )
+
 lazy val core = (project in file("core"))
   .settings(commonSettings: _*)
-  .dependsOn(algebra)
+  .dependsOn(algebra).dependsOn(tensor)
   .settings(
     name := "nexus-core"
   )

@@ -60,7 +60,7 @@ object FloatTensor {
 
   def fromNestedArray[A, N <: Nat, T]
   (axes: A)(array: T)
-  (implicit nest: Nest[T, Float, N], nn: Len.Aux[A, N]) =
+  (implicit nest: Nest.Aux[T, Float, N], nn: Len.Aux[A, N]) =
     fromFlatArray[A](nest.flatten(array), nest.shape(array))
 
   class Contiguous[A](handle: Array[Float], shape: Array[Int])
