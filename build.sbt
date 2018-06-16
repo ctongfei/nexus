@@ -69,13 +69,22 @@ lazy val core = (project in file("core"))
     name := "nexus-core"
   )
 
+lazy val ml = (project in file("ml"))
+  .settings(commonSettings: _*)
+  .dependsOn(core)
+  .settings(
+    name := "nexus-ml"
+  )
+
 lazy val torch = (project in file("torch"))
   .settings(commonSettings: _*)
   .dependsOn(core % "compile->compile;test->test")
   .settings(
     name := "nexus-torch",
-    libraryDependencies += "me.tongfei" % "jtorch-cpu" % "0.3.0-SNAPSHOT"
+    libraryDependencies += "me.tongfei" % "jtorch-java" % "0.1-TH0.4-SNAPSHOT"
   )
+
+
 
 /*
 lazy val cuda = (project in file("cuda"))

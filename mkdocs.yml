@@ -1,0 +1,52 @@
+site_name: 'Nexus 0.1.0'
+site_description: 'Typesafe deep learning in Scala'
+site_author: 'Tongfei Chen'
+copyright: 'Copyright &copy; 2017-2018 Tongfei Chen'
+
+theme:
+  name: 'material'
+  palette:
+    primary: 'blue'
+    accent: 'light blue'
+  font:
+    text: 'Source Sans Pro'
+    code: 'Source Code Pro'
+  logo: 'images/nexus-logo.svg'
+  
+markdown_extensions: 
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  # - mdx_math
+  #- markdown_fenced_code_tabs:
+  #    single_block_as_tab: False
+  #    active_class: 'active'
+  #    template: 'default'
+
+repo_name: 'ctongfei/nexus'
+repo_url: 'https://github.com/ctongfei/nexus'
+
+extra_javascript:
+  - 'js/mathjax-settings.js'
+  - 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'
+extra_css: ['css/extra.css']
+
+pages:
+  - 'Introduction': 'index.md'
+  - 'Typesafe tensors': 'tensor.md'
+  - 'Expressions': 'expr.md'
+  - 'Operators': 'op.md'
+  - 'Tutorial': []

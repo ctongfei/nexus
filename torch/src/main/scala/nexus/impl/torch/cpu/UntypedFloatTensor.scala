@@ -1,64 +1,96 @@
 package nexus.impl.torch.cpu
 
-import jtorch.cpu._
+import jtorch._
 import nexus._
 import nexus.algebra._
-import nexus.exception._
 
 import scala.reflect._
-
-sealed abstract class UntypedFloatTensor extends UntypedTensor[Float] {
-  import UntypedFloatTensor._
-  def stringRepr: String = rank match {
-    case 0 =>
-      this match {
-        case Dim0(x) => x.toString
-      }
-    case 1 =>
-      (0 until shape(0)).map { i => get(offset + i * strides(0)) }.mkString("[", ", \t", "]")
-    case _ =>
-      (0 until shape(0)).map { i => slice(this, 0, i).stringRepr }.mkString("[", "\n", "]")
-  }
-}
 
 /**
  * Wraps around Torch native CPU tensor operations.
  * @author Tongfei Chen
  */
-object UntypedFloatTensor extends IsUntypedRealTensor[UntypedFloatTensor, Float] {
+object UntypedFloatTensor extends IsUntypedRealTensor[jtorch.FloatTensor, Float] {
+  val R = nexus.algebra.instances.Float32
+  def zeroBy(x: FloatTensor) = FloatTensor.zerosLike(x)
+  def add(x1: FloatTensor, x2: FloatTensor) = x1.cadd(1f, x2)
+  def addI(x1: FloatTensor, x2: FloatTensor): Unit = ???
+  def addS(x1: FloatTensor, x2: Float32) = x1.add(x2)
+  def sub(x1: FloatTensor, x2: FloatTensor) = x1.csub(1f, x2)
+  def neg(x: FloatTensor) = x.neg()
+  def eMul(x1: FloatTensor, x2: FloatTensor) = x1.cmul(x2)
+  def eDiv(x1: FloatTensor, x2: FloatTensor) = x1.cdiv(x2)
+  def scale(x: FloatTensor, k: Float32) = x.mul(k)
+  def eInv(x: FloatTensor) = x.cInv()
+  def eSqr(x: FloatTensor) = x.cmul(x)
+  def eSqrt(x: FloatTensor) = x.sqrt()
+  def eLog(x: FloatTensor) = x.log()
+  def eExp(x: FloatTensor) = x.exp()
+  def eLog1p(x: FloatTensor) = x.log1p()
+  def eExpm1(x: FloatTensor) = x.expm1()
+  def eSin(x: FloatTensor) = x.sin()
+  def eCos(x: FloatTensor) = x.cos()
+  def eTan(x: FloatTensor) = x.tanh()
+  def sum(x: FloatTensor) = x.sumall().toFloat
+  def eSigmoid(x: FloatTensor) = x.sigmoid()
+  def eReLU(x: FloatTensor) = ???
+  def eAbs(x: FloatTensor) = x.abs()
+  def eSgn(x: FloatTensor) = x.sign()
+  def eIsPos(x: FloatTensor) = ???
+  def transpose(x: FloatTensor) = x.transpose(0, 1)
+  def mmMul(x: FloatTensor, y: FloatTensor) = ???
+  def mvMul(x: FloatTensor, y: FloatTensor) = ???
+  def vvMul(x: FloatTensor, y: FloatTensor) = ???
+  def dot(x: FloatTensor, y: FloatTensor) = x.dot(y).toFloat
+  def tMul(x: FloatTensor, y: FloatTensor, matchedIndices: Seq[(Int32, Int32)]) = ???
+  def mutable = ???
+  def addS(x1: FloatTensor, x2: Float64) = ???
+  implicit val elementTypeClassTag: ClassTag[Float32] = _
+  def fromFlatArray(array: Array[Float32], shape: Array[Int32]) = ???
+  def get(x: FloatTensor, is: Array[Int32]) = ???
+  def unwrapScalar(x: FloatTensor) = ???
+  def wrapScalar(x: Float32) = ???
+  def rank(x: FloatTensor) = ???
+  def shape(x: FloatTensor) = ???
+  def map(x: FloatTensor)(f: Float32 => Float32) = ???
+  def map2(x1: FloatTensor, x2: FloatTensor)(f: (Float32, Float32) => Float32) = ???
+  def map3(x1: FloatTensor, x2: FloatTensor, x3: FloatTensor)(f: (Float32, Float32, Float32) => Float32) = ???
+  def slice(x: FloatTensor, dim: Int32, i: Int32) = ???
+  def expandDim(x: FloatTensor, i: Int32) = ???
+}
 
   val R = nexus.algebra.instances.Float32
 
   def mutable = true
+//
+//  case class Dim0(var value: Float) extends UntypedFloatTensor {
+//    def get(i: Int) =
+//      if (i == 0) value
+//      else throw new ArrayIndexOutOfBoundsException
+//
+//    def set(i: Int, v: Float): Unit =
+//      if (i == 0) value = v
+//      else throw new ArrayIndexOutOfBoundsException
+//
+//    def shape = Array[Int]()
+//
+//    def shape_=(s: Array[Int]): Unit =
+//      if (s.length != 0) throw new RankMismatchException
+//
+//    def strides = Array[Int]()
+//    def strides_=(s: Array[Int]): Unit =
+//      throw new UnsupportedOperationException
+//
+//    def offset = 0
+//    def offset_=(o: Int): Unit =
+//      throw new UnsupportedOperationException
+//
+//    def rank = 0
+//    def rank_=(n: Int32): Unit =
+//      throw new UnsupportedOperationException
+//  }
 
-  case class Dim0(var value: Float) extends UntypedFloatTensor {
-    def get(i: Int) =
-      if (i == 0) value
-      else throw new ArrayIndexOutOfBoundsException
-
-    def set(i: Int, v: Float): Unit =
-      if (i == 0) value = v
-      else throw new ArrayIndexOutOfBoundsException
-
-    def shape = Array[Int]()
-
-    def shape_=(s: Array[Int]): Unit =
-      if (s.length != 0) throw new RankMismatchException
-
-    def strides = Array[Int]()
-    def strides_=(s: Array[Int]): Unit =
-      throw new UnsupportedOperationException
-
-    def offset = 0
-    def offset_=(o: Int): Unit =
-      throw new UnsupportedOperationException
-
-    def rank = 0
-    def rank_=(n: Int32): Unit =
-      throw new UnsupportedOperationException
-  }
-
-  case class Dense(th: THFloatTensor) extends UntypedFloatTensor {
+  case class Dense(th: FloatTensor) extends UntypedFloatTensor {
 
     def get(i: Int) = TH.floatArray_getitem(th.getStorage.getData, i)
     def set(i: Int, v: Float): Unit = TH.floatArray_setitem(th.getStorage.getData, i, v)

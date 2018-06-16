@@ -64,4 +64,3 @@ object LpNorm extends ParameterizedPolyOp1 {
       }
 
 }
-
