@@ -1,4 +1,4 @@
-<img align="right" src="nexus-logo.svg" height="150px" style="padding-left: 20px"/>
+<img align="right" src="docs/images/nexus-logo.svg" height="150px" style="padding-left: 20px"/>
 
 ## Nexus
 🚧 **Ongoing project** 🚧 **Status: Prototype** 🚧
