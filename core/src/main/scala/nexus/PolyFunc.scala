@@ -4,7 +4,7 @@ package nexus
  * Represents unary type-polymorphic functions that operates on expressions.
  *
  * Specifically, there are two important cases:
- *  - [[PolyOp1]]: where computation is direct;
+ *  - [[PolyOp1]]: where computation is directly encoded;
  *  - [[PolyModule1]]: where computation is interpreted.
  * @author Tongfei Chen
  * @since 0.1.0
@@ -14,7 +14,7 @@ trait PolyFunc1 {
   /**
    * Type constraint / proof expressing what type of variables this polymorphic operation can apply to.
    *
-   * Presence of an implicit `F[X, Y]` encodes (by Curry-Howard correspondence) the predicate
+   * Presence of an implicit `F[X, Y]` encodes the predicate
    * "This function can be applied on `X`, and the result type is `Y`."
    */
   type F[X, Y]
@@ -47,6 +47,11 @@ trait PolyFunc2 {
 
 }
 
+
+/**
+ * Ternary type-polymorphic function.
+ * @see [[PolyFunc1]], [[PolyFunc2]]
+ */
 trait PolyFunc3 {
 
   /** Type constraint expressing what type of variables this polymorphic operation can apply to. */

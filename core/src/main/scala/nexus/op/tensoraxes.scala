@@ -76,6 +76,7 @@ object Squeeze extends ParameterizedPolyOp1 {
 
 /**
  * @example {{{ a |> SwapAxes(Batch, Length) }}}
+ * @see `torch.transpose`
  */
 object SwapAxes extends ParameterizedPolyOp1
 
@@ -92,6 +93,21 @@ object MergeAxes extends ParameterizedPolyOp1 {
     def name = ???
   }
 
+}
+
+/**
+ * @example {{{ a |> SplitAxis(Embedding -> (Direction, Embedding)) }}}
+ */
+object SplitAxis extends ParameterizedPolyOp1 {
+
+  implicit def splitAxisF[T[_], E, A, U: Label, V: Label, W: Label, B]
+  (implicit T: IsTensorK[T, E]) = (uvw: (U, (V, W))) => new F[T[A], T[B]] {
+    private[this] val (u, (v, w)) = uvw
+    def tag(tx: Type[T[A]]) = ???
+    def forward(x: T[A]) = ???
+    def backward(dy: T[B], y: T[B], x: T[A]) = ???
+    def name = s"SplitAxis[${typeName(u)} -> ]"
+  }
 }
 
 /**

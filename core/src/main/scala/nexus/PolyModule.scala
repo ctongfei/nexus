@@ -39,6 +39,10 @@ trait PolyModule2 extends PolyFunc2 {
 }
 
 
+/**
+ * Type-polymorphic ternary module.
+ * @see [[PolyModule1]], [[PolyModule2]]
+ */
 trait PolyModule3 extends PolyFunc3 {
 
   trait F[X1, X2, X3, Y] extends Module3[X1, X2, X3, Y]
