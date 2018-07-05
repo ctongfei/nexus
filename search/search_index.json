@@ -1,0 +1,49 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "Nexus: Typesafe deep learning in Scala\n\n\nNexus is a prototypical typesafe deep learning system, written entirely in Scala.\n\n\nNexus is a departure from common deep learning libraries such as \nTensorFlow\n, \nPyTorch\n, \nTheano\n, \nMXNet\n, etc. \n\n\n\n\nEver been baffled by the axes of tensors? Which axis should I max out? \n\n\nEver got \nTypeError\ns in Python?\n\n\nEver spending hours or days getting the tensors' axes and dimensions right?\n\n\n\n\nNexus' answer to these problems is \nstatic types\n. By specifying tensor axes' semantics in  types exploiting Scala's expressive types, compilers can validate the program \nat compile time\n, freeing developers' burden of remembering axes by heart, and eliminating nearly all errors above before even running.\n\n\nNexus embraces \ndeclarative\n and \nfunctional\n programming: Neural networks are built using small composable components, making code very easy to follow, understand and maintain.\n\n\nCitation\n\n\nPlease cite this project in academic work as follows.\n\n\nTongfei Chen (2017): \nTypesafe Abstractions for Tensor Operations\n. In \nProceedings of the 8\nth\n ACM SIGPLAN International Symposium on Scala\n, pp. 45-50.\n\n\n@inproceedings\n{\nchen2017typesafe\n,\n\n \nauthor\n \n=\n \n{Chen, Tongfei}\n,\n\n \ntitle\n \n=\n \n{Typesafe Abstractions for Tensor Operations (Short Paper)}\n,\n\n \nbooktitle\n \n=\n \n{Proceedings of the 8th ACM SIGPLAN International Symposium on Scala}\n,\n\n \nseries\n \n=\n \n{SCALA 2017}\n,\n\n \nyear\n \n=\n \n{2017}\n,\n\n \npages\n \n=\n \n{45--50}\n,\n\n \nurl\n \n=\n \n{http://doi.acm.org/10.1145/3136000.3136001}\n,\n\n \ndoi\n \n=\n \n{10.1145/3136000.3136001}\n\n\n}",
+            "title": "Introduction"
+        },
+        {
+            "location": "/#nexus-typesafe-deep-learning-in-scala",
+            "text": "Nexus is a prototypical typesafe deep learning system, written entirely in Scala.  Nexus is a departure from common deep learning libraries such as  TensorFlow ,  PyTorch ,  Theano ,  MXNet , etc.    Ever been baffled by the axes of tensors? Which axis should I max out?   Ever got  TypeError s in Python?  Ever spending hours or days getting the tensors' axes and dimensions right?   Nexus' answer to these problems is  static types . By specifying tensor axes' semantics in  types exploiting Scala's expressive types, compilers can validate the program  at compile time , freeing developers' burden of remembering axes by heart, and eliminating nearly all errors above before even running.  Nexus embraces  declarative  and  functional  programming: Neural networks are built using small composable components, making code very easy to follow, understand and maintain.",
+            "title": "Nexus: Typesafe deep learning in Scala"
+        },
+        {
+            "location": "/#citation",
+            "text": "Please cite this project in academic work as follows.  Tongfei Chen (2017):  Typesafe Abstractions for Tensor Operations . In  Proceedings of the 8 th  ACM SIGPLAN International Symposium on Scala , pp. 45-50.  @inproceedings { chen2017typesafe , \n  author   =   {Chen, Tongfei} , \n  title   =   {Typesafe Abstractions for Tensor Operations (Short Paper)} , \n  booktitle   =   {Proceedings of the 8th ACM SIGPLAN International Symposium on Scala} , \n  series   =   {SCALA 2017} , \n  year   =   {2017} , \n  pages   =   {45--50} , \n  url   =   {http://doi.acm.org/10.1145/3136000.3136001} , \n  doi   =   {10.1145/3136000.3136001}  }",
+            "title": "Citation"
+        },
+        {
+            "location": "/tensor/",
+            "text": "Typesafe Tensors\n\n\nThe distinctive feature of Nexus is \ntypesafe\n tensors.\n\n\nIn Nexus, a tensor is typed using a tuple of axis labels.\n\n\nval\n \nimage\n:\n \nFloatTensor\n[(\nWidth\n, \nHeight\n, \nChannel\n)]\n\n\n\n\n\nThis is in contrast with common deep learning libraries, where multidimensional arrays (tensors) all belong to one type (given the element type). For example, a tensor with float is typed as \nnumpy.ndarray\n in NumPy and \ntorch.FloatTensor\n in PyTorch, no matter how many dimensions are there (rank) in the tensor, or what each axis means in the tensor.",
+            "title": "Typesafe tensors"
+        },
+        {
+            "location": "/tensor/#typesafe-tensors",
+            "text": "The distinctive feature of Nexus is  typesafe  tensors.  In Nexus, a tensor is typed using a tuple of axis labels.  val   image :   FloatTensor [( Width ,  Height ,  Channel )]   This is in contrast with common deep learning libraries, where multidimensional arrays (tensors) all belong to one type (given the element type). For example, a tensor with float is typed as  numpy.ndarray  in NumPy and  torch.FloatTensor  in PyTorch, no matter how many dimensions are there (rank) in the tensor, or what each axis means in the tensor.",
+            "title": "Typesafe Tensors"
+        },
+        {
+            "location": "/expr/",
+            "text": "Expressions\n\n\nThe core data type in Nexus is \nExpr[A]\n: expressions. An \nExpr[A]\n is a symbolic expression that conceptually holds data of type \nA\n.\n\n\nAnalogous types in other libraries\nExpr\n is similar to\ntf.Tensor\n: \ntorch.autograd.Variable\n (before PyTorch 0.4.0): \nAn expression \nExpr[A]\n in Nexus can be one of the following:\n\n\n\n\nInput[A]\n: Symbolic input of type \nA\n.\n\n\nConst[A]\n: Constant.\n\n\nParam[A]\n: A parameter that will be updated while training.\n\n\nAppN[A]\n (\nN\n = {1, 2, 3}): Result of applying a \nN\nN\n-ary function.",
+            "title": "Expressions"
+        },
+        {
+            "location": "/expr/#expressions",
+            "text": "The core data type in Nexus is  Expr[A] : expressions. An  Expr[A]  is a symbolic expression that conceptually holds data of type  A .  Analogous types in other libraries Expr  is similar to tf.Tensor :  torch.autograd.Variable  (before PyTorch 0.4.0):  An expression  Expr[A]  in Nexus can be one of the following:   Input[A] : Symbolic input of type  A .  Const[A] : Constant.  Param[A] : A parameter that will be updated while training.  AppN[A]  ( N  = {1, 2, 3}): Result of applying a  N N -ary function.",
+            "title": "Expressions"
+        },
+        {
+            "location": "/op/",
+            "text": "Operators\n\n\nIn Nexus operators can be \"grounded\" or polymorphic.\n\n\n[A, B], [B, C] \\to [A, C]\n[A, B], [B, C] \\to [A, C]",
+            "title": "Operators"
+        },
+        {
+            "location": "/op/#operators",
+            "text": "In Nexus operators can be \"grounded\" or polymorphic.  [A, B], [B, C] \\to [A, C] [A, B], [B, C] \\to [A, C]",
+            "title": "Operators"
+        }
+    ]
+}
