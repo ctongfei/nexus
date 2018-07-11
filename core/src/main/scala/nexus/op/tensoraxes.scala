@@ -7,11 +7,11 @@ import shapeless._
 
 /**
  * Renaming an axis in any tensor.
- * @example {{{ Rename(U -> V) }}}
+ * @example {{{ RenameAxis(U -> V) }}}
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Rename extends ParameterizedPolyOp1 {
+object RenameAxis extends ParameterizedPolyOp1 {
 
   implicit def renameF[T[_], E, A, U: Label, V: Label, B]
   (implicit r: Replace.Aux[A, U, V, B], T: IsTensorK[T, E]) = (uv: (U, V)) =>
@@ -26,9 +26,9 @@ object Rename extends ParameterizedPolyOp1 {
 
 }
 
-object Concat extends ParameterizedPolyOp2 {
+object ConcatAlong extends ParameterizedPolyOp2 {
 
-  implicit def concatF[T[_], E, A, U: Label, N <: Nat]
+  implicit def concatAlongF[T[_], E, A, U: Label, N <: Nat]
   (implicit n: IndexOf.Aux[A, U, N], T: IsTensorK[T, E]) = (u: U) =>
     new F[T[A], T[A], T[A]] {
         def name = s"Concat[${typeName(u)}]"

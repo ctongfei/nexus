@@ -32,6 +32,10 @@ object Test0 extends App {
   val l = p |> Sqr |> Add.Curried1(1f)
 
 
+  given (l := 3) using SimpleForward { implicit comp =>
+    comp.
+  }
+
   val sgd = new GradientDescentOptimizer(0.01)
 
   for (i <- 0 until 1000) {

@@ -1,6 +1,6 @@
 # Nexus: Typesafe deep learning in Scala
 
-Nexus is a prototypical typesafe deep learning system in Scala.
+Nexus is a prototypical typesafe deep learning system, written entirely in Scala.
 
 Nexus is a departure from common deep learning libraries such as [TensorFlow](tensorflow.org), [PyTorch](pytorch.org), [Theano](http://www.deeplearning.net/software/theano/), [MXNet](mxnet.io), etc. 
 
@@ -10,7 +10,7 @@ Nexus is a departure from common deep learning libraries such as [TensorFlow](te
 
 Nexus' answer to these problems is **static types**. By specifying tensor axes' semantics in  types exploiting Scala's expressive types, compilers can validate the program **at compile time**, freeing developers' burden of remembering axes by heart, and eliminating nearly all errors above before even running.
  
-Nexus embraces **declarative** and **functional** programming: Neural networks are built using composable components, making code very easy to follow, understand and maintain.
+Nexus embraces **declarative** and **functional** programming: Neural networks are built using small composable components, making code very easy to follow, understand and maintain.
 
 ### Citation
 

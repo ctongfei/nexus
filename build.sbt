@@ -56,15 +56,9 @@ lazy val algebra = (project in file("algebra"))
     name := "nexus-algebra"
   )
 
-lazy val tensor = (project in file("tensor"))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "nexus-tensor"
-  )
-
 lazy val core = (project in file("core"))
   .settings(commonSettings: _*)
-  .dependsOn(algebra).dependsOn(tensor)
+  .dependsOn(algebra)
   .settings(
     name := "nexus-core"
   )

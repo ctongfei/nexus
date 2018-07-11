@@ -22,6 +22,26 @@ object If extends PolyOp3 {
     def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = if (!c) dy else X.zeroBy(f)
   }
 
+  /**
+   * @note Known in other libraries as `torch.where`.
+   */
+  object Elementwise extends PolyOp3 {
+
+    implicit def ifElementwiseF[TB[_], B, TR[_], R, A](
+                                                        implicit TB: IsBoolTensorK[TB, B],
+                                                        TR: IsRealTensorK[T, R]
+                                                      ): F[TB[A], TR[A], TR[A], TR[A]]
+    = new F[TB[A], TR[A], TR[A], TR[A]] {
+      def name = "If.Elementwise"
+      def tag(tx1: Type[TB[A]], tx2: Type[TR[A]], tx3: Type[TR[A]]) = ???
+      def forward(x1: TB[A], x2: TR[A], x3: TR[A]) = ???
+      def backward1(dy: TR[A], y: TR[A], x1: TB[A], x2: TR[A], x3: TR[A]) = ???
+      def backward2(dy: TR[A], y: TR[A], x1: TB[A], x2: TR[A], x3: TR[A]) = ???
+      def backward3(dy: TR[A], y: TR[A], x1: TB[A], x2: TR[A], x3: TR[A]) = ???
+    }
+
+  }
+
 }
 
 /**

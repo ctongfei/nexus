@@ -76,7 +76,7 @@ object Log1p extends PolyOp1 {
     def name = "Log1p"
     def tag(tx: Type[R]) = tx
     def forward(x: R) = log1p(x)
-    def backward(dy: R, y: R, x: R) = inv(x + one)
+    def backward(dy: R, y: R, x: R) = dy * inv(x + one)
   }
 
   object Elementwise extends PolyOp1 {
@@ -95,6 +95,14 @@ object Log1p extends PolyOp1 {
 
 
 object Expm1 extends PolyOp1 {
+
+  implicit def expm1F[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
+    import R._
+    def name = "Expm1"
+    def tag(tx: Type[R]) = tx
+    def forward(x: R) = expm1(x)
+    def backward(dy: R, y: R, x: R) = dy * y
+  }
 
 
 }

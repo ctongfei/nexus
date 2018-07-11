@@ -23,7 +23,7 @@ class ElmanUnit[T[_], R, X: Label, S: Label] private(
 {
 
   def apply(s: Expr[T[S]], x: Expr[T[X]]) =
-    ((s |> Rename(stateAxis -> inputAxis)), x) |> Concat(inputAxis) |> inputLayer |> stateActivation
+    ((s |> RenameAxis(stateAxis -> inputAxis)), x) |> ConcatAlong(inputAxis) |> inputLayer |> stateActivation
 
 }
 
@@ -55,7 +55,7 @@ object ElmanUnit {
     val inputLayer = Affine(
       inputAxis -> (inputSize + stateSize),
       stateAxis -> stateSize,
-      name = s"$name.Input"
+      name = s"$name.input"
     )
     new ElmanUnit[T, R, X, S](
       inputLayer,

@@ -10,24 +10,24 @@ import scala.collection._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class ExprMap[V[_]](val map: mutable.Map[Expr[_], V[_]]) extends (Expr ~> V) with Iterable[ExprValuePair[V]] {
+class ExprMap[V[_]](val rawMap: mutable.Map[Expr[_], V[_]]) extends (Expr ~> V) with Iterable[ExprValuePair[V]] {
 
   /** Tests if this expression is stored in this map. */
-  def contains(x: Expr[_]) = map contains x
+  def contains(x: Expr[_]) = rawMap contains x
 
   /** Gets the value associated with the specified expression. */
-  def apply[X](e: Expr[X]): V[X] = map(e).asInstanceOf[V[X]]
+  def apply[X](e: Expr[X]): V[X] = rawMap(e).asInstanceOf[V[X]]
 
-  def getOrElse[X](e: Expr[X], default: => V[X]): V[X] = map.getOrElse(e, default).asInstanceOf[V[X]]
+  def getOrElse[X](e: Expr[X], default: => V[X]): V[X] = rawMap.getOrElse(e, default).asInstanceOf[V[X]]
 
-  def update[X](e: Expr[X], v: V[X]) = map.update(e, v)
+  def update[X](e: Expr[X], v: V[X]): Unit = rawMap.update(e, v)
 
-  def iterator: Iterator[ExprValuePair[V]] = map.iterator.map {
+  def iterator: Iterator[ExprValuePair[V]] = rawMap.iterator.map {
     case (e: Expr[eX], v) =>
       new ExprValuePair[V] {
         type Data = eX
         val expr = e
-        val value = v.asInstanceOf[V[eX]]
+        val value = v.asInstanceOf[V[Data]]
       }
   }
 

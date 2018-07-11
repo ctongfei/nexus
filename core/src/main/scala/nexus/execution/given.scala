@@ -16,12 +16,12 @@ object given {
    */
   def apply(as: Assignment*) = new {
 
-    def apply(op: SimpleForward => Any) = {
+    def apply[R](op: SimpleForward => R): R = {
       implicit val comp = SimpleForward.given(as: _*)
       op(comp)
     }
 
-    def using[F <: ForwardInterpreter](factory: ForwardInterpreterFactory[F])(op: F => Any) = {
+    def using[F <: ForwardInterpreter, R](factory: ForwardInterpreterFactory[F])(op: F => R): R = {
       implicit val comp = factory.given(as: _*)
       op(comp)
     }

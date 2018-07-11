@@ -1,5 +1,7 @@
 package nexus
 
+import scala.language.higherKinds
+
 /**
  * Object holding some information associated with a symbolic expression.
  * @tparam V Higher-kinded type that defines the type of information stored for a specific type of expression

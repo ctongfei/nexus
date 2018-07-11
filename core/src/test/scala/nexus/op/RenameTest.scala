@@ -17,7 +17,7 @@ object RenameTest extends App {
    val C = new C
 
   val a = Input[FloatTensor[(A, B)]]()
-  val b = a |> Rename(B -> C)
+  val b = a |> RenameAxis(B -> C)
 
   val x = FloatTensor.fromFlatArray[A](Array(3f, 4f), Array(2))
   val y = FloatTensor.fromFlatArray[A](Array(0f, 0f), Array(2))

@@ -40,9 +40,9 @@ object Linear {
     import ops._
     val (aA, nA) = in
     val (aB, nB) = out
-    val key = ExprName.nextId("Linear")
-    val W = Param(newGaussianTensor[(B, A)](0f, 1f, Array(nB, nA)), name = s"$key.weight")
-    from[T, R, A, B](W)
+    val key = ExprName.nextId(typeName(Linear))
+    val weight = Param(newGaussianTensor[(B, A)](0f, 1f, Array(nB, nA)), name = s"$key.weight")
+    from[T, R, A, B](weight)
   }
 
 }

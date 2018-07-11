@@ -27,6 +27,7 @@ trait Module3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] with ModuleBase
 
 trait ModuleBase {
 
+  /** The set of parameters in this module. */
   def parameters: Set[Param[_]]
 
 }

@@ -5,7 +5,8 @@ import shapeless._
 /**
  * @author Tongfei Chen
  */
-trait Label[A]
+trait Label[A] {
+}
 
 object Label {
 

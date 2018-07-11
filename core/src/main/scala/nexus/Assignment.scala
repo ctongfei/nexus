@@ -22,6 +22,7 @@ object Assignment {
     val value = v
   }
 
+  // Use of dependent types in the return type
   def unapply(a: Assignment): Option[(Expr[a.Data], a.Data)] = Some(a.expr, a.value)
 
 }

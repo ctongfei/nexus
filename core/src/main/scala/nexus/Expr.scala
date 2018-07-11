@@ -54,11 +54,11 @@ sealed trait Expr[X] {
  */
 case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
 
-  def tag = Type.nonDifferentiable[X]
+  def tag = Type.nonDifferentiable[X] // no need to compute the gradient of the input
   def requireGrad = false
 
   /** Constructs a neural function (lambda expression). */
-  def =>>[Y](y: Expr[Y]): Lambda1[X, Y] = new Lambda1(this, y)
+  def =>>[Y](y: Expr[Y]): Lambda1[X, Y] = Lambda1(this, y)
 
   override def toString = name
 
@@ -74,11 +74,11 @@ case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) exten
 
   final def requireGrad = true // or else, how could it be updated?
 
-  def +=(g: X) = if (tag.mutable)
+  def +=(g: X): Unit = if (tag.mutable)
     tag.addI(value, g)
   else value = tag.add(value, g)
 
-  def -=(g: X) = +=(-g)
+  def -=(g: X): Unit = +=(-g)
 
   override def toString = name
 
@@ -101,7 +101,6 @@ case class Const[X](value: X, name: String = ExprName.nextConst)(implicit val ta
  * The result of the application of a unary function to an expression.
  */
 case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
-
   type Input = X
 
   val requireGrad = op.differentiable && x.requireGrad

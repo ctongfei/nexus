@@ -46,7 +46,7 @@ object XorTest extends App {
 
   val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
-  val loss = (y, ŷ) |> CrossEntropy
+  val loss = CrossEntropy(y, ŷ)
 
   /** Declare an optimizer. */
   val opt = new AdamOptimizer(0.01)

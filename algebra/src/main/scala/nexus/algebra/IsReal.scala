@@ -11,7 +11,7 @@ import algebra.ring._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that type ${R} is a real number.")
-trait IsReal[@specialized(Float, Double) R] extends Field[R] with Order[R] with Grad[R] {
+trait IsReal[@specialized(Float, Double) R] extends Field[R] with Grad[R] {
 
   def mutable = false
 
