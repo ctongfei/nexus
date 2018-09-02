@@ -89,8 +89,9 @@ case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) exten
  * A constant value in a computational graph.
  * @param value Value of this constant
  */
-case class Const[X](value: X, name: String = ExprName.nextConst)(implicit val tag: Type[X]) extends Expr[X] {
+case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
 
+  final def tag = Type.nonDifferentiable[X]
   override def requireGrad = false
   override def toString = name
 
@@ -104,7 +105,7 @@ case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
   type Input = X
 
   val requireGrad = op.differentiable && x.requireGrad
-  val tag = op.tag(x.tag)
+  def tag = op.tag
   override def toString = s"${op.name}($x)"
 }
 
@@ -117,7 +118,7 @@ case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) exten
   type Input2 = X2
 
   val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad)
-  val tag = op.tag(x1.tag, x2.tag)
+  def tag = op.tag
   override def toString = s"${op.name}($x1, $x2)"
 }
 
@@ -131,6 +132,6 @@ case class App3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2
   type Input3 = X3
 
   val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad || x3.requireGrad)
-  val tag = op.tag(x1.tag, x2.tag, x3.tag)
+  def tag = op.tag
   override def toString = s"${op.name}($x1, $x2, $x3)"
 }

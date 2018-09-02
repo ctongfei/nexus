@@ -2,8 +2,9 @@ package nexus.algebra.instances
 
 import nexus.algebra._
 
-object Float32 extends IsReal[Float] {
+object Float32 extends IsReal[Float] with GenOrder[Float, Boolean] {
   type R = Float
+  def B = Bool
   
   val one = 1f
   val zero = 0f
@@ -46,8 +47,9 @@ object Float32 extends IsReal[Float] {
   override def toString = "Float"
 }
 
-object Float64 extends IsReal[Double] {
+object Float64 extends IsReal[Double] with GenOrder[Double, Boolean] {
   type R = Double
+  def B = Bool
 
   def one = 1d
   def zero = 0d

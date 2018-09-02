@@ -1,7 +1,7 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.op._
+import nexus.ops._
 import nexus.algebra.syntax._
 
 /**

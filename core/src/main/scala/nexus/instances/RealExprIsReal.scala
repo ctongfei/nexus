@@ -3,7 +3,7 @@ package nexus.instances
 import cats.Order
 import nexus._
 import nexus.algebra._
-import nexus.op._
+import nexus.ops._
 
 /**
  * @author Tongfei Chen
@@ -35,9 +35,12 @@ class RealExprIsReal[R](implicit R: IsReal[R]) extends IsReal[Expr[R]] {
 
 class RealExprGenOrder[R](implicit R: IsReal[R], RO: Order[R]) extends GenOrder[Expr[R], Expr[Boolean]] {
   def B = BoolExprIsBool
-  def eq(x: Expr[R], y: Expr[R]) = ???
+  def eqv(x: Expr[R], y: Expr[R]) = ???
   def lt(x: Expr[R], y: Expr[R]) = ???
 }
 
 object FloatExprIsReal extends RealExprIsReal()(Float32)
 object DoubleExprIsReal extends RealExprIsReal()(Float64)
+
+object FloatExprGenOrder extends RealExprGenOrder[Float]()(Float32, Float32)
+object DoubleExprGenOrder extends RealExprGenOrder[Double]()(Float64, Float64)

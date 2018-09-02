@@ -1,6 +1,6 @@
 package nexus
 
-import nexus.op._
+import nexus.ops._
 
 /**
  * @author Tongfei Chen

@@ -1,11 +1,11 @@
 package nexus
 
 import nexus.algebra._
-import nexus.op._
+import nexus.ops._
 import nexus.optimizer._
 import nexus.execution._
 import nexus.impl.jvm._
-import nexus.layer._
+import nexus.modules._
 
 /**
  * @author Tongfei Chen

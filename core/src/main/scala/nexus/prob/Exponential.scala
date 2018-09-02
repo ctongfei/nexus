@@ -11,12 +11,15 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  */
 class Exponential[R](val λ: R)(implicit R: IsReal[R]) extends Stochastic[R] {
-  private[this] val standardUniform = new Random(GlobalSettings.seed)
+
+  import GlobalSettings._
 
   def sample = {
-    val u = standardUniform.nextDouble()
+    val u = random.nextDouble()
     -R.log(R.fromDouble(u)) / λ
   }
+
+  def rate = λ
 
 }
 
@@ -25,5 +28,6 @@ object Exponential {
   def standard[R](implicit R: IsReal[R]) = apply(R.one)
 
   def apply[R: IsReal](λ: R) = new Exponential[R](λ)
+  def unapply[R](e: Exponential[R]) = Some(e.λ)
 
 }

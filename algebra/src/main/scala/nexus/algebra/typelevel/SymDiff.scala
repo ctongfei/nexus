@@ -6,7 +6,7 @@ import shapeless.ops.nat._
 
 /**
  * Typelevel function that performs symmetric differences on two [[HList]]s.
- * This is used in tensor multiplication ([[nexus.op.Contract]]).
+ * This is used in tensor multiplication ([[nexus.ops.Contract]]).
  * @author Tongfei Chen
  */
 trait SymDiff[A, B] extends DepFn2[A, B] {

@@ -5,7 +5,7 @@ package nexus.algebra
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Type[X]
+trait Type[@specialized(Boolean, Int, Float, Double) X]
 
 object Type {
 

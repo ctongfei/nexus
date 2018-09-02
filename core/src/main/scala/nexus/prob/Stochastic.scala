@@ -4,6 +4,7 @@ import cats._
 import nexus.algebra._
 
 import scala.collection._
+import scala.reflect._
 import scala.util._
 
 /**
@@ -14,50 +15,72 @@ import scala.util._
  */
 trait Stochastic[+A] { self =>
 
-  /** Draws a sample. */
+  import Stochastic._
+
+  /** Draws a sample from this stochastic variable. */
   def sample: A
 
   /** Lazily draws infinitely many samples. */
-  def samples: Iterable[A] = new AbstractIterable[A] {
-    def iterator = new AbstractIterator[A] {
-      def hasNext = true
-      def next() = sample
-    }
-  }
+  def samples: Iterable[A] =
+    new InfiniteSamples(self)
 
-  def map[B](f: A => B): Stochastic[B] = Stochastic.from(f(sample))
+  def map[B](f: A => B): Stochastic[B] =
+    from(f(sample))
 
-  def flatMap[B](f: A => Stochastic[B]): Stochastic[B] = Stochastic.from(f(sample).sample)
+  def flatMap[B](f: A => Stochastic[B]): Stochastic[B] =
+    from(f(sample).sample)
 
-  def filter(f: A => Boolean): Stochastic[A] = new Stochastic.Conditional(self, f)
+  def filter(f: A => Boolean): Stochastic[A] =
+    new Conditional(self, f)
 
-  def collect[B](pf: PartialFunction[A, B]): Stochastic[B] = new Stochastic.ConditionallyMapped(self, pf)
+  def given(f: A => Boolean): Stochastic[A] =
+    filter(f)
 
-  def product[B](that: Stochastic[B]): Stochastic[(A, B)] = Stochastic.from(self.sample, that.sample)
+  def collect[B](pf: PartialFunction[A, B]): Stochastic[B] =
+    new ConditionallyMapped(self, pf)
 
-  def productWith[B, C](that: Stochastic[B])(f: (A, B) => C): Stochastic[C] = Stochastic.from(f(self.sample, that.sample))
+  def product[B](that: Stochastic[B]): Stochastic[(A, B)] =
+    from(self.sample, that.sample)
 
-  def repeatToSeq(n: Int): Stochastic[Seq[A]] = Stochastic.from(Seq.fill(n)(sample))
+  def productWith[B, C](that: Stochastic[B])(f: (A, B) => C): Stochastic[C] =
+    from(f(self.sample, that.sample))
 
-  def repeatToTensor[T, Aʹ >: A](shape: Seq[Int])(implicit T: IsTensor[T, Aʹ]): Stochastic[T] = ???
+  def repeatToArray[A1 >: A](n: Int)(implicit ct: ClassTag[A1]): Stochastic[Array[A1]] =
+    from(Array.fill(n)(sample))
+
+  def repeatToSeq(n: Int): Stochastic[Seq[A]] =
+    from(Seq.fill(n)(sample))
+
+  def repeatToTensor[T[_], Axes, A1 >: A](axes: Axes, shape: Seq[Int])(implicit T: IsTensorK[T, A1]): Stochastic[T[Axes]] =
+    ???
     //(Array.fill(shape.product)(sample), shape.toArray)
 
 }
 
 object Stochastic {
 
-  def from[A](f: => A): Stochastic[A] = new AbstractStochastic[A] {
+  def from[A](f: => A): Stochastic[A] = new Stochastic[A] {
     def sample = f
   }
 
+  def always[A](a: A): Deterministic[A] =
+    Deterministic(a)
+
   implicit object Monad extends Monad[Stochastic] {
-    def pure[A](x: A) = from(x)
+    def pure[A](a: A) = always(a)
     def flatMap[A, B](fa: Stochastic[A])(f: A => Stochastic[B]) = fa.flatMap(f)
     override def map[A, B](fa: Stochastic[A])(f: A => B) = fa.map(f)
     def tailRecM[A, B](a: A)(f: A => Stochastic[Either[A, B]]) = f(a) collect { case Right(b) => b }
   }
 
-  class Conditional[A, B](self: Stochastic[A], f: A => Boolean) extends AbstractStochastic[A] {
+  class InfiniteSamples[A](self: Stochastic[A]) extends AbstractIterable[A] {
+    def iterator = new AbstractIterator[A] {
+      def hasNext = true
+      def next() = self.sample
+    }
+  }
+
+  class Conditional[A, B](self: Stochastic[A], f: A => Boolean) extends Stochastic[A] {
     def sample: A = {
       do {
         val x = self.sample
@@ -67,7 +90,7 @@ object Stochastic {
     }
   }
 
-  class ConditionallyMapped[A, B](self: Stochastic[A], pf: PartialFunction[A, B]) extends AbstractStochastic[B] {
+  class ConditionallyMapped[A, B](self: Stochastic[A], pf: PartialFunction[A, B]) extends Stochastic[B] {
     val f = pf.lift
     def sample: B = {
       do {
@@ -82,6 +105,3 @@ object Stochastic {
   }
 
 }
-
-// Reduce bytecode size
-abstract class AbstractStochastic[+A] extends Stochastic[A]

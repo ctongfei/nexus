@@ -2,7 +2,7 @@ package nexus.syntax
 
 import nexus._
 import nexus.algebra._
-import nexus.op._
+import nexus.ops._
 
 /**
  * @author Tongfei Chen

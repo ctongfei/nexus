@@ -2,7 +2,7 @@ package nexus.optimizer
 
 import nexus._
 import nexus.algebra.syntax._
-import nexus.op._
+import nexus.ops._
 import java.lang.Math._
 
 /**

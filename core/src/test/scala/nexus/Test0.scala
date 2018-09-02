@@ -2,8 +2,8 @@ package nexus
 
 import nexus.execution._
 import nexus.impl.jvm._
-import nexus.layer.recurrent._
-import nexus.op._
+import nexus.modules.recurrent._
+import nexus.ops._
 import nexus.syntax._
 import nexus.optimizer._
 

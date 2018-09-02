@@ -11,12 +11,17 @@ import nexus.algebra.syntax._
  * @since 0.1.0
  */
 class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends Stochastic[R] {
-
-  private[this] val standardNormal = new Random(GlobalSettings.seed)
+  import GlobalSettings._
   private[this] val σ = R.sqrt(σ2)
 
+  def mean = μ
+
+  def variance = σ2
+
+  def stdDev = σ
+
   def sample = {
-    val u = standardNormal.nextGaussian()
+    val u = random.nextGaussian()
     μ + R.fromDouble(u) * σ
   }
 
@@ -27,5 +32,6 @@ object Normal {
   def standard[R](implicit R: IsReal[R]) = apply(R.zero, R.one)
 
   def apply[R: IsReal](μ: R, σ2: R) = new Normal(μ, σ2)
+  def unapply[R](n: Normal[R]) = Some((n.μ, n.σ2))
 
 }

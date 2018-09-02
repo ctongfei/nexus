@@ -54,4 +54,8 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
     if (last endsWith "$") last.init else last
   }
 
+  private[nexus] implicit class TypeNameStringContextOps(val strCtx: StringContext) extends AnyVal {
+    def n(args: Any*) = strCtx.s(args map typeName)
+  }
+
 }

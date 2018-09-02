@@ -15,8 +15,8 @@ class ExpressionNotDifferentiableException(e: Expr[_])
  * @param name
  * @param ordinal
  */
-class OperatorNotDifferentiableException(name: String, ordinal: Int)
-  extends Exception(s"Operator $name is not differentiable with respect to its ${ordinal match {
+class OperatorNotDifferentiableException(val op: AnyOp[_], val ordinal: Int)
+  extends Exception(s"Operator ${op.name} is not differentiable with respect to its ${ordinal match {
     case 1 => "1st"
     case 2 => "2nd"
     case 3 => "3rd"
