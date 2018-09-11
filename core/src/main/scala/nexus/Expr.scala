@@ -97,6 +97,16 @@ case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X]
 
 }
 
+class Deferred[X](val value: () => X, name: String = ExprName.nextConst) extends Expr[X] {
+  final def tag = Type.nonDifferentiable[X]
+  def requireGrad = false
+  override def toString = name
+}
+
+object Deferred {
+  def apply[X](value: => X, name: String = ExprName.nextConst) = new Deferred(() => value, name)
+}
+
 
 /**
  * The result of the application of a unary function to an expression.

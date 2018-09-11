@@ -13,13 +13,13 @@ import shapeless._
  */
 object RenameAxis extends ParameterizedPolyOp1 {
 
-  implicit def renameF[T[_], E, A, U: Label, V: Label, B]
+  implicit def renameF[T[_], E, A, U <: Dim, V <: Dim, B]
   (implicit r: Replace.Aux[A, U, V, B], T: IsTensorK[T, E]) = (uv: (U, V)) =>
     new F[T[A], T[B]] {
       val (u, v) = uv
       import T._
       def name = n"Rename[$u -> $v]"
-      def tag(tx: Type[T[A]]) = T.ground[B]
+      def tag = T.ground[B]
       def forward(x: T[A]) = typeWith[B](untype(x))
       def backward(dy: T[B], y: T[B], x: T[A]) = typeWith[A](untype(dy))
     }
@@ -28,7 +28,7 @@ object RenameAxis extends ParameterizedPolyOp1 {
 
 object ConcatAlong extends ParameterizedPolyOp2 {
 
-  implicit def concatAlongF[T[_], E, A, U: Label, N <: Nat]
+  implicit def concatAlongF[T[_], E, A, U <: Dim, N <: Nat]
   (implicit n: IndexOf.Aux[A, U, N], T: IsTensorK[T, E]) = (u: U) =>
     new F[T[A], T[A], T[A]] {
         def name = n"Concat[$u]"
@@ -46,7 +46,7 @@ object ConcatAlong extends ParameterizedPolyOp2 {
  */
 object Unsqueeze extends ParameterizedPolyOp1 {
 
-  implicit def unsqueezeF[T[_], E, A, N <: Nat, U: Label, B]
+  implicit def unsqueezeF[T[_], E, A, N <: Nat, U <: Dim, B]
   (implicit ia: InsertAt.Aux[A, N, U, B], T: IsTensorK[T, E]) = (nu: (N, U)) =>
     new F[T[A], T[B]] {
         val (n, u) = nu
@@ -63,11 +63,11 @@ object Unsqueeze extends ParameterizedPolyOp1 {
  */
 object Squeeze extends ParameterizedPolyOp1 {
 
-  implicit def squeezeF[T[_], E, A, N <: Nat, U: Label, B]
+  implicit def squeezeF[T[_], E, A, N <: Nat, U <: Dim, B]
   (implicit ix: IndexOf.Aux[A, U, N], rx: RemoveAt.Aux[A, N, B], T: IsTensorK[T, E]) = (u: U) =>
     new F[T[A], T[B]] {
         def name = n"Squeeze[$u]"
-        def tag(tx: Type[T[A]]) = T.ground[B]
+        def tag = T.ground[B]
         def forward(x: T[A]) = ???
         def backward(dy: T[B], y: T[B], x: T[A]) = ???
     }
@@ -85,7 +85,7 @@ object SwapAxes extends ParameterizedPolyOp1
  */
 object MergeAxes extends ParameterizedPolyOp1 {
 
-  implicit def mergeAxesF[T[_], E, A, U: Label, V: Label, W: Label, B]
+  implicit def mergeAxesF[T[_], E, A, U <: Dim, V <: Dim, W <: Dim, B]
   (implicit T: IsTensorK[T, E]) = (uvw: ((U, V), W)) => new F[T[A], T[B]] {
     val ((u, v), w) = uvw
     def tag = T.ground[B]
@@ -101,10 +101,10 @@ object MergeAxes extends ParameterizedPolyOp1 {
  */
 object SplitAxis extends ParameterizedPolyOp1 {
 
-  implicit def splitAxisF[T[_], E, A, U: Label, V: Label, W: Label, B]
+  implicit def splitAxisF[T[_], E, A, U <: Dim, V <: Dim, W <: Dim, B]
   (implicit T: IsTensorK[T, E]) = (uvw: (U, (V, W))) => new F[T[A], T[B]] {
     private[this] val (u, (v, w)) = uvw
-    def tag(tx: Type[T[A]]) = ???
+    def tag = ???
     def name = n"SplitAxis[$u -> ($v, $w)]"
     def forward(x: T[A]) = ???
     def backward(dy: T[B], y: T[B], x: T[A]) = ???
@@ -123,11 +123,11 @@ object SplitAxis extends ParameterizedPolyOp1 {
  */
 object UnstackAlong extends ParameterizedPolyOp1 {
 
-  implicit def unstackAlongF[T[_], E, A, X: Label, N <: Nat, B]
+  implicit def unstackAlongF[T[_], E, A, X <: Dim, N <: Nat, B]
   (implicit T: IsTensorK[T, E], ix: IndexOf.Aux[A, X, N], r: RemoveAt.Aux[A, N, B]): X => F[T[A], Seq[T[B]]] =
     (x: X) => new F[T[A], Seq[T[B]]] {
-      def name = s"UnstackAlong[${typeName(x)}]"
-      def tag(tx: Type[T[A]]) = ???
+      def name = n"UnstackAlong[$x]"
+      def tag = ???
       def forward(x: T[A]) = ???
       def backward(dy: Seq[T[B]], y: Seq[T[B]], x: T[A]) = ???
     }
@@ -142,11 +142,11 @@ object UnstackAlong extends ParameterizedPolyOp1 {
  */
 object Stack extends ParameterizedPolyOp1 {
 
-  implicit def stackF[T[_], E, A, X: Label, B]
+  implicit def stackF[T[_], E, A, X <: Dim, B]
   (implicit T: IsTensorK[T, E], ia: InsertAt.Aux[A, _0, X, B]): X => F[Seq[T[A]], T[B]] =
     (x: X) => new F[Seq[T[A]], T[B]] {
-      def name = s"Stack[${typeName(x)}]"
-      def tag(tx: Type[Seq[T[A]]]) = ???
+      def name = n"Stack[$x]"
+      def tag = ???
       def forward(x: Seq[T[A]]) = ???
       def backward(dy: T[B], y: T[B], x: Seq[T[A]]) = ???
     }

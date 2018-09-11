@@ -12,17 +12,17 @@ object given {
 
   /**
    * User-friendly syntax for creating a forward computation context.
-   * @param as A list of assignments
+   * @param assignments A list of assignments
    */
-  def apply(as: Assignment*) = new {
+  def apply(assignments: Assignment*) = new {
 
     def apply[R](op: SimpleForward => R): R = {
-      implicit val comp = SimpleForward.given(as: _*)
+      implicit val comp = SimpleForward.given(assignments: _*)
       op(comp)
     }
 
     def using[F <: ForwardInterpreter, R](factory: ForwardInterpreterFactory[F])(op: F => R): R = {
-      implicit val comp = factory.given(as: _*)
+      implicit val comp = factory.given(assignments: _*)
       op(comp)
     }
 

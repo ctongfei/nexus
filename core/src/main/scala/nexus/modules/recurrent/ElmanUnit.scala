@@ -12,7 +12,7 @@ import nexus.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class ElmanUnit[T[_], R, X: Label, S: Label] private(
+class ElmanUnit[T[_], R, X <: Dim, S <: Dim] private(
   val inputLayer: Affine[T, R, X, S],
   val stateActivation: Func1[T[S], T[S]],
   val inputAxis: X,
@@ -40,7 +40,7 @@ object ElmanUnit {
    * @param activation
    * @return
    */
-  def apply[T[_], R, X: Label, S: Label, Y: Label](
+  def apply[T[_], R, X <: Dim, S <: Dim, Y <: Dim](
                                                     inputAxisAndSize: (X, Int),
                                                     stateAxisAndSize: (S, Int),
                                                     activation: PolyFunc1 = Tanh,

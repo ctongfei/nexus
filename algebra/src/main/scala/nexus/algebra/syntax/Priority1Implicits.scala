@@ -28,16 +28,16 @@ trait Priority1Implicits {
 
   }
 
-  implicit class RealOps[X](x: X)(implicit X: IsReal[X]) {
+  implicit class RealOps[R](x: R)(implicit R: IsReal[R]) {
 
-    def *(y: X): X = macro op2
-    def /(y: X): X = macro op2
+    def *(y: R): R = macro op2
+    def /(y: R): R = macro op2
 
-    def *(y: Float): X = macro op2Float
-    def /(y: Float): X = macro op2Float
+    def *(y: Float): R = macro op2Float
+    def /(y: Float): R = macro op2Float
 
-    def *(y: Double): X = macro op2Double
-    def /(y: Double): X = macro op2Double
+    def *(y: Double): R = macro op2Double
+    def /(y: Double): R = macro op2Double
 
   }
 
@@ -66,7 +66,7 @@ trait Priority1Implicits {
     /** Scales a tensor by a scalar. */
     def :*(y: Double): T[A] = macro op2TRDouble
 
-    def :/(y: R): T[A] = T.scale(x, T.R.reciprocal(y))
+    def :/(y: R): T[A] = T.scale(x, T.R.inv(y))
     def :/(y: Float): T[A] = T.scale(x, T.R.fromFloat(1f / y))
     def :/(y: Double): T[A] = T.scale(x, T.R.fromDouble(1d / y))
 

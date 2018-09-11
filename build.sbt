@@ -14,6 +14,8 @@ lazy val commonSettings = Seq(
   isSnapshot := true,
   scalaVersion := "2.12.5",
 
+  (scalacOptions in compile) ++= Seq(),
+
   libraryDependencies += "com.chuusai"   %% "shapeless" % "2.3.3",
   libraryDependencies += "org.typelevel" %% "algebra"   % "0.7.0",
   libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
@@ -61,6 +63,15 @@ lazy val core = (project in file("core"))
   .dependsOn(algebra)
   .settings(
     name := "nexus-core"
+  )
+
+lazy val testBase = (project in file("test-base"))
+  .settings(commonSettings: _*)
+  .dependsOn(core)
+  .settings(
+    name := "nexus-test-base",
+    publishArtifact := false,
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4"
   )
 
 lazy val ml = (project in file("ml"))

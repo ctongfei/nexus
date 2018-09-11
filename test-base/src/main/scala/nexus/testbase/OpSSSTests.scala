@@ -1,4 +1,4 @@
-package nexus.ops.properties
+package nexus.testbase
 
 import nexus._
 import nexus.algebra._
@@ -8,6 +8,7 @@ import nexus.prob._
 import org.scalatest._
 
 /**
+ * Tests (R, R) -> R functions.
  * @author Tongfei Chen
  */
 class OpSSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R]) extends FunSuite {

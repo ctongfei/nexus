@@ -1,5 +1,6 @@
 package nexus.algebra.typelevel
 
+import nexus.algebra._
 import shapeless._
 import shapeless.ops.hlist._
 
@@ -27,7 +28,7 @@ object FromHList {
       def invert(x: Unit) = HNil
     }
 
-  implicit def single[A: Label]: FromHList.Aux[A :: HNil, A] =
+  implicit def single[A <: Dim]: FromHList.Aux[A :: HNil, A] =
     new FromHList[A :: HNil] {
       type Out = A
       def apply(x: A :: HNil) = x.head

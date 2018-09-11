@@ -1,4 +1,4 @@
-package nexus.ops.properties
+package nexus.testbase
 
 import nexus._
 import nexus.algebra._
@@ -8,6 +8,7 @@ import nexus.prob._
 import org.scalatest._
 
 /**
+ * Tests R^n^ -> R functions.
  * @author Tongfei Chen
  */
 class OpVSTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) extends FunSuite {
@@ -41,7 +42,7 @@ class OpVSTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
 
   for (op <- ops) {
     test(s"${op.name}'s automatic derivative is close to its numerical approximation on $T") {
-      val prop = new Prop(op, Stochastic.from(T.tabulate(len)(_ => gen.sample)))
+      val prop = new Prop(op, Stochastic.apply(T.tabulate(len)(_ => gen.sample)))
       assert(prop.passedCheck())
     }
   }

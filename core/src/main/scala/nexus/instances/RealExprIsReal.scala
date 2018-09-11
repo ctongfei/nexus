@@ -8,7 +8,7 @@ import nexus.ops._
 /**
  * @author Tongfei Chen
  */
-class RealExprIsReal[R](implicit R: IsReal[R]) extends IsReal[Expr[R]] {
+class RealExprIsReal[R](implicit R: IsReal[R]) extends IsGenReal[Expr, R] {
   def add(x: Expr[R], y: Expr[R]) = Add(x, y)
   def sub(x: Expr[R], y: Expr[R]) = Sub(x, y)
   def neg(x: Expr[R]) = Neg(x)
@@ -31,16 +31,14 @@ class RealExprIsReal[R](implicit R: IsReal[R]) extends IsReal[Expr[R]] {
   def zero = Const(R.zero)
   def addS(x1: Expr[R], x2: Double) = Add(x1, Const(R.fromDouble(x2)))
   def addI(x1: Expr[R], x2: Expr[R]): Unit = ???
+  def B = BoolExprIsBool
+  def fromDouble(d: Double) = Const(R.fromDouble(d))
+  def lt(x: Expr[R], y: Expr[R]) = ???
+  def eq(x: Expr[R], y: Expr[R]) = ???
+  def le(x: Expr[R], y: Expr[R]) = ???
+  def zeroBy(x: Expr[R]) = Const(R.fromDouble(0.0))
 }
 
-class RealExprGenOrder[R](implicit R: IsReal[R], RO: Order[R]) extends GenOrder[Expr[R], Expr[Boolean]] {
-  def B = BoolExprIsBool
-  def eqv(x: Expr[R], y: Expr[R]) = ???
-  def lt(x: Expr[R], y: Expr[R]) = ???
-}
 
 object FloatExprIsReal extends RealExprIsReal()(Float32)
 object DoubleExprIsReal extends RealExprIsReal()(Float64)
-
-object FloatExprGenOrder extends RealExprGenOrder[Float]()(Float32, Float32)
-object DoubleExprGenOrder extends RealExprGenOrder[Double]()(Float64, Float64)

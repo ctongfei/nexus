@@ -10,7 +10,7 @@ import nexus.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Convolution1D[T[_], R, W: Label, X: Label, Y: Label] private(
+class Convolution1D[T[_], R, W <: Dim, X <: Dim, Y <: Dim] private(
                                                                     val window: Int,
                                                                     val stride: Int,
                                                                     val weight: Param[T[(Y, X)]]
@@ -27,7 +27,7 @@ class Convolution1D[T[_], R, W: Label, X: Label, Y: Label] private(
 
 object Convolution1D {
 
-  def apply[T[_], R, W, X, Y](
+  def apply[T[_], R, W <: Dim, X <: Dim, Y <: Dim](
     widthAxis: W,
     inputAxisSize: (X, Int),
     outputAxisSize: (Y, Int),

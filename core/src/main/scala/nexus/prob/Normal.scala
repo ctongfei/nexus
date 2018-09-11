@@ -10,13 +10,22 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends Stochastic[R] {
+class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends HasPdf[R, R] {
+
   import GlobalSettings._
-  private[this] val σ = R.sqrt(σ2)
+
+  private[this] lazy val σ = R.sqrt(σ2)
+  private[this] lazy val τ = R.inv(σ2)
+
+  def pdf(x: R) = ???
+
+  def logPdf(x: R) = ???
 
   def mean = μ
 
   def variance = σ2
+
+  def precision = τ
 
   def stdDev = σ
 
@@ -24,6 +33,8 @@ class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends Stochastic
     val u = random.nextGaussian()
     μ + R.fromDouble(u) * σ
   }
+
+  def real = R
 
 }
 

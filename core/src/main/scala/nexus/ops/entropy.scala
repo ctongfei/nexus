@@ -30,7 +30,7 @@ object Entropy extends PolyOp1 {
  */
 object CrossEntropy extends PolyOp2 {
 
-  implicit def crossEntropyF[T[_], R, A: Label](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
+  implicit def crossEntropyF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
     new F[T[A], T[A], R] {
       import T._
       def name = "CrossEntropy"
@@ -44,7 +44,7 @@ object CrossEntropy extends PolyOp2 {
 
 object KullbackLeiblerDivergence extends PolyOp2 {
 
-  implicit def kullbackLeiblerDivergenceF[T[_], R, A: Label](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
+  implicit def kullbackLeiblerDivergenceF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
     new F[T[A], T[A], R] {
       def name = "KullbackLeiblerDivergence"
       def tag = T.R

@@ -1,5 +1,6 @@
 package nexus.algebra.typelevel
 
+import nexus.algebra._
 import shapeless._
 
 /**
@@ -23,7 +24,8 @@ object InsertAt {
       def index = 0
     }
 
-  implicit def insertAtHListCaseN[H, T <: HList, P <: Nat, X, R <: HList](implicit p: InsertAt.Aux[T, P, X, R]): Aux[H :: T, Succ[P], X, H :: R] =
+  implicit def insertAtHListCaseN[H, T <: HList, P <: Nat, X, R <: HList]
+  (implicit p: InsertAt.Aux[T, P, X, R]): Aux[H :: T, Succ[P], X, H :: R] =
     new InsertAt[H :: T, Succ[P], X] {
       type Out = H :: R
       def apply(t: H :: T, x: X): H :: R = t.head :: p(t.tail, x)

@@ -1,5 +1,6 @@
 package nexus.algebra.typelevel
 
+import nexus.algebra._
 import shapeless._
 
 /**

@@ -1,5 +1,6 @@
 package nexus.algebra.typelevel
 
+import nexus.algebra._
 import shapeless._
 
 /**
@@ -19,7 +20,7 @@ object Replace {
   def apply[L, U, V](implicit r: Replace[L, U, V]): Aux[L, U, V, r.Out] = r
   type Aux[L, U, V, Out0] = Replace[L, U, V] { type Out = Out0 }
 
-  implicit def replaceHListCase0[T <: HList, U: Label, V: Label]: Aux[U :: T, U, V, V :: T] =
+  implicit def replaceHListCase0[T <: HList, U, V]: Aux[U :: T, U, V, V :: T] =
     new Replace[U :: T, U, V] { self =>
       type Out = V :: T
       def apply(l: U :: T, v: V): V :: T = v :: l.tail
@@ -30,7 +31,7 @@ object Replace {
       }
     }
 
-  implicit def replaceHListCaseN[T <: HList, H, U: Label, V: Label, R <: HList]
+  implicit def replaceHListCaseN[T <: HList, H, U, V, R <: HList]
   (implicit n: H =:!= U, r: Replace.Aux[T, U, V, R]): Replace.Aux[H :: T, U, V, H :: R] =
     new Replace[H :: T, U, V] { self =>
       type Out = H :: R
@@ -42,7 +43,7 @@ object Replace {
       }
     }
 
-  implicit def replaceTuple[L, Lh <: HList, U: Label, V: Label, Rh <: HList, R]
+  implicit def replaceTuple[L, Lh <: HList, U, V, Rh <: HList, R]
   (implicit lh: ToHList.Aux[L, Lh], r: Replace.Aux[Lh, U, V, Rh], rh: FromHList.Aux[Rh, R]): Replace.Aux[L, U, V, R] =
     new Replace[L, U, V] { self =>
       type Out = R

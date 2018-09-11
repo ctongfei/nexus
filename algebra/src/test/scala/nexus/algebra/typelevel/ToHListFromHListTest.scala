@@ -20,8 +20,6 @@ class ToHListFromHListTest extends FunSuite {
   test("ToHList should convert types to their canonical HList representation") {
 
     assert(toHList(()) == HNil)
-    assert(toHList(1) == 1 :: HNil)
-    assert(toHList("a") == "a" :: HNil)
     assert(toHList(1 -> 2) == 1 :: 2 :: HNil)
     assert(toHList("a", "b", "c") == "a" :: "b" :: "c" :: HNil)
 

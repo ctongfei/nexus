@@ -1,4 +1,4 @@
-package nexus.ops.properties
+package nexus.testbase
 
 import nexus._
 import nexus.algebra._
@@ -8,10 +8,10 @@ import nexus.prob._
 import org.scalatest._
 
 /**
- * Tests the correctness of autograd for functions of type ℝⁿ => ℝⁿ.
+ * Tests R^n^ -> R^n^ functions.
  * @author Tongfei Chen
  */
-class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) extends FunSuite{
+class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) extends FunSuite {
 
   class Axis
   val len = 10
@@ -29,7 +29,7 @@ class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
       T.tabulate(x.shape(0)) { i =>
         val δ = x(i) * relativeDiff
         val δx = T.tabulate[Axis](x.shape(0)) { j => if (j == i) δ else R.zero }
-        R.div(dy dot (op.forward(x + δx) - op.forward(x - δx)), δ * 2d)
+        (dy dot (op.forward(x + δx) - op.forward(x - δx))) / (δ * 2d)
       }
     }
 
@@ -47,7 +47,7 @@ class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
 
   for (op <- ops) {
     test(s"${op.name}'s automatic derivative is close to its numerical approximation on $T") {
-      val prop = new Prop(op, Stochastic.from(T.tabulate(len)(_ => gen.sample)))
+      val prop = new Prop(op, Stochastic(T.tabulate(len)(_ => gen.sample)))
       assert(prop.passedCheck())
     }
   }

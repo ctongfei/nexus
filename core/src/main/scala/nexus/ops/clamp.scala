@@ -12,7 +12,7 @@ object Clamp extends ParameterizedPolyOp1 {
       new F[T[A], T[A]] {
         val (min, max) = range
         def name = s"Clamp[$min, $max]"
-        def tag(tx: Type[T[A]]) = tx
+        def tag = T.ground[A]
         def forward(x: T[A]) = ???
         def backward(dy: T[A], y: T[A], x: T[A]) = ???
       }

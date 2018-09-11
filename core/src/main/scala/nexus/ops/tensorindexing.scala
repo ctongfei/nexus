@@ -76,7 +76,7 @@ object Select extends PolyOp2 {
   implicit def selectF[TX[_], X, TZ[_], Z, A](implicit TE: IsTensorK[TX, X], TZ: IsIntTensorK[TZ, Z]) =
     new F[TX[A], TZ[A], TX[A]] {
       def name = "Select"
-      def tag(tx1: Type[TX[A]], tx2: Type[TZ[A]]) = ???
+      def tag = ???
       def forward(x1: TX[A], x2: TZ[A]) = ???
       def backward1(dy: TX[A], y: TX[A], x1: TX[A], x2: TZ[A]) = ???
       def backward2(dy: TX[A], y: TX[A], x1: TX[A], x2: TZ[A]) = ???

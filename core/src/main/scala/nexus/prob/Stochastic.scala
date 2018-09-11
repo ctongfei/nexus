@@ -24,11 +24,13 @@ trait Stochastic[+A] { self =>
   def samples: Iterable[A] =
     new InfiniteSamples(self)
 
-  def map[B](f: A => B): Stochastic[B] =
-    from(f(sample))
+  def map[B](f: A => B): Stochastic[B] = Stochastic {
+    f(sample)
+  }
 
-  def flatMap[B](f: A => Stochastic[B]): Stochastic[B] =
-    from(f(sample).sample)
+  def flatMap[B](f: A => Stochastic[B]): Stochastic[B] = Stochastic {
+    f(sample).sample
+  }
 
   def filter(f: A => Boolean): Stochastic[A] =
     new Conditional(self, f)
@@ -39,17 +41,21 @@ trait Stochastic[+A] { self =>
   def collect[B](pf: PartialFunction[A, B]): Stochastic[B] =
     new ConditionallyMapped(self, pf)
 
-  def product[B](that: Stochastic[B]): Stochastic[(A, B)] =
-    from(self.sample, that.sample)
+  def product[B](that: Stochastic[B]): Stochastic[(A, B)] = Stochastic {
+    (self.sample, that.sample)
+  }
 
-  def productWith[B, C](that: Stochastic[B])(f: (A, B) => C): Stochastic[C] =
-    from(f(self.sample, that.sample))
+  def productWith[B, C](that: Stochastic[B])(f: (A, B) => C): Stochastic[C] = Stochastic {
+    f(self.sample, that.sample)
+  }
 
-  def repeatToArray[A1 >: A](n: Int)(implicit ct: ClassTag[A1]): Stochastic[Array[A1]] =
-    from(Array.fill(n)(sample))
+  def repeatToArray[A1 >: A](n: Int)(implicit ct: ClassTag[A1]): Stochastic[Array[A1]] = Stochastic {
+    Array.fill(n)(sample)
+  }
 
-  def repeatToSeq(n: Int): Stochastic[Seq[A]] =
-    from(Seq.fill(n)(sample))
+  def repeatToSeq(n: Int): Stochastic[Seq[A]] = Stochastic {
+    Seq.fill(n)(sample)
+  }
 
   def repeatToTensor[T[_], Axes, A1 >: A](axes: Axes, shape: Seq[Int])(implicit T: IsTensorK[T, A1]): Stochastic[T[Axes]] =
     ???
@@ -59,7 +65,7 @@ trait Stochastic[+A] { self =>
 
 object Stochastic {
 
-  def from[A](f: => A): Stochastic[A] = new Stochastic[A] {
+  def apply[A](f: => A): Stochastic[A] = new Stochastic[A] {
     def sample = f
   }
 

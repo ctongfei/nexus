@@ -1,4 +1,4 @@
-package nexus.ops.properties
+package nexus.testbase
 
 import nexus._
 import nexus.algebra._
@@ -11,7 +11,7 @@ import nexus.prob._
  * @since 0.1.0
  */
 abstract class ApproxProp[X, R](
-                                 val op: AnyOp,
+                                 val op: AnyOp[_],
                                  val gen: Stochastic[X],
                                  val numSamples: Int = 100,
                                  val relativeDiff: Double = 0.001,

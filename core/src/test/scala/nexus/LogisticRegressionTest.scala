@@ -12,9 +12,9 @@ import nexus.modules._
  */
 object LogisticRegressionTest extends App {
 
-  class Batch; val Batch = new Batch
-  class In; val In = new In
-  class Out; val Out = new Out
+  class Batch extends Dim; val Batch = new Batch
+  class In extends Dim;    val In = new In
+  class Out extends Dim;   val Out = new Out
 
   val X = FloatTensor.fromNestedArray(Batch, In)(Array(
     Array(3f, 4f),
@@ -46,7 +46,7 @@ object LogisticRegressionTest extends App {
       implicit val forward = SimpleForward.given(x := xv, y := yv)
       val lossValue = loss.value
       val grads = Backward.compute(loss)
-      println(s"Iteration $i: loss = ${lossValue}")
+      println(s"Iteration $i: loss = $lossValue")
       sgd.update(grads)
     }
   }

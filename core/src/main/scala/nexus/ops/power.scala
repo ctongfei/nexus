@@ -14,7 +14,7 @@ object Sqr extends PolyOp1 {
 
   implicit def sqrF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Sqr"
-    def tag(tx: Type[R]) = tx
+    def tag = R
     def forward(x: R) = R.sqr(x)
     def backward(dy: R, y: R, x: R) = dy * x * 2
   }
@@ -26,7 +26,7 @@ object Sqr extends PolyOp1 {
 
     implicit def sqrElementwiseF[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Sqr.Elementwise"
-      def tag(tx: Type[T[A]]) = tx
+      def tag = T.ground[A]
       def forward(x: T[A]) = T.eSqr(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| x :* 2
     }
@@ -39,7 +39,7 @@ object Sqrt extends PolyOp1 {
 
   implicit def sqrtF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
     def name = "Sqrt"
-    def tag(tx: Type[R]) = tx
+    def tag = R
     def forward(x: R) = R.sqrt(x)
     def backward(dy: R, y: R, x: R) = dy * R.inv(y) * 0.5
   }
@@ -48,7 +48,7 @@ object Sqrt extends PolyOp1 {
 
     implicit def sqrtElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
       def name = "Sqrt.Elementwise"
-      def tag(tx: Type[T[A]]) = tx
+      def tag = T.ground[A]
       def forward(x: T[A]) = T.eSqrt(x)
       def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.eInv(y) :* 0.5
     }

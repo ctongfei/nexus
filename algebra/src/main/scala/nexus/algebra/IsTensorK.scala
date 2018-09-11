@@ -73,7 +73,7 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
   def map3[A](x1: T[A], x2: T[A], x3: T[A])(f: (E, E, E) => E): T[A] =
     typeWith[A](H.map3(untype(x1), untype(x2), untype(x3))(f))
 
-  def expandDim[A, I <: Nat, X, B](x: T[A])(ia: InsertAt.Aux[A, I, X, B]): T[B] =
+  def expandDim[A, I <: Nat, X <: Dim, B](x: T[A])(ia: InsertAt.Aux[A, I, X, B]): T[B] =
     typeWith[B](H.expandDim(untype(x), ia.index))
 
   def ground[A]: IsTensor[T[A], E]

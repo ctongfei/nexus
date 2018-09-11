@@ -14,7 +14,7 @@ import nexus.ops._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class LongShortTermMemoryUnit[T[_], R, X: Label, C: Label, H: Label]()(implicit T: IsRealTensorK[T, R])
+class LongShortTermMemoryUnit[T[_], R, X <: Dim, C <: Dim, H <: Dim]()(implicit T: IsRealTensorK[T, R])
   extends RecurrentUnit[(T[C], T[H]), T[X]]
 {
   def apply(ch: Expr[(T[C], T[H])], x: Expr[T[X]]) = {
@@ -44,7 +44,7 @@ object LongShortTermMemoryUnit {
    * @tparam H
    * @return
    */
-  def apply[T[_], R, X: Label, C: Label, H: Label](
+  def apply[T[_], R, X <: Dim, C <: Dim, H <: Dim](
                                    inputAxisAndSize: (X, Int),
                                    cellAxisAndSize: (C, Int),
                                    hiddenAxisAndSize: (H, Int)

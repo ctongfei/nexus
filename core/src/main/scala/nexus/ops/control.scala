@@ -13,15 +13,25 @@ import nexus.exception._
  */
 object If extends PolyOp3 {
 
-  implicit def ifF[X](implicit X: Grad[X]): F[Boolean, X, X, X] =
-    new F[Boolean, X, X, X] {
+  implicit def ifF[X](implicit X: Type[X]): F[Boolean, X, X, X] = X match {
+    case xX: Grad[X] => new F[Boolean, X, X, X] {
       def name = "If"
-      def tag = Grad[X]
+      def tag = X
       def forward(c: Boolean, t: X, f: X) = if (c) t else f
       def backward1(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 1)
-      def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = if (c) dy else X.zeroBy(t)
-      def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = if (!c) dy else X.zeroBy(f)
+      def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = if (c) dy else xX.zeroBy(t)
+      def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = if (!c) dy else xX.zeroBy(f)
     }
+    case _ => new F[Boolean, X, X, X] {
+      def name = "If"
+      def tag = X
+      def forward(c: Boolean, t: X, f: X) = if (c) t else f
+      override def differentiable = false
+      def backward1(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 1)
+      def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 2)
+      def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 3)
+    }
+  }
 
   /**
    * @note Known in other libraries as `torch.where` / `tf.cond`.
@@ -44,6 +54,7 @@ object If extends PolyOp3 {
   }
 
 }
+
 
 /**
  * Identity function for any expression, but stops gradient backpropagation.

@@ -51,10 +51,10 @@ abstract class PolyOp2 extends PolyFunc2 { self =>
 
   object Curried1 extends ParameterizedPolyOp1 {
 
-    implicit def curriedLiteral1[X1, X2, Y](implicit f: self.F[X1, X2, Y], tx1: Type[X1]) = (x1: X1) =>
+    implicit def curriedLiteral1[X1, X2, Y](implicit f: self.F[X1, X2, Y]) = (x1: X1) =>
       new F[X2, Y] {
         def name = s"$f.curried1($x1)"
-        def tag(tx2: Type[X2]) = f.tag
+        def tag = f.tag
         override def differentiable = f.differentiable
         def forward(x2: X2) = f.forward(x1, x2)
         def backward(dy: Y, y: Y, x2: X2) = f.backward2(dy, y, x1, x2)
@@ -62,10 +62,10 @@ abstract class PolyOp2 extends PolyFunc2 { self =>
   }
 
   object Curried2 extends ParameterizedPolyOp1 {
-    implicit def curriedLiteral2[X1, X2, Y](implicit f: self.F[X1, X2, Y], tx2: Type[X2]) = (x2: X2) =>
+    implicit def curriedLiteral2[X1, X2, Y](implicit f: self.F[X1, X2, Y]) = (x2: X2) =>
       new F[X1, Y] {
         def name = s"$f.curried2($x2)"
-        def tag(tx1: Type[X1]) = f.tag
+        def tag = f.tag
         override def differentiable = f.differentiable
         def forward(x1: X1) = f.forward(x1, x2)
         def backward(dy: Y, y: Y, x1: X1) = f.backward1(dy, y, x1, x2)

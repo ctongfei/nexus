@@ -63,10 +63,10 @@ object Sub extends PolyOp2 {
  */
 object Mul extends PolyOp2 {
 
-  implicit def mulF[R: IsReal]: F[R, R, R] =
+  implicit def mulF[R](implicit R: IsReal[R]): F[R, R, R] =
     new F[R, R, R] {
       def name = "Mul"
-      def tag = IsReal[R]
+      def tag = R
       def forward(x1: R, x2: R) = x1 * x2
       def backward1(dy: R, y: R, x1: R, x2: R) = dy * x2
       def backward2(dy: R, y: R, x1: R, x2: R) = dy * x1

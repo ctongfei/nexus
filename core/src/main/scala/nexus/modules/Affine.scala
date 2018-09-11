@@ -12,7 +12,7 @@ import nexus.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Affine[T[_], R, X: Label, Y: Label] private(
+class Affine[T[_], R, X <: Dim, Y <: Dim] private(
                                                    val W: Param[T[(Y, X)]],
                                                    val b: Param[T[Y]]
                                                  )
@@ -41,14 +41,14 @@ object Affine {
    * @param W Weight matrix (axes `(Y, X)`)
    * @param b Bias vector (axes `Y`)
    */
-  def from[T[_], R, X: Label, Y: Label]
+  def from[T[_], R, X <: Dim, Y <: Dim]
   (W: Param[T[(Y, X)]], b: Param[T[Y]])(implicit T: IsRealTensorK[T, R]) = new Affine[T, R, X, Y](W, b)
 
   /**
    * Constructs an affine (fully-connected) layer with default parameters.
    * @example `Affine(In -> 784, Out -> 300)`
    */
-  def apply[T[_], R, X: Label, Y: Label](
+  def apply[T[_], R, X <: Dim, Y <: Dim](
                                           inAxisAndSize: (X, Int),
                                           outAxisAndSize: (Y, Int),
                                           name: String = ExprName.nextId("Affine")

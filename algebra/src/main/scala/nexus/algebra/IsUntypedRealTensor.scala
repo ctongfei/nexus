@@ -18,7 +18,7 @@ trait IsUntypedRealTensor[T, @specialized(Float, Double) R] extends IsUntypedTen
   def addS(x1: T, x2: R): T
 
   def sub(x1: T, x2: T): T
-  def subS(x1: T, x2: R): T = addS(x1, R.negate(x2))
+  def subS(x1: T, x2: R): T = addS(x1, R.neg(x2))
 
   def neg(x: T): T
 

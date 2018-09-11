@@ -19,4 +19,6 @@ object Type {
    */
   def nonDifferentiable[X]: Type[X] = NonDifferentiableSingleton.asInstanceOf[Type[X]]
 
+  implicit def ground[T[_], A](implicit T: TypeK[T]): Type[T[A]] = T.ground[A]
+
 }

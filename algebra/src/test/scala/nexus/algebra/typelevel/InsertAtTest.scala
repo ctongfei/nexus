@@ -1,6 +1,7 @@
 package nexus.algebra.typelevel
 
-import org.scalatest.FunSuite
+import nexus.algebra._
+import org.scalatest._
 import shapeless._
 
 class InsertAtTest extends FunSuite {

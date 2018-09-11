@@ -1,5 +1,6 @@
 package nexus.algebra.typelevel
 
+import nexus.algebra._
 import shapeless._
 
 /**
@@ -29,7 +30,7 @@ object ToHList {
     }
 
   // Single type (N == 1)
-  implicit def single[A: Label]: ToHList.Aux[A, A :: HNil] =
+  implicit def single[A <: Dim]: ToHList.Aux[A, A :: HNil] =
     new ToHList[A] {
       type Out = A :: HNil
       def apply(x: A) = x :: HNil

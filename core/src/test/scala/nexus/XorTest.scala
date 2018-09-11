@@ -8,10 +8,11 @@ import nexus.ops._
 import nexus.optimizer._
 
 // Define names of axes (an empty class and an object with the same name)
-class Batch
-class In
-class Hidden
-class Out
+class Batch extends Dim
+class In extends Dim
+class Hidden extends Dim
+class Out extends Dim
+
 /**
  * Neural network 101: XOR network.
  * @author Tongfei Chen

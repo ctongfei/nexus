@@ -2,7 +2,7 @@ package nexus.algebra.instances
 
 import nexus.algebra._
 
-object Float32 extends IsReal[Float] with GenOrder[Float, Boolean] {
+object Float32 extends IsReal[Float] {
   type R = Float
   def B = Bool
   
@@ -31,14 +31,14 @@ object Float32 extends IsReal[Float] with GenOrder[Float, Boolean] {
 
   def compare(x: R, y: R) = (x - y).toInt
   override def lt(x: R, y: R) = x < y
-  override def lteqv(x: R, y: R) = x <= y
-  override def eqv(x: R, y: R) = x == y
-  override def neqv(x: R, y: R) = x != y
+  override def le(x: R, y: R) = x <= y
+  override def eq(x: R, y: R) = x == y
+  override def ne(x: R, y: R) = x != y
   override def gt(x: R, y: R) = x > y
-  override def gteqv(x: R, y: R) = x >= y
+  override def ge(x: R, y: R) = x >= y
 
   override def fromDouble(a: Double) = a.toFloat
-  override def fromInt(n: Int) = n.toFloat
+  def fromInt(n: Int) = n.toFloat
 
   def toFloat(x: R) = x
 
@@ -47,7 +47,7 @@ object Float32 extends IsReal[Float] with GenOrder[Float, Boolean] {
   override def toString = "Float"
 }
 
-object Float64 extends IsReal[Double] with GenOrder[Double, Boolean] {
+object Float64 extends IsReal[Double] {
   type R = Double
   def B = Bool
 
@@ -76,14 +76,14 @@ object Float64 extends IsReal[Double] with GenOrder[Double, Boolean] {
 
   def compare(x: R, y: R) = (x - y).toInt
   override def lt(x: R, y: R) = x < y
-  override def lteqv(x: R, y: R) = x <= y
-  override def eqv(x: R, y: R) = x == y
-  override def neqv(x: R, y: R) = x != y
+  override def le(x: R, y: R) = x <= y
+  override def eq(x: R, y: R) = x == y
+  override def ne(x: R, y: R) = x != y
   override def gt(x: R, y: R) = x > y
-  override def gteqv(x: R, y: R) = x >= y
+  override def ge(x: R, y: R) = x >= y
 
   override def fromDouble(a: Double) = a
-  override def fromInt(n: Int) = n
+  def fromInt(n: Int) = n
 
   def toFloat(x: Double) = x.toFloat
 

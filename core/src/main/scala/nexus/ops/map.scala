@@ -16,7 +16,7 @@ object Elementwise extends ParameterizedPolyOp1 {
     new F[T[A], T[A]] {
       import T._
       def name = s"Map[${f.name}]"
-      def tag(tx: Type[T[A]]) = tx
+      def tag = T.ground[A]
       override def differentiable = f.differentiable
       def forward(x: T[A]) = map(x)(f.forward)
       def backward(dy: T[A], y: T[A], x: T[A]) = map3(dy, y, x)(f.backward)

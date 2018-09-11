@@ -1,12 +1,15 @@
 package nexus.ops
 
+
 import nexus._
+import nexus.algebra._
 import nexus.execution._
 import nexus.impl.jvm._
 import nexus.modules._
-class A;
-class B;
-class C;
+
+class A extends Dim
+class B extends Dim
+class C extends Dim
 /**
  * @author Tongfei Chen
  */

@@ -7,7 +7,9 @@ import nexus.syntax._
  * @author Tongfei Chen
  */
 package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleExprOpsMixin {
-  
+
+  type Dim = algebra.Dim
+
   val _0 = shapeless.nat._0
   val _1 = shapeless.nat._1
   val _2 = shapeless.nat._2
@@ -41,7 +43,8 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
   type         Bool    = Boolean
   implicit val Bool    = nxai.Bool
 
-  type Func1[X, Y]                  = (Expr[X] => Expr[Y])
+  type Func0[Y]                     = (() => Expr[Y])
+  type Func1[X1, Y]                 = ((Expr[X1]) => Expr[Y])
   type Func2[X1, X2, Y]             = ((Expr[X1], Expr[X2]) => Expr[Y])
   type Func3[X1, X2, X3, Y]         = ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y])
   type Func4[X1, X2, X3, X4, Y]     = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4]) => Expr[Y])

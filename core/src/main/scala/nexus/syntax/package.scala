@@ -5,4 +5,5 @@ package nexus
  */
 package object syntax extends
   ExprRealMixin with
-  ExprRealTensorMixin
+  ExprRealTensorMixin with
+  GenBoolMixin

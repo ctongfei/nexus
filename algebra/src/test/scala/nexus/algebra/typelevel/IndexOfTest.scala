@@ -1,6 +1,7 @@
 package nexus.algebra.typelevel
 
-import org.scalatest.FunSuite
+import nexus.algebra._
+import org.scalatest._
 import shapeless._
 
 /**
@@ -8,15 +9,18 @@ import shapeless._
  */
 class IndexOfTest extends FunSuite {
 
+  class A extends Dim
+  class B extends Dim
+
   test("IndexOf should find the index of a type in an HList") {
-    type X = Int :: String :: HNil
-    assert(IndexOf[X, Int].toInt == 0)
-    assert(IndexOf[X, String].toInt == 1)
+    type X = A :: B :: HNil
+    assert(IndexOf[X, A].toInt == 0)
+    assert(IndexOf[X, B].toInt == 1)
   }
 
   test("IndexOf should find the index of a type in a Tuple") {
-    type X = (Int, String)
-    assert(IndexOf[X, Int].toInt == 0)
-    assert(IndexOf[X, String].toInt == 1)
+    type X = (A, B)
+    assert(IndexOf[X, A].toInt == 0)
+    assert(IndexOf[X, B].toInt == 1)
   }
 }
