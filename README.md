@@ -22,9 +22,9 @@ A simple neural network for learning the XOR function can be found [**here**](ht
 
 Building a typesafe XOR network:
 ```scala
-  class In;     val In = new In          
-  class Hidden; val Hidden = new Hidden
-  class Out;    val Out = new Out      // tensor axis labels declared as types and singletons
+  class In extends Dim;     val In = new In          
+  class Hidden extends Dim; val Hidden = new Hidden
+  class Out extends Dim;    val Out = new Out // tensor axis labels declared as types and singletons
 
   val x = Input[FloatTensor[In]]()     // input vectors
   val y = Input[FloatTensor[Out]]()    // gold labels
