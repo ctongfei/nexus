@@ -14,8 +14,11 @@ import nexus.util._
  */
 sealed trait Expr[X] {
 
+  /** Type tag on this expression. */
+  type Tag[_]
+
   /** Type tag of this expression. */
-  def tag: Type[X]
+  def tag: Tag[X]
 
   /** Will the gradient of this expression be computed when performing backward computation? */
   def requireGrad: Boolean
@@ -54,7 +57,8 @@ sealed trait Expr[X] {
  */
 case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
 
-  def tag = Type.nonDifferentiable[X] // no need to compute the gradient of the input
+  type Tag[x] = AnyType[x]
+  def tag = AnyType[X] // no need to compute the gradient of the input
   def requireGrad = false
 
   /** Constructs a neural function (lambda expression). */
@@ -71,6 +75,8 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
  * @note A `Param` has to be differentiable by providing a `Grad[X]` instance as its type tag.
  */
 case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) extends Expr[X] {
+
+  type Tag[x] = Grad[x]
 
   final def requireGrad = true // or else, how could it be updated?
 
@@ -91,20 +97,11 @@ case class Param[X](var value: X, name: String)(implicit val tag: Grad[X]) exten
  */
 case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
 
-  final def tag = Type.nonDifferentiable[X]
+  type Tag[x] = AnyType[x]
+  final def tag = AnyType[X]
   override def requireGrad = false
   override def toString = name
 
-}
-
-class Deferred[X](val value: () => X, name: String = ExprName.nextConst) extends Expr[X] {
-  final def tag = Type.nonDifferentiable[X]
-  def requireGrad = false
-  override def toString = name
-}
-
-object Deferred {
-  def apply[X](value: => X, name: String = ExprName.nextConst) = new Deferred(() => value, name)
 }
 
 
@@ -113,7 +110,8 @@ object Deferred {
  */
 case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
   type Input = X
-
+  type Output = Y
+  type Tag[y] = op.Tag[y]
   val requireGrad = op.differentiable && x.requireGrad
   def tag = op.tag
   override def toString = s"${op.name}($x)"
@@ -126,6 +124,8 @@ case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
 case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends Expr[Y] {
   type Input1 = X1
   type Input2 = X2
+  type Output = Y
+  type Tag[y] = op.Tag[y]
 
   val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad)
   def tag = op.tag
@@ -140,6 +140,8 @@ case class App3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2
   type Input1 = X1
   type Input2 = X2
   type Input3 = X3
+  type Output = Y
+  type Tag[y] = op.Tag[y]
 
   val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad || x3.requireGrad)
   def tag = op.tag

@@ -2,7 +2,7 @@ package nexus.algebra.instances
 
 import nexus.algebra._
 
-object Bool extends IsBool[Boolean] {
+object IsBool$ extends IsBool[Boolean] {
   def top = true
   def bot = false
   def not(a: Boolean) = !a

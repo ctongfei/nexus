@@ -46,7 +46,7 @@ object Nest {
   def apply[T, E](implicit n: Nest[T, E]): Aux[T, E, n.Rank] = n
   type Aux[T, E, R0 <: Nat] = Nest[T, E] { type Rank = R0 }
 
-
+  // Nest[E, E, _0]
   implicit def case0[E](implicit ctE: ClassTag[E], na: E <:!< Array[_]): Nest.Aux[E, E, _0] =
     new Nest[E, E] {
       type Rank = _0
@@ -62,7 +62,7 @@ object Nest {
       def shape(a: E) = Array()
     }
 
-  // E <: AnyVal => Nest[Array[E], E, _1]
+  // Nest[Array[E], E, _1]
   implicit def case1[E](implicit ctE: ClassTag[E], na: E <:!< Array[_]): Nest.Aux[Array[E], E, _1] =
     new Nest[Array[E], E] {
       type Rank = _1

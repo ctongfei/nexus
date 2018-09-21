@@ -7,7 +7,7 @@ object all {
 
   import nexus.algebra.{instances => nxai}
 
-  implicit val Bool = nxai.Bool
+  implicit val Bool = nxai.IsBool$
   
   implicit val Int8 = nxai.Int8
   implicit val Int16 = nxai.Int16

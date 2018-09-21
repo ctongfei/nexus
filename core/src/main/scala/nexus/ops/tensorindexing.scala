@@ -48,10 +48,10 @@ object Tensor0ToScalar extends PolyOp1 {
 object OneHot extends ParameterizedPolyOp1 {
 
   implicit def oneHotF[TZ[_], Z, TR[_], R, A, N <: Nat, X, B](
-    implicit TZ: IsIntTensorK[TZ, Z],
-    TR: IsRealTensorK[TR, R],
-    ix: Len.Aux[A, N],
-    ia: InsertAt.Aux[A, N, X, B]
+                                                               implicit TZ: IsIntTensorK[TZ, Z],
+                                                               TR: IsRealTensorK[TR, R],
+                                                               ix: Len.Aux[A, N],
+                                                               ia: InsertAt.Aux[A, N, X, B]
   ): X => F[TZ[A], TR[B]] = (x: X) =>
     new F[TZ[A], TR[B]] {
       def name = n"OneHot[$x]"

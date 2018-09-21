@@ -12,6 +12,7 @@ object Not extends PolyOp1 {
 
   implicit def notF[B](implicit B: IsBool[B]): F[B, B] =
     new F[B, B] {
+      type Tag[b] = IsBool[b]
       def name = "Not"
       def tag = B
       override def differentiable = false
@@ -28,6 +29,7 @@ object And extends PolyOp2 {
 
   implicit def andF[B](implicit B: IsBool[B]): F[B, B, B] =
     new F[B, B, B] {
+      type Tag[b] = IsBool[b]
       def name = "And"
       def tag = B
       override def differentiable = false
@@ -45,6 +47,7 @@ object Or extends PolyOp2 {
 
   implicit def orF[B](implicit B: IsBool[B]): F[B, B, B] =
     new F[B, B, B] {
+      type Tag[b] = IsBool[b]
       def name = "Or"
       def tag = B
       override def differentiable = false
@@ -62,6 +65,7 @@ object Xor extends PolyOp2 {
 
   implicit def xorF[B](implicit B: IsBool[B]): F[B, B, B] =
     new F[B, B, B] {
+      type Tag[b] = IsBool[b]
       def name = "Xor"
       def tag = B
       override def differentiable = false

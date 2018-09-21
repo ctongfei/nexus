@@ -12,10 +12,11 @@ import nexus.exception._
  */
 object Id extends PolyOp1 {
 
-  implicit def idF[X: Type]: F[X, X] =
+  implicit def idF[X]: F[X, X] =
     new F[X, X] {
+      type Tag[x] = AnyType[x]
       def name = "Id"
-      def tag = implicitly[Type[X]]
+      def tag = AnyType[X]
       def forward(x: X) = x
       def backward(dy: X, y: X, x: X) = dy
     }
@@ -31,6 +32,7 @@ object Add extends PolyOp2 {
 
   implicit def addF[X: Grad]: F[X, X, X] =
     new F[X, X, X] {
+      type Tag[x] = Grad[x]
       def name = "Add"
       def tag = Grad[X]
       def forward(x1: X, x2: X): X = x1 + x2
@@ -48,6 +50,7 @@ object Add extends PolyOp2 {
 object Sub extends PolyOp2 {
   implicit def subF[X: Grad]: F[X, X, X] =
     new F[X, X, X] {
+      type Tag[x] = Grad[x]
       def name = "Sub"
       def tag = Grad[X]
       def forward(x1: X, x2: X) = x1 - x2
@@ -65,6 +68,7 @@ object Mul extends PolyOp2 {
 
   implicit def mulF[R](implicit R: IsReal[R]): F[R, R, R] =
     new F[R, R, R] {
+      type Tag[x] = IsReal[x]
       def name = "Mul"
       def tag = R
       def forward(x1: R, x2: R) = x1 * x2
@@ -78,6 +82,7 @@ object Mul extends PolyOp2 {
   object Elementwise extends PolyOp2 {
     implicit def mulElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], T[A]] =
       new F[T[A], T[A], T[A]] {
+        type Tag[t] = IsRealTensor[t, R]
         def name = "Mul.Elementwise"
         def tag = T.ground[A]
         def forward(x1: T[A], x2: T[A]) = x1 |*| x2
@@ -96,6 +101,7 @@ object Div extends PolyOp2 {
 
   implicit def divF[R: IsReal]: F[R, R, R] =
     new F[R, R, R] {
+      type Tag[r] = IsReal[r]
       def name = "Div"
       def tag = IsReal[R]
       def forward(x1: R, x2: R) = x1 / x2
@@ -109,6 +115,7 @@ object Div extends PolyOp2 {
   object Elementwise extends PolyOp2 {
 
     implicit def divElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], T[A]] = new F[T[A], T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "Div.Elementwise"
       def tag = T.ground[A]
       def forward(x1: T[A], x2: T[A]) = x1 |/| x2
@@ -128,6 +135,7 @@ object Neg extends PolyOp1 {
 
   implicit def negF[X: Grad]: F[X, X] =
     new F[X, X] {
+      type Tag[x] = Grad[x]
       def name = "Neg"
       def tag = Grad[X]
       def forward(x: X) = -x
@@ -145,6 +153,7 @@ object Inv extends PolyOp1 {
 
   implicit def invF[R](implicit R: IsReal[R]): F[R, R] =
     new F[R, R] {
+      type Tag[r] = IsReal[r]
       def name = "Inv"
       def tag = IsReal[R]
       def forward(x: R) = R.inv(x)
@@ -157,6 +166,7 @@ object Inv extends PolyOp1 {
   object Elementwise extends PolyOp1 {
 
     implicit def invElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "Inv.Elementwise"
       def tag = T.ground[A]
       def forward(x: T[A]) = T.eInv(x)

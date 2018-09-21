@@ -11,7 +11,8 @@ object SumAlong extends ParameterizedPolyOp1 {
   implicit def sumAlongF[T[_], R, A, U <: Dim, B]
     (implicit T: IsRealTensorK[T, R], r: Remove.Aux[A, U, B]) = (u: U) =>
     new F[T[A], T[B]] {
-      def name = s"SumAlong[${typeName(u)}]"
+      type Tag[t] = IsRealTensor[t, R]
+      def name = n"SumAlong[$u]"
       def tag = T.ground[B]
       def forward(x: T[A]) = ??? // T.sumAlong(x, ix.toInt)
       def backward(dy: T[B], y: T[B], x: T[A]) = ??? //T.expandDim(dy, ix.toInt, T.size(x, ix.toInt))
@@ -27,26 +28,15 @@ object MeanAlong extends ParameterizedPolyOp1 {
   implicit def meanAlongF[T[_], R, A, U <: Dim, B]
   (implicit T: IsRealTensorK[T, R], r: Remove.Aux[A, U, B]) = (u: U) =>
     new F[T[A], T[B]] {
-      def name = s"MeanAlong[${typeName(u)}]"
+      type Tag[t] = IsRealTensor[t, R]
+      def name = n"MeanAlong[$u]"
       def tag = T.ground[B]
       def forward(x: T[A]) = ???
       def backward(dy: T[B], y: T[B], x: T[A]) = ???
     }
 }
 
-object ArgMaxAlong extends ParameterizedPolyOp1 {
-
-  implicit def argmaxAlongF[TR[_], R, TZ[_], Z, A, U <: Dim, B]
-  (implicit TR: IsRealTensorK[TR, R], TZ: IsIntTensorK[TZ, Z], r: Remove.Aux[A, U, B]) = (u: U) =>
-    new F[TR[A], TZ[B]] {
-      def name = s"ArgMaxAlong[${typeName(u)}"
-      def tag = TZ.ground[B]
-      override def differentiable = false
-      def forward(x: TR[A]) = ???
-      def backward(dy: TZ[B], y: TZ[B], x: TR[A]) = throw new OperatorNotDifferentiableException(this, 1)
-    }
-
-}
+object ArgMaxAlong extends ParameterizedPolyOp1
 
 object ArgMinAlong extends ParameterizedPolyOp1
 

@@ -9,6 +9,7 @@ object Entropy extends PolyOp1 {
 
   implicit def entropyF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[T[A], R] {
     import T._
+    type Tag[r] = IsReal[r]
     def name = "Entropy"
     def tag = T.R
     def forward(x: T[A]) = -sum(x |*| eLog(x))
@@ -33,6 +34,7 @@ object CrossEntropy extends PolyOp2 {
   implicit def crossEntropyF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
     new F[T[A], T[A], R] {
       import T._
+      type Tag[r] = IsReal[r]
       def name = "CrossEntropy"
       def tag = T.R
       def forward(p: T[A], q: T[A]) = -sum(p |*| eLog(q))
@@ -46,6 +48,7 @@ object KullbackLeiblerDivergence extends PolyOp2 {
 
   implicit def kullbackLeiblerDivergenceF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
     new F[T[A], T[A], R] {
+      type Tag[r] = IsReal[r]
       def name = "KullbackLeiblerDivergence"
       def tag = T.R
       def forward(x1: T[A], x2: T[A]) = ???

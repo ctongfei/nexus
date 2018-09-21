@@ -21,6 +21,7 @@ import nexus.algebra.typelevel._
 object ReLU extends PolyOp1 {
   implicit def reLUF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "ReLU"
       def tag = T.ground[A]
       def forward(x: T[A]) = T.relu(x)
@@ -37,6 +38,7 @@ object ReLU extends PolyOp1 {
 object SELU extends PolyOp1 {
   implicit def seluF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "SELU"
       def tag = T.ground[A]
       def forward(x: T[A]) = ???
@@ -55,6 +57,7 @@ object SELU extends PolyOp1 {
 object Sigmoid extends PolyOp1 {
   implicit def sigmoidF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "Sigmoid"
       def tag = T.ground[A]
       def forward(x: T[A]) = T.sigmoid(x)
@@ -73,6 +76,7 @@ object Sigmoid extends PolyOp1 {
 object SoftPlus extends PolyOp1 {
   implicit def softPlusF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "SoftPlus"
       def tag = T.ground[A]
       def forward(x: T[A]) = T.eLog1p(T.eExp(x))
@@ -91,6 +95,7 @@ object SoftPlus extends PolyOp1 {
 object Softmax extends PolyOp1 {
   implicit def softmaxF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
     new F[T[A], T[A]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "Softmax"
       def tag = T.ground[A]
       def forward(x: T[A]) = {

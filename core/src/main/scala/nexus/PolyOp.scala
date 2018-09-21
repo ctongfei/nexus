@@ -53,6 +53,7 @@ abstract class PolyOp2 extends PolyFunc2 { self =>
 
     implicit def curriedLiteral1[X1, X2, Y](implicit f: self.F[X1, X2, Y]) = (x1: X1) =>
       new F[X2, Y] {
+        type Tag[y] = f.Tag[y]
         def name = s"$f.curried1($x1)"
         def tag = f.tag
         override def differentiable = f.differentiable
@@ -64,6 +65,7 @@ abstract class PolyOp2 extends PolyFunc2 { self =>
   object Curried2 extends ParameterizedPolyOp1 {
     implicit def curriedLiteral2[X1, X2, Y](implicit f: self.F[X1, X2, Y]) = (x2: X2) =>
       new F[X1, Y] {
+        type Tag[y] = f.Tag[y]
         def name = s"$f.curried2($x2)"
         def tag = f.tag
         override def differentiable = f.differentiable

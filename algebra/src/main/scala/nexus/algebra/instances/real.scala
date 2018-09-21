@@ -4,7 +4,7 @@ import nexus.algebra._
 
 object Float32 extends IsReal[Float] {
   type R = Float
-  def B = Bool
+  def B = IsBool$
   
   val one = 1f
   val zero = 0f
@@ -29,14 +29,6 @@ object Float32 extends IsReal[Float] {
   def cos(x: R) = Math.cos(x).toFloat
   def tan(x: R) = Math.tan(x).toFloat
 
-  def compare(x: R, y: R) = (x - y).toInt
-  override def lt(x: R, y: R) = x < y
-  override def le(x: R, y: R) = x <= y
-  override def eq(x: R, y: R) = x == y
-  override def ne(x: R, y: R) = x != y
-  override def gt(x: R, y: R) = x > y
-  override def ge(x: R, y: R) = x >= y
-
   override def fromDouble(a: Double) = a.toFloat
   def fromInt(n: Int) = n.toFloat
 
@@ -49,7 +41,7 @@ object Float32 extends IsReal[Float] {
 
 object Float64 extends IsReal[Double] {
   type R = Double
-  def B = Bool
+  def B = IsBool$
 
   def one = 1d
   def zero = 0d
@@ -74,13 +66,6 @@ object Float64 extends IsReal[Double] {
   def cos(x: Double) = Math.cos(x)
   def tan(x: Double) = Math.tan(x)
 
-  def compare(x: R, y: R) = (x - y).toInt
-  override def lt(x: R, y: R) = x < y
-  override def le(x: R, y: R) = x <= y
-  override def eq(x: R, y: R) = x == y
-  override def ne(x: R, y: R) = x != y
-  override def gt(x: R, y: R) = x > y
-  override def ge(x: R, y: R) = x >= y
 
   override def fromDouble(a: Double) = a
   def fromInt(n: Int) = n

@@ -12,6 +12,7 @@ import nexus.algebra.typelevel._
 object Scale extends PolyOp2 {
 
   implicit def scaleF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[R, T[A], T[A]] {
+    type Tag[t] = IsRealTensor[t, R]
     def name = "Scale"
     def tag = T.ground[A]
     def forward(x1: R, x2: T[A]) = x2 :* x1
@@ -34,6 +35,7 @@ object Scale extends PolyOp2 {
  */
 object Dot extends PolyOp2 {
   implicit def dotF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[T[A], T[A], R] {
+    type Tag[r] = IsReal[r]
     def name = "Dot"
     def tag = T.R
     def forward(x1: T[A], x2: T[A]) = T.dot(x1, x2)
@@ -54,6 +56,7 @@ object MatMul extends PolyOp2 {
   (implicit T: IsRealTensorK[T, R]): F[T[(A, B)], T[(B, C)], T[(A, C)]] =
     new F[T[(A, B)], T[(B, C)], T[(A, C)]] {
       import T._
+      type Tag[t] = IsRealTensor[t, R]
       def name = "MatMul"
       def tag = T.ground[(A, C)]
       def forward(x1: T[(A, B)], x2: T[(B, C)]) = mmMul(x1, x2)
@@ -69,6 +72,7 @@ object MatMul extends PolyOp2 {
  */
 object Transpose extends PolyOp1 {
   implicit def transposeF[T[_], R, A <: Dim, B <: Dim](implicit T: IsRealTensorK[T, R]) = new F[T[(A, B)], T[(B, A)]] {
+    type Tag[t] = IsRealTensor[t, R]
     def name = "Transpose"
     def tag = T.ground[(B, A)]
     def forward(x: T[(A, B)]) = T.transpose(x)
@@ -95,6 +99,7 @@ object MVMul extends PolyOp2 {
   implicit def mvMulF[T[_], R, A <: Dim, B <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(B, A)], T[A], T[B]] =
     new F[T[(B, A)], T[A], T[B]] {
       import T._
+      type Tag[t] = IsRealTensor[t, R]
       def name = "MVMul"
       def tag = T.ground[B]
       def forward(x1: T[(B, A)], x2: T[A]) = mvMul(x1, x2)
@@ -115,6 +120,7 @@ object MVMul extends PolyOp2 {
 object Contract extends PolyOp2 {
   implicit def contractF[T[_], R, A, B, C](implicit T: IsRealTensorK[T, R], sd: SymDiff.Aux[A, B, C]) =
     new F[T[A], T[B], T[C]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "Contract"
       def tag = T.ground[C]
       def forward(x1: T[A], x2: T[B]) = T.contract(x1, x2)(sd)

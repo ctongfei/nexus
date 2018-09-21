@@ -16,7 +16,7 @@ import scala.collection._
 class WengertList(override val rawMap: ReversibleLinkedHashMap[Expr[_], Id[_]] = ReversibleLinkedHashMap[Expr[_], Id[_]]())
   extends ExprMap[Id](rawMap) with Iterable[Assignment] {
 
-  def increment[X](e: Expr[X], v: X) = e.tag match {
+  def increment[X](e: Expr[X], v: X): Unit = e.tag match {
     case gX: Grad[X] => // if differentiable
       if (contains(e)) {
         if (gX.mutable)

@@ -11,26 +11,16 @@ import nexus.exception._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object If extends PolyOp3 {
+object Cond extends PolyOp3 {
 
-  implicit def ifF[X](implicit X: Type[X]): F[Boolean, X, X, X] = X match {
-    case xX: Grad[X] => new F[Boolean, X, X, X] {
+  implicit def condF[X](implicit X: Grad[X]): F[Boolean, X, X, X] = new F[Boolean, X, X, X] {
       def name = "If"
+      type Tag[x] = Grad[x]
       def tag = X
       def forward(c: Boolean, t: X, f: X) = if (c) t else f
       def backward1(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 1)
-      def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = if (c) dy else xX.zeroBy(t)
-      def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = if (!c) dy else xX.zeroBy(f)
-    }
-    case _ => new F[Boolean, X, X, X] {
-      def name = "If"
-      def tag = X
-      def forward(c: Boolean, t: X, f: X) = if (c) t else f
-      override def differentiable = false
-      def backward1(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 1)
-      def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 2)
-      def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = throw new OperatorNotDifferentiableException(this, 3)
-    }
+      def backward2(dy: X, y: X, c: Boolean, t: X, f: X) = if (c) dy else X.zeroBy(t)
+      def backward3(dy: X, y: X, c: Boolean, t: X, f: X) = if (!c) dy else X.zeroBy(f)
   }
 
   /**
@@ -38,11 +28,12 @@ object If extends PolyOp3 {
    */
   object Elementwise extends PolyOp3 {
 
-    implicit def ifElementwiseF[TB[_], B, TR[_], R, A](
-                                                        implicit TB: IsBoolTensorK[TB, B],
+    implicit def condElementwiseF[TB[_], B, TR[_], R, A](
+                                                        implicit TB: BoolTensorK[TB, B],
                                                         TR: IsRealTensorK[TR, R]
                                                       ): F[TB[A], TR[A], TR[A], TR[A]] =
       new F[TB[A], TR[A], TR[A], TR[A]] {
+        type Tag[t] = IsRealTensor[t, R]
         def name = "If.Elementwise"
         def tag = TR.ground[A]
         def forward(x1: TB[A], x2: TR[A], x3: TR[A]) = ???
@@ -65,8 +56,9 @@ object StopGrad extends PolyOp1 {
 
   implicit def stopGradF[X]: F[X, X] =
     new F[X, X] {
+      type Tag[x] = NonGrad[x]
       def name = "StopGrad"
-      def tag = Type.nonDifferentiable[X]
+      def tag = NonGrad[X]
       override def differentiable = false
       def forward(x: X) = x
       def backward(dy: X, y: X, x: X) = throw new OperatorNotDifferentiableException(this, 1)

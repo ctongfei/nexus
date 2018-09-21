@@ -8,7 +8,7 @@ import nexus.ops._
 /**
  * @author Tongfei Chen
  */
-class RealExprIsReal[R](implicit R: IsReal[R]) extends IsGenReal[Expr, R] {
+class RealExprIsReal[R](implicit R: IsReal[R]) extends IsReal[Expr[R]] {
   def add(x: Expr[R], y: Expr[R]) = Add(x, y)
   def sub(x: Expr[R], y: Expr[R]) = Sub(x, y)
   def neg(x: Expr[R]) = Neg(x)
@@ -31,12 +31,7 @@ class RealExprIsReal[R](implicit R: IsReal[R]) extends IsGenReal[Expr, R] {
   def zero = Const(R.zero)
   def addS(x1: Expr[R], x2: Double) = Add(x1, Const(R.fromDouble(x2)))
   def addI(x1: Expr[R], x2: Expr[R]): Unit = ???
-  def B = BoolExprIsBool
   def fromDouble(d: Double) = Const(R.fromDouble(d))
-  def lt(x: Expr[R], y: Expr[R]) = ???
-  def eq(x: Expr[R], y: Expr[R]) = ???
-  def le(x: Expr[R], y: Expr[R]) = ???
-  def zeroBy(x: Expr[R]) = Const(R.fromDouble(0.0))
 }
 
 

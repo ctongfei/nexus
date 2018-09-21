@@ -40,8 +40,7 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
   type         Float64 = Double
   implicit val Float64 = nxai.Float64
 
-  type         Bool    = Boolean
-  implicit val Bool    = nxai.Bool
+  implicit val Boolean = nxai.IsBool$
 
   type Func0[Y]                     = (() => Expr[Y])
   type Func1[X1, Y]                 = ((Expr[X1]) => Expr[Y])

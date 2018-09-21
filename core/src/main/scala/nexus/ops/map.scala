@@ -15,6 +15,7 @@ object Elementwise extends ParameterizedPolyOp1 {
   implicit def mapF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = (f: Op1[R, R]) =>
     new F[T[A], T[A]] {
       import T._
+      type Tag[t] = IsRealTensor[t, R]
       def name = s"Map[${f.name}]"
       def tag = T.ground[A]
       override def differentiable = f.differentiable

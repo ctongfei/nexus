@@ -16,7 +16,7 @@ trait Uniform[R] extends HasPdf[R, R] {
 
 object Uniform {
 
-  class Impl[E[_], R](l: E[R], r: E[R])(implicit R: IsGenReal[E, R]) extends Uniform[E[R]] {
+  class Impl[E[_], R](l: E[R], r: E[R])(implicit R: GenReal[E, R]) extends Uniform[E[R]] {
 
     import R._
     private[this] val standardUniform = new Random(GlobalSettings.seed)
@@ -35,6 +35,6 @@ object Uniform {
 
   def standard[R](implicit R: IsReal[R]) = apply(R.zero, R.one)
 
-  def apply[E[_], R](l: E[R], r: E[R])(implicit R: IsGenReal[E, R]): Uniform[E[R]] = new Impl(l, r)
+  def apply[E[_], R](l: E[R], r: E[R])(implicit R: GenReal[E, R]): Uniform[E[R]] = new Impl(l, r)
 
 }

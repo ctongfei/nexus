@@ -4,7 +4,7 @@ import nexus.algebra._
 import shapeless._
 
 /**
- * A simpler [[shapeless.ops.hlist.Length]] without using the `Aux` pattern.
+ * A simpler [[shapeless.ops.hlist.Length]].
  * @author Tongfei Chen
  * @since 0.1.0
  */

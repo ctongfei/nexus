@@ -27,7 +27,8 @@ object Test0 extends App {
 
   val z = q |> Dropout(0.3)
 
-  val t = Exp(p)
+  val t = p |> Exp
+  val tt = q |> Exp.Elementwise
 
   val l = p |> Sqr |> Add.Curried1(1f)
 
