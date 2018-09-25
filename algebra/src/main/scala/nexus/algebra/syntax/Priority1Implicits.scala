@@ -43,7 +43,10 @@ trait Priority1Implicits {
 
   implicit class TensorOps[T[_], E, A](x: T[A])(implicit T: IsTensorK[T, E]) {
 
-    def shape: Array[Int] = macro op1
+    def apply(indices: Int*): E = T.get(x, indices)
+    def shape: Seq[Int] = macro op1
+
+    def unstackAlong[U, B](axis: U)(implicit rx: Remove.Aux[A, U, B]): Seq[T[B]] = T.unstackAlong(x, axis)
 
   }
 

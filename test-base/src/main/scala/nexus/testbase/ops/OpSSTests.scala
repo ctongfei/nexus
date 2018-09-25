@@ -1,4 +1,4 @@
-package nexus.testbase
+package nexus.testbase.ops
 
 import nexus._
 import nexus.algebra._
@@ -34,12 +34,12 @@ class OpSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R]) extends FunSuite {
   val opsOnReal: Seq[Op1[R, R]] = Seq(
     Id.idF[R],
     Neg.negF[R],
-    Inv.invF[R],
-    Sin.sinF[R],
-    Cos.cosF[R],
-    Exp.expF[R],
-    Abs.absF[R],
-    Sqr.sqrF[R]
+    Inv.scalarF[R],
+    Sin.scalarF[R],
+    Cos.scalarF[R],
+    Exp.scalarF[R],
+    Abs.scalarF[R],
+    Sqr.scalarF[R]
   )
 
   for (op <- opsOnReal) {
@@ -49,8 +49,8 @@ class OpSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R]) extends FunSuite {
   }
 
   val opsOnPositiveReal: Seq[Op1[R, R]] = Seq(
-    Log.logF[R],
-    Sqrt.sqrtF[R]
+    Log.scalarF[R],
+    Sqrt.scalarF[R]
   )
 
   for (op <- opsOnPositiveReal) {

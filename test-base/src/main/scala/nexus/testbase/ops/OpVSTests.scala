@@ -1,4 +1,4 @@
-package nexus.testbase
+package nexus.testbase.ops
 
 import nexus._
 import nexus.algebra._
@@ -26,10 +26,11 @@ class OpVSTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
     }
 
     def numGrad(x: T[Axis]) =
-      T.tabulate(x.shape(0)) { i =>
-        val δ = x(i) * relativeDiff
+      T.tabulate[Axis](x.shape(0)) { i =>
+        val z: R = x(i)
+        val δ = z * relativeDiff
         val δx = T.tabulate[Axis](x.shape(0)) { j => if (j == i) δ else R.zero }
-        R.div(op.forward(x + δx) - op.forward(x - δx), (δ * 2d))
+        (op.forward(x + δx) - op.forward(x - δx)) / (δ * 2d)
       }
 
     def error(ag: T[Axis], ng: T[Axis]): R = L2Norm(ag - ng) / L2Norm(ag)

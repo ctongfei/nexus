@@ -4,7 +4,7 @@ import nexus.algebra._
 
 object Float32 extends IsReal[Float] {
   type R = Float
-  def B = IsBool$
+  def B = Bool
   
   val one = 1f
   val zero = 0f
@@ -41,7 +41,7 @@ object Float32 extends IsReal[Float] {
 
 object Float64 extends IsReal[Double] {
   type R = Double
-  def B = IsBool$
+  def B = Bool
 
   def one = 1d
   def zero = 0d

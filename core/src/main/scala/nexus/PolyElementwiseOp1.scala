@@ -3,6 +3,9 @@ package nexus
 import nexus.algebra._
 
 /**
+ * Base class for polymorphic operators that can be applied to either a scalar or a tensor (applied elementwise).
+ * @tparam EvE Type of typeclass on element type
+ * @tparam EvT Type of typeclass on tensor type
  * @author Tongfei Chen
  */
 abstract class PolyElementwiseOp1[EvE[e], EvT[t[_], e] <: IsTensorK[t, e]] extends PolyOp1 { poly =>
@@ -14,7 +17,7 @@ abstract class PolyElementwiseOp1[EvE[e], EvT[t[_], e] <: IsTensorK[t, e]] exten
   def forwardElementwise[T[_], E, A](x: T[A])(implicit T: EvT[T, E]): T[A]
   def backwardElementwise[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: EvT[T, E]): T[A]
 
-  implicit def f[E](implicit E: EvE[E]): F[E, E] =
+  implicit def scalarF[E](implicit E: EvE[E]): F[E, E] =
     new F[E, E] {
       type Tag[e] = EvE[e]
       def name = poly.name
@@ -23,17 +26,13 @@ abstract class PolyElementwiseOp1[EvE[e], EvT[t[_], e] <: IsTensorK[t, e]] exten
       def backward(dy: E, y: E, x: E) = poly.backward(dy, y, x)
     }
 
-  object Elementwise extends PolyOp1 {
-
-    implicit def f[T[_], E, A](implicit T: EvT[T, E]): F[T[A], T[A]] =
-      new F[T[A], T[A]] {
-        type Tag[ta] = IsTensor[T[A], E]
-        def name = s"${poly.name}.Elementwise"
-        def tag = T.ground[A]
-        def forward(x: T[A]) = poly.forwardElementwise(x)
-        def backward(dy: T[A], y: T[A], x: T[A]) = poly.backwardElementwise(dy, y, x)
-      }
-
-  }
+  implicit def tensorF[T[_], E, A](implicit T: EvT[T, E]): F[T[A], T[A]] =
+    new F[T[A], T[A]] {
+      type Tag[ta] = IsTensor[T[A], E]
+      def name = s"${poly.name}.Elementwise"
+      def tag = T.ground[A]
+      def forward(x: T[A]) = poly.forwardElementwise(x)
+      def backward(dy: T[A], y: T[A], x: T[A]) = poly.backwardElementwise(dy, y, x)
+    }
 
 }

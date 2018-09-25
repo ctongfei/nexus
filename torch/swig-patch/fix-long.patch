@@ -1,0 +1,244 @@
+diff --git a/share/swig/1.3.40/java/java.swg b/share/swig/1.3.40/java/java.swg
+index bd2357a..5a73331 100644
+--- a/share/swig/1.3.40/java/java.swg
++++ b/share/swig/1.3.40/java/java.swg
+@@ -7,6 +7,7 @@
+  * Java typemaps
+  * ----------------------------------------------------------------------------- */
+ 
++%include <swigarch.i>
+ %include <javahead.swg>
+ 
+ /* The jni, jtype and jstype typemaps work together and so there should be one of each. 
+@@ -23,8 +24,6 @@
+ %typemap(jni) unsigned short,     const unsigned short &     "jint"
+ %typemap(jni) int,                const int &                "jint"
+ %typemap(jni) unsigned int,       const unsigned int &       "jlong"
+-%typemap(jni) long,               const long &               "jint"
+-%typemap(jni) unsigned long,      const unsigned long &      "jlong"
+ %typemap(jni) long long,          const long long &          "jlong"
+ %typemap(jni) unsigned long long, const unsigned long long & "jobject"
+ %typemap(jni) float,              const float &              "jfloat"
+@@ -39,8 +38,6 @@
+ %typemap(jtype) unsigned short,     const unsigned short &     "int"
+ %typemap(jtype) int,                const int &                "int"
+ %typemap(jtype) unsigned int,       const unsigned int &       "long"
+-%typemap(jtype) long,               const long &               "int"
+-%typemap(jtype) unsigned long,      const unsigned long &      "long"
+ %typemap(jtype) long long,          const long long &          "long"
+ %typemap(jtype) unsigned long long, const unsigned long long & "java.math.BigInteger"
+ %typemap(jtype) float,              const float &              "float"
+@@ -55,8 +52,6 @@
+ %typemap(jstype) unsigned short,     const unsigned short &     "int"
+ %typemap(jstype) int,                const int &                "int"
+ %typemap(jstype) unsigned int,       const unsigned int &       "long"
+-%typemap(jstype) long,               const long &               "int"
+-%typemap(jstype) unsigned long,      const unsigned long &      "long"
+ %typemap(jstype) long long,          const long long &          "long"
+ %typemap(jstype) unsigned long long, const unsigned long long & "java.math.BigInteger"
+ %typemap(jstype) float,              const float &              "float"
+@@ -169,8 +164,6 @@
+              unsigned short, 
+              int, 
+              unsigned int, 
+-             long, 
+-             unsigned long, 
+              long long, 
+              float, 
+              double
+@@ -183,8 +176,6 @@
+              unsigned short, 
+              int, 
+              unsigned int, 
+-             long, 
+-             unsigned long, 
+              long long, 
+              float, 
+              double
+@@ -198,8 +189,6 @@
+ %typemap(directorin, descriptor="I") unsigned short   "$input = (jint) $1;"
+ %typemap(directorin, descriptor="I") int              "$input = (jint) $1;"
+ %typemap(directorin, descriptor="J") unsigned int     "$input = (jlong) $1;"
+-%typemap(directorin, descriptor="I") long             "$input = (jint) $1;"
+-%typemap(directorin, descriptor="J") unsigned long    "$input = (jlong) $1;"
+ %typemap(directorin, descriptor="J") long long        "$input = (jlong) $1;"
+ %typemap(directorin, descriptor="F") float            "$input = (jfloat) $1;"
+ %typemap(directorin, descriptor="D") double           "$input = (jdouble) $1;"
+@@ -211,8 +200,6 @@
+                          unsigned short, 
+                          int, 
+                          unsigned int, 
+-                         long, 
+-                         unsigned long, 
+                          long long, 
+                          float, 
+                          double
+@@ -225,8 +212,6 @@
+                           unsigned short, 
+                           int, 
+                           unsigned int, 
+-                          long, 
+-                          unsigned long, 
+                           long long, 
+                           float, 
+                           double
+@@ -240,8 +225,6 @@
+ %typemap(out) unsigned short %{ $result = (jint)$1; %}
+ %typemap(out) int            %{ $result = (jint)$1; %}
+ %typemap(out) unsigned int   %{ $result = (jlong)$1; %}
+-%typemap(out) long           %{ $result = (jint)$1; %}
+-%typemap(out) unsigned long  %{ $result = (jlong)$1; %}
+ %typemap(out) long long      %{ $result = (jlong)$1; %}
+ %typemap(out) float          %{ $result = (jfloat)$1; %}
+ %typemap(out) double         %{ $result = (jdouble)$1; %}
+@@ -405,8 +388,6 @@
+              const unsigned short & ($*1_ltype temp), 
+              const int & ($*1_ltype temp), 
+              const unsigned int & ($*1_ltype temp), 
+-             const long & ($*1_ltype temp), 
+-             const unsigned long & ($*1_ltype temp), 
+              const long long & ($*1_ltype temp), 
+              const float & ($*1_ltype temp), 
+              const double & ($*1_ltype temp)
+@@ -420,8 +401,6 @@
+              const unsigned short &,
+              const int &,
+              const unsigned int &,
+-             const long &,
+-             const unsigned long &,
+              const long long &,
+              const float &,
+              const double &
+@@ -437,8 +416,6 @@
+ %typemap(directorin, descriptor="I") const unsigned short & "$input = (jint)$1_name;"
+ %typemap(directorin, descriptor="I") const int &            "$input = (jint)$1_name;"
+ %typemap(directorin, descriptor="J") const unsigned int &   "$input = (jlong)$1_name;"
+-%typemap(directorin, descriptor="I") const long &           "$input = (jint)$1_name;"
+-%typemap(directorin, descriptor="J") const unsigned long &  "$input = (jlong)$1_name;"
+ %typemap(directorin, descriptor="J") const long long &      "$input = (jlong)$1_name;"
+ %typemap(directorin, descriptor="F") const float &          "$input = (jfloat)$1_name;"
+ %typemap(directorin, descriptor="D") const double &         "$input = (jdouble)$1_name;"
+@@ -450,8 +427,6 @@
+                          const unsigned short & ($*1_ltype temp), 
+                          const int & ($*1_ltype temp), 
+                          const unsigned int & ($*1_ltype temp), 
+-                         const long & ($*1_ltype temp), 
+-                         const unsigned long & ($*1_ltype temp), 
+                          const long long & ($*1_ltype temp), 
+                          const float & ($*1_ltype temp), 
+                          const double & ($*1_ltype temp)
+@@ -464,8 +439,6 @@
+                           const unsigned short & ($*1_ltype temp), 
+                           const int & ($*1_ltype temp), 
+                           const unsigned int & ($*1_ltype temp), 
+-                          const long & ($*1_ltype temp), 
+-                          const unsigned long & ($*1_ltype temp), 
+                           const long long & ($*1_ltype temp), 
+                           const float & ($*1_ltype temp), 
+                           const double & ($*1_ltype temp)
+@@ -480,8 +453,6 @@
+ %typemap(out) const unsigned short & %{ $result = (jint)*$1; %}
+ %typemap(out) const int &            %{ $result = (jint)*$1; %}
+ %typemap(out) const unsigned int &   %{ $result = (jlong)*$1; %}
+-%typemap(out) const long &           %{ $result = (jint)*$1; %}
+-%typemap(out) const unsigned long &  %{ $result = (jlong)*$1; %}
+ %typemap(out) const long long &      %{ $result = (jlong)*$1; %}
+ %typemap(out) const float &          %{ $result = (jfloat)*$1; %}
+ %typemap(out) const double &         %{ $result = (jdouble)*$1; %}
+@@ -819,19 +790,15 @@
+     jint,
+     unsigned short, 
+     int, 
+-    long, 
+     const unsigned short &, 
+-    const int &, 
+-    const long &
++    const int &
+     ""
+ 
+ %typecheck(SWIG_TYPECHECK_INT64) /* Java long */
+     jlong,
+     unsigned int, 
+-    unsigned long, 
+     long long, 
+     const unsigned int &, 
+-    const unsigned long &, 
+     const long long &
+     ""
+ 
+@@ -908,10 +875,8 @@
+ /* Exception handling */
+ 
+ %typemap(throws) int, 
+-                 long, 
+                  short, 
+                  unsigned int, 
+-                 unsigned long, 
+                  unsigned short
+ %{ char error_msg[256];
+    sprintf(error_msg, "C++ $1_type exception thrown, value: %d", $1);
+@@ -940,8 +905,6 @@
+                  unsigned short,     const unsigned short &,
+                  int,                const int &,
+                  unsigned int,       const unsigned int &,
+-                 long,               const long &,
+-                 unsigned long,      const unsigned long &,
+                  long long,          const long long &,
+                  unsigned long long, const unsigned long long &,
+                  float,              const float &,
+@@ -981,8 +944,6 @@
+                   unsigned short,     const unsigned short &,
+                   int,                const int &,
+                   unsigned int,       const unsigned int &,
+-                  long,               const long &,
+-                  unsigned long,      const unsigned long &,
+                   long long,          const long long &,
+                   unsigned long long, const unsigned long long &,
+                   float,              const float &,
+@@ -1201,6 +1162,28 @@ SWIG_PROXY_CONSTRUCTOR(true, true, SWIGTYPE)
+ %pragma(java) jniclassclassmodifiers="class"
+ %pragma(java) moduleclassmodifiers="public class"
+ 
++/*
++ * Define typemaps for `long`
++ *
++ * This is complicated by the fact `long` is 32-bits on some platforms
++ * but is 64-bits on other platforms.
++ *
++ * Note that we must not define any typemaps for `long` above.
++ */
++#if defined(SWIGWORDSIZE64)
++%apply long long { long };
++%apply const long long & { const long & };
++%apply unsigned long long { unsigned long };
++%apply const unsigned long long & { const unsigned long & };
++#elif defined(SWIGWORDSIZE32)
++%apply int { long };
++%apply const int & { const long & };
++%apply unsigned int { unsigned long };
++%apply const unsigned int & { const unsigned long & };
++#else
++#error "Neither SWIGWORDSIZE64 nor SWIGWORDSIZE32 is defined"
++#endif
++
+ /* Some ANSI C typemaps */
+ 
+ %apply unsigned long { size_t };
+diff --git a/share/swig/1.3.40/java/javahead.swg b/share/swig/1.3.40/java/javahead.swg
+index 7626bf5..01509bc 100644
+--- a/share/swig/1.3.40/java/javahead.swg
++++ b/share/swig/1.3.40/java/javahead.swg
+@@ -38,13 +38,6 @@
+   typedef long long __int64;
+ #endif
+ 
+-/* Fix for jlong on 64-bit x86 Solaris */
+-#if defined(__x86_64)
+-# ifdef _LP64
+-#   undef _LP64
+-# endif
+-#endif
+-
+ #include <jni.h>
+ #include <stdlib.h>
+ #include <string.h>

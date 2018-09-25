@@ -1,6 +1,6 @@
 import scala.io._
 
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.6"
 enablePlugins(ScalaUnidocPlugin)
 
 
@@ -12,13 +12,13 @@ lazy val commonSettings = Seq(
   organization := "me.tongfei",
   version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.6",
 
-  (scalacOptions in compile) ++= Seq(),
+  scalacOptions += "-Ypartial-unification", // types
 
   libraryDependencies += "com.chuusai"   %% "shapeless" % "2.3.3",
   libraryDependencies += "org.typelevel" %% "algebra"   % "0.7.0",
-  libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0",
+  libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0",
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
   libraryDependencies += "me.tongfei"    %% "poly-io"   % "0.3.2" % Test,
@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
           """<head>
              |  <script type="text/x-mathjax-config">
              |    MathJax.Hub.Config({
-             |      asciimath2jax: { delimiters: [['「', '」']] }
+             |      asciimath2jax: { delimiters: [['[[', ']]']] }
              |    });
              |  </script>
              |  <script type="text/javascript" async
@@ -81,31 +81,33 @@ lazy val ml = (project in file("ml"))
     name := "nexus-ml"
   )
 
-lazy val torch = (project in file("torch"))
-  .settings(commonSettings: _*)
-  .dependsOn(core % "compile->compile;test->test")
-  .settings(
-    name := "nexus-torch",
-    libraryDependencies += "me.tongfei" % "jtorch-java" % "0.1-TH0.4-SNAPSHOT"
-  )
-
-
-
-/*
-lazy val cuda = (project in file("cuda"))
+lazy val jvmRefBackend = (project in file("jvm-ref-backend"))
   .settings(commonSettings: _*)
   .dependsOn(core)
   .settings(
-    name := "nexus-cuda",
-    libraryDependencies += "org.bytedeco.javacpp-presets" % "cuda-platform" % "9.0-7.0-1.3"
-)
+    name := "nexus-jvm-ref-backend"
+  )
 
-lazy val vision = (project in file("vision"))
+lazy val torchJni = (project in file("torch/jni"))
   .settings(commonSettings: _*)
   .settings(
-    name := "nexus-vision"
+    name := "nexus-torch-backend-jni"
   )
-*/
+
+lazy val torchCpu = (project in file("torch/cpu"))
+  .settings(commonSettings: _*)
+  .dependsOn(algebra).dependsOn(torchJni)
+  .settings(
+    name := "nexus-torch-backend-cpu"
+  )
+
+lazy val torchCuda = (project in file("torch/cuda"))
+  .settings(commonSettings: _*)
+  .dependsOn(algebra).dependsOn(torchCpu)
+  .settings(
+    name := "nexus-torch-backend-cuda"
+  )
+
 
 // function that find html files recursively
 def listHtmlFile(dir: java.io.File): List[java.io.File] = {

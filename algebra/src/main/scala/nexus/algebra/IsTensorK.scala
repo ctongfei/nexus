@@ -4,7 +4,8 @@ import nexus._
 import nexus.algebra.typelevel._
 import nexus.algebra.util._
 import shapeless._
-import shapeless.ops.nat._
+
+import scala.reflect._
 
 /**
  * Typeclass that describes the algebraic structures on tensors with arbitrary element type.
@@ -13,68 +14,61 @@ import shapeless.ops.nat._
  */
 trait IsTensorK[T[_], E] extends TypeK[T] { self =>
 
-  /** Type of untyped handle. */
-  type H
-
-  val H: IsUntypedTensor[H, E]
+  type ElementTag[E]
 
   /** Returns the type tag associated with the element type of this tensor. */
-  def elementType: Type[E]
+  def elementType: ElementTag[E]
 
-  /** Returns an untyped handle of a tensor by removing the axis type information. */
-  def untype(x: T[_]): H
+  def elementClassTag: ClassTag[E]
 
-  /** Attaches axis information (an HList) to an untyped handle. */
-  def typeWith[A](x: H): T[A]
+  def rank(x: T[_]): Int
 
-  def rank(x: T[_]) = H.rank(untype(x))
+  def shape(x: T[_]): Seq[Int]
 
-  def shape(x: T[_]) = H.shape(untype(x))
+  def size(x: T[_]): Int
 
-  def size(x: T[_]) = H.size(untype(x))
+  def get(x: T[_], is: Seq[Int]): E
 
-  def get(x: T[_], is: Array[Int]): E
-    = H.get(untype(x), is)
+  def set(x: T[_], is: Seq[Int], v: E): Unit
 
-  def set(x: T[_], is: Array[Int], v: E): Unit
+  def newTensor[A](shape: Seq[Int]): T[A]
 
-  def newTensor[A](shape: Array[Int]): T[A]
-
-  def fromFlatArray[A](array: Array[E], shape: Array[Int]): T[A] =
-    typeWith[A](H.fromFlatArray(array, shape))
+  def fromFlatArray[A](array: Array[E], shape: Seq[Int]): T[A]
 
   def fromNestedArray[A, N <: Nat, Arr](axes: A)(array: Arr)(implicit nest: Nest.Aux[Arr, E, N], len: Len.Aux[A, N]) =
     fromFlatArray[A](nest.flatten(array), nest.shape(array))
 
-  def wrapScalar(x: E): T[Unit] = typeWith[Unit](H.wrapScalar(x))
+  def wrapScalar(x: E): T[Unit]
 
-  def unwrapScalar(x: T[Unit]): E = H.unwrapScalar(untype(x))
+  def unwrapScalar(x: T[Unit]): E
 
-  def tabulate[A](shape: Array[Int])(f: Array[Int] => E): T[A] = {
-    val flatArray = Indices.indices(shape).map(f).toArray(H.elementTypeClassTag)
+  def tabulateA[A](shape: Array[Int])(f: Array[Int] => E): T[A] = {
+    val flatArray = Indices.indices(shape).map(f).toArray(elementClassTag)
     fromFlatArray(flatArray, shape)
   }
 
   def tabulate[A](n: Int)(f: Int => E): T[A] =
-    tabulate(Array(n))((a: Array[Int]) => f(a(0)))
+    tabulateA(Array(n))((a: Array[Int]) => f(a(0)))
 
   def tabulate[A, B](m: Int, n: Int)(f: (Int, Int) => E): T[(A, B)] =
-    tabulate(Array(m, n))((a: Array[Int]) => f(a(0), a(1)))
+    tabulateA(Array(m, n))((a: Array[Int]) => f(a(0), a(1)))
 
   def tabulate[A, B, C](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(A, B, C)] =
-    tabulate(Array(n0, n1, n2))((a: Array[Int]) => f(a(0), a(1), a(2)))
+    tabulateA(Array(n0, n1, n2))((a: Array[Int]) => f(a(0), a(1), a(2)))
 
-  def map[A](x: T[A])(f: E => E): T[A] =
-    typeWith[A](H.map(untype(x))(f))
+  def map[A](x: T[A])(f: E => E): T[A]
 
-  def map2[A](x1: T[A], x2: T[A])(f: (E, E) => E): T[A] =
-    typeWith[A](H.map2(untype(x1), untype(x2))(f))
+  def map2[A](x1: T[A], x2: T[A])(f: (E, E) => E): T[A]
 
-  def map3[A](x1: T[A], x2: T[A], x3: T[A])(f: (E, E, E) => E): T[A] =
-    typeWith[A](H.map3(untype(x1), untype(x2), untype(x3))(f))
+  def map3[A](x1: T[A], x2: T[A], x3: T[A])(f: (E, E, E) => E): T[A]
 
-  def expandDim[A, I <: Nat, X <: Dim, B](x: T[A])(ia: InsertAt.Aux[A, I, X, B]): T[B] =
-    typeWith[B](H.expandDim(untype(x), ia.index))
+  def sliceAlong[A, U, B](x: T[A], axis: U, n: Int)(implicit rx: Remove.Aux[A, U, B]): T[B]
+
+  def unstackAlong[A, U, B](x: T[A], axis: U)(implicit rx: Remove.Aux[A, U, B]): Seq[T[B]]
+
+  def expandDim[A, I <: Nat, X <: Dim, B](x: T[A])(implicit ix: InsertAt.Aux[A, I, X, B]): T[B]
+
+  def renameAxis[A, B](x: T[A]): T[B]
 
   def ground[A]: IsTensor[T[A], E]
 

@@ -1,4 +1,4 @@
-package nexus.testbase
+package nexus.testbase.ops
 
 import nexus._
 import nexus.algebra._
@@ -26,7 +26,7 @@ class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
     }
 
     def numGrad(x: T[Axis]) = {
-      T.tabulate(x.shape(0)) { i =>
+      T.tabulate[Axis](x.shape(0)) { i =>
         val δ = x(i) * relativeDiff
         val δx = T.tabulate[Axis](x.shape(0)) { j => if (j == i) δ else R.zero }
         (dy dot (op.forward(x + δx) - op.forward(x - δx))) / (δ * 2d)
@@ -39,8 +39,8 @@ class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
   val ops = Seq(
     Id.idF[T[Axis]],
     Neg.negF[T[Axis]],
-    Inv.Elementwise.invElementwiseF[T, R, Axis],
-    Exp.Elementwise.expElementwiseF[T, R, Axis],
+    Inv.tensorF[T, R, Axis],
+    Exp.tensorF[T, R, Axis],
     ReLU.reLUF[T, R, Axis],
     Softmax.softmaxF[T, R, Axis]
   )

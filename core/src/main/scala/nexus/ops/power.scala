@@ -10,54 +10,20 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sqr extends PolyOp1 {
-
-  implicit def sqrF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
-    def name = "Sqr"
-    def tag = R
-    def forward(x: R) = R.sqr(x)
-    def backward(dy: R, y: R, x: R) = dy * x * 2
-  }
-
-  /**
-   * Elementwise square.
-   */
-  object Elementwise extends PolyOp1 {
-
-    implicit def sqrElementwiseF[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
-      def name = "Sqr.Elementwise"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = T.eSqr(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| x :* 2
-    }
-
-  }
+object Sqr extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+  def name = "Sqr"
+  def forward[R](x: R)(implicit R: IsReal[R]) = R.sqr(x)
+  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * x * 2
+  def forwardElementwise[T[_], E, A](x: T[A])(implicit T: IsRealTensorK[T, E]) = T.eSqr(x)
+  def backwardElementwise[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, E]) = dy |*| x :* 2
 }
 
-
-object Sqrt extends PolyOp1 {
-
-  implicit def sqrtF[R](implicit R: IsReal[R]): F[R, R] = new F[R, R] {
-    def name = "Sqrt"
-    def tag = R
-    def forward(x: R) = R.sqrt(x)
-    def backward(dy: R, y: R, x: R) = dy * R.inv(y) * 0.5
-  }
-
-  object Elementwise extends PolyOp1 {
-
-    implicit def sqrtElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
-      def name = "Sqrt.Elementwise"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = T.eSqrt(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.eInv(y) :* 0.5
-    }
-
-  }
+object Sqrt extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+  def name = "Sqrt"
+  def forward[R](x: R)(implicit R: IsReal[R]) = R.sqrt(x)
+  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(y) * 0.5
+  def forwardElementwise[T[_], E, A](x: T[A])(implicit T: IsRealTensorK[T, E]) = T.eSqrt(x)
+  def backwardElementwise[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, E]) = dy |*| T.eInv(y) :* 0.5
 }
 
-object Power extends PolyOp2 {
-
-
-}
-
+// TODO: Power

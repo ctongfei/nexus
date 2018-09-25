@@ -5,6 +5,7 @@ package nexus.algebra
  */
 trait IsIntTensorK[T[_], Z] extends IsTensorK[T, Z] { self =>
 
+  type ElementTag[z] = IsInt[z]
   val Z: IsInt[Z]
   def elementType = Z
 

@@ -5,3 +5,6 @@ package nexus.algebra
  * @author Tongfei Chen
  */
 trait Dim
+// TODO: enforce singleton? something like:
+// TODO: trait Dim { self: Singleton => }
+

@@ -21,14 +21,13 @@ object RenameAxis extends ParameterizedPolyOp1 {
       type Tag[t] = IsTensor[t, E]
       def name = n"Rename[$u -> $v]"
       def tag = T.ground[B]
-      def forward(x: T[A]) = typeWith[B](untype(x))
-      def backward(dy: T[B], y: T[B], x: T[A]) = typeWith[A](untype(dy))
+      def forward(x: T[A]) = T.renameAxis[A, B](x)
+      def backward(dy: T[B], y: T[B], x: T[A]) = T.renameAxis[B, A](dy)
     }
 
 }
 
 object ConcatAlong extends ParameterizedPolyOp2 {
-
   implicit def concatAlongF[T[_], E, A, U <: Dim, N <: Nat]
   (implicit n: IndexOf.Aux[A, U, N], T: IsTensorK[T, E]) = (u: U) =>
     new F[T[A], T[A], T[A]] {
@@ -41,7 +40,6 @@ object ConcatAlong extends ParameterizedPolyOp2 {
     }
 
 }
-
 
 /**
  * @see `tf.expand_dims`, `torch.unsqueeze`
@@ -129,13 +127,13 @@ object SplitAxis extends ParameterizedPolyOp1 {
  */
 object UnstackAlong extends ParameterizedPolyOp1 {
 
-  implicit def unstackAlongF[T[_], E, A, X <: Dim, N <: Nat, B]
-  (implicit T: IsTensorK[T, E], ix: IndexOf.Aux[A, X, N], r: RemoveAt.Aux[A, N, B]): X => F[T[A], Seq[T[B]]] =
-    (x: X) => new F[T[A], Seq[T[B]]] {
+  implicit def unstackAlongF[T[_], E, A, U <: Dim, B]
+  (implicit T: IsTensorK[T, E], rx: Remove.Aux[A, U, B]): U => F[T[A], Seq[T[B]]] =
+    (axis: U) => new F[T[A], Seq[T[B]]] {
       type Tag[t] = IsTensor[t, E]
-      def name = n"UnstackAlong[$x]"
+      def name = n"UnstackAlong[$axis]"
       def tag = ???
-      def forward(x: T[A]) = ???
+      def forward(x: T[A]) = T.unstackAlong(x, axis)
       def backward(dy: Seq[T[B]], y: Seq[T[B]], x: T[A]) = ???
     }
 

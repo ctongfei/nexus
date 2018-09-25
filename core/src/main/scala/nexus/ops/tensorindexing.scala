@@ -17,6 +17,7 @@ import scala.annotation._
 object ScalarToTensor0 extends PolyOp1 {
   implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[R, T[Unit]] =
     new F[R, T[Unit]] {
+      type Tag[t] = IsRealTensor[t, R]
       def name = "ScalarToTensor0"
       def tag = T.ground[Unit]
       def forward(x: R) = T.wrapScalar(x)
@@ -33,6 +34,7 @@ object Tensor0ToScalar extends PolyOp1 {
 
   implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[T[Unit], R] =
     new F[T[Unit], R] {
+      type Tag[r] = IsReal[r]
       def name = "Tensor0ToTensor"
       def tag = T.R
       def forward(x: T[Unit]) = T.unwrapScalar(x)
@@ -42,11 +44,10 @@ object Tensor0ToScalar extends PolyOp1 {
 }
 
 /**
- * Transforms each
  * @author Tongfei Chen
  */
 object OneHot extends ParameterizedPolyOp1 {
-
+/*
   implicit def oneHotF[TZ[_], Z, TR[_], R, A, N <: Nat, X, B](
                                                                implicit TZ: IsIntTensorK[TZ, Z],
                                                                TR: IsRealTensorK[TR, R],
@@ -60,7 +61,7 @@ object OneHot extends ParameterizedPolyOp1 {
       def forward(x: TZ[A]) = ???
       def backward(dy: TR[B], y: TR[B], x: TZ[A]) = throw new OperatorNotDifferentiableException(this, 1)
     }
-
+*/
 }
 
 /**
@@ -72,7 +73,7 @@ object OneHot extends ParameterizedPolyOp1 {
 object SliceAlong extends ParameterizedPolyOp1
 
 object Select extends PolyOp2 {
-
+/*
   implicit def selectF[TX[_], X, TZ[_], Z, A](implicit TE: IsTensorK[TX, X], TZ: IsIntTensorK[TZ, Z]) =
     new F[TX[A], TZ[A], TX[A]] {
       def name = "Select"
@@ -81,7 +82,7 @@ object Select extends PolyOp2 {
       def backward1(dy: TX[A], y: TX[A], x1: TX[A], x2: TZ[A]) = ???
       def backward2(dy: TX[A], y: TX[A], x1: TX[A], x2: TZ[A]) = ???
     }
-
+*/
 }
 
 object Diag

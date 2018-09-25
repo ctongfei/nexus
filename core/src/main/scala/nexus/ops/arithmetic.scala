@@ -149,29 +149,10 @@ object Neg extends PolyOp1 {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Inv extends PolyOp1 {
-
-  implicit def invF[R](implicit R: IsReal[R]): F[R, R] =
-    new F[R, R] {
-      type Tag[r] = IsReal[r]
-      def name = "Inv"
-      def tag = IsReal[R]
-      def forward(x: R) = R.inv(x)
-      def backward(dy: R, y: R, x: R) = -dy * R.sqr(y)
-    }
-
-  /**
-   * Element-wise multiplicative inverse.
-   */
-  object Elementwise extends PolyOp1 {
-
-    implicit def invElementwiseF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] = new F[T[A], T[A]] {
-      type Tag[t] = IsRealTensor[t, R]
-      def name = "Inv.Elementwise"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = T.eInv(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = -dy |*| T.eSqr(y)
-    }
-
-  }
+object Inv extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+  def name = "Inv"
+  def forward[R](x: R)(implicit R: IsReal[R]) = R.inv(x)
+  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = -dy * R.sqr(y)
+  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eInv(x)
+  def backwardElementwise[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, E]) = -dy |*| T.eSqr(y)
 }

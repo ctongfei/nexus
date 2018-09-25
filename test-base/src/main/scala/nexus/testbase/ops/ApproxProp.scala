@@ -1,4 +1,4 @@
-package nexus.testbase
+package nexus.testbase.ops
 
 import nexus._
 import nexus.algebra._
