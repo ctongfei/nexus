@@ -3,9 +3,9 @@ package nexus.algebra
 /**
  * @author Tongfei Chen
  */
-trait Cond[B, R[_]] {
+trait Cond[B, F[_]] {
 
   /** If-then-else construction. */
-  def cond[A](c: B, t: R[A], f: R[A]): R[A]
+  def cond[A](c: B, t: F[A], f: F[A]): F[A]
 
 }

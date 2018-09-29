@@ -9,7 +9,6 @@ import shapeless._
 import scala.reflect._
 import scala.util._
 
-// TODO: @specialized(Float, Double) causes compiler crash
 abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
 (implicit
   val R: IsReal[R],
@@ -125,6 +124,7 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
 
   def unwrapScalar(x: T[Unit]) = x.handle(x.offset)
 
+  //TODO: map functions below should be macros
   def map[A](x: T[A])(f: R => R): T[A] = {
     if (x.rank == 0) return wrapScalar(f(x())).asInstanceOf[T[A]] // cast is safe
     val y = Array.ofDim[R](x.size)

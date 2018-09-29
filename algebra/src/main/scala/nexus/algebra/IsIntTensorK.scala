@@ -12,6 +12,9 @@ trait IsIntTensorK[T[_], Z] extends IsTensorK[T, Z] { self =>
   def zeroBy[A](x: T[A]): T[A]
 
   def add[A](x: T[A], y: T[A]): T[A] = ???
+  def neg[A](x: T[A]): T[A] = ???
+  def sub[A](x: T[A], y: T[A]): T[A] = ???
+  def eMul[A](x: T[A], y: T[A]): T[A] = ???
 
   def ground[A]: IsTensor[T[A], Z] = ???
 }

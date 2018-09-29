@@ -14,10 +14,10 @@ trait ExprRealTensorMixin {
     def +(y: Expr[T[A]]): Expr[T[A]] = Add(x, y)
     def -(y: Expr[T[A]]): Expr[T[A]] = Sub(x, y)
 
-    def |*|(y: Expr[T[A]]): Expr[T[A]] = Mul.Elementwise(x, y)
-    def ⊙(y: Expr[T[A]]): Expr[T[A]] = Mul.Elementwise(x, y)
+    def |*|(y: Expr[T[A]]): Expr[T[A]] = Mul(x, y)
+    def ⊙(y: Expr[T[A]]): Expr[T[A]] = Mul(x, y)
 
-    def |/|(y: Expr[T[A]]): Expr[T[A]] = Div.Elementwise(x, y)
+    def |/|(y: Expr[T[A]]): Expr[T[A]] = Div(x, y)
 
   }
 
