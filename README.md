@@ -18,7 +18,7 @@ Nexus embraces **declarative** and **functional** programming: Neural networks a
 
 ### A first glance
 
-A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/core/src/test/scala/nexus/XorTest.scala).
+A simple neural network for learning the XOR function can be found [**here**](https://github.com/ctongfei/nexus/blob/master/jvm-ref-backend/src/test/scala/nexus/XorTest.scala).
 
 Building a typesafe XOR network:
 ```scala
