@@ -29,7 +29,7 @@ class Tensor[@specialized(Int, Long, Float, Double) E, A](
       i += indices(k) * stride(k)
       k += 1
     }
-    k
+    i
   }
 
   def apply(indices: Int*): E = handle(index(indices))
