@@ -1,7 +1,8 @@
 package nexus.algebra
 
+import algebra.ring._
+
 import scala.annotation._
-import cats._
 
 /**
  * Encapsulates mathematical operations on real numbers.

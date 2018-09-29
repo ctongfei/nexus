@@ -1,7 +1,6 @@
 package nexus.algebra
 
 import shapeless._
-
 import scala.annotation._
 
 /**

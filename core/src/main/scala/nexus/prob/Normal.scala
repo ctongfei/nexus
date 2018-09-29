@@ -10,7 +10,7 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends HasPdf[R, R] {
+class Normal[R](val μ: R, val σ2: R)(implicit R: IsReal[R]) extends Stochastic[R] with HasPdf[R, R] {
 
   import GlobalSettings._
 

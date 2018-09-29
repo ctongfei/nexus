@@ -9,12 +9,12 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sin extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Sin extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Sin"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.sin(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.cos(x)
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eSin(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.eCos(x)
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.sin(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.cos(x)
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eSin(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.eCos(x)
 }
 
 
@@ -23,12 +23,12 @@ object Sin extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Cos extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Cos extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Cos"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.cos(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = -dy * R.sin(x)
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eCos(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = -dy |*| T.eSin(x)
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.cos(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = -dy * R.sin(x)
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eCos(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = -dy |*| T.eSin(x)
 }
 
 object Tan extends PolyOp1

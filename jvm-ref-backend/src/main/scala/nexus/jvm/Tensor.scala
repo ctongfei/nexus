@@ -29,13 +29,41 @@ class Tensor[@specialized(Int, Long, Float, Double) E, A](
       i += indices(k) * stride(k)
       k += 1
     }
-    k
+    i
   }
 
   def apply(indices: Int*): E = handle(index(indices))
 
   def update(indices: Int*)(value: E) = handle(index(indices)) = value
 
+  override def toString: String = {
+    if (rank == 0) return handle(offset).toString
+    val sb = new StringBuilder
+    var yi = 0
+    var xi = offset
+    var d = rank - 1
+    sb.append("[" * rank)
+    val indices = Array.fill(rank)(0)
+    while (yi < size) {
+      sb.append(handle(xi))
+      sb.append("\t")
+      xi += stride(d)
+      indices(d) += 1
+      if (indices(d) >= shape(d) && d > 0) {
+        while (indices(d) >= shape(d) && d > 0) {
+          indices(d) = 0
+          d -= 1
+          sb.append("]\n")
+          indices(d) += 1
+          xi += stride(d) - (stride(d + 1) * shape(d + 1))
+        }
+        sb.append("[" * (rank - 1 - d))
+        d = rank - 1
+      }
+      yi += 1
+    }
+    sb.toString()
+  }
 
 }
 

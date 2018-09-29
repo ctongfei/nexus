@@ -9,12 +9,12 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Abs extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Abs extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Abs"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.abs(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.sgn(x)
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eAbs(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.eSgn(x)
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.abs(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.sgn(x)
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eAbs(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.eSgn(x)
 }
 
 

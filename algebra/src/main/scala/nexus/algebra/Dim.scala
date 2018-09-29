@@ -1,10 +1,10 @@
 package nexus.algebra
 
 /**
- * Base trait for dimension labels.
+ * Base trait for tensor dimension labels.
+ * All dimension labels should inherit this trait.
  * @author Tongfei Chen
  */
-trait Dim
 // TODO: enforce singleton? something like:
 // TODO: trait Dim { self: Singleton => }
-
+trait Dim

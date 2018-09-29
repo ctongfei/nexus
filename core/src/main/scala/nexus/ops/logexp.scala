@@ -9,12 +9,12 @@ import nexus.algebra.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Exp extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Exp extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Exp"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.exp(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * y
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eExp(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| y
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.exp(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * y
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eExp(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| y
 }
 
 /**
@@ -22,28 +22,28 @@ object Exp extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Log extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Log extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Log"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.log(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy / x
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eLog(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |/| x
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.log(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy / x
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eLog(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |/| x
 }
 
-object Expm1 extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Expm1 extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Expm1"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.expm1(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * y
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eExpm1(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| y
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.expm1(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * y
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eExpm1(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| y
 }
 
-object Log1p extends PolyElementwiseOp1[IsReal, IsRealTensorK] {
+object Log1p extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Log1p"
-  def forward[R](x: R)(implicit R: IsReal[R]) = R.log1p(x)
-  def backward[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(x + R.one)
-  def forwardElementwise[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eLog1p(x)
-  def backwardElementwise[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.eInv(T.addS(x, T.R.one))
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = R.log1p(x)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(x + R.one)
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.eLog1p(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.eInv(T.addS(x, T.R.one))
 }
 
 object LogSumExp extends PolyOp1 {

@@ -21,7 +21,8 @@ class ResidualUnit[X](val residual: Func1[X, X])(implicit X: Grad[X]) extends Mo
 
   def apply(x: Expr[X]): Expr[X] = {
     val r = residual(x)
-    Add(x, r)
+    // TODO: Add(x, r)
+    ???
   }
 
 }
