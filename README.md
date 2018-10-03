@@ -48,7 +48,7 @@ Building a typesafe XOR network:
  - **[TODO] Typesafe tensor sizes using literal singleton types (Scala 2.13+)**. 
  - **[TODO] Automatic batching over sequences/trees** (Neubig, Goldberg, Dyer, NIPS 2017). Free programmers from the pain of manual batching.
  - **[TODO] GPU Acceleration**. Reuse `Torch` C++ core through Swig [(bindings)](https://github.com/ctongfei/JTorch).
- - **[TODO] Multiple backends**. Torch / MXNet / ?
+ - **[TODO] Multiple backends**. Torch / MXNet? / TensorFlow? / TensorFlow.js for Scala.js? / Lib
  - **[TODO] Automatic operator fusion for optimization.**
  - **[TODO] Typesafe higher-order gradients**.
  
