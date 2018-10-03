@@ -1,5 +1,7 @@
 package nexus.tensor.instances
 
+import nexus.tensor._
+
 object Float32 extends IsReal[Float] {
   type R = Float
   def B = Bool

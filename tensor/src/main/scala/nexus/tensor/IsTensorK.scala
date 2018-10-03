@@ -1,8 +1,8 @@
 package nexus.tensor
 
-import nexus._
+import nexus.tensor.typelevel._
+import nexus.tensor.util._
 import shapeless._
-
 import scala.reflect._
 
 /**

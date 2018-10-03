@@ -1,6 +1,7 @@
 package nexus.tensor.instances
 
-import cats.Id
+import nexus.tensor._
+import cats._
 
 object Int8 extends IsInt[Byte] {
   def add(x: Byte, y: Byte) = (x + y).toByte

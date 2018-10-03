@@ -1,5 +1,7 @@
 package nexus.tensor.syntax
 
+import nexus.tensor._
+
 /**
  * @author Tongfei Chen
  */

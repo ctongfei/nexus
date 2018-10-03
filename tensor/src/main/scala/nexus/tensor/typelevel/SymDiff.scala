@@ -61,8 +61,8 @@ object SymDiff {
       def recoverRight = ???
     }
 
-  implicit def symDiffTuple[A, Ah <: HList, B, Bh <: HList, C, Ch <: HList]
-  (implicit ah: ToHList.Aux[A, Ah], bh: ToHList.Aux[B, Bh], sd: SymDiff.Aux[Ah, Bh, Ch], ch: ToHList.Aux[C, Ch]): Aux[A, B, C] =
+  implicit def symDiffTuple[A, Al <: HList, B, Bl <: HList, C, Cl <: HList]
+  (implicit al: ToHList.Aux[A, Al], bl: ToHList.Aux[B, Bl], sd: SymDiff.Aux[Al, Bl, Cl], cl: ToHList.Aux[C, Cl]): Aux[A, B, C] =
     new SymDiff[A, B] {
       type Out = C
       def matchedIndices = sd.matchedIndices
@@ -70,7 +70,7 @@ object SymDiff {
       def rhsRetainedIndices = sd.rhsRetainedIndices
       def recoverLeft = ???
       def recoverRight = ???
-      def apply(t: A, u: B): C = ch.invert(sd(ah(t), bh(u)))
+      def apply(t: A, u: B): C = cl.invert(sd(al(t), bl(u)))
     }
 
 }

@@ -1,5 +1,8 @@
 package nexus.tensor.syntax
 
+import nexus.tensor._
+import nexus.tensor.typelevel._
+import nexus.tensor.util._
 import scala.language.experimental.macros
 
 /**

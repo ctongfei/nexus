@@ -1,5 +1,6 @@
 package nexus.tensor.instances
 
+import nexus.tensor._
 import cats._
 
 object Bool extends IsBool[Boolean] {

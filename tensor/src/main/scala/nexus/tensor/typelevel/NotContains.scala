@@ -3,24 +3,24 @@ package nexus.tensor.typelevel
 import shapeless._
 
 /**
- * Typelevel function that witnesses type [[X]] is not a member of [[L]].
+ * Typelevel function that witnesses type [[U]] is not a member of [[A]].
  * @author Tongfei Chen
  */
-trait NotContains[L, X]
+trait NotContains[A, U]
 
 object NotContains {
 
-  def apply[L, X](implicit n: NotContains[L, X]) = n
+  def apply[A, U](implicit n: NotContains[A, U]) = n
 
-  implicit def notContainsHListCase0[X]: NotContains[HNil, X]
-    = new NotContains[HNil, X] {}
+  implicit def notContainsHListCase0[U]: NotContains[HNil, U]
+    = new NotContains[HNil, U] {}
 
-  implicit def notContainsHListCaseN[H, T <: HList, X]
-  (implicit t: NotContains[T, X], n: H =:!= X): NotContains[H :: T, X]
-    = new NotContains[H :: T, X] {}
+  implicit def notContainsHListCaseN[Ah, At <: HList, U]
+  (implicit t: NotContains[At, U], n: Ah =:!= U): NotContains[Ah :: At, U]
+    = new NotContains[Ah :: At, U] {}
 
-  implicit def notContainsTuple[A, Ah <: HList, X]
-  (implicit ah: ToHList.Aux[A, Ah], n: NotContains[Ah, X]): NotContains[A, X]
-    = new NotContains[A, X] {}
+  implicit def notContainsTuple[A, Al <: HList, U]
+  (implicit ah: ToHList.Aux[A, Al], n: NotContains[Al, U]): NotContains[A, U]
+    = new NotContains[A, U] {}
 
 }

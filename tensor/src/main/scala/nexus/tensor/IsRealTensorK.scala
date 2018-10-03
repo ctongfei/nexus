@@ -1,5 +1,6 @@
 package nexus.tensor
 
+import nexus.tensor.typelevel._
 import scala.annotation._
 
 /**

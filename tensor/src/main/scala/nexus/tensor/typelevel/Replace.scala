@@ -3,54 +3,54 @@ package nexus.tensor.typelevel
 import shapeless._
 
 /**
- * Typelevel function that replaces type [[U]] in [[L]] to [[V]].
+ * Typelevel function that replaces type [[U]] in [[A]] to [[V]].
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Replace[L, U, V] extends DepFn2[L, V] {
+trait Replace[A, U, V] extends DepFn2[A, V] {
   type Out
 
   /** Constructs the inverse replacement evidence. */
-  def inverse: Replace.Aux[Out, V, U, L]
+  def inverse: Replace.Aux[Out, V, U, A]
 }
 
 object Replace {
 
-  def apply[L, U, V](implicit r: Replace[L, U, V]): Aux[L, U, V, r.Out] = r
-  type Aux[L, U, V, Out0] = Replace[L, U, V] { type Out = Out0 }
+  def apply[A, U, V](implicit r: Replace[A, U, V]): Aux[A, U, V, r.Out] = r
+  type Aux[A, U, V, B] = Replace[A, U, V] { type Out = B }
 
-  implicit def replaceHListCase0[T <: HList, U, V]: Aux[U :: T, U, V, V :: T] =
-    new Replace[U :: T, U, V] { self =>
-      type Out = V :: T
-      def apply(l: U :: T, v: V): V :: T = v :: l.tail
-      def inverse = new Replace[V :: T, V, U] {
-        type Out = U :: T
-        def apply(l: V :: T, u: U): U :: T = u :: l.tail
+  implicit def replaceHListCase0[A <: HList, U, V]: Aux[U :: A, U, V, V :: A] =
+    new Replace[U :: A, U, V] { self =>
+      type Out = V :: A
+      def apply(l: U :: A, v: V): V :: A = v :: l.tail
+      def inverse = new Replace[V :: A, V, U] {
+        type Out = U :: A
+        def apply(l: V :: A, u: U): U :: A = u :: l.tail
         def inverse = self
       }
     }
 
-  implicit def replaceHListCaseN[T <: HList, H, U, V, R <: HList]
-  (implicit n: H =:!= U, r: Replace.Aux[T, U, V, R]): Replace.Aux[H :: T, U, V, H :: R] =
-    new Replace[H :: T, U, V] { self =>
-      type Out = H :: R
-      def apply(l: H :: T, v: V): H :: R = l.head :: r(l.tail, v)
-      def inverse = new Replace[H :: R, V, U] {
-        type Out = H :: T
-        def apply(l: H :: R, u: U): H :: T = l.head :: r.inverse(l.tail, u)
+  implicit def replaceHListCaseN[At <: HList, Ah, U, V, Bt <: HList]
+  (implicit n: Ah =:!= U, r: Replace.Aux[At, U, V, Bt]): Replace.Aux[Ah :: At, U, V, Ah :: Bt] =
+    new Replace[Ah :: At, U, V] { self =>
+      type Out = Ah :: Bt
+      def apply(l: Ah :: At, v: V): Ah :: Bt = l.head :: r(l.tail, v)
+      def inverse = new Replace[Ah :: Bt, V, U] {
+        type Out = Ah :: At
+        def apply(l: Ah :: Bt, u: U): Ah :: At = l.head :: r.inverse(l.tail, u)
         def inverse = self
       }
     }
 
-  implicit def replaceTuple[L, Lh <: HList, U, V, Rh <: HList, R]
-  (implicit lh: ToHList.Aux[L, Lh], r: Replace.Aux[Lh, U, V, Rh], rh: FromHList.Aux[Rh, R]): Replace.Aux[L, U, V, R] =
-    new Replace[L, U, V] { self =>
-      type Out = R
-      def apply(t: L, v: V): R = rh(r(lh(t), v))
-      def inverse = new Replace[R, V, U] {
-        type Out = L
+  implicit def replaceTuple[A, Al <: HList, U, V, Bl <: HList, B]
+  (implicit al: ToHList.Aux[A, Al], r: Replace.Aux[Al, U, V, Bl], bl: FromHList.Aux[Bl, B]): Replace.Aux[A, U, V, B] =
+    new Replace[A, U, V] { self =>
+      type Out = B
+      def apply(t: A, v: V): B = bl(r(al(t), v))
+      def inverse = new Replace[B, V, U] {
+        type Out = A
         def inverse = self
-        def apply(t: R, u: U) = lh.invert(r.inverse(rh.invert(t), u))
+        def apply(t: B, u: U) = al.invert(r.inverse(bl.invert(t), u))
       }
     }
 

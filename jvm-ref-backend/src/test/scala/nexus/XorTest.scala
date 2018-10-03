@@ -1,5 +1,7 @@
 package nexus
 
+import nexus.tensor._
+import nexus.tensor.syntax._
 import nexus.execution._
 import nexus.jvm._
 import nexus.modules._

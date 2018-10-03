@@ -4,17 +4,17 @@ package nexus.tensor.instances
  * @author Tongfei Chen
  */
 object all {
-
-  implicit val Bool = nxai.Bool
-  implicit val boolIdCond = nxai.BoolIdCond
-  implicit val boolFunction0Cond = nxai.BoolFunction0Cond
   
-  implicit val Int8 = nxai.Int8
-  implicit val Int16 = nxai.Int16
-  implicit val Int32 = nxai.Int32
-  implicit val Int64 = nxai.Int64
+  implicit val impBool = Bool
+  implicit val impboolIdCond = BoolIdCond
+  implicit val impboolFunction0Cond = BoolFunction0Cond
+  
+  implicit val impInt8 = Int8
+  implicit val impInt16 = Int16
+  implicit val impInt32 = Int32
+  implicit val impInt64 = Int64
 
-  implicit val Float32 = nxai.Float32
-  implicit val Float64 = nxai.Float64
+  implicit val impFloat32 = Float32
+  implicit val impFloat64 = Float64
 
 }
