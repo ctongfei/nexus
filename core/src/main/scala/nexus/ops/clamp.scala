@@ -1,7 +1,6 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
 
 /**
  * @author Tongfei Chen

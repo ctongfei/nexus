@@ -1,5 +1,4 @@
-import nexus.algebra._
-import nexus.algebra.{instances => nxai}
+
 import nexus.syntax._
 
 /**

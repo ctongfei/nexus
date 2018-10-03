@@ -2,7 +2,6 @@ package nexus.optimizer
 
 import nexus._
 import nexus.ops._
-import nexus.algebra.syntax._
 
 /**
  * Basic stochastic gradient descent optimizer.

@@ -1,8 +1,6 @@
 package nexus.modules
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.typelevel._
 import nexus.util._
 
 /**

@@ -2,7 +2,6 @@ package nexus.instances
 
 import cats.Order
 import nexus._
-import nexus.algebra._
 import nexus.ops._
 
 /**

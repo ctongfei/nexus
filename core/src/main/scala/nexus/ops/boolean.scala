@@ -1,77 +1,42 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
 import nexus.exception._
+import nexus.ops.mixin._
 
 /**
  * Boolean negation.
- * @author Tongfei Chen
  */
-object Not extends PolyOp1 {
-
-  implicit def notF[B](implicit B: IsBool[B]): F[B, B] =
-    new F[B, B] {
-      type Tag[b] = IsBool[b]
-      def name = "Not"
-      def tag = B
-      override def differentiable = false
-      def forward(x: B) = B.not(x)
-      def backward(dy: B, y: B, x: B) = throw new OperatorNotDifferentiableException(this, 1)
-    }
+object Not extends PolyOp1 with BoolElementwisePolyOp1Mixin {
+  def name = "Not"
+  def forwardB[B](x: B)(implicit B: IsBool[B]) = B.not(x)
+  def forwardTB[T[_], B, A](x: T[A])(implicit T: IsBoolTensorK[T, B]) = T.eNot(x)
 
 }
 
 /**
  * Boolean conjunction.
  */
-object And extends PolyOp2 {
-
-  implicit def andF[B](implicit B: IsBool[B]): F[B, B, B] =
-    new F[B, B, B] {
-      type Tag[b] = IsBool[b]
-      def name = "And"
-      def tag = B
-      override def differentiable = false
-      def forward(x1: B, x2: B) = B.and(x1, x2)
-      def backward1(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 1)
-      def backward2(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 2)
-    }
-
+object And extends PolyOp2 with BoolElementwisePolyOp2Mixin {
+  def name = "And"
+  def forwardB[B](x1: B, x2: B)(implicit B: IsBool[B]) = B.and(x1, x2)
+  def forwardTB[T[_], B, A](x1: T[A], x2: T[A])(implicit T: IsBoolTensorK[T, B]) = T.eAnd(x1, x2)
 }
 
 /**
  * Boolean disjunction.
  */
-object Or extends PolyOp2 {
-
-  implicit def orF[B](implicit B: IsBool[B]): F[B, B, B] =
-    new F[B, B, B] {
-      type Tag[b] = IsBool[b]
-      def name = "Or"
-      def tag = B
-      override def differentiable = false
-      def forward(x1: B, x2: B) = B.or(x1, x2)
-      def backward1(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 1)
-      def backward2(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 2)
-    }
-
+object Or extends PolyOp2 with BoolElementwisePolyOp2Mixin {
+  def name = "Or"
+  def forwardB[B](x1: B, x2: B)(implicit B: IsBool[B]) = B.or(x1, x2)
+  def forwardTB[T[_], B, A](x1: T[A], x2: T[A])(implicit T: IsBoolTensorK[T, B]) = T.eOr(x1, x2)
 }
 
 /**
  * Boolean exclusive disjunction.
  */
-object Xor extends PolyOp2 {
-
-  implicit def xorF[B](implicit B: IsBool[B]): F[B, B, B] =
-    new F[B, B, B] {
-      type Tag[b] = IsBool[b]
-      def name = "Xor"
-      def tag = B
-      override def differentiable = false
-      def forward(x1: B, x2: B) = B.xor(x1, x2)
-      def backward1(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 1)
-      def backward2(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 2)
-    }
-
+object Xor extends PolyOp2 with BoolElementwisePolyOp2Mixin {
+  def name = "Xor"
+  def forwardB[B](x1: B, x2: B)(implicit B: IsBool[B]) = B.xor(x1, x2)
+  def forwardTB[T[_], B, A](x1: T[A], x2: T[A])(implicit T: IsBoolTensorK[T, B]) = T.eXor(x1, x2)
 }

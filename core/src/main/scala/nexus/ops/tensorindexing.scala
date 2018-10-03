@@ -1,9 +1,6 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
-import nexus.algebra.typelevel._
 import nexus.exception._
 import shapeless.Nat
 

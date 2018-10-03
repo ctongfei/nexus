@@ -1,23 +1,12 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.typelevel._
 import nexus.exception._
-import shapeless._
+import nexus.ops.mixin._
 
-object SumAlong extends ParameterizedPolyOp1 {
-
-  implicit def sumAlongF[T[_], R, A, U <: Dim, B]
-    (implicit T: IsRealTensorK[T, R], r: Remove.Aux[A, U, B]) = (u: U) =>
-    new F[T[A], T[B]] {
-      type Tag[t] = IsRealTensor[t, R]
-      def name = n"SumAlong[$u]"
-      def tag = T.ground[B]
-      def forward(x: T[A]) = ??? // T.sumAlong(x, ix.toInt)
-      def backward(dy: T[B], y: T[B], x: T[A]) = ??? //T.expandDim(dy, ix.toInt, T.size(x, ix.toInt))
-    }
-
+object SumAlong extends ParameterizedPolyOp1 with RealAxisReductionOpMixin {
+  def forwardR[T[_], R, A, U <: Dim, B](x: T[A], u: U)(implicit T: IsRealTensorK[T, R], rx: Remove.Aux[A, U, B]) = ???
+  def backwardR[T[_], R, A, U <: Dim, B](dy: T[B], y: T[B], x: T[A])(implicit T: IsRealTensorK[T, R], rx: Remove.Aux[A, U, B]) = ???
 }
 
 object ProdAlong extends ParameterizedPolyOp1 {

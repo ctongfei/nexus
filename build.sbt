@@ -52,15 +52,15 @@ lazy val commonSettings = Seq(
 )
 
 
-lazy val algebra = (project in file("algebra"))
+lazy val tensor = (project in file("tensor"))
   .settings(commonSettings: _*)
   .settings(
-    name := "nexus-algebra"
+    name := "nexus-tensor"
   )
 
 lazy val core = (project in file("core"))
   .settings(commonSettings: _*)
-  .dependsOn(algebra)
+  .dependsOn(tensor)
   .settings(
     name := "nexus-core"
   )
@@ -96,14 +96,14 @@ lazy val torchJni = (project in file("torch/jni"))
 
 lazy val torchCpu = (project in file("torch/cpu"))
   .settings(commonSettings: _*)
-  .dependsOn(algebra).dependsOn(torchJni)
+  .dependsOn(tensor).dependsOn(torchJni)
   .settings(
     name := "nexus-torch-backend-cpu"
   )
 
 lazy val torchCuda = (project in file("torch/cuda"))
   .settings(commonSettings: _*)
-  .dependsOn(algebra).dependsOn(torchCpu)
+  .dependsOn(tensor).dependsOn(torchCpu)
   .settings(
     name := "nexus-torch-backend-cuda"
   )

@@ -2,8 +2,8 @@ package nexus.impl.torch.cpu
 
 import jtorch._
 import nexus._
-import nexus.algebra._
-import nexus.algebra.typelevel.util._
+import nexus.tensor._
+import nexus.tensor.typelevel.util._
 
 //
 //object FloatTensor extends IsRealTensorK[FloatTensor, Float] {

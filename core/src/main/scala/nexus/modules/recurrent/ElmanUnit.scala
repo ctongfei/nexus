@@ -1,8 +1,6 @@
 package nexus.modules.recurrent
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.typelevel._
 import nexus.modules._
 import nexus.ops._
 import nexus.util._

@@ -1,7 +1,5 @@
 package nexus.torch
 
-import nexus.algebra._
-
 /**
  * @author Tongfei Chen
  */

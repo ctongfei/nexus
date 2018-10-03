@@ -1,9 +1,6 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
-import nexus.algebra.typelevel._
 
 object Entropy extends PolyOp1 {
 

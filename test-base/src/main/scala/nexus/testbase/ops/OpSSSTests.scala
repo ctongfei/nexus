@@ -1,8 +1,6 @@
 package nexus.testbase.ops
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
 import nexus.ops._
 import nexus.prob._
 import org.scalatest._

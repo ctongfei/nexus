@@ -3,8 +3,6 @@ package nexus.prob
 import java.util._
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
 
 /**
  * An exponential distribution.

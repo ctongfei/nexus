@@ -2,7 +2,6 @@ package nexus.ops
 
 
 import nexus._
-import nexus.algebra._
 import nexus.execution._
 import nexus.jvm._
 import nexus.modules._

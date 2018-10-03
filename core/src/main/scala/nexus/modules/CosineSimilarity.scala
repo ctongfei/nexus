@@ -1,8 +1,6 @@
 package nexus.modules
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
 import nexus.ops._
 import nexus.syntax._
 

@@ -1,8 +1,6 @@
 package nexus
 
 import cats._
-import nexus.algebra._
-import nexus.algebra.syntax._
 import nexus.util._
 
 /**

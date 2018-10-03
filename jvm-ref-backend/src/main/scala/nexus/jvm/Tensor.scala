@@ -1,7 +1,5 @@
 package nexus.jvm
 
-import nexus.algebra.typelevel._
-import nexus.algebra.typelevel.util._
 import shapeless.Nat
 
 import scala.reflect._
@@ -68,8 +66,6 @@ class Tensor[@specialized(Int, Long, Float, Double) E, A](
 }
 
 
-
-
 class FloatTensor[A](
                       handle: Array[Float],
                       shape: Array[Int],
@@ -80,4 +76,16 @@ class FloatTensor[A](
 object FloatTensor extends JvmIsRealTensorK[Float, FloatTensor] {
   def newTensor[A](handle: Array[Float], shape: Array[Int], stride: Array[Int], offset: Int) =
     new FloatTensor[A](handle, shape, stride, offset)
+}
+
+class DoubleTensor[A](
+                     handle: Array[Double],
+                     shape: Array[Int],
+                     stride: Array[Int],
+                     offset: Int
+                     ) extends Tensor[Double, A](handle, shape, stride, offset)
+
+object DoubleTensor extends JvmIsRealTensorK[Double, DoubleTensor] {
+  def newTensor[A](handle: Array[Double], shape: Array[Int], stride: Array[Int], offset: Int) =
+    new DoubleTensor[A](handle, shape, stride, offset)
 }

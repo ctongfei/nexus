@@ -1,7 +1,6 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
 
 /**
  * 1-D convolution.

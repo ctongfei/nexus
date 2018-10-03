@@ -2,7 +2,6 @@ package nexus.execution
 
 import cats._
 import nexus._
-import nexus.algebra._
 
 /**
  * @author Tongfei Chen

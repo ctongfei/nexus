@@ -1,7 +1,5 @@
 package nexus
 
-import nexus.algebra._
-import nexus.algebra.syntax._
 import nexus.execution._
 import nexus.jvm._
 import nexus.modules._

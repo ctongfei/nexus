@@ -1,7 +1,6 @@
 package nexus.instances
 
 import nexus._
-import nexus.algebra._
 import nexus.ops._
 
 /**

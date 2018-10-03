@@ -1,9 +1,5 @@
 package nexus.torch
 
-import nexus.algebra._
-import nexus.algebra.instances._
-import nexus.algebra.typelevel.Remove.Aux
-import nexus.algebra.typelevel._
 import nexus.torch.jni.THJNI._
 import shapeless.Nat
 

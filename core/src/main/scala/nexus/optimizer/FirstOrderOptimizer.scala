@@ -2,7 +2,6 @@ package nexus.optimizer
 
 import cats._
 import nexus._
-import nexus.algebra._
 import nexus.execution._
 
 /**

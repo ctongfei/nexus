@@ -1,9 +1,8 @@
 package nexus.ops
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
 import nexus.exception._
+import nexus.ops.mixin._
 
 /**
  * Identity function.

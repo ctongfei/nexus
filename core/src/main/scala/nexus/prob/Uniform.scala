@@ -1,8 +1,6 @@
 package nexus.prob
 
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
 import java.util._
 
 import cats.Id

@@ -1,7 +1,7 @@
 package nexus.impl.torch.cpu
 
 import nexus._
-import nexus.algebra._
+import nexus.tensor._
 
 import scala.reflect._
 

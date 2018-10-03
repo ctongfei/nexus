@@ -1,6 +1,5 @@
 package nexus
 
-import nexus.algebra._
 import nexus.exception._
 
 

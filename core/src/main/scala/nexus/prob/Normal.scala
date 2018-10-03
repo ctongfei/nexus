@@ -2,8 +2,6 @@ package nexus.prob
 
 import java.util._
 import nexus._
-import nexus.algebra._
-import nexus.algebra.syntax._
 
 /**
  * Represents the normal distribution N(μ, σ^2^).

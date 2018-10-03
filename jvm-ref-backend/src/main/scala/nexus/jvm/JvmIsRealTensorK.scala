@@ -1,9 +1,5 @@
 package nexus.jvm
 
-import nexus.algebra._
-import nexus.algebra.syntax._
-import nexus.algebra.typelevel._
-import nexus.algebra.typelevel.util._
 import shapeless._
 
 import scala.reflect._

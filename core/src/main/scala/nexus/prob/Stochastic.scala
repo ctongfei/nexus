@@ -1,7 +1,6 @@
 package nexus.prob
 
 import cats._
-import nexus.algebra._
 
 import scala.collection._
 import scala.reflect._
