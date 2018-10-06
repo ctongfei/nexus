@@ -1,5 +1,7 @@
 package nexus.jvm
 
+import nexus.tensor.instances.all._
+import nexus.tensor.typelevel.util._
 import shapeless.Nat
 
 import scala.reflect._

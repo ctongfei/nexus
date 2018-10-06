@@ -2,6 +2,7 @@ package nexus.modules
 
 import nexus._
 import nexus.ops._
+import nexus.tensor._
 import nexus.syntax._
 
 /**

@@ -1,8 +1,8 @@
 package nexus.ops
 
 import nexus._
-import nexus.exception._
 import nexus.ops.mixin._
+import nexus.tensor._
 
 /**
  * Boolean negation.

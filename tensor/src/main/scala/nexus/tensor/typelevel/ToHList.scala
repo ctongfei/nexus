@@ -1,5 +1,6 @@
 package nexus.tensor.typelevel
 
+import nexus.tensor._
 import shapeless._
 
 /**

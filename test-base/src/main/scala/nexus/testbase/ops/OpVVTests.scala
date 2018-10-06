@@ -3,6 +3,8 @@ package nexus.testbase.ops
 import nexus._
 import nexus.ops._
 import nexus.prob._
+import nexus.tensor._
+import nexus.tensor.syntax._
 import org.scalatest._
 
 /**
@@ -35,10 +37,9 @@ class OpVVTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
   }
 
   val ops = Seq(
-    Id.idF[T[Axis]],
-    Neg.negF[T[Axis]],
-    Inv.tensorF[T, R, Axis],
-    Exp.tensorF[T, R, Axis],
+    Neg.fTR[T, R, Axis],
+    Inv.fTR[T, R, Axis],
+    Exp.fTR[T, R, Axis],
     ReLU.reLUF[T, R, Axis],
     Softmax.softmaxF[T, R, Axis]
   )

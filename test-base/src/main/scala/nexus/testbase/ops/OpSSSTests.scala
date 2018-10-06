@@ -3,6 +3,8 @@ package nexus.testbase.ops
 import nexus._
 import nexus.ops._
 import nexus.prob._
+import nexus.tensor._
+import nexus.tensor.syntax._
 import org.scalatest._
 
 /**
@@ -36,10 +38,10 @@ class OpSSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R]) extends FunSuite 
   }
 
   val opsOnReal: Seq[Op2[R, R, R]] = Seq(
-    Add.addF[R],
-    Sub.subF[R],
-    Mul.mulF[R],
-    Div.divF[R]
+    Add.fR[R],
+    Sub.fR[R],
+    Mul.fR[R],
+    Div.fR[R]
   )
 
   for (op <- opsOnReal) {

@@ -2,6 +2,7 @@ package nexus.syntax
 
 import nexus._
 import nexus.ops._
+import nexus.tensor._
 
 /**
  * @author Tongfei Chen

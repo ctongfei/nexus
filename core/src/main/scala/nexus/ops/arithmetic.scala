@@ -1,26 +1,9 @@
 package nexus.ops
 
 import nexus._
-import nexus.exception._
+import nexus.tensor._
+import nexus.tensor.syntax._
 import nexus.ops.mixin._
-
-/**
- * Identity function.
- * @author Tongfei Chen
- * @since 0.1.0
- */
-object Id extends PolyOp1 {
-
-  implicit def idF[X]: F[X, X] =
-    new F[X, X] {
-      type Tag[x] = AnyType[x]
-      def name = "Id"
-      def tag = AnyType[X]
-      def forward(x: X) = x
-      def backward(dy: X, y: X, x: X) = dy
-    }
-
-}
 
 /**
  * Adds two scalars or two tensors of the same axes/shape.

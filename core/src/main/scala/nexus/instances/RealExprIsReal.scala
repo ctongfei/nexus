@@ -1,8 +1,9 @@
 package nexus.instances
 
-import cats.Order
 import nexus._
 import nexus.ops._
+import nexus.tensor._
+import nexus.tensor.instances._
 
 /**
  * @author Tongfei Chen

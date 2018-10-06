@@ -3,6 +3,7 @@ package nexus.optimizer
 import cats._
 import nexus._
 import nexus.execution._
+import nexus.tensor._
 
 /**
  * Base abstract class for optimizers.

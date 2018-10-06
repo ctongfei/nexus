@@ -2,6 +2,8 @@ package nexus.ops
 
 import nexus._
 import nexus.ops.mixin._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * Absolute value.
@@ -21,9 +23,8 @@ object L1Norm extends PolyOp1 {
 
   implicit def l1NormF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], R] =
     new F[T[A], R] {
-      type Tag[r] = IsReal[r]
       def name = "L1Norm"
-      def tag = T.R
+      def tag = Tag.real[R]
       def forward(x: T[A]) = T.sum(T.eAbs(x))
       def backward(dy: R, y: R, x: T[A]) = T.eSgn(x) :* dy
     }
@@ -33,9 +34,8 @@ object L2Norm extends PolyOp1 {
 
   implicit def l2NormF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], R] =
     new F[T[A], R] {
-      type Tag[r] = IsReal[r]
       def name = "L2Norm"
-      def tag = T.R
+      def tag = Tag.real[R]
       def forward(x: T[A]) = T.R.sqrt(T.dot(x, x))
       def backward(dy: R, y: R, x: T[A]) = x :* T.R.div(dy, y)
     }
@@ -45,9 +45,8 @@ object LpNorm extends ParameterizedPolyOp1 {
 
   implicit def lpNormF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = (p: Double) =>
       new F[T[A], R] {
-        type Tag[r] = IsReal[r]
         def name = s"LpNorm[$p]"
-        def tag = T.R
+        def tag = Tag.real[R]
         def forward(x: T[A]) = ???
         def backward(dy: R, y: R, x: T[A]) = ???
       }

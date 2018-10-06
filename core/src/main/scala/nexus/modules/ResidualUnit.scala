@@ -1,6 +1,7 @@
 package nexus.modules
 
 import nexus._
+import nexus.tensor._
 import nexus.ops._
 
 /**

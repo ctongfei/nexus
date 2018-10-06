@@ -1,6 +1,8 @@
 package nexus.tensor
 
 import cats._
+import nexus._
+
 import scala.annotation._
 
 /**
@@ -10,7 +12,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that type ${Z} is an integer.")
-trait IsInt[@specialized(Byte, Short, Int, Long) Z] extends Type[Z] {
+trait IsInt[@specialized(Byte, Short, Int, Long) Z] {
 
   def zero: Z
   def one: Z

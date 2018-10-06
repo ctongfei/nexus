@@ -7,8 +7,6 @@ package nexus
  */
 trait AnyOp[Y] {
 
-  type Tag[_]
-
   /** The arity of this operator. */
   def arity: Int
 

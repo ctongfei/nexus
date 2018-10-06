@@ -1,4 +1,4 @@
-package nexus.tensor
+package nexus
 
 /**
  * @author Tongfei Chen

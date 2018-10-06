@@ -1,6 +1,9 @@
 package nexus.ops
 
 import nexus._
+import nexus.tensor._
+import nexus.tensor.syntax._
+import nexus.tensor.typelevel._
 
 /**
  * Scales a tensor by a scalar.
@@ -9,13 +12,12 @@ import nexus._
  */
 object Scale extends PolyOp2 {
 
-  implicit def scaleF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[R, T[A], T[A]] {
-    type Tag[t] = IsRealTensor[t, R]
+  implicit def scaleF[T[_], R, a](implicit T: IsRealTensorK[T, R]) = new F[R, T[a], T[a]] {
     def name = "Scale"
-    def tag = T.ground[A]
-    def forward(x1: R, x2: T[A]) = x2 :* x1
-    def backward1(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy ⋅ x2
-    def backward2(dy: T[A], y: T[A], x1: R, x2: T[A]) = dy :* x1
+    def tag = Tag.realTensor[T, R, a]
+    def forward(x1: R, x2: T[a]) = x2 :* x1
+    def backward1(dy: T[a], y: T[a], x1: R, x2: T[a]) = dy ⋅ x2
+    def backward2(dy: T[a], y: T[a], x1: R, x2: T[a]) = dy :* x1
   }
 
   val By = Curried1
@@ -33,9 +35,8 @@ object Scale extends PolyOp2 {
  */
 object Dot extends PolyOp2 {
   implicit def dotF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[T[A], T[A], R] {
-    type Tag[r] = IsReal[r]
     def name = "Dot"
-    def tag = T.R
+    def tag = Tag.real[R]
     def forward(x1: T[A], x2: T[A]) = T.dot(x1, x2)
     def backward1(dy: R, y: R, x1: T[A], x2: T[A]) = x2 :* dy
     def backward2(dy: R, y: R, x1: T[A], x2: T[A]) = x1 :* dy
@@ -50,16 +51,15 @@ object Dot extends PolyOp2 {
  */
 object MatMul extends PolyOp2 {
 
-  implicit def matMulF[T[_], R, A, B, C]
-  (implicit T: IsRealTensorK[T, R]): F[T[(A, B)], T[(B, C)], T[(A, C)]] =
-    new F[T[(A, B)], T[(B, C)], T[(A, C)]] {
+  implicit def matMulF[T[_], R, a, b, c]
+  (implicit T: IsRealTensorK[T, R]): F[T[(a, b)], T[(b, c)], T[(a, c)]] =
+    new F[T[(a, b)], T[(b, c)], T[(a, c)]] {
       import T._
-      type Tag[t] = IsRealTensor[t, R]
       def name = "MatMul"
-      def tag = T.ground[(A, C)]
-      def forward(x1: T[(A, B)], x2: T[(B, C)]) = mmMul(x1, x2)
-      def backward1(dy: T[(A, C)], y: T[(A, C)], x1: T[(A, B)], x2: T[(B, C)]) = mmMul(dy, transpose(x2))
-      def backward2(dy: T[(A, C)], y: T[(A, C)], x1: T[(A, B)], x2: T[(B, C)]) = mmMul(transpose(x1), dy)
+      def tag = Tag.realTensor[T, R, (a, c)]
+      def forward(x1: T[(a, b)], x2: T[(b, c)]) = mmMul(x1, x2)
+      def backward1(dy: T[(a, c)], y: T[(a, c)], x1: T[(a, b)], x2: T[(b, c)]) = mmMul(dy, transpose(x2))
+      def backward2(dy: T[(a, c)], y: T[(a, c)], x1: T[(a, b)], x2: T[(b, c)]) = mmMul(transpose(x1), dy)
     }
 }
 
@@ -69,12 +69,11 @@ object MatMul extends PolyOp2 {
  * @since 0.1.0
  */
 object Transpose extends PolyOp1 {
-  implicit def transposeF[T[_], R, A <: Dim, B <: Dim](implicit T: IsRealTensorK[T, R]) = new F[T[(A, B)], T[(B, A)]] {
-    type Tag[t] = IsRealTensor[t, R]
+  implicit def transposeF[T[_], R, a <: Dim, b <: Dim](implicit T: IsRealTensorK[T, R]) = new F[T[(a, b)], T[(b, a)]] {
     def name = "Transpose"
-    def tag = T.ground[(B, A)]
-    def forward(x: T[(A, B)]) = T.transpose(x)
-    def backward(dy: T[(B, A)], y: T[(B, A)], x: T[(A, B)]) = T.transpose(dy)
+    def tag = Tag.realTensor[T, R, (b, a)]
+    def forward(x: T[(a, b)]) = T.transpose(x)
+    def backward(dy: T[(b, a)], y: T[(b, a)], x: T[(a, b)]) = T.transpose(dy)
   }
 
 }
@@ -94,15 +93,14 @@ object Transpose extends PolyOp1 {
  */
 object MVMul extends PolyOp2 {
 
-  implicit def mvMulF[T[_], R, A <: Dim, B <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(B, A)], T[A], T[B]] =
-    new F[T[(B, A)], T[A], T[B]] {
+  implicit def mvMulF[T[_], R, a <: Dim, b <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(b, a)], T[a], T[b]] =
+    new F[T[(b, a)], T[a], T[b]] {
       import T._
-      type Tag[t] = IsRealTensor[t, R]
       def name = "MVMul"
-      def tag = T.ground[B]
-      def forward(x1: T[(B, A)], x2: T[A]) = mvMul(x1, x2)
-      def backward1(dy: T[B], y: T[B], x1: T[(B, A)], x2: T[A]) = vvMul(dy, x2)
-      def backward2(dy: T[B], y: T[B], x1: T[(B, A)], x2: T[A]) = mvMul(transpose(x1), dy)
+      def tag = Tag.realTensor[T, R, b]
+      def forward(x1: T[(b, a)], x2: T[a]) = mvMul(x1, x2)
+      def backward1(dy: T[b], y: T[b], x1: T[(b, a)], x2: T[a]) = vvMul(dy, x2)
+      def backward2(dy: T[b], y: T[b], x1: T[(b, a)], x2: T[a]) = mvMul(transpose(x1), dy)
     }
 
 }
@@ -116,14 +114,13 @@ object MVMul extends PolyOp2 {
  * @since 0.1.0
  */
 object Contract extends PolyOp2 {
-  implicit def contractF[T[_], R, A, B, C](implicit T: IsRealTensorK[T, R], sd: SymDiff.Aux[A, B, C]) =
-    new F[T[A], T[B], T[C]] {
-      type Tag[t] = IsRealTensor[t, R]
+  implicit def contractF[T[_], R, a, b, c](implicit T: IsRealTensorK[T, R], sd: SymDiff.Aux[a, b, c]) =
+    new F[T[a], T[b], T[c]] {
       def name = "Contract"
-      def tag = T.ground[C]
-      def forward(x1: T[A], x2: T[B]) = T.contract(x1, x2)(sd)
-      def backward1(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = T.contract(dy, x2)(sd.recoverLeft)
-      def backward2(dy: T[C], y: T[C], x1: T[A], x2: T[B]) = T.contract(dy, x1)(sd.recoverRight)
+      def tag = Tag.realTensor[T, R, c]
+      def forward(x1: T[a], x2: T[b]) = T.contract(x1, x2)(sd)
+      def backward1(dy: T[c], y: T[c], x1: T[a], x2: T[b]) = T.contract(dy, x2)(sd.recoverLeft)
+      def backward2(dy: T[c], y: T[c], x1: T[a], x2: T[b]) = T.contract(dy, x1)(sd.recoverRight)
     }
 
 }

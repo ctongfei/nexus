@@ -1,7 +1,7 @@
 package nexus.ops
 
 import nexus._
-import scala.annotation._
+import nexus.tensor._
 
 /**
  * Applies an arbitrary differentiable function to all elements in a specific tensor.
@@ -11,15 +11,14 @@ import scala.annotation._
  */
 object Elementwise extends ParameterizedPolyOp1 {
 
-  implicit def mapF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = (f: Op1[R, R]) =>
-    new F[T[A], T[A]] {
+  implicit def mapF[T[_], R, a](implicit T: IsRealTensorK[T, R]) = (f: Op1[R, R]) =>
+    new F[T[a], T[a]] {
       import T._
-      type Tag[t] = IsRealTensor[t, R]
       def name = s"Map[${f.name}]"
-      def tag = T.ground[A]
+      def tag = Tag.realTensor[T, R, a]
       override def differentiable = f.differentiable
-      def forward(x: T[A]) = map(x)(f.forward)
-      def backward(dy: T[A], y: T[A], x: T[A]) = map3(dy, y, x)(f.backward)
+      def forward(x: T[a]) = map(x)(f.forward)
+      def backward(dy: T[a], y: T[a], x: T[a]) = map3(dy, y, x)(f.backward)
     }
 
 }

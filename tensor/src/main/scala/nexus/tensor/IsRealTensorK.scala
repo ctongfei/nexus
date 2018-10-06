@@ -12,86 +12,87 @@ import scala.annotation._
 trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
 
   type ElementTag[r] = IsReal[r]
+  override type TensorTag[te] = IsRealTensor[te, R]
 
   implicit val R: IsReal[R]
   def elementType = R
 
-  def newTensor[A](shape: Array[Int]): T[A]
+  def newTensor[a](shape: Array[Int]): T[a]
 
-  def newGaussianTensor[A](μ: Double, σ2: Double, shape: Array[Int]): T[A]
+  def newGaussianTensor[a](μ: Double, σ2: Double, shape: Array[Int]): T[a]
 
-  def zeroBy[A](x: T[A]): T[A]
+  def zeroBy[a](x: T[a]): T[a]
 
-  def add[A](x1: T[A], x2: T[A]): T[A]
+  def add[a](x1: T[a], x2: T[a]): T[a]
 
-  def addI[A](x1: T[A], x2: T[A]): T[A]
+  def addI[a](x1: T[a], x2: T[a]): T[a]
 
-  def addS[A](x: T[A], u: R): T[A]
+  def addS[a](x: T[a], u: R): T[a]
 
-  def neg[A](x: T[A]): T[A]
+  def neg[a](x: T[a]): T[a]
 
-  def sub[A](x1: T[A], x2: T[A]): T[A]
+  def sub[a](x1: T[a], x2: T[a]): T[a]
 
-  def subS[A](x: T[A], u: R): T[A]
+  def subS[a](x: T[a], u: R): T[a]
 
-  def eMul[A](x1: T[A], x2: T[A]): T[A]
+  def eMul[a](x1: T[a], x2: T[a]): T[a]
 
-  def eDiv[A](x1: T[A], x2: T[A]): T[A]
+  def eDiv[a](x1: T[a], x2: T[a]): T[a]
 
-  def scale[A](x: T[A], u: R): T[A]
+  def scale[a](x: T[a], u: R): T[a]
 
-  def eInv[A](x: T[A]): T[A]
+  def eInv[a](x: T[a]): T[a]
 
-  def eSqr[A](x: T[A]): T[A]
+  def eSqr[a](x: T[a]): T[a]
 
-  def eSqrt[A](x: T[A]): T[A]
+  def eSqrt[a](x: T[a]): T[a]
 
-  def transpose[A, B](x: T[(A, B)]): T[(B, A)]
+  def transpose[a, b](x: T[(a, b)]): T[(b, a)]
 
-  def eLog[A](x: T[A]): T[A]
-  def eExp[A](x: T[A]): T[A]
-  def eLog1p[A](x: T[A]): T[A]
-  def eExpm1[A](x: T[A]): T[A]
+  def eLog[a](x: T[a]): T[a]
+  def eExp[a](x: T[a]): T[a]
+  def eLog1p[a](x: T[a]): T[a]
+  def eExpm1[a](x: T[a]): T[a]
 
-  def eSin[A](x: T[A]): T[A]
-  def eCos[A](x: T[A]): T[A]
-  def eTan[A](x: T[A]): T[A]
+  def eSin[a](x: T[a]): T[a]
+  def eCos[a](x: T[a]): T[a]
+  def eTan[a](x: T[a]): T[a]
 
-  def sigmoid[A](x: T[A]): T[A]
+  def sigmoid[a](x: T[a]): T[a]
 
-  def relu[A](x: T[A]): T[A]
+  def relu[a](x: T[a]): T[a]
 
-  def eAbs[A](x: T[A]): T[A]
-  def eSgn[A](x: T[A]): T[A]
+  def eAbs[a](x: T[a]): T[a]
+  def eSgn[a](x: T[a]): T[a]
 
-  def pos[A](x: T[A]): T[A]
+  def pos[a](x: T[a]): T[a]
 
   def sum(x: T[_]): R
 
-  def mmMul[A, B, C](x: T[(A, B)], y: T[(B, C)]): T[(A, C)]
+  def mmMul[a, b, c](x: T[(a, b)], y: T[(b, c)]): T[(a, c)]
 
-  def mvMul[A, B](x: T[(A, B)], y: T[B]): T[A]
+  def mvMul[a, b](x: T[(a, b)], y: T[b]): T[a]
 
-  def vvMul[A, B](x: T[A], y: T[B]): T[(A, B)]
+  def vvMul[a, b](x: T[a], y: T[b]): T[(a, b)]
 
-  def dot[A](x: T[A], y: T[A]): R
+  def dot[a](x: T[a], y: T[a]): R
 
-  def contract[A, B, C](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C]
+  def contract[a, b, c](x: T[a], y: T[b])(implicit sd: SymDiff.Aux[a, b, c]): T[c]
 
-  def ground[A]: IsRealTensor[T[A], R] =
-    new IsRealTensor[T[A], R] {
+  def ground[a]: IsRealTensor[T[a], R] =
+    new IsRealTensor[T[a], R] {
       def elementType = self.elementType
       def mutable = true
-      def zeroBy(x: T[A]) = self.zeroBy(x)
-      def add(x1: T[A], x2: T[A]) = self.add(x1, x2)
-      def addS(x1: T[A], x2: Double) = self.addS(x1, R.fromDouble(x2))
-      def addI(x1: T[A], x2: T[A]): Unit = self.addI(x1, x2)
-      def sub(x1: T[A], x2: T[A]) = self.sub(x1, x2)
-      def neg(x: T[A]) = self.neg(x)
-      def eMul(x1: T[A], x2: T[A]) = self.eMul(x1, x2)
-      def eDiv(x1: T[A], x2: T[A]) = self.eDiv(x1, x2)
-      def scale(x: T[A], k: Double) = self.scale(x, R.fromDouble(k))
-      def eSqrt(x: T[A]) = self.eSqrt(x)
+      def zeroBy(x: T[a]) = self.zeroBy(x)
+      def add(x1: T[a], x2: T[a]) = self.add(x1, x2)
+      def addS(x1: T[a], x2: Double) = self.addS(x1, R.fromDouble(x2))
+      def addI(x1: T[a], x2: T[a]): Unit = self.addI(x1, x2)
+      def sub(x1: T[a], x2: T[a]) = self.sub(x1, x2)
+      def neg(x: T[a]) = self.neg(x)
+      def eMul(x1: T[a], x2: T[a]) = self.eMul(x1, x2)
+      def eDiv(x1: T[a], x2: T[a]) = self.eDiv(x1, x2)
+      def scale(x: T[a], k: Double) = self.scale(x, R.fromDouble(k))
+      def eSqrt(x: T[a]) = self.eSqrt(x)
     }
 
 }

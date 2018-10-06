@@ -2,6 +2,7 @@ package nexus.modules.recurrent
 
 import nexus._
 import nexus.ops._
+import nexus.tensor._
 
 /**
  * A recurrent unit used in long short-term memory networks.
@@ -12,10 +13,10 @@ import nexus.ops._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class LongShortTermMemoryUnit[T[_], R, X <: Dim, C <: Dim, H <: Dim]()(implicit T: IsRealTensorK[T, R])
-  extends RecurrentUnit[(T[C], T[H]), T[X]]
+class LongShortTermMemoryUnit[T[_], R, a <: Dim, c <: Dim, h <: Dim]()(implicit T: IsRealTensorK[T, R])
+  extends RecurrentUnit[(T[c], T[h]), T[a]]
 {
-  def apply(ch: Expr[(T[C], T[H])], x: Expr[T[X]]) = {
+  def apply(ch: Expr[(T[c], T[h])], x: Expr[T[a]]) = {
     val c = ch |> Tuple2First
     val h = ch |> Tuple2Second
 
@@ -37,15 +38,15 @@ object LongShortTermMemoryUnit {
    * @param T
    * @tparam T
    * @tparam R
-   * @tparam X
-   * @tparam C
-   * @tparam H
+   * @tparam a
+   * @tparam c
+   * @tparam h
    * @return
    */
-  def apply[T[_], R, X <: Dim, C <: Dim, H <: Dim](
-                                   inputAxisAndSize: (X, Int),
-                                   cellAxisAndSize: (C, Int),
-                                   hiddenAxisAndSize: (H, Int)
+  def apply[T[_], R, a <: Dim, c <: Dim, h <: Dim](
+                                   inputAxisAndSize: (a, Int),
+                                   cellAxisAndSize: (c, Int),
+                                   hiddenAxisAndSize: (h, Int)
                                    )
                                    (implicit T: IsRealTensorK[T, R]) = {
     ???

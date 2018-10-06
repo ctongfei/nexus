@@ -1,6 +1,7 @@
 package nexus.tensor
 
 import shapeless._
+
 import scala.annotation._
 
 /**
@@ -16,7 +17,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Type ${X} is not differentiable with respect to.")
-trait Grad[@specialized(Float, Double) X] extends Type[X] {
+trait Grad[@specialized(Float, Double) X] {
 
   def mutable: Boolean
 
@@ -104,6 +105,6 @@ object Grad extends ProductTypeClassCompanion[Grad] {
   }
 }
 
-trait GradK[T[_]] extends TypeK[T] {
+trait GradK[T[_]] {
   def ground[A]: Grad[T[A]]
 }

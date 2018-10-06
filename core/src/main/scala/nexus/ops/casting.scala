@@ -1,15 +1,14 @@
 package nexus.ops
 
 import nexus._
-import scala.annotation._
+import nexus.tensor._
 
 object CastTo extends ParameterizedPolyOp1 {
 
   implicit def castToF[S, T, TT[_]](implicit c: BidiCasting[S, T]) = (T: TT[T]) =>
     new F[S, T] {
-      type Tag[t] = TT[t]
       def name = s"CastTo[$T]"
-      def tag = T
+      def tag = ???
       def forward(x: S) = c.cast(x)
       def backward(dy: T, y: T, x: S) = c.invert(dy)
     }

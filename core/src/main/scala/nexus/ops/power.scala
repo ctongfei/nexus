@@ -2,6 +2,8 @@ package nexus.ops
 
 import nexus._
 import nexus.ops.mixin._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * Square of a number.

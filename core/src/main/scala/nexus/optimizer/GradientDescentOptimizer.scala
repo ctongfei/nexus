@@ -1,7 +1,7 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.ops._
+import nexus.tensor.syntax._
 
 /**
  * Basic stochastic gradient descent optimizer.
@@ -12,7 +12,7 @@ import nexus.ops._
 class GradientDescentOptimizer(η: => Double) extends FirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X) = {
-    implicit val tag = p.tag
+    implicit val ev = p.tag.ev
     p -= g :* η
   }
 

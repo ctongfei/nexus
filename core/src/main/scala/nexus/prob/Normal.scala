@@ -1,7 +1,8 @@
 package nexus.prob
 
-import java.util._
 import nexus._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * Represents the normal distribution N(μ, σ^2^).

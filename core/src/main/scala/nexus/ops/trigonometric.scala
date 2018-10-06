@@ -2,6 +2,8 @@ package nexus.ops
 
 import nexus._
 import nexus.ops.mixin._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * Sine on a scalar.
@@ -39,4 +41,3 @@ object ArcCos extends PolyOp1
 object ArcTan extends PolyOp1
 
 object ATan2 extends PolyOp2
-

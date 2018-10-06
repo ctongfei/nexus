@@ -1,7 +1,7 @@
 package nexus.prob
 
 import cats._
-
+import nexus.tensor._
 import scala.collection._
 import scala.reflect._
 import scala.util._
@@ -56,7 +56,7 @@ trait Stochastic[+A] { self =>
     Seq.fill(n)(sample)
   }
 
-  def repeatToTensor[T[_], Axes, A1 >: A](axes: Axes, shape: Seq[Int])(implicit T: IsTensorK[T, A1]): Stochastic[T[Axes]] =
+  def repeatToTensor[T[_], axes, A1 >: A](axes: axes, shape: Seq[Int])(implicit T: IsTensorK[T, A1]): Stochastic[T[axes]] =
     ???
     //(Array.fill(shape.product)(sample), shape.toArray)
 

@@ -5,6 +5,7 @@ import nexus._
 import nexus.execution._
 import nexus.jvm._
 import nexus.modules._
+import nexus.tensor._
 
 class A extends Dim
 class B extends Dim

@@ -1,5 +1,6 @@
 package nexus.tensor.typelevel
 
+import nexus.tensor._
 import org.scalatest._
 import shapeless._
 

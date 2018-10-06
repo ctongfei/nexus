@@ -2,6 +2,7 @@ package nexus.ops
 
 import nexus._
 import nexus.exception._
+import nexus.tensor._
 import shapeless.Nat
 
 import scala.annotation._
@@ -14,9 +15,8 @@ import scala.annotation._
 object ScalarToTensor0 extends PolyOp1 {
   implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[R, T[Unit]] =
     new F[R, T[Unit]] {
-      type Tag[t] = IsRealTensor[t, R]
       def name = "ScalarToTensor0"
-      def tag = T.ground[Unit]
+      def tag = Tag.tensor[T, R, Unit]
       def forward(x: R) = T.wrapScalar(x)
       def backward(dy: T[Unit], y: T[Unit], x: R) = T.unwrapScalar(dy)
     }
@@ -31,9 +31,8 @@ object Tensor0ToScalar extends PolyOp1 {
 
   implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[T[Unit], R] =
     new F[T[Unit], R] {
-      type Tag[r] = IsReal[r]
       def name = "Tensor0ToTensor"
-      def tag = T.R
+      def tag = ??? // TODO: element
       def forward(x: T[Unit]) = T.unwrapScalar(x)
       def backward(dy: R, y: R, x: T[Unit]) = T.wrapScalar(dy)
   }

@@ -1,8 +1,10 @@
 package nexus.tensor
 
+import nexus._
 import nexus.tensor.typelevel._
 import nexus.tensor.util._
 import shapeless._
+
 import scala.reflect._
 
 /**
@@ -10,9 +12,10 @@ import scala.reflect._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait IsTensorK[T[_], E] extends TypeK[T] { self =>
+trait IsTensorK[T[_], E] { self =>
 
   type ElementTag[E]
+  type TensorTag[te] <: IsTensor[te, E]
 
   /** Returns the type tag associated with the element type of this tensor. */
   def elementType: ElementTag[E]
@@ -29,51 +32,49 @@ trait IsTensorK[T[_], E] extends TypeK[T] { self =>
 
   def set(x: T[_], is: Seq[Int], v: E): Unit
 
-  def newTensor[A](shape: Seq[Int]): T[A]
+  def newTensor[a](shape: Seq[Int]): T[a]
 
-  def fromFlatArray[A](array: Array[E], shape: Seq[Int]): T[A]
+  def fromFlatArray[a](array: Array[E], shape: Seq[Int]): T[a]
 
-  def fromNestedArray[A, N <: Nat, Arr](axes: A)(array: Arr)(implicit nest: Nest.Aux[Arr, E, N], len: Len.Aux[A, N]) =
-    fromFlatArray[A](nest.flatten(array), nest.shape(array))
+  def fromNestedArray[a, N <: Nat, Arr](axes: a)(array: Arr)(implicit nest: Nest.Aux[Arr, E, N], len: Len.Aux[a, N]) =
+    fromFlatArray[a](nest.flatten(array), nest.shape(array))
 
   def wrapScalar(x: E): T[Unit]
 
   def unwrapScalar(x: T[Unit]): E
 
-  def tabulateA[A](shape: Array[Int])(f: Array[Int] => E): T[A] = {
+  def tabulateA[a](shape: Array[Int])(f: Array[Int] => E): T[a] = {
     val flatArray = Indices.indices(shape).map(f).toArray(elementClassTag)
     fromFlatArray(flatArray, shape)
   }
 
-  def tabulate[A](n: Int)(f: Int => E): T[A] =
+  def tabulate[a](n: Int)(f: Int => E): T[a] =
     tabulateA(Array(n))((a: Array[Int]) => f(a(0)))
 
-  def tabulate[A, B](m: Int, n: Int)(f: (Int, Int) => E): T[(A, B)] =
+  def tabulate[a, b](m: Int, n: Int)(f: (Int, Int) => E): T[(a, b)] =
     tabulateA(Array(m, n))((a: Array[Int]) => f(a(0), a(1)))
 
-  def tabulate[A, B, C](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(A, B, C)] =
+  def tabulate[a, b, c](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(a, b, c)] =
     tabulateA(Array(n0, n1, n2))((a: Array[Int]) => f(a(0), a(1), a(2)))
 
-  def map[A](x: T[A])(f: E => E): T[A]
+  def map[a](x: T[a])(f: E => E): T[a]
 
-  def map2[A](x1: T[A], x2: T[A])(f: (E, E) => E): T[A]
+  def map2[a](x1: T[a], x2: T[a])(f: (E, E) => E): T[a]
 
-  def map3[A](x1: T[A], x2: T[A], x3: T[A])(f: (E, E, E) => E): T[A]
+  def map3[a](x1: T[a], x2: T[a], x3: T[a])(f: (E, E, E) => E): T[a]
 
-  def sliceAlong[A, U, B](x: T[A], axis: U, n: Int)(implicit rx: Remove.Aux[A, U, B]): T[B]
+  def sliceAlong[a, u, b](x: T[a], axis: u, n: Int)(implicit rx: Remove.Aux[a, u, b]): T[b]
 
-  def unstackAlong[A, U, B](x: T[A], axis: U)(implicit rx: Remove.Aux[A, U, B]): Seq[T[B]]
+  def unstackAlong[a, u, b](x: T[a], axis: u)(implicit rx: Remove.Aux[a, u, b]): Seq[T[b]]
 
-  def expandDim[A, I <: Nat, X <: Dim, B](x: T[A])(implicit ix: InsertAt.Aux[A, I, X, B]): T[B]
+  def expandDim[a, i <: Nat, u <: Dim, b](x: T[a])(implicit ix: InsertAt.Aux[a, i, u, b]): T[b]
 
-  def renameAxis[A, B](x: T[A]): T[B]
+  def renameAxis[a, b](x: T[a]): T[b]
 
-  def ground[A]: IsTensor[T[A], E]
+  def ground[a]: TensorTag[T[a]]
 
 }
 
-trait IsTensor[T, E] extends Type[T] {
+trait IsTensor[T, E] {
 
-  /** Returns the type tag associated with the element type of this tensor. */
-  def elementType: Type[E]
 }

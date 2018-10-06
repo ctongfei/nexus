@@ -1,6 +1,7 @@
 package nexus.tensor
 
-import cats._
+import nexus._
+
 import scala.annotation._
 
 
@@ -10,7 +11,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that type ${B} is a Boolean.")
-trait IsBool[@specialized(Boolean) B] extends Type[B] {
+trait IsBool[@specialized(Boolean) B] {
 
   def top: B
   def bot: B

@@ -11,6 +11,9 @@ import algebra.ring._
 trait IsComplex[C, R] extends Field[C] {
 
   def R: IsReal[R]
+
+  def i: C
+
   def re(z: C): R
   def im(z: C): R
   def complex(x: R, y: R): C

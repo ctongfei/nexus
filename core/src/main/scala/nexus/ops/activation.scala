@@ -1,6 +1,8 @@
 package nexus.ops
 
 import nexus._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * Rectified linear unit.
@@ -16,13 +18,12 @@ import nexus._
  * @since 0.1.0
  */
 object ReLU extends PolyOp1 {
-  implicit def reLUF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
-      type Tag[t] = IsRealTensor[t, R]
+  implicit def reLUF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
+    new F[T[a], T[a]] {
       def name = "ReLU"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = T.relu(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.pos(x)
+      def tag = Tag.realTensor[T, R, a]
+      def forward(x: T[a]) = T.relu(x)
+      def backward(dy: T[a], y: T[a], x: T[a]) = dy |*| T.pos(x)
     }
 }
 
@@ -33,13 +34,12 @@ object ReLU extends PolyOp1 {
  *  - G Klambauer, T Unterthiner, A Mayr, S Hochreiter (2017): Self-normalizing neural networks. NIPS.
  */
 object SELU extends PolyOp1 {
-  implicit def seluF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
-      type Tag[t] = IsRealTensor[t, R]
+  implicit def seluF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
+    new F[T[a], T[a]] {
       def name = "SELU"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = ???
-      def backward(dy: T[A], y: T[A], x: T[A]) = ???
+      def tag = Tag.realTensor[T, R, a]
+      def forward(x: T[a]) = ???
+      def backward(dy: T[a], y: T[a], x: T[a]) = ???
     }
 }
 
@@ -51,14 +51,13 @@ object SELU extends PolyOp1 {
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sigmoid extends PolyOp1 {
-  implicit def sigmoidF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
-      type Tag[t] = IsRealTensor[t, R]
+object Sigmoid extends PolyOp1 { // TODO: ufunc
+  implicit def sigmoidF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
+    new F[T[a], T[a]] {
       def name = "Sigmoid"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = T.sigmoid(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| y |*| T.addS(-y, T.R.one) // TODO: inplace
+      def tag = Tag.realTensor[T, R, a]
+      def forward(x: T[a]) = T.sigmoid(x)
+      def backward(dy: T[a], y: T[a], x: T[a]) = dy |*| y |*| T.addS(-y, T.R.one) // TODO: inplace
     }
 }
 
@@ -71,13 +70,12 @@ object Sigmoid extends PolyOp1 {
  * @since 0.1.0
  */
 object SoftPlus extends PolyOp1 {
-  implicit def softPlusF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
-      type Tag[t] = IsRealTensor[t, R]
+  implicit def softPlusF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
+    new F[T[a], T[a]] {
       def name = "SoftPlus"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = T.eLog1p(T.eExp(x))
-      def backward(dy: T[A], y: T[A], x: T[A]) = dy |*| T.sigmoid(x)
+      def tag = Tag.realTensor[T, R, a]
+      def forward(x: T[a]) = T.eLog1p(T.eExp(x))
+      def backward(dy: T[a], y: T[a], x: T[a]) = dy |*| T.sigmoid(x)
     }
 }
 
@@ -90,17 +88,16 @@ object SoftPlus extends PolyOp1 {
  * @since 0.1.0
  */
 object Softmax extends PolyOp1 {
-  implicit def softmaxF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
-      type Tag[t] = IsRealTensor[t, R]
+  implicit def softmaxF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
+    new F[T[a], T[a]] {
       def name = "Softmax"
-      def tag = T.ground[A]
-      def forward(x: T[A]) = {
+      def tag = Tag.realTensor[T, R, a]
+      def forward(x: T[a]) = {
         import T._
         val expX = eExp(x)
         expX :* R.inv(sum(expX)) //TODO: numerical stability
       }
-      def backward(dy: T[A], y: T[A], x: T[A]) = {
+      def backward(dy: T[a], y: T[a], x: T[a]) = {
         import T._
         val dyy = dy |*| y
         dyy - (y :* sum(dyy))

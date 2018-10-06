@@ -2,6 +2,8 @@ package nexus.ops
 
 import nexus._
 import nexus.ops.mixin._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * Exponentiation.
@@ -48,12 +50,10 @@ object Log1p extends PolyOp1 with RealElementwisePolyOp1Mixin {
 object LogSumExp extends PolyOp1 {
 
   implicit def logSumExpF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], R] = new F[T[A], R] {
-    type Tag[r] = IsReal[r]
     def name = "LogSumExp"
-    def tag = T.R
+    def tag = Tag.real[R]
     def forward(x: T[A]) = ???
     def backward(dy: R, y: R, x: T[A]) = ???
   }
 
 }
-

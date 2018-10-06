@@ -5,6 +5,8 @@ import nexus.optimizer._
 import nexus.execution._
 import nexus.jvm._
 import nexus.modules._
+import nexus.tensor._
+import nexus.tensor.syntax._
 
 /**
  * @author Tongfei Chen

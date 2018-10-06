@@ -9,9 +9,9 @@ trait IsBoolTensorK[T[_], B] extends IsTensorK[T, B] { self =>
   val B: IsBool[B]
   def elementType = B
 
-  def eNot[A](x: T[A]): T[A]
-  def eAnd[A](x1: T[A], x2: T[A]): T[A]
-  def eOr[A](x1: T[A], x2: T[A]): T[A]
-  def eXor[A](x1: T[A], x2: T[A]): T[A]
+  def eNot[a](x: T[a]): T[a]
+  def eAnd[a](x1: T[a], x2: T[a]): T[a]
+  def eOr[a](x1: T[a], x2: T[a]): T[a]
+  def eXor[a](x1: T[a], x2: T[a]): T[a]
 
 }

@@ -1,7 +1,8 @@
 package nexus.ops.mixin
 
-import nexus.PolyOp2
+import nexus._
 import nexus.exception._
+import nexus.tensor._
 
 
 trait RealElementwisePolyOp2Mixin { poly: PolyOp2 =>
@@ -18,9 +19,8 @@ trait RealElementwisePolyOp2Mixin { poly: PolyOp2 =>
 
   implicit def fR[R](implicit R: IsReal[R]): F[R, R, R] =
     new F[R, R, R] {
-      type Tag[e] = IsReal[e]
       def name = poly.name
-      def tag = R
+      def tag = Tag.real[R]
       def forward(x1: R, x2: R) = poly.forwardR(x1, x2)
       def backward1(dy: R, y: R, x1: R, x2: R) = poly.backward1R(dy, y, x1, x2)
       def backward2(dy: R, y: R, x1: R, x2: R) = poly.backward2R(dy, y, x1, x2)
@@ -28,9 +28,8 @@ trait RealElementwisePolyOp2Mixin { poly: PolyOp2 =>
 
   implicit def fTR[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], T[A]] =
     new F[T[A], T[A], T[A]] {
-      type Tag[ta] = IsTensor[T[A], R]
       def name = s"${poly.name}.Elementwise"
-      def tag = T.ground[A]
+      def tag = Tag.realTensor[T, R, A]
       def forward(x1: T[A], x2: T[A]) = poly.forwardTR(x1, x2)
       def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = poly.backward1TR(dy, y, x1, x2)
       def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = poly.backward2TR(dy, y, x1, x2)
@@ -48,9 +47,8 @@ trait IntElementwisePolyOp2Mixin { poly: PolyOp2 =>
 
   implicit def fZ[Z](implicit Z: IsInt[Z]): F[Z, Z, Z] =
     new F[Z, Z, Z] {
-      type Tag[e] = IsInt[e]
       def name = poly.name
-      def tag = Z
+      def tag = Tag.int[Z]
       override def differentiable = false
       def forward(x1: Z, x2: Z) = poly.forwardZ(x1, x2)
       def backward1(dy: Z, y: Z, x1: Z, x2: Z) = throw new OperatorNotDifferentiableException(this, 1)
@@ -59,9 +57,8 @@ trait IntElementwisePolyOp2Mixin { poly: PolyOp2 =>
 
   implicit def fTZ[T[_], Z, A](implicit T: IsIntTensorK[T, Z]): F[T[A], T[A], T[A]] =
     new F[T[A], T[A], T[A]] {
-      type Tag[ta] = IsTensor[T[A], Z]
       def name = s"${poly.name}.Elementwise"
-      def tag = T.ground[A]
+      def tag = ???
       def forward(x1: T[A], x2: T[A]) = poly.forwardTZ(x1, x2)
       def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = throw new OperatorNotDifferentiableException(this, 1)
       def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = throw new OperatorNotDifferentiableException(this, 1)
@@ -79,9 +76,8 @@ trait BoolElementwisePolyOp2Mixin { poly: PolyOp2 =>
 
   implicit def fB[B](implicit B: IsBool[B]): F[B, B, B] =
     new F[B, B, B] {
-      type Tag[e] = IsBool[e]
       def name = poly.name
-      def tag = B
+      def tag = Tag.bool[B]
       override def differentiable = false
       def forward(x1: B, x2: B) = poly.forwardB(x1, x2)
       def backward1(dy: B, y: B, x1: B, x2: B) = throw new OperatorNotDifferentiableException(this, 1)
@@ -90,9 +86,8 @@ trait BoolElementwisePolyOp2Mixin { poly: PolyOp2 =>
 
   implicit def fTB[T[_], B, A](implicit T: IsBoolTensorK[T, B]): F[T[A], T[A], T[A]] =
     new F[T[A], T[A], T[A]] {
-      type Tag[ta] = IsTensor[T[A], B]
       def name = s"${poly.name}.Elementwise"
-      def tag = T.ground[A]
+      def tag = ???
       def forward(x1: T[A], x2: T[A]) = poly.forwardTB(x1, x2)
       def backward1(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = throw new OperatorNotDifferentiableException(this, 1)
       def backward2(dy: T[A], y: T[A], x1: T[A], x2: T[A]) = throw new OperatorNotDifferentiableException(this, 1)

@@ -1,13 +1,11 @@
-
 import nexus.syntax._
+import nexus.tensor._
 
 /**
  * '''Nexus''': Typeful & typesafe deep learning.
  * @author Tongfei Chen
  */
 package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleExprOpsMixin {
-
-  type Dim = algebra.Dim
 
   val _0 = shapeless.nat._0
   val _1 = shapeless.nat._1
@@ -22,24 +20,16 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
 
   // ALIASES AND TYPE TAGS FOR BASIC TYPES
   type         Int8    = Byte
-  implicit val Int8    = nxai.Int8
 
   type         Int16   = Short
-  implicit val Int16   = nxai.Int16
 
   type         Int32   = Int
-  implicit val Int32   = nxai.Int32
 
   type         Int64   = Long
-  implicit val Int64   = nxai.Int64
 
   type         Float32 = Float
-  implicit val Float32 = nxai.Float32
 
   type         Float64 = Double
-  implicit val Float64 = nxai.Float64
-
-  implicit val Boolean = nxai.Bool
 
   type Func0[Y]                     = (() => Expr[Y])
   type Func1[X1, Y]                 = ((Expr[X1]) => Expr[Y])

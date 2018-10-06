@@ -3,6 +3,8 @@ package nexus.testbase.ops
 import nexus._
 import nexus.ops._
 import nexus.prob._
+import nexus.tensor._
+import nexus.tensor.syntax._
 import org.scalatest._
 
 /**

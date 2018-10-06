@@ -2,6 +2,8 @@ package nexus.instances
 
 import nexus._
 import nexus.ops._
+import nexus.tensor._
+import nexus.tensor.instances.all._
 
 /**
  * @author Tongfei Chen

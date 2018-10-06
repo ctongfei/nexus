@@ -1,5 +1,7 @@
 package nexus.torch
 
+import nexus.tensor._
+import nexus.tensor.instances._
 import nexus.torch.jni.THJNI._
 import shapeless.Nat
 

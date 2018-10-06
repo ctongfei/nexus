@@ -2,6 +2,7 @@ package nexus.execution
 
 import cats._
 import nexus._
+import nexus.tensor._
 
 /**
  * Performs backward computation (backpropagation through the neural network).

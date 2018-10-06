@@ -1,20 +1,20 @@
 package nexus.ops
 
 import nexus._
+import nexus.tensor._
 
 /**
  * @author Tongfei Chen
  */
 object Clamp extends ParameterizedPolyOp1 {
 
-  implicit def clampF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = (range: (R, R)) =>
-      new F[T[A], T[A]] {
+  implicit def clampF[T[_], R, a](implicit T: IsRealTensorK[T, R]) = (range: (R, R)) =>
+      new F[T[a], T[a]] {
         val (min, max) = range
-        type Tag[t] = IsRealTensor[t, R]
         def name = s"Clamp[$min, $max]"
-        def tag = T.ground[A]
-        def forward(x: T[A]) = ???
-        def backward(dy: T[A], y: T[A], x: T[A]) = ???
+        def tag = Tag.realTensor[T, R, a]
+        def forward(x: T[a]) = ???
+        def backward(dy: T[a], y: T[a], x: T[a]) = ???
       }
 
 }

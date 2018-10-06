@@ -44,15 +44,15 @@ object InsertAt {
     }
 
   implicit def insertAtTuple[A, Al <: HList, I <: Nat, U, Bl <: HList, B]
-  (implicit al: ToHList.Aux[A, Al], ix: InsertAt.Aux[Al, I, U, Bl], bl: FromHList.Aux[B, Bl]): Aux[A, I, U, B] =
+  (implicit al: ToHList.Aux[A, Al], ix: InsertAt.Aux[Al, I, U, Bl], bl: FromHList.Aux[Bl, B]): Aux[A, I, U, B] =
     new InsertAt[A, I, U] {
       type Out = B
-      def apply(t: A, x: U): B = bl.invert(ix(al(t), x))
+      def apply(t: A, x: U): B = bl(ix(al(t), x))
       def index = ix.index
       def inverse: RemoveAt.Aux[B, I, A] = new RemoveAt[B, I] {
         def index = ix.index
         type Out = A
-        def apply(t: B): A = al.invert(ix.inverse(bl(t)))
+        def apply(t: B): A = al.invert(ix.inverse(bl.invert(t)))
       }
     }
 }

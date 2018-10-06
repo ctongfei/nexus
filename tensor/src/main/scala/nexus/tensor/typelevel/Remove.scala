@@ -12,7 +12,7 @@ trait Remove[A, U] extends DepFn1[A] {
   type Index <: Nat
   def index: Int
 
-  def asRemoveAt: RemoveAt.Aux[A, Index, Out]
+  def asRemoveAt: RemoveAt.Aux[A, Index, Out] = ???
 }
 
 object Remove {

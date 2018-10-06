@@ -1,8 +1,8 @@
 package nexus.optimizer
 
 import nexus._
-import nexus.ops._
-import java.lang.Math._
+import nexus.tensor.syntax._
+import scala.math._
 
 /**
  * The Adaptive Moment Estimation ('''Adam''') optimizer.
@@ -25,8 +25,8 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
 
   def updateParam[X](p: Param[X], g: X) = {
 
-    implicit val tag = p.tag
-    import tag._
+    implicit val ev = p.tag.ev
+    import ev._
 
     if (!(history contains p))
       history(p) = AdamHistory(zeroBy(g), zeroBy(g))
