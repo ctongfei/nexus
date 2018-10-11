@@ -2,6 +2,7 @@ package nexus.tensor.typelevel
 
 import nexus.tensor._
 import shapeless._
+import shapeless.ops.hlist.Tupler
 
 /**
  * Typelevel function that transforms tuples / single types to HLists.
@@ -13,6 +14,8 @@ trait ToHList[A] {
 
   def apply(x: A): Out
   def invert(x: Out): A
+
+  def inverse: FromHList.Aux[Out, A]
 
 }
 
@@ -27,6 +30,7 @@ object ToHList {
       type Out = HNil
       def apply(x: Unit) = HNil
       def invert(x: HNil) = ()
+      def inverse = FromHList.hNil
     }
 
   // Single type (N == 1)
@@ -35,14 +39,16 @@ object ToHList {
       type Out = A :: HNil
       def apply(x: A) = x :: HNil
       def invert(x: A :: HNil) = x.head
+      def inverse = FromHList.single[A]
     }
 
   // Tuple2+ (N >= 2)
-  implicit def generic[A, B <: HList](implicit g: Generic.Aux[A, B]): ToHList.Aux[A, B] =
+  implicit def generic[A, B <: HList](implicit g: Generic.Aux[A, B], t: Tupler.Aux[B, A]): ToHList.Aux[A, B] =
     new ToHList[A] {
       type Out = B
       def apply(x: A) = g.to(x)
       def invert(x: B) = g.from(x)
+      def inverse = FromHList.generic(t, g)
     }
 
 }

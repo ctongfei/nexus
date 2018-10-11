@@ -5,6 +5,7 @@ import shapeless._
 import shapeless.ops.hlist._
 
 /**
+ * Typelevel function that transforms HLists to tuples / single types.
  * @author Tongfei Chen
  */
 trait FromHList[A <: HList] {
@@ -13,6 +14,8 @@ trait FromHList[A <: HList] {
 
   def apply(x: A): Out
   def invert(x: Out): A
+
+  def inverse: ToHList.Aux[Out, A]
 
 }
 
@@ -26,6 +29,7 @@ object FromHList {
       type Out = Unit
       def apply(x: HNil) = ()
       def invert(x: Unit) = HNil
+      def inverse = ToHList.unit
     }
 
   implicit def single[A <: Dim]: FromHList.Aux[A :: HNil, A] =
@@ -33,6 +37,7 @@ object FromHList {
       type Out = A
       def apply(x: A :: HNil) = x.head
       def invert(x: A) = x :: HNil
+      def inverse = ToHList.single[Out]
     }
 
   implicit def generic[A <: HList, B](implicit t: Tupler.Aux[A, B], g: Generic.Aux[B, A]): FromHList.Aux[A, B] =
@@ -40,5 +45,6 @@ object FromHList {
       type Out = B
       def apply(x: A) = t(x)
       def invert(x: B) = g.to(x)
+      def inverse = ToHList.generic(g, t)
     }
 }

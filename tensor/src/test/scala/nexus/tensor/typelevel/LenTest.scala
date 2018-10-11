@@ -10,9 +10,9 @@ import shapeless._
  */
 class LenTest extends FunSuite {
 
-  class A; val A = new A
-  class B; val B = new B
-  class C; val C = new C
+  class A extends Dim; val A = new A
+  class B extends Dim; val B = new B
+  class C extends Dim; val C = new C
 
   test("Len should calculate length of HList") {
     assert(Len[$].apply == 0)

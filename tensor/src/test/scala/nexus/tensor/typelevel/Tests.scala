@@ -10,9 +10,9 @@ import shapeless._
 class Tests extends FunSuite {
 
 
-  class a; val a = new a
-  class b; val b = new b
-  class c; val c = new c
+  class a extends Dim; val a = new a
+  class b extends Dim; val b = new b
+  class c extends Dim; val c = new c
 
   test("Len") {
 
