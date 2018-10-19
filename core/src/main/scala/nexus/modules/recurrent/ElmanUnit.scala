@@ -21,7 +21,7 @@ class ElmanUnit[T[_], R, a <: Dim, s <: Dim] private(
   extends RecurrentUnit[T[s], T[a]]
 {
 
-  def apply(s: Expr[T[s]], x: Expr[T[a]]) =
+  def apply(s: Symbolic[T[s]], x: Symbolic[T[a]]) =
     ((s |> RenameAxis(stateAxis -> inputAxis)), x) |> ConcatAlong(inputAxis) |> inputLayer |> stateActivation
 
 }

@@ -11,7 +11,7 @@ import nexus.util._
  * @since 0.1.0
  * @author Tongfei Chen
  */
-sealed trait Expr[X] {
+sealed trait Symbolic[X] {
 
   /** Type tag of this expression. */
   def tag: Tag[X]
@@ -24,22 +24,22 @@ sealed trait Expr[X] {
    * while forcing this expression to be evaluated strictly in that specific
    * computation instance.
    */
-  def value(implicit comp: Expr ~> Id): X = comp(this)
+  def value(implicit comp: Symbolic ~> Id): X = comp(this)
 
-  def !>[Y](f: X => Y): Expr[Y] = Op1.fromFunction(f)(this)
+  def !>[Y](f: X => Y): Symbolic[Y] = Op1.fromFunction(f)(this)
 
   /** Passes this expression through a function. */
-  def |>[Y](f: Func1[X, Y]): Expr[Y] = f(this)
+  def |>[Y](f: Func1[X, Y]): Symbolic[Y] = f(this)
 
   /** Passes this expression through a type-polymorphic function. */
-  def |>[Y](f: PolyFunc1)(implicit ff: f.F[X, Y]): Expr[Y] = f(this)
+  def |>[Y](f: PolyFunc1)(implicit ff: f.F[X, Y]): Symbolic[Y] = f(this)
 
   /** Creates an assignment to this expression. */
   def :=(value: X): Assignment = Assignment(this, value)
 
   /** Substitutes an input to an expression in this expression. */
-  def substitute[E](a: Input[E], b: Expr[E]): Expr[X] = this match {
-    case x: Input[X] => if (x eq a) b.asInstanceOf[Expr[X]] else x // this cast is safe: (x eq a) proves that E =:= X
+  def substitute[E](a: Input[E], b: Symbolic[E]): Symbolic[X] = this match {
+    case x: Input[X] => if (x eq a) b.asInstanceOf[Symbolic[X]] else x // this cast is safe: (x eq a) proves that E =:= X
     case x: Const[X] => x
     case x: Param[X] => x
     case App1(op, x) => App1(op, x.substitute(a, b))
@@ -51,13 +51,13 @@ sealed trait Expr[X] {
 /**
  * A placeholder for inputs to a computation graph.
  */
-case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
+case class Input[X](name: String = ExprName.nextInput) extends Symbolic[X] { self =>
 
   def tag = Tag.any[X] // no need to compute the gradient of the input
   def requireGrad = false
 
   /** Constructs a neural function (lambda expression). */
-  def =>>[Y](y: Expr[Y]): Lambda1[X, Y] = Lambda1(this, y)
+  def =>>[Y](y: Symbolic[Y]): Lambda1[X, Y] = Lambda1(this, y)
 
   override def toString = name
 
@@ -69,7 +69,7 @@ case class Input[X](name: String = ExprName.nextInput) extends Expr[X] { self =>
  * @param value Initial value of this parameter
  * @note A `Param` has to be differentiable by providing a `Grad[X]` instance as its type tag.
  */
-case class Param[X](var value: X, name: String)(implicit grad: Grad[X]) extends Expr[X] {
+case class Param[X](var value: X, name: String)(implicit grad: Grad[X]) extends Symbolic[X] {
 
   final def requireGrad = true // or else, how could it be updated?
 
@@ -92,7 +92,7 @@ case class Param[X](var value: X, name: String)(implicit grad: Grad[X]) extends 
  * A constant value in a computational graph.
  * @param value Value of this constant
  */
-case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X] {
+case class Const[X](value: X, name: String = ExprName.nextConst) extends Symbolic[X] {
 
   final def tag = Tag.any[X]
   override def requireGrad = false
@@ -104,7 +104,7 @@ case class Const[X](value: X, name: String = ExprName.nextConst) extends Expr[X]
 /**
  * The result of the application of a unary function to an expression.
  */
-case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
+case class App1[X, Y](op: Op1[X, Y], x: Symbolic[X]) extends Symbolic[Y] {
   type Input = X
   type Output = Y
   val requireGrad = op.differentiable && x.requireGrad
@@ -116,7 +116,7 @@ case class App1[X, Y](op: Op1[X, Y], x: Expr[X]) extends Expr[Y] {
 /**
  * The result of the application of a binary function to two expressions.
  */
-case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) extends Expr[Y] {
+case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Symbolic[X1], x2: Symbolic[X2]) extends Symbolic[Y] {
   type Input1 = X1
   type Input2 = X2
   type Output = Y
@@ -130,7 +130,7 @@ case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Expr[X1], x2: Expr[X2]) exten
 /**
  * The result of the application of a ternary function to three expressions.
  */
-case class App3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) extends Expr[Y] {
+case class App3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3]) extends Symbolic[Y] {
   type Input1 = X1
   type Input2 = X2
   type Input3 = X3

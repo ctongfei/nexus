@@ -20,7 +20,7 @@ object Remove {
   def apply[A, U, B](implicit o: Remove.Aux[A, U, B]) = o
   type Aux[A, U, B] = Remove[A, U] { type Out = B }
 
-  implicit def removeHListCase0[T <: HList, H]: Aux[H :: T, H, T] =
+  implicit def case0[T <: HList, H]: Aux[H :: T, H, T] =
     new Remove[H :: T, H] { rx =>
       type Out = T
       type Index = _0
@@ -28,7 +28,7 @@ object Remove {
       def apply(t: H :: T): T = t.tail
     }
 
-  implicit def removeHListCaseN[T <: HList, H, U, R <: HList]
+  implicit def caseN[T <: HList, H, U, R <: HList]
   (implicit r: Remove.Aux[T, U, R]): Aux[H :: T, U, H :: R] =
     new Remove[H :: T, U] { rx =>
       type Out = H :: R
@@ -37,7 +37,7 @@ object Remove {
       def apply(t: H :: T): H :: R = t.head :: r(t.tail)
     }
 
-  implicit def removeTuple[L, Lh <: HList, X, Rh <: HList, R]
+  implicit def tuple[L, Lh <: HList, X, Rh <: HList, R]
   (implicit lh: ToHList.Aux[L, Lh], r: Remove.Aux[Lh, X, Rh], rh: FromHList.Aux[Rh, R]): Aux[L, X, R] =
     new Remove[L, X] {
       type Out = R

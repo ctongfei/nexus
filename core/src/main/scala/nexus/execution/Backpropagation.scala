@@ -9,6 +9,6 @@ import nexus.tensor._
  */
 trait Backpropagation[F <: ForwardInterpreter] {
 
-  def compute[R](e: Expr[R])(implicit R: IsReal[R], forward: F): ExprMap[Id]
+  def compute[R](e: Symbolic[R])(implicit R: IsReal[R], forward: F): SymbolicMap[Id]
 
 }

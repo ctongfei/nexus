@@ -11,7 +11,7 @@ import nexus.exception._
  */
 class SimpleForward private(val values: WengertList) extends ForwardInterpreter {
 
-  def apply[A](e: Expr[A]): A = {
+  def apply[A](e: Symbolic[A]): A = {
     if (values contains e) values(e)
     else e match {
 
@@ -39,10 +39,10 @@ object SimpleForward extends ForwardInterpreterFactory[SimpleForward] {
 
   def given(inputs: Assignment*): SimpleForward = new SimpleForward(WengertList(inputs: _*))
 
-  def compute[X](e: Expr[X])(inputs: Assignment*): (X, WengertList) =
+  def compute[X](e: Symbolic[X])(inputs: Assignment*): (X, WengertList) =
     compute(e, WengertList(inputs: _*))
 
-  def compute[X](e: Expr[X], inputs: WengertList): (X, WengertList) = {
+  def compute[X](e: Symbolic[X], inputs: WengertList): (X, WengertList) = {
     val eval = new SimpleForward(inputs)
     val y = eval(e)
     (y, inputs)

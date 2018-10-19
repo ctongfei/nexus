@@ -9,21 +9,21 @@ import nexus.tensor._
  */
 trait ExprRealMixin {
 
-  implicit class ExprRealOps[R](val x: Expr[R])(implicit R: IsReal[R]) {
+  implicit class ExprRealOps[R](val x: Symbolic[R])(implicit R: IsReal[R]) {
 
-    def +(y: Expr[R]): Expr[R] = Add(x, y)
+    def +(y: Symbolic[R]): Symbolic[R] = Add(x, y)
 
-    def -(y: Expr[R]): Expr[R] = Sub(x, y)
+    def -(y: Symbolic[R]): Symbolic[R] = Sub(x, y)
 
-    def *(y: Expr[R]): Expr[R] = Mul(x, y)
+    def *(y: Symbolic[R]): Symbolic[R] = Mul(x, y)
 
-    def /(y: Expr[R]): Expr[R] = Div(x, y)
+    def /(y: Symbolic[R]): Symbolic[R] = Div(x, y)
 
   }
 
-  implicit class ExprRealOps2[T[_], R, A](val x: Expr[R])(implicit T: IsRealTensorK[T, R]) {
+  implicit class ExprRealOps2[T[_], R, A](val x: Symbolic[R])(implicit T: IsRealTensorK[T, R]) {
 
-    def *:(y: Expr[T[A]]): Expr[T[A]] = Scale(x, y)
+    def *:(y: Symbolic[T[A]]): Symbolic[T[A]] = Scale(x, y)
 
   }
 

@@ -13,7 +13,7 @@ trait Op1[X, Y] extends Func1[X, Y] with AnyOp[Y] /*with PolyFunc1 */ {
   final def arity = 1
 
   /** Applies this operation to a symbolic expression. */
-  def apply(x: Expr[X]): Expr[Y] = App1(this, x)
+  def apply(x: Symbolic[X]): Symbolic[Y] = App1(this, x)
 
   /** Applies this operation to a concrete value (forward computation). */
   def forward(x: X): Y
@@ -50,7 +50,7 @@ trait Op2[X1, X2, Y] extends Func2[X1, X2, Y] with AnyOp[Y] {
   final def arity = 2
 
   /** Applies this operation to two symbolic expressions. */
-  def apply(x1: Expr[X1], x2: Expr[X2]) = App2(this, x1, x2)
+  def apply(x1: Symbolic[X1], x2: Symbolic[X2]) = App2(this, x1, x2)
 
   /** Applies this operation to two concrete values (forward computation). */
   def forward(x1: X1, x2: X2): Y
@@ -110,7 +110,7 @@ trait Op3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] with AnyOp[Y] {
   def forward(x1: X1, x2: X2, x3: X3): Y
 
   /** Applies this operation to three concrete values (forward computation). */
-  def apply(x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) = App3(this, x1, x2, x3)
+  def apply(x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3]) = App3(this, x1, x2, x3)
 
   def backward1(dy: Y, y: Y, x1: X1, x2: X2, x3: X3): X1
   def backward2(dy: Y, y: Y, x1: X1, x2: X2, x3: X3): X2

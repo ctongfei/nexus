@@ -11,7 +11,7 @@ import nexus.tensor._
  */
 object Backward extends Backpropagation[SimpleForward] {
 
-  def compute[R](e: Expr[R])(implicit R: IsReal[R], forward: SimpleForward): ExprMap[Id] = {
+  def compute[R](e: Symbolic[R])(implicit R: IsReal[R], forward: SimpleForward): SymbolicMap[Id] = {
 
     val grad = WengertList(e := R.one) // gradient of loss is 1
     val values = forward.values

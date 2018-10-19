@@ -18,7 +18,7 @@ abstract class FirstOrderOptimizer {
 
   def updateParam[X](p: Param[X], g: X): Unit
 
-  def update(gradients: ExprMap[Id]): Unit = {
+  def update(gradients: SymbolicMap[Id]): Unit = {
     t += 1
     for (item <- gradients) {
       item.expr match {
@@ -29,7 +29,7 @@ abstract class FirstOrderOptimizer {
     }
   }
 
-  def step[R: IsReal](loss: Expr[R])(implicit comp: SimpleForward) = {
+  def step[R: IsReal](loss: Symbolic[R])(implicit comp: SimpleForward) = {
     val lossValue = loss.value
     val gradients = Backward.compute(loss)
     update(gradients)

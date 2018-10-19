@@ -37,17 +37,17 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
     static {
         try {
-            System.loadLibrary("ATen_cpu");
+            System.loadLibrary("caffe2");
         }
         catch (Exception e) {
-            System.err.println("ATen CPU native library not available.");
+            System.err.println("caffe2 native library not available.");
         }
 
         try {
-            System.loadLibrary("ATen_cuda");
+            System.loadLibrary("caffe2_gpu");
         }
         catch (Exception e) {
-            System.err.println("ATen CUDA native library unavailable.");
+            System.err.println("caffe2_gpu native library unavailable.");
         }
 
         try {

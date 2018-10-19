@@ -2,7 +2,8 @@ package nexus.torch
 
 import nexus.tensor._
 import nexus.tensor.instances._
-import nexus.torch.jni.THJNI._
+import nexus.tensor.typelevel._
+import nexus.torch.jni.torchJNI._
 import shapeless.Nat
 
 import scala.reflect._
@@ -78,6 +79,6 @@ object FloatTensorOps extends IsRealTensorK[({type L[A] = Tensor[Float, A]})#L, 
   def newTensor[A](shape: Seq[Int]) = ???
   def fromFlatArray[A](array: Array[Float], shape: Seq[Int]) = ???
   def renameAxis[A, B](x: Tensor[Float, A]) = ???
-  def sliceAlong[A, U, B](x: Tensor[Float, A], axis: U, n: Int)(implicit rx: Aux[A, U, B]) = ???
-  def unstackAlong[A, U, B](x: Tensor[Float, A], axis: U)(implicit rx: Aux[A, U, B]) = ???
+  def sliceAlong[A, U, B](x: Tensor[Float, A], axis: U, n: Int)(implicit rx: Remove.Aux[A, U, B]) = ???
+  def unstackAlong[A, U, B](x: Tensor[Float, A], axis: U)(implicit rx: Remove.Aux[A, U, B]) = ???
 }

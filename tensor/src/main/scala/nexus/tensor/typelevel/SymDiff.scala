@@ -24,7 +24,7 @@ object SymDiff {
   type Aux[A, B, C] = SymDiff[A, B] { type Out = C }
 
   // A =:= HNil
-  implicit def symDiffCase0[B <: HList](implicit bl: Len[B]): Aux[HNil, B, B] =
+  implicit def case0[B <: HList](implicit bl: Len[B]): Aux[HNil, B, B] =
     new SymDiff[HNil, B] {
       type Out = B
       def apply(a: HNil, b: B): Out = b
@@ -36,7 +36,7 @@ object SymDiff {
     }
 
   // A.head ∉ B => A.head ∈ C
-  implicit def symDiffCase1[H, T <: HList, B <: HList, C <: HList]
+  implicit def caseN1[H, T <: HList, B <: HList, C <: HList]
   (implicit n: NotContains[B, H], s: SymDiff.Aux[T, B, C]): Aux[H :: T, B, H :: C] =
     new SymDiff[H :: T, B] {
       type Out = H :: C
@@ -49,7 +49,7 @@ object SymDiff {
     }
 
   // A.head ∈ B => A.head ∉ C
-  implicit def symDiffCase2[H, T <: HList, B <: HList, R <: HList, N <: Nat, C <: HList]
+  implicit def caseN2[H, T <: HList, B <: HList, R <: HList, N <: Nat, C <: HList]
   (implicit idx: IndexOf.Aux[B, H, N], r: RemoveAt.Aux[B, N, R], s: SymDiff.Aux[T, R, C]): Aux[H :: T, B, C] =
     new SymDiff[H :: T, B] {
       type Out = C
@@ -61,7 +61,7 @@ object SymDiff {
       def recoverRight = ???
     }
 
-  implicit def symDiffTuple[A, Al <: HList, B, Bl <: HList, C, Cl <: HList]
+  implicit def tuple[A, Al <: HList, B, Bl <: HList, C, Cl <: HList]
   (implicit al: ToHList.Aux[A, Al], bl: ToHList.Aux[B, Bl], sd: SymDiff.Aux[Al, Bl, Cl], cl: ToHList.Aux[C, Cl]): Aux[A, B, C] =
     new SymDiff[A, B] {
       type Out = C

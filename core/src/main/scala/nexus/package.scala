@@ -31,12 +31,12 @@ package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleEx
 
   type         Float64 = Double
 
-  type Func0[Y]                     = (() => Expr[Y])
-  type Func1[X1, Y]                 = ((Expr[X1]) => Expr[Y])
-  type Func2[X1, X2, Y]             = ((Expr[X1], Expr[X2]) => Expr[Y])
-  type Func3[X1, X2, X3, Y]         = ((Expr[X1], Expr[X2], Expr[X3]) => Expr[Y])
-  type Func4[X1, X2, X3, X4, Y]     = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4]) => Expr[Y])
-  type Func5[X1, X2, X3, X4, X5, Y] = ((Expr[X1], Expr[X2], Expr[X3], Expr[X4], Expr[X5]) => Expr[Y])
+  type Func0[Y]                     = (() => Symbolic[Y])
+  type Func1[X1, Y]                 = ((Symbolic[X1]) => Symbolic[Y])
+  type Func2[X1, X2, Y]             = ((Symbolic[X1], Symbolic[X2]) => Symbolic[Y])
+  type Func3[X1, X2, X3, Y]         = ((Symbolic[X1], Symbolic[X2], Symbolic[X3]) => Symbolic[Y])
+  type Func4[X1, X2, X3, X4, Y]     = ((Symbolic[X1], Symbolic[X2], Symbolic[X3], Symbolic[X4]) => Symbolic[Y])
+  type Func5[X1, X2, X3, X4, X5, Y] = ((Symbolic[X1], Symbolic[X2], Symbolic[X3], Symbolic[X4], Symbolic[X5]) => Symbolic[Y])
 
 
   private[nexus] def typeName(o: Any) = {

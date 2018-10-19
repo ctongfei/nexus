@@ -50,35 +50,35 @@ trait Priority1Implicits {
 
   }
 
-  implicit class RealTensorOps[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) {
+  implicit class RealTensorOps[T[_], R, a](x: T[a])(implicit T: IsRealTensorK[T, R]) {
 
     /** Addition of two tensors with the same axes and shape. */
-    def +(y: T[A]): T[A] = macro op2
+    def +(y: T[a]): T[a] = macro op2
     /** Subtraction of two tensors with the same axes and shape. */
-    def -(y: T[A]): T[A] = macro op2
+    def -(y: T[a]): T[a] = macro op2
     /** Negation of a tensor. */
-    def unary_- : T[A] = macro op1
+    def unary_- : T[a] = macro op1
     /** Elementwise multiplication (Hadamard product) of two tensors with the same axes and shape. */
-    def |*|(y: T[A]): T[A] = macro op2
+    def |*|(y: T[a]): T[a] = macro op2
     /** Elementwise division of two tensors with the same axes and shape. */
-    def |/|(y: T[A]): T[A] = macro op2
+    def |/|(y: T[a]): T[a] = macro op2
     /** Scales a tensor by a scalar. */
-    def :*(y: R): T[A] = macro op2
+    def :*(y: R): T[a] = macro op2
     /** Scales a tensor by a scalar. */
-    def :*(y: Float): T[A] = macro op2TRFloat
+    def :*(y: Float): T[a] = macro op2TRFloat
     /** Scales a tensor by a scalar. */
-    def :*(y: Double): T[A] = macro op2TRDouble
+    def :*(y: Double): T[a] = macro op2TRDouble
 
-    def :/(y: R): T[A] = T.scale(x, T.R.inv(y))
-    def :/(y: Float): T[A] = T.scale(x, T.R.fromFloat(1f / y))
-    def :/(y: Double): T[A] = T.scale(x, T.R.fromDouble(1d / y))
+    def :/(y: R): T[a] = T.scale(x, T.R.inv(y))
+    def :/(y: Float): T[a] = T.scale(x, T.R.fromFloat(1f / y))
+    def :/(y: Double): T[a] = T.scale(x, T.R.fromDouble(1d / y))
 
     /** Dot product (inner product) of two tensors of the same shape and size. */
-    def dot(y: T[A]): R = macro op2
-    def ⋅(y: T[A]): R = T.dot(x, y)
+    def dot(y: T[a]): R = macro op2
+    def ⋅(y: T[a]): R = T.dot(x, y)
 
     /** Natural contraction of two tensors. */
-    def ⋈[B, C](y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] = T.contract(x, y)
+    def ⋈[b, c](y: T[b])(implicit sd: SymDiff.Aux[a, b, c]): T[c] = T.contract(x, y)
 
 
   }

@@ -27,7 +27,7 @@ class Affine[T[_], R, X <: Dim, Y <: Dim] private(
   /** The additive bias of this layer. */
   def bias = b
 
-  def apply(x: Expr[T[X]]): Expr[T[Y]] =
+  def apply(x: Symbolic[T[X]]): Symbolic[T[Y]] =
     Add(MVMul(W, x), b)
 
 }

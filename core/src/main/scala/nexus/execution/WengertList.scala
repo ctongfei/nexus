@@ -13,10 +13,10 @@ import scala.collection._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class WengertList(override val rawMap: ReversibleLinkedHashMap[Expr[_], Id[_]] = ReversibleLinkedHashMap[Expr[_], Id[_]]())
-  extends ExprMap[Id](rawMap) with Iterable[Assignment] {
+class WengertList(override val rawMap: ReversibleLinkedHashMap[Symbolic[_], Id[_]] = ReversibleLinkedHashMap[Symbolic[_], Id[_]]())
+  extends SymbolicMap[Id](rawMap) with Iterable[Assignment] {
 
-  def increment[X](e: Expr[X], v: X): Unit = e.tag.ev match {
+  def increment[X](e: Symbolic[X], v: X): Unit = e.tag.ev match {
     case gX: Grad[X] => // if differentiable
       if (contains(e)) {
         if (gX.mutable)
@@ -27,8 +27,8 @@ class WengertList(override val rawMap: ReversibleLinkedHashMap[Expr[_], Id[_]] =
     case _ => throw new ExpressionNotDifferentiableException(e)
   }
 
-  private def asAssignment(p: (Expr[_], Id[_])): Assignment = p match {
-    case (e: Expr[t], v) => new Assignment {
+  private def asAssignment(p: (Symbolic[_], Id[_])): Assignment = p match {
+    case (e: Symbolic[t], v) => new Assignment {
       type Data = t
       val expr = e
       val value = v.asInstanceOf[t]

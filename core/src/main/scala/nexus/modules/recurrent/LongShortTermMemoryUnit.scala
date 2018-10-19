@@ -16,7 +16,7 @@ import nexus.tensor._
 class LongShortTermMemoryUnit[T[_], R, a <: Dim, c <: Dim, h <: Dim]()(implicit T: IsRealTensorK[T, R])
   extends RecurrentUnit[(T[c], T[h]), T[a]]
 {
-  def apply(ch: Expr[(T[c], T[h])], x: Expr[T[a]]) = {
+  def apply(ch: Symbolic[(T[c], T[h])], x: Symbolic[T[a]]) = {
     val c = ch |> Tuple2First
     val h = ch |> Tuple2Second
 

@@ -10,8 +10,6 @@ object Bool extends IsBool[Boolean] {
   def and(a: Boolean, b: Boolean) = a && b
   def or(a: Boolean, b: Boolean) = a || b
   override def xor(a: Boolean, b: Boolean) = a ^ b
-
-  def cond[A](c: Boolean, t: A, f: A) = if (c) t else f
 }
 
 object BoolIdCond extends Cond[Boolean, Id] {

@@ -18,7 +18,7 @@ object InsertAt {
   def apply[A, I <: Nat, U](implicit o: InsertAt[A, I, U]): Aux[A, I, U, o.Out] = o
   type Aux[A, I <: Nat, U, Out0] = InsertAt[A, I, U] { type Out = Out0 }
 
-  implicit def insertAtHListCase0[At <: HList, Ah]: Aux[At, _0, Ah, Ah :: At] =
+  implicit def case0[At <: HList, Ah]: Aux[At, _0, Ah, Ah :: At] =
     new InsertAt[At, _0, Ah] { ix =>
       type Out = Ah :: At
       def apply(t: At, h: Ah): Ah :: At = h :: t
@@ -30,7 +30,7 @@ object InsertAt {
       }
     }
 
-  implicit def insertAtHListCaseN[At <: HList, Ah, P <: Nat, U, Bt <: HList]
+  implicit def caseN[At <: HList, Ah, P <: Nat, U, Bt <: HList]
   (implicit pix: InsertAt.Aux[At, P, U, Bt]): Aux[Ah :: At, Succ[P], U, Ah :: Bt] =
     new InsertAt[Ah :: At, Succ[P], U] { ix =>
       type Out = Ah :: Bt
@@ -43,7 +43,7 @@ object InsertAt {
       }
     }
 
-  implicit def insertAtTuple[A, Al <: HList, I <: Nat, U, Bl <: HList, B]
+  implicit def tuple[A, Al <: HList, I <: Nat, U, Bl <: HList, B]
   (implicit al: ToHList.Aux[A, Al], ix: InsertAt.Aux[Al, I, U, Bl], bl: FromHList.Aux[Bl, B]): Aux[A, I, U, B] =
     new InsertAt[A, I, U] {
       type Out = B

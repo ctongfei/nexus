@@ -11,7 +11,7 @@ trait PolyModule1 extends PolyFunc1 {
   object F {
     def apply[X, Y](f: Func1[X, Y]): F[X, Y] = new F[X, Y] {
       def parameters = Set()
-      def apply(x: Expr[X]) = f(x)
+      def apply(x: Symbolic[X]) = f(x)
     }
   }
 
@@ -30,7 +30,7 @@ trait PolyModule2 extends PolyFunc2 {
   object F {
     def apply[X1, X2, Y](f: Func2[X1, X2, Y]): F[X1, X2, Y] = new F[X1, X2, Y] {
       def parameters = Set()
-      def apply(x1: Expr[X1], x2: Expr[X2]) = f(x1, x2)
+      def apply(x1: Symbolic[X1], x2: Symbolic[X2]) = f(x1, x2)
     }
   }
 
@@ -50,7 +50,7 @@ trait PolyModule3 extends PolyFunc3 {
   object F {
     def apply[X1, X2, X3, Y](f: Func3[X1, X2, X3, Y]): F[X1, X2, X3, Y] = new F[X1, X2, X3, Y] {
       def parameters = Set()
-      def apply(x1: Expr[X1], x2: Expr[X2], x3: Expr[X3]) = f(x1, x2, x3)
+      def apply(x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3]) = f(x1, x2, x3)
     }
   }
 

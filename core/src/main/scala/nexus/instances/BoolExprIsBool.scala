@@ -8,12 +8,12 @@ import nexus.tensor.instances.all._
 /**
  * @author Tongfei Chen
  */
-object BoolExprIsBool extends IsBool[Expr[Boolean]] {
+object BoolExprIsBool extends IsBool[Symbolic[Boolean]] {
   def top = Const(true)
   def bot = Const(false)
-  def not(a: Expr[Boolean]) = Not(a)
-  def and(a: Expr[Boolean], b: Expr[Boolean]) = And(a, b)
-  def or(a: Expr[Boolean], b: Expr[Boolean]) = Or(a, b)
-  override def xor(a: Expr[Boolean], b: Expr[Boolean]) = Xor(a, b)
+  def not(a: Symbolic[Boolean]) = Not(a)
+  def and(a: Symbolic[Boolean], b: Symbolic[Boolean]) = And(a, b)
+  def or(a: Symbolic[Boolean], b: Symbolic[Boolean]) = Or(a, b)
+  override def xor(a: Symbolic[Boolean], b: Symbolic[Boolean]) = Xor(a, b)
 
 }

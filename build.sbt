@@ -87,26 +87,26 @@ lazy val jvmRefBackend = (project in file("jvm-ref-backend"))
   .settings(
     name := "nexus-jvm-ref-backend"
   )
-//
-//lazy val torchJni = (project in file("torch/jni"))
-//  .settings(commonSettings: _*)
-//  .settings(
-//    name := "nexus-torch-backend-jni"
-//  )
-//
-//lazy val torchCpu = (project in file("torch/cpu"))
-//  .settings(commonSettings: _*)
-//  .dependsOn(tensor).dependsOn(torchJni)
-//  .settings(
-//    name := "nexus-torch-backend-cpu"
-//  )
-//
-//lazy val torchCuda = (project in file("torch/cuda"))
-//  .settings(commonSettings: _*)
-//  .dependsOn(tensor).dependsOn(torchCpu)
-//  .settings(
-//    name := "nexus-torch-backend-cuda"
-//  )
+
+lazy val torchJni = (project in file("torch/jni"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "nexus-torch-backend-jni"
+  )
+
+lazy val torchCpu = (project in file("torch/cpu"))
+  .settings(commonSettings: _*)
+  .dependsOn(tensor).dependsOn(torchJni)
+  .settings(
+    name := "nexus-torch-backend-cpu"
+  )
+
+lazy val torchCuda = (project in file("torch/cuda"))
+  .settings(commonSettings: _*)
+  .dependsOn(tensor).dependsOn(torchCpu)
+  .settings(
+    name := "nexus-torch-backend-cuda"
+  )
 
 
 // function that find html files recursively

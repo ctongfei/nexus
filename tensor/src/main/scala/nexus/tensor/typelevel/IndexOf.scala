@@ -17,14 +17,14 @@ object IndexOf {
   def apply[A, U](implicit o: IndexOf[A, U]): Aux[A, U, o.Out] = o
   type Aux[A, U, I <: Nat] = IndexOf[A, U] { type Out = I }
 
-  implicit def indexOfHListCase0[At <: HList, U]: Aux[U :: At, U, _0] =
+  implicit def case0[At <: HList, U]: Aux[U :: At, U, _0] =
     new IndexOf[U :: At, U] {
       type Out = _0
       def apply() = Nat._0
       def toInt = 0
     }
 
-  implicit def indexOfHListCaseN[At <: HList, Ah, U, I <: Nat]
+  implicit def caseN[At <: HList, Ah, U, I <: Nat]
   (implicit p: IndexOf.Aux[At, U, I]): Aux[Ah :: At, U, Succ[I]] =
     new IndexOf[Ah :: At, U] {
       type Out = Succ[I]
@@ -32,7 +32,7 @@ object IndexOf {
       def toInt = p.toInt + 1
     }
 
-  implicit def indexOfTuple[A, Al <: HList, U, I <: Nat]
+  implicit def tuple[A, Al <: HList, U, I <: Nat]
   (implicit h: ToHList.Aux[A, Al], i: IndexOf.Aux[Al, U, I]): Aux[A, U, I] =
     new IndexOf[A, U] {
       type Out = I

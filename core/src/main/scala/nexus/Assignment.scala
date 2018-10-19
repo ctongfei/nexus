@@ -16,13 +16,13 @@ trait Assignment extends ExprValuePair[Id] {
 object Assignment {
 
   /** Creates an assignment for an symbolic expression. */
-  def apply[X](x: Expr[X], v: X): Assignment = new Assignment {
+  def apply[X](x: Symbolic[X], v: X): Assignment = new Assignment {
     type Data = X
     val expr = x
     val value = v
   }
 
   // Use of dependent types in the return type
-  def unapply(a: Assignment): Option[(Expr[a.Data], a.Data)] = Some(a.expr, a.value)
+  def unapply(a: Assignment): Option[(Symbolic[a.Data], a.Data)] = Some(a.expr, a.value)
 
 }

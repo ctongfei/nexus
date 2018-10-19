@@ -22,7 +22,7 @@ class Linear[T[_], R, a <: Dim, b <: Dim] private(
 
   def parameters = Set(weight)
 
-  def apply(x: Expr[T[a]]): Expr[T[b]] = MVMul(weight, x)
+  def apply(x: Symbolic[T[a]]): Symbolic[T[b]] = MVMul(weight, x)
 
 }
 

@@ -19,7 +19,7 @@ object Replace {
   def apply[A, U, V](implicit r: Replace[A, U, V]): Aux[A, U, V, r.Out] = r
   type Aux[A, U, V, B] = Replace[A, U, V] { type Out = B }
 
-  implicit def replaceHListCase0[A <: HList, U, V]: Aux[U :: A, U, V, V :: A] =
+  implicit def case0[A <: HList, U, V]: Aux[U :: A, U, V, V :: A] =
     new Replace[U :: A, U, V] { self =>
       type Out = V :: A
       def apply(l: U :: A, v: V): V :: A = v :: l.tail
@@ -30,7 +30,7 @@ object Replace {
       }
     }
 
-  implicit def replaceHListCaseN[At <: HList, Ah, U, V, Bt <: HList]
+  implicit def caseN[At <: HList, Ah, U, V, Bt <: HList]
   (implicit n: Ah =:!= U, r: Replace.Aux[At, U, V, Bt]): Replace.Aux[Ah :: At, U, V, Ah :: Bt] =
     new Replace[Ah :: At, U, V] { self =>
       type Out = Ah :: Bt
@@ -42,7 +42,7 @@ object Replace {
       }
     }
 
-  implicit def replaceTuple[A, Al <: HList, U, V, Bl <: HList, B]
+  implicit def tuple[A, Al <: HList, U, V, Bl <: HList, B]
   (implicit al: ToHList.Aux[A, Al], r: Replace.Aux[Al, U, V, Bl], bl: FromHList.Aux[Bl, B]): Replace.Aux[A, U, V, B] =
     new Replace[A, U, V] { self =>
       type Out = B

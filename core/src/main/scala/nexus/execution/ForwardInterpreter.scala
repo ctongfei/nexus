@@ -8,10 +8,10 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait ForwardInterpreter extends (Expr ~> Id) {
+trait ForwardInterpreter extends (Symbolic ~> Id) {
 
   /** Cached values in this computation instance. */
-  def values: ExprMap[Id]
+  def values: SymbolicMap[Id]
 
 }
 

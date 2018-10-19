@@ -1,6 +1,6 @@
 package nexus.torch
 
-import nexus.torch.jni.THJNI._
+import nexus.torch.jni.torchJNI._
 
 /**
  * Represents a C struct that is accessed by a pointer through JNI.

@@ -6,8 +6,8 @@ import scala.annotation._
  * Any generic unary function whose type parameters (axes, etc.) are not yet grounded:
  * itself can be applied to variables of different types constrained by the type member `Op`.
  *
- * Essentially, this function can be applied to a symbolic expression of type [[Expr]]`[X]` '''if and only if''' an
- * implicit `Op[X, Y]` is found, and the application returns a symbolic expression of type [[Expr]]`[Y]`.
+ * Essentially, this function can be applied to a symbolic expression of type [[Symbolic]]`[X]` '''if and only if''' an
+ * implicit `Op[X, Y]` is found, and the application returns a symbolic expression of type [[Symbolic]]`[Y]`.
  *
  * @author Tongfei Chen
  * @since 0.1.0
@@ -21,7 +21,7 @@ abstract class PolyOp1 extends PolyFunc1 {
   @implicitNotFound("This operator cannot be applied to an argument of type ${X}.")
   trait F[X, Y] extends Op1[X, Y]
 
-  override def apply[X, Y](x: Expr[X])(implicit f: F[X, Y]) = f(x)
+  override def apply[X, Y](x: Symbolic[X])(implicit f: F[X, Y]) = f(x)
 
   /** Applies this operation to a concrete value (forward computation). */
   def apply[X, Y](x: X)(implicit f: F[X, Y]): Y = f.forward(x)
@@ -41,7 +41,7 @@ abstract class PolyOp2 extends PolyFunc2 { self =>
   @implicitNotFound("This operator cannot be applied to arguments of type ${X1} and ${X2}.")
   trait F[X1, X2, Y] extends Op2[X1, X2, Y]
 
-  override def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]) = f(x1, x2)
+  override def apply[X1, X2, Y](x1: Symbolic[X1], x2: Symbolic[X2])(implicit f: F[X1, X2, Y]) = f(x1, x2)
 
   /** Applies this operation to concrete values (forward computation). */
   def apply[X1, X2, Y](x1: X1, x2: X2)(implicit f: F[X1, X2, Y]): Y = f.forward(x1, x2)
@@ -84,7 +84,7 @@ abstract class PolyOp3 extends PolyFunc3 {
   @implicitNotFound("This operator cannot be applied to arguments of type ${X1}, ${X2} and ${X3}.")
   trait F[X1, X2, X3, Y] extends Op3[X1, X2, X3, Y]
 
-  override def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[X1, X2, X3, Y]) = f(x1, x2, x3)
+  override def apply[X1, X2, X3, Y](x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3])(implicit f: F[X1, X2, X3, Y]) = f(x1, x2, x3)
 
   def apply[X1, X2, X3, Y](x1: X1, x2: X2, x3: X3)(implicit f: F[X1, X2, X3, Y]): Y = f.forward(x1, x2, x3)
 

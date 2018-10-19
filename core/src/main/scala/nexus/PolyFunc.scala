@@ -26,7 +26,7 @@ trait PolyFunc1 {
   def ground[X, Y](implicit f: F[X, Y]): Func1[X, Y]
 
   /** Given input expression, constructs the output expression. */
-  def apply[X, Y](x: Expr[X])(implicit f: F[X, Y]): Expr[Y] =
+  def apply[X, Y](x: Symbolic[X])(implicit f: F[X, Y]): Symbolic[Y] =
     ground(f)(x)
 
 }
@@ -42,7 +42,7 @@ trait PolyFunc2 {
 
   def ground[X1, X2, Y](implicit f: F[X1, X2, Y]): Func2[X1, X2, Y]
 
-  def apply[X1, X2, Y](x1: Expr[X1], x2: Expr[X2])(implicit f: F[X1, X2, Y]): Expr[Y] =
+  def apply[X1, X2, Y](x1: Symbolic[X1], x2: Symbolic[X2])(implicit f: F[X1, X2, Y]): Symbolic[Y] =
     ground(f)(x1, x2)
 
 }
@@ -59,7 +59,7 @@ trait PolyFunc3 {
 
   def ground[X1, X2, X3, Y](implicit f: F[X1, X2, X3, Y]): Func3[X1, X2, X3, Y]
 
-  def apply[X1, X2, X3, Y](x1: Expr[X1], x2: Expr[X2], x3: Expr[X3])(implicit f: F[X1, X2, X3, Y]): Expr[Y] =
+  def apply[X1, X2, X3, Y](x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3])(implicit f: F[X1, X2, X3, Y]): Symbolic[Y] =
     ground(f)(x1, x2, x3)
 
 }
