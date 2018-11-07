@@ -1,4 +1,4 @@
-package nexus.tensor.typelevel.util
+package nexus.tensor.util
 
 /**
  * @author Tongfei Chen
