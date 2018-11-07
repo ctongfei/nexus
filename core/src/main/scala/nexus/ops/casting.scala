@@ -5,7 +5,7 @@ import nexus.tensor._
 
 object CastTo extends ParameterizedPolyOp1 {
 
-  implicit def castToF[S, T, TT[_]](implicit c: BidiCasting[S, T]) = (T: TT[T]) =>
+  implicit def castToF[S, T, TT[_]](implicit c: BidiCast[S, T]) = (T: TT[T]) =>
     new F[S, T] {
       def name = s"CastTo[$T]"
       def tag = ???

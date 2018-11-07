@@ -23,11 +23,7 @@ object InsertAt {
       type Out = Ah :: At
       def apply(t: At, h: Ah): Ah :: At = h :: t
       def index = 0
-      def inverse: RemoveAt.Aux[Ah :: At, _0, At] = new RemoveAt[Ah :: At, _0] {
-        def index = ix.index
-        type Out = At
-        def apply(t: Ah :: At) = t.tail
-      }
+      def inverse: RemoveAt.Aux[Ah :: At, _0, At] = RemoveAt.case0
     }
 
   implicit def caseN[At <: HList, Ah, P <: Nat, U, Bt <: HList]
@@ -36,11 +32,7 @@ object InsertAt {
       type Out = Ah :: Bt
       def apply(t: Ah :: At, x: U): Ah :: Bt = t.head :: pix(t.tail, x)
       def index = pix.index + 1
-      def inverse: RemoveAt.Aux[Ah :: Bt, Succ[P], Ah :: At] = new RemoveAt[Ah :: Bt, Succ[P]] {
-        def index = pix.index
-        type Out = Ah :: At
-        def apply(t: Ah :: Bt) = t.head :: pix.inverse(t.tail)
-      }
+      def inverse: RemoveAt.Aux[Ah :: Bt, Succ[P], Ah :: At] = RemoveAt.caseN(pix.inverse)
     }
 
   implicit def tuple[A, Al <: HList, I <: Nat, U, Bl <: HList, B]
@@ -49,10 +41,6 @@ object InsertAt {
       type Out = B
       def apply(t: A, x: U): B = bl(ix(al(t), x))
       def index = ix.index
-      def inverse: RemoveAt.Aux[B, I, A] = new RemoveAt[B, I] {
-        def index = ix.index
-        type Out = A
-        def apply(t: B): A = al.invert(ix.inverse(bl.invert(t)))
-      }
+      def inverse: RemoveAt.Aux[B, I, A] = RemoveAt.tuple(bl.inverse, ix.inverse, al.inverse)
     }
 }

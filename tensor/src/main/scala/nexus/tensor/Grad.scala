@@ -7,7 +7,7 @@ import scala.annotation._
 /**
  * Typeclass witnessing that the specific type which an expression is differentiable with respect to.
  *
- * An instance of this typeclass should be attached to differentiable expressions ([[nexus.Expr]])
+ * An instance of this typeclass should be attached to differentiable expressions ([[nexus.Symbolic]])
  * or differentiable operators ([[nexus.Op1]] etc.).
  *
  * This typeclass contains basic math operations on gradients that are used by optimizers
@@ -48,7 +48,7 @@ object Grad extends ProductTypeClassCompanion[Grad] {
   /** Summons the implicit `Grad` instance of a type. */
   @inline def apply[X](implicit X: Grad[X]) = X
 
-  /** Grounds from a higher-kinded `GradH`. */
+  /** Grounds from a higher-kinded `GradK`. */
   implicit def ground[T[_], A](implicit T: GradK[T]): Grad[T[A]] = T.ground[A]
 
   /**
