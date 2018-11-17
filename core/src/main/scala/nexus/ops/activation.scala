@@ -28,22 +28,6 @@ object ReLU extends PolyOp1 {
 }
 
 /**
- * Scaled exponential linear units.
- *
- * Reference:
- *  - G Klambauer, T Unterthiner, A Mayr, S Hochreiter (2017): Self-normalizing neural networks. NIPS.
- */
-object SELU extends PolyOp1 {
-  implicit def seluF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
-    new F[T[a], T[a]] {
-      def name = "SELU"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x: T[a]) = ???
-      def backward(dy: T[a], y: T[a], x: T[a]) = ???
-    }
-}
-
-/**
  * Sigmoid (a.k.a. logistic) activation function that maps any real output to the interval (0, 1).
  * - Input: any tensor 「bb"x"」.
  * - Output: a tensor 「bb"y"」, of the same shape as 「bb"x"」, computed as

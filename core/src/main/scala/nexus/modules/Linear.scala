@@ -10,19 +10,19 @@ import nexus.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Linear[T[_], R, a <: Dim, b <: Dim] private(
-  val weight: Param[T[(b, a)]]
+class Linear[T[_], R, X <: Dim, Y <: Dim] private(
+  val weight: Param[T[(Y, X)]]
 )(implicit T: IsRealTensorK[T, R])
-  extends Module1[T[a], T[b]]
+  extends Module1[T[X], T[Y]]
 {
 
-  type Input = a
+  type Input = X
 
-  type Output = b
+  type Output = Y
 
   def parameters = Set(weight)
 
-  def apply(x: Symbolic[T[a]]): Symbolic[T[b]] = MVMul(weight, x)
+  def apply(x: Symbolic[T[X]]): Symbolic[T[Y]] = MVMul(weight, x)
 
 }
 

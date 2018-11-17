@@ -56,7 +56,7 @@ trait Stochastic[+A] { self =>
     Seq.fill(n)(sample)
   }
 
-  def repeatToTensor[T[_], axes, A1 >: A](axes: axes, shape: Seq[Int])(implicit T: IsTensorK[T, A1]): Stochastic[T[axes]] =
+  def repeatToTensor[T[_], U, A1 >: A](axes: U, shape: Seq[Int])(implicit T: IsTensorK[T, A1]): Stochastic[T[U]] =
     ???
     //(Array.fill(shape.product)(sample), shape.toArray)
 

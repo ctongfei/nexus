@@ -57,7 +57,7 @@ object Affine {
     val (_, nX) = inAxisAndSize
     val (_, nY) = outAxisAndSize
     val W = Param(newGaussianTensor[(Y, X)](0f, 1f, Array(nY, nX)), name = s"$name.weight")
-    val b = Param(newGaussianTensor[Y](0f, 1f, Array(nX)), name = s"$name.bias")
+    val b = Param(newGaussianTensor[Y](0f, 1f, Array(nY)), name = s"$name.bias")
     from[T, R, X, Y](W, b)
   }
 

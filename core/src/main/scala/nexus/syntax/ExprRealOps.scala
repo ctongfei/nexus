@@ -7,9 +7,9 @@ import nexus.tensor._
 /**
  * @author Tongfei Chen
  */
-trait ExprRealMixin {
+trait SymbolicRealOpsMixin {
 
-  implicit class ExprRealOps[R](val x: Symbolic[R])(implicit R: IsReal[R]) {
+  implicit class SymbolicRealOps[R](val x: Symbolic[R])(implicit R: IsReal[R]) {
 
     def +(y: Symbolic[R]): Symbolic[R] = Add(x, y)
 
@@ -20,6 +20,7 @@ trait ExprRealMixin {
     def /(y: Symbolic[R]): Symbolic[R] = Div(x, y)
 
   }
+
 
   implicit class ExprRealOps2[T[_], R, A](val x: Symbolic[R])(implicit T: IsRealTensorK[T, R]) {
 

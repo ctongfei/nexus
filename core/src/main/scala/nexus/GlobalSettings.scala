@@ -7,7 +7,7 @@ object GlobalSettings {
 
   private[nexus] var seed: Long = System.nanoTime()
 
-  def setSeed(newSeed: Long) = {
+  def setSeed(newSeed: Long) = synchronized {
     seed = newSeed
     random = new java.util.Random(seed)
   }

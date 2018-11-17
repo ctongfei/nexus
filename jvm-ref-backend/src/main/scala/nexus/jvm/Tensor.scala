@@ -1,7 +1,6 @@
 package nexus.jvm
 
 import nexus.tensor.instances.all._
-import nexus.tensor.typelevel.util._
 import nexus.tensor.util._
 import shapeless.Nat
 

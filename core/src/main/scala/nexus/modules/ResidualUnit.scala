@@ -1,8 +1,8 @@
 package nexus.modules
 
 import nexus._
-import nexus.tensor._
 import nexus.ops._
+import nexus.tensor._
 
 /**
  * A residual unit.
@@ -21,8 +21,7 @@ class ResidualUnit[X](val residual: Func1[X, X])(implicit X: Grad[X]) extends Mo
 
   def apply(x: Symbolic[X]): Symbolic[X] = {
     val r = residual(x)
-    // TODO: Add(x, r)
-    ???
+    Add.grad.apply(x, r)
   }
 
 }

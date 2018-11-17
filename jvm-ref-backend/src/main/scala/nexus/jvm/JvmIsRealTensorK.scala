@@ -3,7 +3,6 @@ package nexus.jvm
 import nexus.tensor._
 import nexus.tensor.syntax._
 import nexus.tensor.typelevel._
-import nexus.tensor.typelevel.util._
 import nexus.tensor.util._
 import shapeless._
 

@@ -43,8 +43,8 @@ object XorTest extends App {
   val x = Input[FloatTensor[In]]()
   val y = Input[FloatTensor[Out]]()
 
-  val Layer1 = Affine(In -> 2, Hidden -> 2)
-  val Layer2 = Affine(Hidden -> 2, Out -> 2)
+  val Layer1 = Affine(In -> 2, Hidden -> 3)
+  val Layer2 = Affine(Hidden -> 3, Out -> 2)
 
   val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
 
@@ -63,6 +63,7 @@ object XorTest extends App {
       given (x := xv, y := yv) { implicit computation =>
 
         val lossValue = loss.value
+
         averageLoss += lossValue
         opt.step(loss)
 
@@ -73,10 +74,5 @@ object XorTest extends App {
     println(s"Epoch $epoch: loss = ${averageLoss / 4.0}")
   }
 
-  println(Layer1.weight.value)
-  println(Layer1.bias.value)
-
-  println(Layer2.weight.value)
-  println(Layer2.bias.value)
 
 }

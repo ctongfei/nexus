@@ -18,7 +18,6 @@ trait PolyModule1 extends PolyFunc1 {
   def ground[X, Y](implicit f: F[X, Y]) = f
 }
 
-
 /**
  * Type polymorphic binary module.
  * @see [[PolyModule1]]

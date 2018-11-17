@@ -6,7 +6,7 @@ import nexus.tensor._
 import nexus.tensor.syntax._
 
 /**
- * Sine on a scalar.
+ * Sine function.
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -20,7 +20,7 @@ object Sin extends PolyOp1 with RealElementwisePolyOp1Mixin {
 
 
 /**
- * Cosine on a scalar.
+ * Cosine function.
  * @author Tongfei Chen
  * @since 0.1.0
  */

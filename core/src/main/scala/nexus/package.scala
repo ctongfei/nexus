@@ -5,7 +5,7 @@ import nexus.tensor._
  * '''Nexus''': Typeful & typesafe deep learning.
  * @author Tongfei Chen
  */
-package object nexus extends ExprRealTensorMixin with ExprRealMixin with TupleExprOpsMixin {
+package object nexus extends ExprRealTensorMixin with SymbolicRealOpsMixin with TupleExprOpsMixin {
 
   val _0 = shapeless.nat._0
   val _1 = shapeless.nat._1

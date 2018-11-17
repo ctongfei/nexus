@@ -9,11 +9,12 @@ import nexus.tensor.syntax._
  */
 class Exponential[R](val λ: R)(implicit R: IsReal[R]) extends Stochastic[R] {
 
+  import R._
   import nexus.GlobalSettings._
 
   def sample = {
     val u = random.nextDouble()
-    -R.log(R.fromDouble(u)) / λ
+    log(fromDouble(u)) / λ
   }
 
   def rate = λ
