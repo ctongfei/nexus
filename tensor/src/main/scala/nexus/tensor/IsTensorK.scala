@@ -12,7 +12,7 @@ import scala.reflect._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait IsTensorK[T[_], E] { self =>
+trait IsTensorK[T[_], @specialized E] { self =>
 
   type ElementTag[E]
   type TensorTag[te] <: IsTensor[te, E]

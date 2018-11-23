@@ -1,5 +1,7 @@
 package nexus
 
+import nexus.execution._
+
 
 trait AnyModule {
 
@@ -9,6 +11,14 @@ trait AnyModule {
 }
 
 trait Module1[X, Y] extends Func1[X, Y] with AnyModule { self =>
+
+  def apply(x: X): Y = {
+    val _x = Input[X]()
+    given (_x := x) { implicit comp =>
+      val y = this(_x)
+      y.value
+    }
+  }
 
   def >>[Z](that: Func1[Y, Z]): Module1[X, Z] = new Module1[X, Z] {
 

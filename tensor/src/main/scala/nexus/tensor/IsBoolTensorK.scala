@@ -3,7 +3,7 @@ package nexus.tensor
 /**
  * @author Tongfei Chen
  */
-trait IsBoolTensorK[T[_], B] extends IsTensorK[T, B] { self =>
+trait IsBoolTensorK[T[_], @specialized(Boolean) B] extends IsTensorK[T, B] { self =>
 
   type ElementTag[b] = IsBool[b]
   val B: IsBool[B]

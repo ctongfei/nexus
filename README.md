@@ -1,6 +1,7 @@
 # Nexus
 
 <img src="images/nexus-logo.svg" align="right" style="padding-left: 20px" height="150px" />
+<img src="images/nexus-tensor-logo.svg" align="right" style="padding-left: 20px" height="150px" />
 
 🚧 **Ongoing project** 🚧 **Status: Prototype** 🚧
 

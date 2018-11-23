@@ -57,9 +57,9 @@ object MatMul extends PolyOp2 {
       import T._
       def name = "MatMul"
       def tag = Tag.realTensor[T, R, (a, c)]
-      def forward(x1: T[(a, b)], x2: T[(b, c)]) = mmMul(x1, x2)
-      def backward1(dy: T[(a, c)], y: T[(a, c)], x1: T[(a, b)], x2: T[(b, c)]) = mmMul(dy, transpose(x2))
-      def backward2(dy: T[(a, c)], y: T[(a, c)], x1: T[(a, b)], x2: T[(b, c)]) = mmMul(transpose(x1), dy)
+      def forward(x1: T[(a, b)], x2: T[(b, c)]) = matMul(x1, x2)
+      def backward1(dy: T[(a, c)], y: T[(a, c)], x1: T[(a, b)], x2: T[(b, c)]) = matMul(dy, transpose(x2))
+      def backward2(dy: T[(a, c)], y: T[(a, c)], x1: T[(a, b)], x2: T[(b, c)]) = matMul(transpose(x1), dy)
     }
 }
 

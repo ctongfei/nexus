@@ -81,6 +81,13 @@ lazy val ml = (project in file("ml"))
     name := "nexus-ml"
   )
 
+lazy val tensorboard = (project in file("tensorboard"))
+  .settings(commonSettings: _*)
+  .dependsOn(core)
+  .settings(
+    name := "nexus-tensorboard"
+  )
+
 lazy val jvmRefBackend = (project in file("jvm-ref-backend"))
   .settings(commonSettings: _*)
   .dependsOn(core)

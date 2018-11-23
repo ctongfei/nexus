@@ -85,7 +85,7 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
      offset = 0
     )
 
-  def mmMul[A, B, C](x: T[(A, B)], y: T[(B, C)]) = ???
+  def matMul[A, B, C](x: T[(A, B)], y: T[(B, C)]) = ???
 
   def mvMul[A, B](x: T[(A, B)], y: T[B]): T[A] = {
     val z = Array.fill(x.shape(0))(R.zero)

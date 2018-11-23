@@ -9,7 +9,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that ${T} is a typed tensor of ${R}.")
-trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
+trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends IsTensorK[T, R] with GradK[T] { self =>
 
   type ElementTag[r] = IsReal[r]
   override type TensorTag[te] = IsRealTensor[te, R]
@@ -69,7 +69,7 @@ trait IsRealTensorK[T[_], R] extends IsTensorK[T, R] with GradK[T] { self =>
 
   def sum(x: T[_]): R
 
-  def mmMul[a, b, c](x: T[(a, b)], y: T[(b, c)]): T[(a, c)]
+  def matMul[a, b, c](x: T[(a, b)], y: T[(b, c)]): T[(a, c)]
 
   def mvMul[a, b](x: T[(a, b)], y: T[b]): T[a]
 

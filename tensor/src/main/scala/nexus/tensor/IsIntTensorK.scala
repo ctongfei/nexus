@@ -3,7 +3,7 @@ package nexus.tensor
 /**
  * @author Tongfei Chen
  */
-trait IsIntTensorK[T[_], Z] extends IsTensorK[T, Z] { self =>
+trait IsIntTensorK[T[_], @specialized(Long, Int, Short, Byte) Z] extends IsTensorK[T, Z] { self =>
 
   type ElementTag[z] = IsInt[z]
 

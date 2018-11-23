@@ -64,6 +64,7 @@ trait Stochastic[+A] { self =>
 
 object Stochastic {
 
+  /** Creates a stochastic variable with a call-by-name parameter. */
   def apply[A](f: => A): Stochastic[A] = new Stochastic[A] {
     def sample = f
   }
