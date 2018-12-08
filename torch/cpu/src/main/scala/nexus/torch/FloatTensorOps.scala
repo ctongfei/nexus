@@ -11,7 +11,7 @@ import scala.reflect._
 
 object FloatTensorOps extends IsRealTensorK[({type L[A] = Tensor[Float, A]})#L, Float] {
 
-  val R = Float32
+  val R = FloatIsReal
   implicit val elementTypeClassTag: ClassTag[Float] = ClassTag.Float
   private type T[A] = Tensor[Float, A]
 
@@ -30,29 +30,29 @@ object FloatTensorOps extends IsRealTensorK[({type L[A] = Tensor[Float, A]})#L, 
   }
 
   def newGaussianTensor[A](μ: Double, σ2: Double, shape: Array[Int]) = ???
-  def addI[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
-  def addS[A](x: Tensor[Float, A], u: Float) = ???
+  def addInplace[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
+  def addScalar[A](x: Tensor[Float, A], u: Float) = ???
   def neg[A](x: Tensor[Float, A]) = ???
   def sub[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
-  def subS[A](x: Tensor[Float, A], u: Float) = ???
-  def eMul[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
-  def eDiv[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
+  def subScalar[A](x: Tensor[Float, A], u: Float) = ???
+  def mul[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
+  def div[A](x1: Tensor[Float, A], x2: Tensor[Float, A]) = ???
   def scale[A](x: Tensor[Float, A], u: Float) = ???
-  def eInv[A](x: Tensor[Float, A]) = ???
-  def eSqr[A](x: Tensor[Float, A]) = ???
-  def eSqrt[A](x: Tensor[Float, A]) = ???
+  def inv[A](x: Tensor[Float, A]) = ???
+  def sqr[A](x: Tensor[Float, A]) = ???
+  def sqrt[A](x: Tensor[Float, A]) = ???
   def transpose[A, B](x: Tensor[Float, (A, B)]) = ???
-  def eLog[A](x: Tensor[Float, A]) = ???
-  def eExp[A](x: Tensor[Float, A]) = ???
-  def eLog1p[A](x: Tensor[Float, A]) = ???
-  def eExpm1[A](x: Tensor[Float, A]) = ???
-  def eSin[A](x: Tensor[Float, A]) = ???
-  def eCos[A](x: Tensor[Float, A]) = ???
-  def eTan[A](x: Tensor[Float, A]) = ???
+  def log[A](x: Tensor[Float, A]) = ???
+  def exp[A](x: Tensor[Float, A]) = ???
+  def log1p[A](x: Tensor[Float, A]) = ???
+  def expm1[A](x: Tensor[Float, A]) = ???
+  def sin[A](x: Tensor[Float, A]) = ???
+  def cos[A](x: Tensor[Float, A]) = ???
+  def tan[A](x: Tensor[Float, A]) = ???
   def sigmoid[A](x: Tensor[Float, A]) = ???
   def relu[A](x: Tensor[Float, A]) = ???
-  def eAbs[A](x: Tensor[Float, A]) = ???
-  def eSgn[A](x: Tensor[Float, A]) = ???
+  def abs[A](x: Tensor[Float, A]) = ???
+  def sgn[A](x: Tensor[Float, A]) = ???
   def pos[A](x: Tensor[Float, A]) = ???
   def sum(x: Tensor[Float, _]) = ???
   def matMul[A, B, C](x: Tensor[Float, (A, B)], y: Tensor[Float, (B, C)]) = ???

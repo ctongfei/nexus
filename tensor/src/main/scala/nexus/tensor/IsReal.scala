@@ -44,11 +44,9 @@ trait IsReal[@specialized(Float, Double) R] extends Grad[R] {
   def sqr(x: R): R
   def sqrt(x: R): R
 
-  def eMul(x1: R, x2: R) = mul(x1, x2)
-  def eDiv(x1: R, x2: R) = div(x1, x2)
-  def eSqrt(x: R) = sqrt(x)
+  def addScalar(x1: R, x2: Double) = add(x1, fromDouble(x2))
+  def addInplace(x1: R, x2: R): R = add(x1, x2)
   def scale(x: R, k: Double) = mul(x, fromDouble(k))
-
 }
 
 
@@ -56,6 +54,6 @@ object IsReal {
 
   def apply[R](implicit R: IsReal[R]) = R
 
-  implicit def extract[T[_], R](implicit T: IsRealTensorK[T, R]): IsReal[R] = T.R
+  implicit def c2[T[_], R](implicit T: IsRealTensorK[T, R]): IsReal[R] = T.R
 
 }

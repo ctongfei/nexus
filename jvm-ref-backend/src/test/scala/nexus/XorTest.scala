@@ -2,11 +2,13 @@ package nexus
 
 import nexus.tensor._
 import nexus.tensor.syntax._
-import nexus.execution._
+import nexus.diff._
+import nexus.diff.execution._
 import nexus.jvm._
-import nexus.modules._
-import nexus.ops._
-import nexus.optimizer._
+import nexus.jvm.setFloat32AsDefault._
+import nexus.diff.modules._
+import nexus.diff.ops._
+import nexus.diff.optimizers._
 
 // Define names of axes (an empty class and an object with the same name)
 class Batch extends Dim
@@ -43,10 +45,12 @@ object XorTest extends App {
   val x = Input[FloatTensor[In]]()
   val y = Input[FloatTensor[Out]]()
 
-  val Layer1 = Affine(In -> 2, Hidden -> 3)
-  val Layer2 = Affine(Hidden -> 3, Out -> 2)
+  val Layer1 = Affine(In -> 2, Hidden -> 2)
+  val Layer2 = Affine(Hidden -> 2, Out -> 2)
+
 
   val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
+  //val ŷ = Softmax(Layer2(Sigmoid(Layer1(x))))
 
   val loss = CrossEntropy(y, ŷ)
 

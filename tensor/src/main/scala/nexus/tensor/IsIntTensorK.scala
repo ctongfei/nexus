@@ -3,7 +3,7 @@ package nexus.tensor
 /**
  * @author Tongfei Chen
  */
-trait IsIntTensorK[T[_], @specialized(Long, Int, Short, Byte) Z] extends IsTensorK[T, Z] { self =>
+trait IsIntTensorK[T[_], @specialized(Long, Int, Short, Byte) Z] extends RingTensorK[T, Z] { self =>
 
   type ElementTag[z] = IsInt[z]
 
@@ -12,12 +12,7 @@ trait IsIntTensorK[T[_], @specialized(Long, Int, Short, Byte) Z] extends IsTenso
   val Z: IsInt[Z]
   def elementType = Z
 
-  def zeroBy[a](x: T[a]): T[a]
-
-  def add[a](x: T[a], y: T[a]): T[a] = ???
-  def neg[a](x: T[a]): T[a] = ???
-  def sub[a](x: T[a], y: T[a]): T[a] = ???
-  def eMul[a](x: T[a], y: T[a]): T[a] = ???
+  def zeroBy[A](x: T[A]): T[A]
 
   def ground[a]: IsTensor[T[a], Z] = ???
 }

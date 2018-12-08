@@ -9,7 +9,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that ${T} is a typed tensor of ${R}.")
-trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends IsTensorK[T, R] with GradK[T] { self =>
+trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends RingTensorK[T, R] with GradK[T] { self =>
 
   type ElementTag[r] = IsReal[r]
   override type TensorTag[te] = IsRealTensor[te, R]
@@ -17,83 +17,54 @@ trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends IsTensorK[T, R]
   implicit val R: IsReal[R]
   def elementType = R
 
-  def newTensor[a](shape: Array[Int]): T[a]
+  def newTensor[A](shape: Array[Int]): T[A]
 
-  def newGaussianTensor[a](μ: Double, σ2: Double, shape: Array[Int]): T[a]
+  def newGaussianTensor[A](μ: Double, σ2: Double, shape: Array[Int]): T[A]
 
-  def zeroBy[a](x: T[a]): T[a]
 
-  def add[a](x1: T[a], x2: T[a]): T[a]
+  def inv[A](x: T[A]): T[A]
 
-  def addI[a](x1: T[a], x2: T[a]): T[a]
+  def sqrt[A](x: T[A]): T[A]
 
-  def addS[a](x: T[a], u: R): T[a]
+  def log[a](x: T[a]): T[a]
+  def exp[a](x: T[a]): T[a]
+  def log1p[a](x: T[a]): T[a]
+  def expm1[a](x: T[a]): T[a]
 
-  def neg[a](x: T[a]): T[a]
-
-  def sub[a](x1: T[a], x2: T[a]): T[a]
-
-  def subS[a](x: T[a], u: R): T[a]
-
-  def eMul[a](x1: T[a], x2: T[a]): T[a]
-
-  def eDiv[a](x1: T[a], x2: T[a]): T[a]
-
-  def scale[a](x: T[a], u: R): T[a]
-
-  def eInv[a](x: T[a]): T[a]
-
-  def eSqr[a](x: T[a]): T[a]
-
-  def eSqrt[a](x: T[a]): T[a]
-
-  def transpose[a, b](x: T[(a, b)]): T[(b, a)]
-
-  def eLog[a](x: T[a]): T[a]
-  def eExp[a](x: T[a]): T[a]
-  def eLog1p[a](x: T[a]): T[a]
-  def eExpm1[a](x: T[a]): T[a]
-
-  def eSin[a](x: T[a]): T[a]
-  def eCos[a](x: T[a]): T[a]
-  def eTan[a](x: T[a]): T[a]
+  def sin[a](x: T[a]): T[a]
+  def cos[a](x: T[a]): T[a]
+  def tan[a](x: T[a]): T[a]
 
   def sigmoid[a](x: T[a]): T[a]
 
   def relu[a](x: T[a]): T[a]
 
-  def eAbs[a](x: T[a]): T[a]
-  def eSgn[a](x: T[a]): T[a]
+  def abs[a](x: T[a]): T[a]
+  def sgn[a](x: T[a]): T[a]
 
   def pos[a](x: T[a]): T[a]
 
-  def sum(x: T[_]): R
+  private object grounded extends IsRealTensor[T[Any], R] {
+    def elementType = self.elementType
+    def mutable = true
+    def zeroBy(x: T[Any]) = self.zeroBy(x)
+    def add(x1: T[Any], x2: T[Any]) = self.add(x1, x2)
+    def addScalar(x1: T[Any], x2: Double) = self.addScalar(x1, R.fromDouble(x2))
+    def addInplace(x1: T[Any], x2: T[Any]) = self.addInplace(x1, x2)
+    def sub(x1: T[Any], x2: T[Any]) = self.sub(x1, x2)
+    def neg(x: T[Any]) = self.neg(x)
+    def mul(x1: T[Any], x2: T[Any]) = self.mul(x1, x2)
+    def div(x1: T[Any], x2: T[Any]) = self.div(x1, x2)
+    def scale(x: T[Any], k: Double) = self.scale(x, R.fromDouble(k))
+    def sqrt(x: T[Any]) = self.sqrt(x)
+  } // only allocate one object
 
-  def matMul[a, b, c](x: T[(a, b)], y: T[(b, c)]): T[(a, c)]
+  def ground[A]: IsRealTensor[T[A], R] = grounded.asInstanceOf[IsRealTensor[T[A], R]]
+}
 
-  def mvMul[a, b](x: T[(a, b)], y: T[b]): T[a]
+object IsRealTensorK {
 
-  def vvMul[a, b](x: T[a], y: T[b]): T[(a, b)]
-
-  def dot[a](x: T[a], y: T[a]): R
-
-  def contract[a, b, c](x: T[a], y: T[b])(implicit sd: SymDiff.Aux[a, b, c]): T[c]
-
-  def ground[a]: IsRealTensor[T[a], R] =
-    new IsRealTensor[T[a], R] {
-      def elementType = self.elementType
-      def mutable = true
-      def zeroBy(x: T[a]) = self.zeroBy(x)
-      def add(x1: T[a], x2: T[a]) = self.add(x1, x2)
-      def addS(x1: T[a], x2: Double) = self.addS(x1, R.fromDouble(x2))
-      def addI(x1: T[a], x2: T[a]): Unit = self.addI(x1, x2)
-      def sub(x1: T[a], x2: T[a]) = self.sub(x1, x2)
-      def neg(x: T[a]) = self.neg(x)
-      def eMul(x1: T[a], x2: T[a]) = self.eMul(x1, x2)
-      def eDiv(x1: T[a], x2: T[a]) = self.eDiv(x1, x2)
-      def scale(x: T[a], k: Double) = self.scale(x, R.fromDouble(k))
-      def eSqrt(x: T[a]) = self.eSqrt(x)
-    }
+  implicit def fromDType[T[_], R](implicit T: RealDType.Aux[R, T]): IsRealTensorK[T, R] = T.T
 
 }
 

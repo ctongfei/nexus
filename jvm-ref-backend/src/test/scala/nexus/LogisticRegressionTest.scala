@@ -1,10 +1,12 @@
 package nexus
 
-import nexus.ops._
-import nexus.optimizer._
-import nexus.execution._
+import nexus.diff.Input
+import nexus.diff.ops._
+import nexus.diff.optimizers._
+import nexus.diff.execution._
 import nexus.jvm._
-import nexus.modules._
+import nexus.jvm.setFloat32AsDefault._
+import nexus.diff.modules._
 import nexus.tensor._
 import nexus.tensor.syntax._
 
@@ -37,8 +39,7 @@ object LogisticRegressionTest extends App {
 
   val Layer = Affine(In -> 2, Out -> 2)
 
-  val z = x |> Softmax
-
+  val z = Layer(x)
   val output = x |> Layer |> Softmax
   val loss = CrossEntropy(y, output)
 

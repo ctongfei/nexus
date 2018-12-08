@@ -18,8 +18,8 @@ object OpsInlining {
       case TermName("$div")           => TermName("div")
       case TermName("$colon$times")   => TermName("scale")
       case TermName("$times$colon")   => TermName("scale")
-      case TermName("$bar$times$bar") => TermName("eMul")
-      case TermName("$bar$div$bar")   => TermName("eDiv")
+      case TermName("$bar$times$bar") => TermName("mul")
+      case TermName("$bar$div$bar")   => TermName("div")
       case _                          => op
     }
   }

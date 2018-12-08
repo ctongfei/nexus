@@ -2,7 +2,7 @@ package nexus.tensor.instances
 
 import nexus.tensor._
 
-object Float32 extends IsReal[Float] {
+object FloatIsReal extends IsReal[Float] {
   type R = Float
   def B = Bool
   
@@ -15,7 +15,7 @@ object Float32 extends IsReal[Float] {
   def div(x: R, y: R) = x / y
   def inv(x: R) = 1f / x
 
-  def addS(x1: R, x2: Double) = x1 + x2.toFloat
+  override def addScalar(x1: R, x2: Double) = x1 + x2.toFloat
 
   def abs(x: R) = Math.abs(x)
   def sgn(x: R) = Math.signum(x)
@@ -34,12 +34,12 @@ object Float32 extends IsReal[Float] {
 
   def toFloat(x: R) = x
 
-  def addI(x1: R, x2: R) = x1 + x2
+  override def addInplace(x1: R, x2: R) = x1 + x2
 
   override def toString = "Float"
 }
 
-object Float64 extends IsReal[Double] {
+object DoubleIsReal extends IsReal[Double] {
   type R = Double
 
   def one = 1d
@@ -51,7 +51,7 @@ object Float64 extends IsReal[Double] {
   def div(x: R, y: R) = x / y
   def inv(x: R) = 1d / x
 
-  def addS(x1: R, x2: R) = x1 + x2
+  override def addScalar(x1: R, x2: R) = x1 + x2
 
   def abs(x: R) = Math.abs(x)
   def sgn(x: R) = Math.signum(x)
@@ -71,7 +71,7 @@ object Float64 extends IsReal[Double] {
 
   def toFloat(x: R) = x.toFloat
 
-  def addI(x1: R, x2: R) = x1 + x2
+  override def addInplace(x1: R, x2: R) = x1 + x2
 
   override def toString = "Double"
 }

@@ -1,13 +1,12 @@
 # Nexus
 
 <img src="images/nexus-logo.svg" align="right" style="padding-left: 20px" height="150px" />
-<img src="images/nexus-tensor-logo.svg" align="right" style="padding-left: 20px" height="150px" />
 
 🚧 **Ongoing project** 🚧 **Status: Prototype** 🚧
 
 Nexus is a prototypical typesafe deep learning system in Scala.
 
-Nexus is a departure from common deep learning libraries such as [TensorFlow](tensorflow.org), [PyTorch](pytorch.org), [Theano](http://www.deeplearning.net/software/theano/), [MXNet](mxnet.io), etc. 
+Nexus is a departure from common deep learning libraries such as [TensorFlow](http://tensorflow.org), [PyTorch](http://pytorch.org), [MXNet](http://mxnet.io), etc. 
 
  - Ever been baffled by the axes of tensors? Which axis should I max out? 
  - Ever got `TypeError`s in Python?
@@ -30,12 +29,12 @@ Building a typesafe XOR network:
   val x = Input[FloatTensor[In]]()     // input vectors
   val y = Input[FloatTensor[Out]]()    // gold labels
 
-  val ŷ = x                       |>   // type: Expr[FloatTensor[In]]
-    Affine(In -> 2, Hidden -> 2)  |>   // type: Expr[FloatTensor[Hidden]]
-    Sigmoid                       |>   // type: Expr[FloatTensor[Hidden]]
-    Affine(Hidden -> 2, Out -> 2) |>   // type: Expr[FloatTensor[Out]]
-    Softmax                            // type: Expr[FloatTensor[Out]]
-  val loss = CrossEntropy(y, ŷ)        // type: Expr[Float]
+  val ŷ = x                       |>   // type: Symbolic[FloatTensor[In]]
+    Affine(In -> 2, Hidden -> 2)  |>   // type: Symbolic[FloatTensor[Hidden]]
+    Sigmoid                       |>   // type: Symbolic[FloatTensor[Hidden]]
+    Affine(Hidden -> 2, Out -> 2) |>   // type: Symbolic[FloatTensor[Out]]
+    Softmax                            // type: Symbolic[FloatTensor[Out]]
+  val loss = CrossEntropy(y, ŷ)        // type: Symbolic[Float]
 ``` 
 
 ### Design goals
@@ -52,6 +51,20 @@ Building a typesafe XOR network:
  - **[TODO] Multiple backends**. Torch / MXNet? / TensorFlow? / TensorFlow.js for Scala.js? / Lib
  - **[TODO] Automatic operator fusion for optimization.**
  - **[TODO] Typesafe higher-order gradients**.
+ 
+### Modules
+Nexus is modularized. It contains the following modules:
+
+| Module               |  Description                                        |
+|----------------------|-----------------------------------------------------|
+| `nexus-tensor`       | Foundations for typesafe tensors                    |
+| `nexus-prob`         | Typesafe probabilistic programming                  |
+| `nexus-diff`         | Typesafe deep learning (differentiable programming) |
+| `nexus-ml`           | High-level machine learning abstractions / models   |
+| `nexus-jvm-backend`  | JVM reference backend (slow)                        |
+| `nexus-torch`        | Torch native CPU backend                            |
+| `nexus-torch-cuda`   | Torch CUDA GPU backend                              |
+
  
 ### Citation
 Please cite this in academic work as

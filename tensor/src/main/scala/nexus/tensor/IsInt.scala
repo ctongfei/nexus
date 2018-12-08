@@ -1,5 +1,6 @@
 package nexus.tensor
 
+import algebra.ring._
 import cats._
 import nexus._
 
@@ -12,7 +13,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that type ${Z} is an integer.")
-trait IsInt[@specialized(Byte, Short, Int, Long) Z] {
+trait IsInt[@specialized(Byte, Short, Int, Long) Z] extends Ring[Z] {
 
   def zero: Z
   def one: Z
@@ -26,4 +27,8 @@ trait IsInt[@specialized(Byte, Short, Int, Long) Z] {
   def div(x: Z, y: Z): Z
   def mod(x: Z, y: Z): Z
 
+  // Conforming to algebra.ring.Ring
+  def plus(x: Z, y: Z) = add(x, y)
+  def negate(x: Z) = neg(x)
+  def times(x: Z, y: Z) = mul(x, y)
 }

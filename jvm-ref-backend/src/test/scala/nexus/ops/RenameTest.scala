@@ -1,10 +1,11 @@
 package nexus.ops
 
 
-import nexus._
-import nexus.execution._
+import nexus.diff._
+import nexus.diff.ops._
+import nexus.diff.execution._
 import nexus.jvm._
-import nexus.modules._
+import nexus.diff.modules._
 import nexus.tensor._
 import nexus.tensor.syntax._
 

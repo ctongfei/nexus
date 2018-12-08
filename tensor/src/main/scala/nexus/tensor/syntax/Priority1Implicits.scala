@@ -17,7 +17,7 @@ trait Priority1Implicits {
 
     def +(y: X): X = macro op2
     def -(y: X): X = macro op2
-    def +#(y: Double) = X.addS(x, y)
+    def +#(y: Double) = X.addScalar(x, y)
     def unary_- : X = macro op1
     def :*(y: Float): X = macro op2
     def :*(y: Double): X = macro op2

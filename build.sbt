@@ -16,9 +16,12 @@ lazy val commonSettings = Seq(
 
   scalacOptions += "-Ypartial-unification", // types
 
-  libraryDependencies += "com.chuusai"   %% "shapeless" % "2.3.3",
-  libraryDependencies += "org.typelevel" %% "algebra"   % "0.7.0",
-  libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0",
+  libraryDependencies ++= Seq(
+    "com.chuusai"   %% "shapeless"  % "2.3.3",
+    "org.typelevel" %% "cats-core"  % "1.4.0",
+    "org.typelevel" %% "algebra"    % "0.7.0",
+    "com.lihaoyi"   %% "sourcecode" % "0.1.4"
+  ),
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
   libraryDependencies += "me.tongfei"    %% "poly-io"   % "0.3.2" % Test,
@@ -58,16 +61,23 @@ lazy val tensor = (project in file("tensor"))
     name := "nexus-tensor"
   )
 
-lazy val core = (project in file("core"))
+lazy val prob = (project in file("prob"))
   .settings(commonSettings: _*)
   .dependsOn(tensor)
   .settings(
-    name := "nexus-core"
+    name := "nexus-prob"
+  )
+
+lazy val diff = (project in file("diff"))
+  .settings(commonSettings: _*)
+  .dependsOn(tensor, prob)
+  .settings(
+    name := "nexus-diff"
   )
 
 lazy val testBase = (project in file("test-base"))
   .settings(commonSettings: _*)
-  .dependsOn(core)
+  .dependsOn(diff)
   .settings(
     name := "nexus-test-base",
     publishArtifact := false,
@@ -76,21 +86,33 @@ lazy val testBase = (project in file("test-base"))
 
 lazy val ml = (project in file("ml"))
   .settings(commonSettings: _*)
-  .dependsOn(core)
+  .dependsOn(diff)
   .settings(
     name := "nexus-ml"
   )
 
-lazy val tensorboard = (project in file("tensorboard"))
+lazy val tensorflow = (project in file("interop/tensorflow"))
   .settings(commonSettings: _*)
-  .dependsOn(core)
+  .dependsOn(diff)
   .settings(
-    name := "nexus-tensorboard"
+    name := "nexus-interop-tensorflow",
+    libraryDependencies ++= Seq(
+      "org.tensorflow" % "tensorflow" % "1.12.0",
+      "org.tensorflow" % "libtensorflow" % "1.12.0",
+      "org.tensorflow" % "libtensorflow_jni_gpu" % "1.12.0"
+    )
+  )
+
+lazy val tensorboard = (project in file("interop/tensorboard"))
+  .settings(commonSettings: _*)
+  .dependsOn(diff)
+  .settings(
+    name := "nexus-interop-tensorboard"
   )
 
 lazy val jvmRefBackend = (project in file("jvm-ref-backend"))
   .settings(commonSettings: _*)
-  .dependsOn(core)
+  .dependsOn(diff)
   .settings(
     name := "nexus-jvm-ref-backend"
   )

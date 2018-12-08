@@ -3,7 +3,7 @@ package nexus.tensor.instances
 import nexus.tensor._
 import cats._
 
-object Int8 extends IsInt[Byte] {
+object ByteIsInt extends IsInt[Byte] {
   def add(x: Byte, y: Byte) = (x + y).toByte
   def neg(x: Byte) = (-x).toByte
   def sub(x: Byte, y: Byte) = (x - y).toByte
@@ -20,7 +20,7 @@ object Int8 extends IsInt[Byte] {
   def le(x: Byte, y: Byte) = x <= y
 }
 
-object Int16 extends IsInt[Short] {
+object ShortIsInt extends IsInt[Short] {
   def add(x: Short, y: Short) = (x + y).toShort
   def neg(x: Short) = (-x).toShort
   def sub(x: Short, y: Short) = (x - y).toShort
@@ -37,7 +37,7 @@ object Int16 extends IsInt[Short] {
   def le(x: Short, y: Short) = x <= y
 }
 
-object Int32 extends IsInt[Int] {
+object IntIsInt extends IsInt[Int] {
   def add(x: Int, y: Int) = x + y
   def neg(x: Int) = -x
   def sub(x: Int, y: Int) = x - y
@@ -54,7 +54,7 @@ object Int32 extends IsInt[Int] {
   def le(x: Int, y: Int) = x <= y
 }
 
-object Int64 extends IsInt[Long] {
+object LongIsInt extends IsInt[Long] {
   def add(x: Long, y: Long) = x + y
   def neg(x: Long) = -x
   def sub(x: Long, y: Long) = x - y

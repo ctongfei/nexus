@@ -20,8 +20,5 @@ package object tensor {
   sealed class ?
   val ? : ? = new ?
 
-  sealed class Batch
-  object Batch extends Batch
-
 
 }

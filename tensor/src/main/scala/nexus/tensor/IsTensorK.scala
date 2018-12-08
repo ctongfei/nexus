@@ -63,15 +63,18 @@ trait IsTensorK[T[_], @specialized E] { self =>
 
   def map3[a](x1: T[a], x2: T[a], x3: T[a])(f: (E, E, E) => E): T[a]
 
-  def sliceAlong[a, u, b](x: T[a], axis: u, n: Int)(implicit rx: Remove.Aux[a, u, b]): T[b]
 
-  def unstackAlong[a, u, b](x: T[a], axis: u)(implicit rx: Remove.Aux[a, u, b]): Seq[T[b]]
+  def transpose[U, V](x: T[(U, V)]): T[(V, U)]
 
-  def expandDim[a, i <: Nat, u <: Dim, b](x: T[a])(implicit ix: InsertAt.Aux[a, i, u, b]): T[b]
+  def sliceAlong[U, X, V](x: T[U], axis: X, n: Int)(implicit rx: Remove.Aux[U, X, V]): T[V]
 
-  def renameAxis[a, b](x: T[a]): T[b]
+  def unstackAlong[U, X, V](x: T[U], axis: X)(implicit rx: Remove.Aux[U, X, V]): Seq[T[V]]
 
-  def ground[a]: TensorTag[T[a]]
+  def expandDim[U, I <: Nat, X <: Dim, V](x: T[U])(implicit ix: InsertAt.Aux[U, I, X, V]): T[V]
+
+  def renameAxis[U, V](x: T[U]): T[V]
+
+  def ground[A]: TensorTag[T[A]]
 
 }
 
