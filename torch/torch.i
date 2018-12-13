@@ -4,11 +4,13 @@
     #include <math.h>
     #include <stdbool.h>
     #include <stddef.h>
-    
+
     #include "include/TH/TH.h"
-    #include "include/THNN/THNN.h"
     #include "include/THC/THC.h"
-    #include "include/THCUNN/THCUNN.h"
+    #include "include/ATen/ATen.h"
+
+    using namespace at;
+    using namespace c10::detail;
 %}
 
 %include "stdint.i"
@@ -31,6 +33,7 @@ intptr_t
 SWIG_JAVABODY_PROXY(public, public, SWIGTYPE)
 SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
+
 %include "include-swig/torch-preprocessed.h"
 
 %pragma(java) jniclasscode=%{
@@ -51,7 +54,7 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
         }
 
         try {
-            System.loadLibrary("jnitorch");
+            nexus.jniloader.JNILoader.loadLibraryFromJar("jnitorch");
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -12,15 +12,15 @@ lazy val commonSettings = Seq(
   organization := "me.tongfei",
   version := "0.1.0-SNAPSHOT",
   isSnapshot := true,
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.8",
 
   scalacOptions += "-Ypartial-unification", // types
 
   libraryDependencies ++= Seq(
     "com.chuusai"   %% "shapeless"  % "2.3.3",
-    "org.typelevel" %% "cats-core"  % "1.4.0",
-    "org.typelevel" %% "algebra"    % "0.7.0",
-    "com.lihaoyi"   %% "sourcecode" % "0.1.4"
+    "org.typelevel" %% "cats-core"  % "1.5.0",
+    "org.typelevel" %% "algebra"    % "1.0.0",
+    "com.lihaoyi"   %% "sourcecode" % "0.1.5"
   ),
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
@@ -54,7 +54,6 @@ lazy val commonSettings = Seq(
   mathFormulaInDoc <<= mathFormulaInDoc triggeredBy (doc in Compile)
 )
 
-
 lazy val tensor = (project in file("tensor"))
   .settings(commonSettings: _*)
   .settings(
@@ -75,6 +74,15 @@ lazy val diff = (project in file("diff"))
     name := "nexus-diff"
   )
 
+// this is a small, pure Java library
+lazy val jniLoader = (project in file("jni-loader"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "nexus-jni-loader",
+    crossPaths := false,
+    autoScalaLibrary := false
+  )
+
 lazy val testBase = (project in file("test-base"))
   .settings(commonSettings: _*)
   .dependsOn(diff)
@@ -91,17 +99,6 @@ lazy val ml = (project in file("ml"))
     name := "nexus-ml"
   )
 
-lazy val tensorflow = (project in file("interop/tensorflow"))
-  .settings(commonSettings: _*)
-  .dependsOn(diff)
-  .settings(
-    name := "nexus-interop-tensorflow",
-    libraryDependencies ++= Seq(
-      "org.tensorflow" % "tensorflow" % "1.12.0",
-      "org.tensorflow" % "libtensorflow" % "1.12.0",
-      "org.tensorflow" % "libtensorflow_jni_gpu" % "1.12.0"
-    )
-  )
 
 lazy val tensorboard = (project in file("interop/tensorboard"))
   .settings(commonSettings: _*)
@@ -119,6 +116,7 @@ lazy val jvmRefBackend = (project in file("jvm-ref-backend"))
 
 lazy val torchJni = (project in file("torch/jni"))
   .settings(commonSettings: _*)
+  .dependsOn(jniLoader)
   .settings(
     name := "nexus-torch-backend-jni"
   )

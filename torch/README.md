@@ -1,9 +1,23 @@
 ### nexus-torch
-This directory contains a JVM bindings for Torch (PyTorch C++ core), used as a backend for Nexus. It uses SWIG to generate the JNI bindings.
+This directory contains JVM bindings for Torch (PyTorch C/C++ core), used as a backend for Nexus. It uses SWIG to generate the JNI bindings.
 
-#### Building manually
+#### Tested environments
 
- - **Step 1**: Build ATen in PyTorch from source.
+ - Linux + CUDA 10.0 + PyTorch 1.0.0
+
+
+#### Building the binding manually
+
+Prerequisites:
+ - PyTorch 1.0.0
+
+Steps:
+
+ - **Step 1**: Install PyTorch.
  
- - **Step 2**: Run `build.sh`.
+ - **Step 2**: Run `build.sh`. 
+
+#### Internals
+
+
  

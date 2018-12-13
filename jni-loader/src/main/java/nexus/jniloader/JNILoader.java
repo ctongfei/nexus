@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package nexus.torch.jni;
+package nexus.jniloader;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +80,15 @@ public class JNILoader {
             Files.copy(is, lib.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
-        System.load(lib.getAbsolutePath()); // JVM requires absolute path
+        try {
+            System.load(lib.getAbsolutePath()); // JVM requires absolute path
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        System.err.println("Native library " + libraryName + " loaded.");
 
     }
 
