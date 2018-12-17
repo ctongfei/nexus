@@ -7,7 +7,6 @@ import nexus.torch.jni.torchJNI._
  */
 object TorchTest extends App {
 
-  val d = TH_digamma(3.0)
-  println(d)
+  val t = FloatTensor.newTensor()
 
 }

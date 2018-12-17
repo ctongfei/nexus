@@ -1,8 +1,6 @@
 package nexus.tensor
 
 import algebra.ring._
-import cats._
-import nexus._
 
 import scala.annotation._
 

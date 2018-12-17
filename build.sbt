@@ -121,9 +121,15 @@ lazy val torchJni = (project in file("torch/jni"))
     name := "nexus-torch-backend-jni"
   )
 
+lazy val torchMacros = (project in file("torch/macros"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "nexus-torch-backend-macros"
+  )
+
 lazy val torchCpu = (project in file("torch/cpu"))
   .settings(commonSettings: _*)
-  .dependsOn(tensor).dependsOn(torchJni)
+  .dependsOn(tensor).dependsOn(torchJni).dependsOn(torchMacros)
   .settings(
     name := "nexus-torch-backend-cpu"
   )

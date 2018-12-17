@@ -26,23 +26,23 @@ trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends RingTensorK[T, 
 
   def sqrt[A](x: T[A]): T[A]
 
-  def log[a](x: T[a]): T[a]
-  def exp[a](x: T[a]): T[a]
-  def log1p[a](x: T[a]): T[a]
-  def expm1[a](x: T[a]): T[a]
+  def log[A](x: T[A]): T[A]
+  def exp[A](x: T[A]): T[A]
+  def log1p[A](x: T[A]): T[A]
+  def expm1[A](x: T[A]): T[A]
 
-  def sin[a](x: T[a]): T[a]
-  def cos[a](x: T[a]): T[a]
-  def tan[a](x: T[a]): T[a]
+  def sin[A](x: T[A]): T[A]
+  def cos[A](x: T[A]): T[A]
+  def tan[A](x: T[A]): T[A]
 
-  def sigmoid[a](x: T[a]): T[a]
+  def sigmoid[A](x: T[A]): T[A]
 
-  def relu[a](x: T[a]): T[a]
+  def relu[A](x: T[A]): T[A]
 
-  def abs[a](x: T[a]): T[a]
-  def sgn[a](x: T[a]): T[a]
+  def abs[A](x: T[A]): T[A]
+  def sgn[A](x: T[A]): T[A]
 
-  def pos[a](x: T[a]): T[a]
+  def pos[A](x: T[A]): T[A]
 
   private object grounded extends IsRealTensor[T[Any], R] {
     def elementType = self.elementType

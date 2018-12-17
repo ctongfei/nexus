@@ -1,7 +1,6 @@
 package nexus.tensor
 
 import algebra.ring._
-
 import scala.annotation._
 
 /**
@@ -11,7 +10,7 @@ import scala.annotation._
  * @since 0.1.0
  */
 @implicitNotFound("Cannot prove that type ${R} is a real number.")
-trait IsReal[@specialized(Float, Double) R] extends Grad[R] {
+trait IsReal[@specialized(Float, Double) R] extends Grad[R] with Field[R] {
   def zeroBy(x: R) = zero
   def toFloat(x: R): Float
 
@@ -47,6 +46,12 @@ trait IsReal[@specialized(Float, Double) R] extends Grad[R] {
   def addScalar(x1: R, x2: Double) = add(x1, fromDouble(x2))
   def addInplace(x1: R, x2: R): R = add(x1, x2)
   def scale(x: R, k: Double) = mul(x, fromDouble(k))
+
+  // Conforms to algebra.ring.Field
+  def negate(x: R) = neg(x)
+  def plus(x: R, y: R) = add(x, y)
+  def times(x: R, y: R) = mul(x, y)
+
 }
 
 

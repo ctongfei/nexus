@@ -14,11 +14,11 @@ trait BoolTensorK[T[_], B] extends IsTensorK[T, B] { self =>
 
   def trueBy[A](x: T[A]): T[A]
 
-  def eNot[A](x: T[A]): T[A]
+  def not[A](x: T[A]): T[A]
 
-  def eAnd[A](x: T[A]): T[A]
+  def and[A](x: T[A]): T[A]
 
-  def eOr[A](x: T[A]): T[A]
+  def or[A](x: T[A]): T[A]
 
   override def ground[A] = ???
 

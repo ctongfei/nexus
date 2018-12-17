@@ -9,6 +9,9 @@ package nexus.diff;
  */
 trait Device {
 
+  /**
+   * Supertype of all objects allocated on this device.
+   */
   type Obj
 
   /**

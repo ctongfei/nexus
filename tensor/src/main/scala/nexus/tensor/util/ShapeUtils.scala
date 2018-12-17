@@ -37,4 +37,14 @@ private[nexus] object ShapeUtils {
     n
   }
 
+  def product(shape: Seq[Int]) = {
+    var n = 1l
+    var k = 0
+    while (k < shape.length) {
+      n *= shape(k)
+      k += 1
+    }
+    n
+  }
+
 }

@@ -30,7 +30,7 @@ object FloatIsReal extends IsReal[Float] {
   def tan(x: R) = Math.tan(x).toFloat
 
   override def fromDouble(a: Double) = a.toFloat
-  def fromInt(n: Int) = n.toFloat
+  override def fromInt(n: Int) = n.toFloat
 
   def toFloat(x: R) = x
 
@@ -67,7 +67,7 @@ object DoubleIsReal extends IsReal[Double] {
 
 
   override def fromDouble(a: R) = a
-  def fromInt(n: Int) = n
+  override def fromInt(n: Int) = n
 
   def toFloat(x: R) = x.toFloat
 

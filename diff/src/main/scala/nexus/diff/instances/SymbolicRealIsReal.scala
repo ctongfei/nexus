@@ -31,7 +31,7 @@ class SymbolicRealIsReal[R](implicit R: IsReal[R]) extends IsReal[Symbolic[R]] {
   def zero = Const(R.zero)
   override def addScalar(x1: Symbolic[R], x2: Double) = Add(x1, Const(R.fromDouble(x2)))
   override def addInplace(x1: Symbolic[R], x2: Symbolic[R]) = Add(x1, x2)
-  def fromDouble(d: Double) = Const(R.fromDouble(d))
+  override def fromDouble(d: Double) = Const(R.fromDouble(d))
 }
 
 
