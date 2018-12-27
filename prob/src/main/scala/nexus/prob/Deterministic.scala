@@ -1,7 +1,7 @@
 package nexus.prob
 
 /**
- * Represents a deterministic stochastic variable.
+ * A deterministic stochastic variable.
  * @author Tongfei Chen
  * @since 0.1.0
  */

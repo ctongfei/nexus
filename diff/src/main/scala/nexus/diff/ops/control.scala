@@ -3,7 +3,7 @@ package nexus.diff.ops
 import nexus.diff._
 import nexus.diff.execution._
 import nexus.diff.exception._
-import nexus.tensor._
+import nexus._
 
 /**
  * Conditional expression.

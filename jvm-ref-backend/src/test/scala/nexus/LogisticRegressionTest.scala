@@ -7,8 +7,8 @@ import nexus.diff.execution._
 import nexus.jvm._
 import nexus.jvm.setFloat32AsDefault._
 import nexus.diff.modules._
-import nexus.tensor._
-import nexus.tensor.syntax._
+import nexus._
+import nexus.syntax._
 
 /**
  * @author Tongfei Chen

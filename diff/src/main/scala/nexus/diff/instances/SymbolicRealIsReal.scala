@@ -2,8 +2,8 @@ package nexus.diff.instances
 
 import nexus.diff._
 import nexus.diff.ops._
-import nexus.tensor._
-import nexus.tensor.instances._
+import nexus._
+import nexus.instances._
 
 /**
  * @author Tongfei Chen

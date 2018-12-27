@@ -1,7 +1,7 @@
 package nexus.prob
 
-import nexus.tensor._
-import nexus.tensor.syntax._
+import nexus._
+import nexus.syntax._
 
 /**
  * An exponential distribution.
@@ -12,11 +12,13 @@ class Exponential[R](val λ: R)(implicit R: IsReal[R]) extends Stochastic[R] {
   import R._
 
   def sample = {
-    val u = random.nextDouble()
+    val u = randomSource.nextDouble()
     log(fromDouble(u)) / λ
   }
 
   def rate = λ
+
+  override def toString = s"Exponential(λ = $rate)"
 
 }
 

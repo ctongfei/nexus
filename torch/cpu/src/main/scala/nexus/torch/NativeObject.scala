@@ -1,7 +1,5 @@
 package nexus.torch
 
-import nexus.torch.jni.torchJNI._
-
 /**
  * Represents a C struct that is accessed by a pointer through JNI.
  * @author Tongfei Chen
@@ -12,8 +10,8 @@ trait NativeObject {
   def ptr: Long
 
   /** Frees the memory of this object. */
-  override def finalize(): Unit = {
-    THFree(ptr)
-  }
+  def free(): Unit
+
+  override final def finalize(): Unit = free()
 
 }

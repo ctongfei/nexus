@@ -1,7 +1,7 @@
 package nexus
 
-import nexus.tensor._
-import nexus.tensor.syntax._
+import nexus._
+import nexus.syntax._
 import nexus.diff._
 import nexus.diff.execution._
 import nexus.jvm._
@@ -47,7 +47,6 @@ object XorTest extends App {
 
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)
-
 
   val ŷ = x |> Layer1 |> Sigmoid |> Layer2 |> Softmax
   //val ŷ = Softmax(Layer2(Sigmoid(Layer1(x))))

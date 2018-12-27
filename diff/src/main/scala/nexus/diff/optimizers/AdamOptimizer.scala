@@ -1,7 +1,7 @@
 package nexus.diff.optimizers
 
 import nexus.diff._
-import nexus.tensor.syntax._
+import nexus.syntax._
 import scala.math._
 
 /**

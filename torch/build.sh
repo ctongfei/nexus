@@ -71,7 +71,9 @@ cd include-swig
 g++ -P -E \
   -I TH -I THNN -I THC -I THCUNN torch.h \
   | sed -e 's/__attribute__((__visibility__("default")))//g' \
+  | sed -e 's/CAFFE2_API//g' \
   | grep -v "AT_CUDA_API" \
+  | grep -v "^at::DataPtr" \
   | python ../remove_classes.py \
   > torch-preprocessed.h
 cd ..
@@ -82,7 +84,6 @@ mkdir -p jni/src/main/java/nexus/torch/jni
 swig -c++ -v -DSWIGWORDSIZE64 -java -package nexus.torch.jni -outdir jni/src/main/java/nexus/torch/jni torch.i
 
 cat torch_wrap.cxx \
-  | grep -v 'at::cuda::CUDAStream arg2 ;' \
   | python fix_cuda_stream_dereferencing.py \
   > torch_wrap_fixed.cxx
 
@@ -104,10 +105,10 @@ mkdir -p jni/src/main/resources
 cc $CC_LIB_ARGS
 
 echo "Cleaning up..."
-rm -r include-swig
-
-rm torch_wrap.cxx
-rm torch_wrap_fixed.cxx
+#rm -r include-swig
+#
+#rm torch_wrap.cxx
+#rm torch_wrap_fixed.cxx
 
 
 echo "Done. SWIG JNI bridge built."

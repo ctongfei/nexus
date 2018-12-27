@@ -20,11 +20,18 @@ object macros {
   )
 
   val nexusTorchMethodMap = Map(
+    "addScalar" -> "add",
+    "subScalar" -> "sub",
+    "scale" -> "mul",
     "add" -> "cadd",
     "sub" -> "csub",
     "mul" -> "cmul",
     "div" -> "cdiv",
-    "inv" -> "cinv"
+    "inv" -> "cinv",
+    "arcsin" -> "asin",
+    "arccos" -> "acos",
+    "arctan" -> "atan",
+    "zeroBy" -> "zerosLike"
   )
 
   def getClassName(c: Context) =
@@ -91,7 +98,7 @@ object macros {
     tree
   }
 
-  def elementwise2addSub[A: c.WeakTypeTag](c: Context)(x: c.Tree, y: c.Tree): c.Tree = {
+  def addSub[A: c.WeakTypeTag](c: Context)(x: c.Tree, y: c.Tree): c.Tree = {
     import c.universe._
     val info = new Info[c.type, A](c)
     import info._
@@ -100,6 +107,21 @@ object macros {
     val tree = q"""
        val z = new $nexusType[$axesType](nexus.torch.jni.torchJNI.$torchNewFunc())
        nexus.torch.jni.torchJNI.$torchFunc(z.ptr, $x.ptr, 1f, $y.ptr)
+       z
+     """
+
+    tree
+  }
+
+  def addSubScalar[A: c.WeakTypeTag](c: Context)(x: c.Tree, u: c.Tree): c.Tree = {
+    import c.universe._
+    val info = new Info[c.type, A](c)
+    import info._
+
+    println(s"Macro with native method $torchFuncName generated.")
+    val tree = q"""
+       val z = new $nexusType[$axesType](nexus.torch.jni.torchJNI.$torchNewFunc())
+       nexus.torch.jni.torchJNI.$torchFunc(z.ptr, $x.ptr, $u)
        z
      """
 

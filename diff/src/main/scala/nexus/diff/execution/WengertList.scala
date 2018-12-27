@@ -3,7 +3,7 @@ package nexus.diff.execution
 import cats._
 import nexus.diff.exception._
 import nexus.diff._
-import nexus.tensor._
+import nexus._
 
 import scala.collection._
 

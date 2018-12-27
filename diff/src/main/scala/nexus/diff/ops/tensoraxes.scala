@@ -1,8 +1,8 @@
 package nexus.diff.ops
 
 import nexus.diff._
-import nexus.tensor._
-import nexus.tensor.typelevel._
+import nexus._
+import nexus.typelevel._
 import shapeless._
 
 /**

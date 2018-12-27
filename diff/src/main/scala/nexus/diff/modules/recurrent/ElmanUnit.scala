@@ -3,7 +3,7 @@ package nexus.diff.modules.recurrent
 import nexus.diff._
 import nexus.diff.modules._
 import nexus.diff.ops._
-import nexus.tensor._
+import nexus._
 import nexus.diff.util._
 
 /**

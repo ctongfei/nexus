@@ -4,7 +4,7 @@ import nexus.diff._
 import nexus.diff.execution._
 import nexus.diff.ops._
 import nexus.diff.optimizers._
-import nexus.tensor.instances._
+import nexus.instances._
 
 /**
  * @author Tongfei Chen

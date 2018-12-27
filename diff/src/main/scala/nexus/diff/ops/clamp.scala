@@ -1,7 +1,7 @@
 package nexus.diff.ops
 
 import nexus.diff._
-import nexus.tensor._
+import nexus._
 
 /**
  * @author Tongfei Chen

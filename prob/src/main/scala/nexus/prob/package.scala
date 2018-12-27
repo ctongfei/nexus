@@ -11,9 +11,9 @@ package object prob {
 
   def setSeed(newSeed: Long): Unit = synchronized {
     seed = newSeed
-    random = new java.util.Random(seed)
+    randomSource = new java.util.Random(seed)
   }
 
-  private[nexus] var random = new java.util.Random(seed)
+  private[nexus] var randomSource = new java.util.Random(seed)
 
 }

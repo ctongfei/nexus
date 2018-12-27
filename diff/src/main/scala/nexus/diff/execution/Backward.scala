@@ -2,7 +2,7 @@ package nexus.diff.execution
 
 import cats._
 import nexus.diff._
-import nexus.tensor._
+import nexus._
 
 /**
  * Performs backward computation (backpropagation through the neural network).

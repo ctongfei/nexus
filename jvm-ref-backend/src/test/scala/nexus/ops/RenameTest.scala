@@ -6,8 +6,8 @@ import nexus.diff.ops._
 import nexus.diff.execution._
 import nexus.jvm._
 import nexus.diff.modules._
-import nexus.tensor._
-import nexus.tensor.syntax._
+import nexus._
+import nexus.syntax._
 
 class A extends Dim
 class B extends Dim

@@ -1,6 +1,6 @@
-package nexus.tensor
+package nexus
 
-import nexus.tensor.instances._
+import nexus.instances._
 /**
  * @author Tongfei Chen
  */

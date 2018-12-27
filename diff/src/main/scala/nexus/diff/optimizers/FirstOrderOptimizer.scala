@@ -3,7 +3,7 @@ package nexus.diff.optimizers
 import cats._
 import nexus.diff._
 import nexus.diff.execution._
-import nexus.tensor._
+import nexus._
 
 /**
  * Base abstract class for optimizers.

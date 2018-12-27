@@ -2,7 +2,7 @@ package nexus.diff.syntax
 
 import nexus.diff._
 import nexus.diff.ops._
-import nexus.tensor._
+import nexus._
 
 /**
  * @author Tongfei Chen

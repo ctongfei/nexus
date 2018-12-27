@@ -1,7 +1,7 @@
 package nexus.diff.ops
 
 import nexus.diff._
-import nexus.tensor._
+import nexus._
 
 /**
  * Applies an arbitrary differentiable function to all elements in a specific tensor.

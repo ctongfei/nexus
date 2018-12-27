@@ -1,11 +1,11 @@
 package nexus.prob
 
 import nexus._
-import nexus.tensor._
-import nexus.tensor.syntax._
+import nexus._
+import nexus.syntax._
 
 /**
- * Represents the univariate normal distribution N(μ, σ^2^).
+ * Univariate normal distribution N(μ, σ^2^).
  * @author Tongfei Chen
  * @since 0.1.0
  */
@@ -19,15 +19,12 @@ class Normal[R] private(val μ: R, val τ: R)(implicit R: IsReal[R]) extends Sto
   def logPdf(x: R) = ???
 
   def mean = μ
-
   def variance = σ2
-
   def precision = τ
-
   def stdDev = σ
 
   def sample = {
-    val u = random.nextGaussian()
+    val u = randomSource.nextGaussian()
     μ + R.fromDouble(u) * σ
   }
 

@@ -2,7 +2,7 @@ package nexus.diff.ops
 
 import nexus.diff._
 import nexus.diff.ops.mixin._
-import nexus.tensor._
+import nexus._
 
 /**
  * Boolean negation.

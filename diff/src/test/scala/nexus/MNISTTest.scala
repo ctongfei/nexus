@@ -2,7 +2,7 @@ package nexus
 
 import java.nio._
 /*
-import nexus.tensor._
+import nexus._
 import nexus.execution._
 import nexus.jvm._
 import nexus.modules._

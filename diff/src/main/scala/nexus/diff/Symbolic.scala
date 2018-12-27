@@ -1,7 +1,7 @@
 package nexus.diff
 
 import cats._
-import nexus.tensor._
+import nexus._
 import nexus.diff.util._
 
 /**

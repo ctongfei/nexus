@@ -12,6 +12,8 @@ import cats.Id
 trait Uniform[R] extends Stochastic[R] with HasPdf[R, R] {
   def left: R
   def right: R
+
+  override def toString = s"Uniform($left, $right)"
 }
 
 object Uniform {

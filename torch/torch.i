@@ -42,14 +42,14 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
         try {
             System.loadLibrary("caffe2");
         }
-        catch (Exception e) {
+        catch (UnsatisfiedLinkError e) {
             System.err.println("caffe2 native library not available.");
         }
 
         try {
             System.loadLibrary("caffe2_gpu");
         }
-        catch (Exception e) {
+        catch (UnsatisfiedLinkError e) {
             System.err.println("caffe2_gpu native library unavailable.");
         }
 

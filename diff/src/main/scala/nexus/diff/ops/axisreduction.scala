@@ -3,8 +3,8 @@ package nexus.diff.ops
 import nexus.diff._
 import nexus.diff.exception._
 import nexus.diff.ops.mixin._
-import nexus.tensor._
-import nexus.tensor.typelevel._
+import nexus._
+import nexus.typelevel._
 
 object SumAlong extends ParameterizedPolyOp1 with RealAxisReductionOpMixin {
   def forwardR[T[_], R, A, U <: Dim, B](x: T[A], u: U)(implicit T: IsRealTensorK[T, R], rx: Remove.Aux[A, U, B]) = ???

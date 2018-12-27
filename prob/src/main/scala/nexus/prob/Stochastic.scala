@@ -1,7 +1,7 @@
 package nexus.prob
 
 import cats._
-import nexus.tensor._
+import nexus._
 import scala.collection._
 import scala.reflect._
 import scala.util._
@@ -31,23 +31,19 @@ trait Stochastic[+A] { self =>
     f(sample).sample
   }
 
-  /**
-   * Creates a conditional stochastic variable conditioned on the given predicate.
-   */
+  /** Creates a conditional stochastic variable conditioned on the given predicate. */
   def filter(f: A => Boolean): Stochastic[A] =
     new Conditional(self, f)
 
-  /**
-   * Creates a conditional stochastic variable conditioned on the given predicate. Alias of [[filter]].
-   */
+  /** Creates a conditional stochastic variable conditioned on the given predicate. Alias of [[filter]]. */
   def given(f: A => Boolean): Stochastic[A] = filter(f)
 
   def collect[B](pf: PartialFunction[A, B]): Stochastic[B] =
     new ConditionallyMapped(self, pf)
 
   /**
-   * Creates a joint distribution of two stochastic variables, assuming they are independent.
-   * This is the [[cats.Applicative]] `product` function on [[Stochastic]].
+   * Creates a joint distribution of two stochastic variables, assuming that they are independent.
+   * This is the [[cats.Applicative]] `product` function on [[nexus.prob.Stochastic]].
    */
   def product[B](that: Stochastic[B]): Stochastic[(A, B)] = Stochastic {
     (self.sample, that.sample)
@@ -101,7 +97,7 @@ object Stochastic {
         val x = self.sample
         if (f(x)) return x
       } while (true)
-      null.asInstanceOf[A] // will never happen
+      throw new IllegalStateException("This should never happen.")
     }
   }
 
@@ -115,7 +111,7 @@ object Stochastic {
           case None =>
         }
       } while (true)
-      null.asInstanceOf[B] // will never happen
+      throw new IllegalStateException("This should never happen.")
     }
   }
 

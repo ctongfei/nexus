@@ -1,6 +1,6 @@
 package nexus.diff.syntax
 
-import nexus.tensor._
+import nexus._
 
 /**
  * @author Tongfei Chen

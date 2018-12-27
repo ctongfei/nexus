@@ -2,7 +2,7 @@ package nexus.diff.modules
 
 import nexus.diff._
 import nexus.diff.ops._
-import nexus.tensor._
+import nexus._
 
 
 object L1Distance extends PolyModule2 {

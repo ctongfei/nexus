@@ -1,9 +1,9 @@
 package nexus.jvm
 
-import nexus.tensor._
-import nexus.tensor.syntax._
-import nexus.tensor.typelevel._
-import nexus.tensor.util._
+import nexus._
+import nexus.syntax._
+import nexus.typelevel._
+import nexus.util._
 import shapeless._
 
 import scala.reflect._

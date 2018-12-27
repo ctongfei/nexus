@@ -1,4 +1,4 @@
-package nexus.tensor.typelevel
+package nexus.typelevel
 
 import org.scalatest._
 

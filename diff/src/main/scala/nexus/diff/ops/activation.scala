@@ -1,8 +1,8 @@
 package nexus.diff.ops
 
 import nexus.diff._
-import nexus.tensor._
-import nexus.tensor.syntax._
+import nexus._
+import nexus.syntax._
 
 /**
  * Rectified linear unit.

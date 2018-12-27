@@ -2,7 +2,7 @@ package nexus.diff.modules
 
 import nexus.diff._
 import nexus.diff.ops._
-import nexus.tensor._
+import nexus._
 import nexus.diff.util._
 
 /**

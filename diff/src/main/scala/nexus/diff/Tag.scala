@@ -1,6 +1,6 @@
 package nexus.diff
 
-import nexus.tensor._
+import nexus._
 
 /**
  * Type tag containing an evidence typeclass instance on a variable.

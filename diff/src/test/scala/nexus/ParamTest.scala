@@ -1,7 +1,7 @@
 package nexus
 
 import nexus.diff._
-import nexus.tensor.instances._
+import nexus.instances._
 import org.scalatest._
 
 /**

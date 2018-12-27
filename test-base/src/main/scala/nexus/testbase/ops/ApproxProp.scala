@@ -1,7 +1,7 @@
 package nexus.testbase.ops
 
 import nexus._
-import nexus.tensor._
+import nexus._
 import nexus.prob._
 
 /**

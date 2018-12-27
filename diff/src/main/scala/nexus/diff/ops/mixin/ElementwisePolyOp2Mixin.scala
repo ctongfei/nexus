@@ -2,7 +2,7 @@ package nexus.diff.ops.mixin
 
 import nexus.diff._
 import nexus.diff.exception._
-import nexus.tensor._
+import nexus._
 
 
 trait RealElementwisePolyOp2Mixin { poly: PolyOp2 =>

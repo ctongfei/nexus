@@ -1,7 +1,7 @@
 package nexus.jvm
 
-import nexus.tensor.instances._
-import nexus.tensor.util._
+import nexus.instances._
+import nexus.util._
 import shapeless.Nat
 
 import scala.reflect._

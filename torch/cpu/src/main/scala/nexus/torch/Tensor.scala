@@ -8,4 +8,3 @@ abstract class Tensor[E, A] private[torch](val ptr: Long) extends NativeObject {
 }
 // TODO: SIP-35 opaque type: zero-cost abstraction:
 // TODO: opaque type Tensor[E, A] = Long
-

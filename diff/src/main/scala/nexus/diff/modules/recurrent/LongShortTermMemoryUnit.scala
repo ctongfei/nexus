@@ -2,7 +2,7 @@ package nexus.diff.modules.recurrent
 
 import nexus.diff._
 import nexus.diff.ops._
-import nexus.tensor._
+import nexus._
 
 /**
  * A recurrent unit used in long short-term memory networks.

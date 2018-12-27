@@ -1,6 +1,6 @@
 package nexus.prob
 
-import nexus.tensor._
+import nexus._
 
 /**
  * @author Tongfei Chen
