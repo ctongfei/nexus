@@ -16,13 +16,13 @@ if [[ $OSTYPE == "linux-gnu" ]]; then
     echo "Operating system is $OSTYPE"
     JAVA_OS_DEPENDENT_INCLUDE=linux
     JNI_COMPILATION_FLAGS="-std=c++11 -fPIC -static"
-    CC_LIB_ARGS="-shared torch_wrap.o -o jni/src/main/resources/libjnitorch.so -Wl,-rpath,$PYTORCH_LIB_PATH -L $PYTORCH_LIB_PATH -lcaffe2 -lcaffe2_gpu"
+    CC_LIB_ARGS="-shared torch_wrap_fixed.o -o jni/src/main/resources/libjnitorch.so -Wl,-rpath,$PYTORCH_LIB_PATH -L $PYTORCH_LIB_PATH -lcaffe2 -lcaffe2_gpu"
 
 elif [[ $OSTYPE == "darwin"* ]]; then
     echo "Operating system is $OSTYPE"
     JAVA_OS_DEPENDENT_INCLUDE=darwin
     JNI_COMPILATION_FLAGS=""
-    CC_LIB_ARGS="-dynamiclib -undefined suppress -flat_namespace torch_wrap.o -o jni/src/main/resources/libjnitorch.dylib"
+    CC_LIB_ARGS="-dynamiclib -undefined suppress -flat_namespace torch_wrap_fixed.o -o jni/src/main/resources/libjnitorch.dylib"
 
 fi
 
