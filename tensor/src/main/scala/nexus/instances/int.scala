@@ -18,6 +18,7 @@ object ByteIsInt extends IsInt[Byte] {
   def eq(x: Byte, y: Byte) = x == y
   def ne(x: Byte, y: Byte) = x != y
   def le(x: Byte, y: Byte) = x <= y
+  def fromLong(x: Long) = x.toByte
 }
 
 object ShortIsInt extends IsInt[Short] {
@@ -35,6 +36,7 @@ object ShortIsInt extends IsInt[Short] {
   def eq(x: Short, y: Short) = x == y
   def ne(x: Short, y: Short) = x != y
   def le(x: Short, y: Short) = x <= y
+  def fromLong(x: Long) = x.toShort
 }
 
 object IntIsInt extends IsInt[Int] {
@@ -52,6 +54,7 @@ object IntIsInt extends IsInt[Int] {
   def eq(x: Int, y: Int) = x == y
   def ne(x: Int, y: Int) = x != y
   def le(x: Int, y: Int) = x <= y
+  def fromLong(x: Long) = x.toInt
 }
 
 object LongIsInt extends IsInt[Long] {
@@ -69,4 +72,5 @@ object LongIsInt extends IsInt[Long] {
   def eq(x: Long, y: Long) = x == y
   def ne(x: Long, y: Long) = x != y
   def le(x: Long, y: Long) = x <= y
+  def fromLong(x: Long) = x
 }

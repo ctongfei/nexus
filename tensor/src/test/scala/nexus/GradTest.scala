@@ -1,6 +1,7 @@
 package nexus
 
-import nexus.instances._
+import _root_.nexus.instances._
+
 /**
  * @author Tongfei Chen
  */

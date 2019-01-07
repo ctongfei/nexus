@@ -1,6 +1,7 @@
 package nexus.torch
 
 import nexus._
+import nexus.tensormath._
 import nexus.syntax._
 import nexus.torch._
 import nexus.torch.jni._
@@ -18,25 +19,15 @@ object TorchTest extends App {
   s.view foreach println
 
 
-  val storage = Storage.ofSize[Float](4)
-  storage(0) = 1f
-  storage(1) = 2f
-  storage(2) = 3f
-  storage(3) = 4f
-  println(storage)
-  val ptr = torchJNI.THFloatTensor_newWithStorage1d(storage.ptr, 0, storage.length, 1)
-  val tensor = new FloatTensor(ptr)
-  println(tensor)
-  torchJNI.THFloatTensor_resize2d(tensor.ptr, 2, 2)
-  println(tensor)
-  println(tensor.tensorRank)
-  println(tensor.shape)
-  println(tensor.stride)
-
   class A extends Dim; val A = new A
   class B extends Dim; val B = new B
+  class C extends Dim; val C = new C
 
-  val x = FloatTensor.fromNestedArray(A, B)(
+  val z = FloatTensor.newTensor(A -> 2, B -> 3)
+
+  val zT = FloatTensorIsRealTensorK.transpose(z)
+
+  val x = FloatTensorIsRealTensorK.fromNestedArray(A, B)(
     Array(
       Array(1f, 2f),
       Array(3f, 4f)

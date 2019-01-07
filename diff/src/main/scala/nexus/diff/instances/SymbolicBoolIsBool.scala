@@ -8,7 +8,7 @@ import nexus.instances._
 /**
  * @author Tongfei Chen
  */
-object BoolExprIsBool extends IsBool[Symbolic[Boolean]] {
+object SymbolicBoolIsBool extends IsBool[Symbolic[Boolean]] {
   def top = Const(true)
   def bot = Const(false)
   def not(a: Symbolic[Boolean]) = Not(a)

@@ -15,11 +15,17 @@ import scala.reflect._
  * @tparam A Axis descriptor
  */
 class FloatTensor[A] private[torch](ptr: Long) extends Tensor[Float, A](ptr) {
+
   def storage = new Storage[Float](ptr = THFloatTensor_storage(ptr), tag = Storage.TypeTag.Float)
+  def tensorRank = THFloatTensor_nDimension(ptr)
+  def shape = Array.tabulate(tensorRank)(i => THFloatTensor_size(ptr, i).toInt)
+  def stride = Array.tabulate(tensorRank)(i => THFloatTensor_stride(ptr, i).toInt)
   def free(): Unit = THFloatTensor_free(ptr)
 
-  override def toString = s"FloatTensor[@0x${ptr.toHexString}]"
+  override def toString = s"FloatTensor[@0x${ptr.toHexString}; shape = ${StringUtils.arraySummary(shape)}; stride = ${StringUtils.arraySummary(stride)}]"
 }
+
+object FloatTensor extends TensorFactory[FloatTensor, Float](FloatTensorIsRealTensorK)
 
 object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
 
@@ -37,16 +43,13 @@ object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
   }
 
   def newTensor[A](shape: Seq[Int]): FloatTensor[A] = {
-    // TODO: resizeNd throws error! now this fallback method
-    val ptr = shape.length match {
-      case 0 => ???
-      case 1 => THFloatTensor_newWithSize1d(shape(0))
-      case 2 => THFloatTensor_newWithSize2d(shape(0), shape(1))
-      case 3 => THFloatTensor_newWithSize3d(shape(0), shape(1), shape(2))
-      case 4 => THFloatTensor_newWithSize4d(shape(0), shape(1), shape(2), shape(3))
-      case n => ???
-    }
-    new FloatTensor[A](ptr)
+    val sh = shape.map(_.toLong).toArray
+    val nShape = NativeArray.fromJvm(sh :+ 0l)                                // Torch requires a 0-ending array here
+    val nStride = NativeArray.fromJvm(ShapeUtils.contiguousStrides(sh) :+ 0l) // Torch requires a 0-ending array here
+
+    val tensor = newVector(ShapeUtils.product(shape).toInt)
+    THFloatTensor_resizeNd(tensor.ptr, shape.length, nShape.ptr, nStride.ptr)
+    tensor.asInstanceOf[FloatTensor[A]]
   }
 
   def fromFlatArray[A](array: Array[Float], shape: Seq[Int]) = {

@@ -32,7 +32,7 @@ trait Op1[X, Y] extends Func1[X, Y] with AnyOp[Y] /*with PolyFunc1 */ {
 object Op1 {
   def fromFunction[A, B](f: A => B): Op1[A, B] = new Op1[A, B] {
     def name = f.toString()
-    def tag = Tag.any[B]
+    def tag = Tag.none[B]
     override def differentiable = false
     def forward(x: A) = f(x)
     def backward(dy: B, y: B, x: A) = throw new OperatorNotDifferentiableException(this, 1)
@@ -81,7 +81,7 @@ trait Op2[X1, X2, Y] extends Func2[X1, X2, Y] with AnyOp[Y] {
 object Op2 {
   def fromFunction[A, B, C](f: (A, B) => C): Op2[A, B, C] = new Op2[A, B, C] {
     def name = f.toString()
-    def tag = Tag.any[C]
+    def tag = Tag.none[C]
     override def differentiable = false
     def forward(x1: A, x2: B) = f(x1, x2)
     def backward1(dy: C, y: C, x1: A, x2: B) = throw new OperatorNotDifferentiableException(this, 1)

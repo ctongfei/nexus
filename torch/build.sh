@@ -93,22 +93,15 @@ echo "Compiling SWIG generated JNI wrapper code..."
 g++ $JNI_COMPILATION_FLAGS -c torch_wrap_fixed.cxx \
     -I $JAVA_HOME/include \
     -I $JAVA_HOME/include/$JAVA_OS_DEPENDENT_INCLUDE \
-    -I $CUDA_ROOT/include \
+    -I $CUDA_HOME/include \
     -I $PYTORCH_LIB_PATH \
     -I $PYTORCH_INCLUDE_PATH \
     -I $PYTORCH_INCLUDE_PATH/TH \
     -I $PYTORCH_INCLUDE_PATH/THC
 
-echo "Building dynamic linking library..."
+echo "Building the shared library..."
 
 mkdir -p jni/src/main/resources
 cc $CC_LIB_ARGS
-
-echo "Cleaning up..."
-#rm -r include-swig
-#
-#rm torch_wrap.cxx
-#rm torch_wrap_fixed.cxx
-
 
 echo "Done. SWIG JNI bridge built."

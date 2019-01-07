@@ -5,6 +5,12 @@ package nexus.util
  */
 private[nexus] object ShapeUtils {
 
+  def contiguousStrides(shape: Array[Int]) =
+    shape.tail.scanRight(1)(_*_)
+
+  def contiguousStrides(shape: Array[Long]) =
+    shape.tail.scanRight(1l)(_*_)
+
   def removeAt(shape: Array[Int], index: Int) =
     shape.take(index) ++ shape.drop(index + 1)
 

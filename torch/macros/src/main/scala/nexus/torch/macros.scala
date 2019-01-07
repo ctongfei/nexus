@@ -55,7 +55,7 @@ object macros {
 
   class Info[Ctx <: Context, A](val c: Ctx)(implicit A: Ctx#WeakTypeTag[A]) {
     import c.universe._
-    val nexusClassName = getClassName(c)
+    val nexusClassName = getClassName(c).split("Is").head  // e.g. "FloatTensorIsRealTensorK" => "FloatTensor"
     val nexusMethodName = getMethodName(c)
     val axesType = weakTypeOf[A]
     val torchClassName = getTorchClassName(nexusClassName)

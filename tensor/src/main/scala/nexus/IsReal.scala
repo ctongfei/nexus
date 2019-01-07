@@ -13,7 +13,6 @@ import scala.annotation._
 trait IsReal[@specialized(Float, Double) R] extends Grad[R] with Field[R] {
   def zeroBy(x: R) = zero
   def toFloat(x: R): Float
-  def toDouble(x: R): Double
 
   def mutable = false
 

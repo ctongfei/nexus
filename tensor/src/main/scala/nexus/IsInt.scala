@@ -26,12 +26,6 @@ trait IsInt[@specialized(Byte, Short, Int, Long) Z] extends Ring[Z] {
   def mod(x: Z, y: Z): Z
 
   def fromLong(x: Long): Z
-  def toLong(x: Z): Long
-
-  def castingToLong: BidiCast[Z, Long] = new BidiCast[Z, Long] {
-    def cast(s: Z) = toLong(s)
-    def invert(t: Long) = fromLong(t)
-  }
 
   // Conforming to algebra.ring.Ring
   def plus(x: Z, y: Z) = add(x, y)

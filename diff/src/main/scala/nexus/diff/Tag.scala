@@ -25,14 +25,14 @@ object Tag {
     val ev = evidence
   }
 
-  private class Tensor[T[_], E, a, EvidenceK[t[_], e] <: IsTensorK[t, e]](val evK: EvidenceK[T, E]) extends Tag[T[a]] {
+  private class Tensor[T[_], E, a, EvK[t[_], e] <: IsTensorK[t, e]](val evK: EvK[T, E]) extends Tag[T[a]] {
     type Ev[ta] = evK.TensorTag[ta]
     val ev = evK.ground[a]
   }
 
   def of[T[_], X](tag: T[X]): Tag.Aux[X, T] = new Scalar[X, T](tag)
 
-  def any[X]: Tag[X] = new Tag[X] {
+  def none[X]: Tag[X] = new Tag[X] {
     type Ev[x] = Unit
     val ev: Unit = ()
   }

@@ -55,7 +55,7 @@ sealed trait Symbolic[X] {
  */
 case class Input[X](name: String = ExprName.nextInput) extends Symbolic[X] { self =>
 
-  def tag = Tag.any[X] // no need to compute the gradient of the input
+  def tag = Tag.none[X] // no need to compute the gradient of the input
   def requireGrad = false
 
   /** Constructs a neural function (lambda expression). */
@@ -111,7 +111,7 @@ object Param {
  */
 case class Const[X](value: X, name: String = ExprName.nextConst) extends Symbolic[X] {
 
-  final def tag = Tag.any[X]
+  final def tag = Tag.none[X]
   override def requireGrad = false
   override def toString = name
 

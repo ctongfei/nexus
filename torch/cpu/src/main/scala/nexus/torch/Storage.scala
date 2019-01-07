@@ -1,6 +1,7 @@
 package nexus.torch
 
 import nexus.torch.jni.torchJNI._
+import nexus.util._
 
 import scala.collection._
 
@@ -15,25 +16,21 @@ class Storage[@specialized E] private[torch](
 
   import tag._
 
-  val data = new NativeArray[E](
+  lazy val data = new NativeArray[E](
     ptr = dataPtr(ptr),
     len = len(ptr),
     tag = tag.nativeTypeTag
   )
 
-  def apply(i: Int) = data(i)
-  def update(i: Int, x: E): Unit = data(i) = x
+  def apply(i: Int) = get(ptr, i)
+  def update(i: Int, x: E): Unit = set(ptr, i, x)
   def length = len(ptr)
 
+  /** Copies this array to JVM. */
   def toArray: Array[E] = nativeTypeTag.nativeToJvm(data.ptr, length)
 
-  def view: mutable.IndexedSeqView[E, Storage[E]] =
-    new mutable.IndexedSeqView[E, Storage[E]] {
-      def update(idx: Int, elem: E): Unit = self(idx) = elem
-      def length = self.length
-      def apply(idx: Int) = self(idx)
-      protected def underlying = self
-    }
+  /** A `scala.collection`-compatible view to this native storage. */
+  def view: mutable.IndexedSeqView[E, Storage[E]] = new Storage.View(this)
 
   def free(): Unit = freeStorage(ptr)
 
@@ -44,11 +41,17 @@ class Storage[@specialized E] private[torch](
   }
 
   @specialized override def toString =
-    s"$tag[@0x${ptr.toHexString}, length = $length]: " +
-    (0 until length).map(apply).mkString("[", ", ", "]")
+    s"$tag[@0x${ptr.toHexString}, length = $length]: " + StringUtils.arraySummary(view)
 }
 
 object Storage {
+
+  class View[E](storage: Storage[E]) extends mutable.IndexedSeqView[E, Storage[E]] {
+    def length = storage.length
+    def apply(idx: Int) = storage.apply(idx)
+    def update(idx: Int, elem: E): Unit = storage.update(idx, elem)
+    protected def underlying = storage
+  }
 
   def fromJvm[@specialized E](array: Array[E])(implicit E: TypeTag[E]): Storage[E] = {
     val storage = ofSize(array.length)

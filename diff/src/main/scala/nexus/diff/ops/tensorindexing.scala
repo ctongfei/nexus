@@ -83,4 +83,3 @@ object Select extends PolyOp2 {
 
 object Diag
 
-object Trace

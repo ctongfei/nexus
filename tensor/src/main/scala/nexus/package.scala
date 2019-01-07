@@ -1,21 +1,14 @@
-package nexus
-
 import shapeless._
 
 /**
- * Contains types and typeclass definitions for tensor operations.
- *
+ * Nexus: Typesafe tensors / deep learning for Scala.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-package object tensor {
-
-  type AdditiveSemigroup[X] = _root_.algebra.ring.AdditiveSemigroup[X]
+package object nexus {
 
   // Some alias for HList / HNil: Think `$` as the end of a regex
-  private[tensor] type $$ = HList
-  private[tensor] type $ = HNil
-  private[tensor] val  $: $ = HNil // explicit type annotation to avoid some implicit search bugs
+  private[nexus] val  $: HNil = HNil // explicit type annotation to avoid some implicit search bugs
 
   sealed class ?
   val ? : ? = new ?
