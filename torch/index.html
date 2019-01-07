@@ -40,7 +40,7 @@
     
     
       
-        <title>Expressions - Nexus 0.1.0</title>
+        <title>Torch - Nexus 0.1.0</title>
       
     
     
@@ -105,7 +105,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#expressions" tabindex="1" class="md-skip">
+      <a href="#tested-environments" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -131,7 +131,7 @@
                 Nexus 0.1.0
               </span>
               <span class="md-header-nav__topic">
-                Expressions
+                Torch
               </span>
             
           
@@ -270,20 +270,11 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="Expressions" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../expr/" title="Expressions" class="md-nav__link">
       Expressions
     </a>
-    
   </li>
 
     
@@ -315,10 +306,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6" checked>
     
     <label class="md-nav__link" for="nav-6">
       Backends
@@ -334,11 +327,59 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../torch/" title="Torch" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Torch
+      </label>
+    
+    <a href="./" title="Torch" class="md-nav__link md-nav__link--active">
       Torch
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tested-environments" title="Tested environments" class="md-nav__link">
+    Tested environments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-the-binding-manually" title="Building the binding manually" class="md-nav__link">
+    Building the binding manually
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internals" title="Internals" class="md-nav__link">
+    Internals
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -361,8 +402,36 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tested-environments" title="Tested environments" class="md-nav__link">
+    Tested environments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-the-binding-manually" title="Building the binding manually" class="md-nav__link">
+    Building the binding manually
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internals" title="Internals" class="md-nav__link">
+    Internals
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -374,23 +443,35 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/ctongfei/nexus/edit/master/docs/expr.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/ctongfei/nexus/edit/master/docs/torch.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="expressions">Expressions</h1>
-<p>The core data type in Nexus is <code>Expr[A]</code>: expressions. An <code>Expr[A]</code> is a symbolic expression that conceptually holds data of type <code>A</code>.</p>
-<details open="open"><summary>Analogous types in other libraries</summary><p><code>Expr</code> is similar to</p>
+                  <h1>Torch</h1>
+                
+                <p><code>nexus-torch</code> is a tensor computation backend for Nexus based on <a href="https://github.com/pytorch/pytorch">PyTorch</a>. 
+It uses SWIG to generate the JNI bindings directly from the Torch C/C++ source without the Python part of PyTorch.</p>
+<h3 id="tested-environments">Tested environments</h3>
 <ul>
-<li><code>tf.Tensor</code>: </li>
-<li><code>torch.autograd.Variable</code> (before PyTorch 0.4.0): </li>
+<li>Linux + CUDA 9.1 / 10.0 + PyTorch 1.0.0</li>
 </ul>
-</details>
-<p>An expression <code>Expr[A]</code> in Nexus can be one of the following:</p>
+<h3 id="building-the-binding-manually">Building the binding manually</h3>
+<p>Prerequisites:</p>
 <ul>
-<li><code>Input[A]</code>: Symbolic input of type <code>A</code>.</li>
-<li><code>Const[A]</code>: Constant.</li>
-<li><code>Param[A]</code>: A parameter that will be updated while training.</li>
-<li><code>AppN[A]</code> (<code>N</code> = {1, 2, 3}): Result of applying a <span><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span>-ary function.</li>
+<li>PyTorch 1.0.0
+ <div class="highlight"><pre><span></span>pip install torch==1.0.0
+</pre></div></li>
+<li>SWIG 3.0+</li>
+</ul>
+<p>Steps:</p>
+<ul>
+<li><strong>Patch SWIG</strong>. 
+   Use the <a href="https://github.com/ctongfei/nexus/blob/master/torch/swig-patch/fix-long.patch"><code>swig-patch/fix-long.patch</code></a> 
+   file to patch SWIG: This resolves SWIG issue <a href="https://github.com/swig/swig/issues/646">#646</a>, which incorrectly maps <code>ptrdiff_t</code> to <code>Int</code> instead of the correct <code>Long</code> under 64-bit machines.</li>
+<li><strong>Generate JNI shared library</strong>: Run <code>build.sh</code> to build the shared library (<code>libjnitorch.so</code> / <code>libjnitorch.dylib</code>).</li>
+</ul>
+<h3 id="internals">Internals</h3>
+<ul>
+<li></li>
 </ul>
                 
                   
@@ -412,7 +493,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../tensor/" title="Typesafe tensors" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../op/" title="Operators" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -421,25 +502,11 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Typesafe tensors
-              </span>
-            </div>
-          </a>
-        
-        
-          <a href="../op/" title="Operators" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
                 Operators
               </span>
             </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
           </a>
+        
         
       </nav>
     </div>

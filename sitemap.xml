@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>/</loc>
-     <lastmod>2018-07-11</lastmod>
+     <loc>None</loc>
+     <lastmod>2019-01-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>/tensor/</loc>
-     <lastmod>2018-07-11</lastmod>
+     <loc>None</loc>
+     <lastmod>2019-01-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>/expr/</loc>
-     <lastmod>2018-07-11</lastmod>
+     <loc>None</loc>
+     <lastmod>2019-01-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>/op/</loc>
-     <lastmod>2018-07-11</lastmod>
+     <loc>None</loc>
+     <lastmod>2019-01-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc></loc>
      
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>None</loc>
+     <lastmod>2019-01-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
