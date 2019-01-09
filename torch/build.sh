@@ -29,7 +29,6 @@ fi
 
 TORCH_MODULES=(TH THC ATen)
 
-
 mkdir -p include
 mkdir -p include-swig
 
@@ -89,6 +88,7 @@ cat torch_wrap.cxx \
 
 
 echo "Compiling SWIG generated JNI wrapper code..."
+echo "Compiling using Java: $JAVA_HOME"
 
 g++ $JNI_COMPILATION_FLAGS -c torch_wrap_fixed.cxx \
     -I $JAVA_HOME/include \
