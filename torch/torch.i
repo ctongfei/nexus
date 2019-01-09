@@ -34,13 +34,15 @@ SWIG_JAVABODY_PROXY(public, public, SWIGTYPE)
 SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
 
-%include "include-swig/torch-preprocessed.h"
+%include "torch-preprocessed.h"
 
 %pragma(java) jniclasscode=%{
 
     static {
+
         try {
             System.loadLibrary("caffe2");
+            System.err.println("caffe2 native library loaded.");
         }
         catch (UnsatisfiedLinkError e) {
             System.err.println("caffe2 native library not available.");
@@ -48,6 +50,7 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
         try {
             System.loadLibrary("caffe2_gpu");
+            System.err.println("caffe2_gpu native library loaded.");
         }
         catch (UnsatisfiedLinkError e) {
             System.err.println("caffe2_gpu native library unavailable.");
@@ -55,6 +58,7 @@ SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
         try {
             nexus.jniloader.JNILoader.loadLibraryFromJar("jnitorch");
+            System.err.println("jnitorch JNI library loaded.");
         }
         catch (Exception e) {
             e.printStackTrace();

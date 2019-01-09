@@ -61,3 +61,12 @@ project/plugins/project/
 ### Scala template
 *.class
 *.log
+
+# Torch: auto-generated source
+torch/jni/src/main/java
+torch/include-swig
+torch/torch_wrap.cxx
+torch/torch_wrap_fixed.cxx
+
+# MkDocs
+site/
