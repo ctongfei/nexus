@@ -88,8 +88,6 @@ public class JNILoader {
             throw e;
         }
 
-        System.err.println("Native library " + libraryName + " loaded.");
-
     }
 
 }

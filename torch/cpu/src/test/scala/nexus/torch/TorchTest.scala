@@ -11,23 +11,11 @@ import nexus.torch.jni._
  */
 object TorchTest extends App {
 
-  val s = Storage.fromJvm(Array(1f, 2f, 3f))
-  val sa = s.data
-  val t = sa.toArray
-  val ss = s.toArray
-
-  s.view foreach println
-
-
   class A extends Dim; val A = new A
   class B extends Dim; val B = new B
   class C extends Dim; val C = new C
 
-  val z = FloatTensor.newTensor(A -> 2, B -> 3)
-
-  val zT = FloatTensorIsRealTensorK.transpose(z)
-
-  val x = FloatTensorIsRealTensorK.fromNestedArray(A, B)(
+  val x = FloatTensor.fromNestedArray(A, B)(
     Array(
       Array(1f, 2f),
       Array(3f, 4f)
@@ -36,8 +24,10 @@ object TorchTest extends App {
 
   println(x)
 
-  val y = x + x
+  val y = FloatTensor.fromNestedArray(B)(Array(-1f, -1f))
+  val z = mvMul(x, y)
 
+  val u = matMul(x, transpose(x))
 
   val bp = 0
 }

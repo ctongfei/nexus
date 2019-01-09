@@ -24,9 +24,14 @@ trait IsTensorK[T[_], @specialized E] { self =>
 
   def rank[A](x: T[A]): Int
 
-  def shape[A](x: T[A]): Seq[Int]
+  def shape[A](x: T[A]): IndexedSeq[Int] = new IndexedSeq[Int] {
+    def length = rank(x)
+    def apply(idx: Int) = sizeOfDim(x, idx)
+  }
 
-  def size[A](x: T[A]): Int
+  def sizeOfDim[A](x: T[A], dim: Int): Int
+
+  def numElements[A](x: T[A]): Int = shape(x).product
 
   def get[A](x: T[A], is: Seq[Int]): E
 

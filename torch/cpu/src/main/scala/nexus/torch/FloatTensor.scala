@@ -7,7 +7,6 @@ import nexus.util._
 import nexus.torch.macros._
 import nexus.torch.jni.torchJNI._
 import shapeless._
-
 import scala.reflect._
 
 /**
@@ -16,13 +15,15 @@ import scala.reflect._
  */
 class FloatTensor[A] private[torch](ptr: Long) extends Tensor[Float, A](ptr) {
 
+  import FloatTensorIsRealTensorK._
+
   def storage = new Storage[Float](ptr = THFloatTensor_storage(ptr), tag = Storage.TypeTag.Float)
   def tensorRank = THFloatTensor_nDimension(ptr)
-  def shape = Array.tabulate(tensorRank)(i => THFloatTensor_size(ptr, i).toInt)
-  def stride = Array.tabulate(tensorRank)(i => THFloatTensor_stride(ptr, i).toInt)
+
   def free(): Unit = THFloatTensor_free(ptr)
 
-  override def toString = s"FloatTensor[@0x${ptr.toHexString}; shape = ${StringUtils.arraySummary(shape)}; stride = ${StringUtils.arraySummary(stride)}]"
+  override def toString =
+    s"FloatTensor[@0x${ptr.toHexString}; shape = ${StringUtils.arraySummary(shape(this))}]"
 }
 
 object FloatTensor extends TensorFactory[FloatTensor, Float](FloatTensorIsRealTensorK)
@@ -49,6 +50,7 @@ object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
 
     val tensor = newVector(ShapeUtils.product(shape).toInt)
     THFloatTensor_resizeNd(tensor.ptr, shape.length, nShape.ptr, nStride.ptr)
+    THFloatTensor_zero(tensor.ptr)  // initialize with 0
     tensor.asInstanceOf[FloatTensor[A]]
   }
 
@@ -152,14 +154,31 @@ object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
 
   def dot[A](x: FloatTensor[A], y: FloatTensor[A]) = THFloatTensor_dot(x.ptr, y.ptr).toFloat
 
-  def matMul[U, V, W](x: FloatTensor[(U, V)], y: FloatTensor[(V, W)]) = ???
-  def mvMul[U, V](x: FloatTensor[(U, V)], y: FloatTensor[V]) = ???
-  def vvMul[U, V](x: FloatTensor[U], y: FloatTensor[V]) = ???
+  def matMul[U, V, W](x: FloatTensor[(U, V)], y: FloatTensor[(V, W)]) = {
+    val z = newTensor[(U, W)](List(sizeOfDim(x, 0), sizeOfDim(y, 1)))
+    THFloatTensor_addmm(z.ptr, 0f, z.ptr, 1f, x.ptr, y.ptr)
+    z
+  }
+
+  def mvMul[U, V](x: FloatTensor[(U, V)], y: FloatTensor[V]) = {
+    val z = newVector[U](sizeOfDim(x, 0))
+    THFloatTensor_addmv(z.ptr, 0f, z.ptr, 1f, x.ptr, y.ptr)
+    z
+  }
+
+  def vvMul[U, V](x: FloatTensor[U], y: FloatTensor[V]) = {
+    val z = newTensor[(U, V)](List(sizeOfDim(x, 0), sizeOfDim(y, 0)))
+    THFloatTensor_addr(z.ptr, 0f, z.ptr, 1f, x.ptr, y.ptr)
+    z
+  }
+
   def contract[U, V, W](x: FloatTensor[U], y: FloatTensor[V])(implicit sd: SymDiff.Aux[U, V, W]) = ???
 
   def rank[A](x: FloatTensor[A]) = THFloatTensor_nDimension(x.ptr)
-  def shape[A](x: FloatTensor[A]) = (0 until rank(x)).map(i => THFloatTensor_size(x.ptr, i).toInt)
-  def size[A](x: FloatTensor[A]) = THFloatTensor_nElement(x.ptr).toInt
+
+  def sizeOfDim[A](x: FloatTensor[A], dim: Int) = THFloatTensor_size(x.ptr, dim).toInt
+
+  override def numElements[A](x: FloatTensor[A]) = THFloatTensor_nElement(x.ptr).toInt
   def get[A](x: FloatTensor[A], is: Seq[Int]) = ???
   def set[A](x: FloatTensor[A], is: Seq[Int], v: Float): Unit = ???
 

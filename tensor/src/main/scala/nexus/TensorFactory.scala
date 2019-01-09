@@ -5,7 +5,8 @@ import shapeless._
 
 /**
  * Contains shared methods for creating tensors.
- * This should be inherited by companion objects of various tensor types.
+ * This should be inherited by companion objects of various tensor types
+ * to provide easy access to various constructors of tensors.
  * @author Tongfei Chen
  */
 abstract class TensorFactory[T[_], E](val T: IsTensorK[T, E]) {

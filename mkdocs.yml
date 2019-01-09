@@ -6,7 +6,7 @@ copyright: 'Copyright &copy; 2017-2018 Tongfei Chen'
 theme:
   name: 'material'
   palette:
-    primary: 'blue'
+    primary: 'blue-800'
     accent: 'light blue'
   font:
     text: 'Source Sans Pro'
@@ -44,9 +44,14 @@ extra_css: ['css/extra.css']
 
 nav:
   - 'Introduction': 'index.md'
-  - 'Typesafe tensors': 'tensor.md'
-  - 'Expressions': 'expr.md'
-  - 'Operators': 'op.md'
+  - 'Tensors':
+    - 'Typesafe tensors': 'tensor.md'
+    - 'Tensor operations': 'tensor-ops.md'
+  - 'Deep learning':
+    - 'Symbolic expressions': 'expr.md'
+    - 'Differentiable operators': 'op.md'
   - 'Tutorial': []
-  - 'Backends':
-      - 'Torch': 'torch.md'
+  - 'Computation backends':
+      - 'Torch':
+          - 'Torch': 'torch.md'
+          - 'Torch CUDA support': 'torch-cuda.md'

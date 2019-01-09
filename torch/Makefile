@@ -27,7 +27,7 @@ LDFLAGS_Linux := -shared -fPIC torch_wrap_fixed.o -o $(RESOURCES_PATH)/$(JNI_FIL
 LDFLAGS_Darwin := -dynamiclib -undefined suppress -flat_namespace torch_wrap_fixed.o -o $RESOURCES_PATH/$JNI_FILENAME
 LDFLAGS := $(LDFLAGS_$(OS))
 
-.PHONY: all clean
+.PHONY: all clean cleanall
 
 $(info PyTorch $(PYTORCH_VERSION) found at $(PYTORCH_PATH))
 $(info OS is $(OS))
@@ -108,3 +108,7 @@ clean:
 	-rm torch_wrap.cxx
 	-rm torch_wrap_fixed.cxx
 	-rm torch_wrap_fixed.o
+
+cleanall: clean
+	-rm -r jni
+
