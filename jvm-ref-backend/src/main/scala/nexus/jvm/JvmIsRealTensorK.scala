@@ -75,6 +75,14 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
   def abs[A](x: T[A]) = map(x)(R.abs)
   def sgn[A](x: T[A]) = map(x)(R.sgn)
   def pos[A](x: T[A]) = ???
+
+
+  def arcsin[I](x: T[I]) = map(x)(R.arcsin)
+  def arccos[I](x: T[I]) = map(x)(R.arccos)
+  def arctan[I](x: T[I]) = map(x)(R.arctan)
+
+  def rank[I](x: T[I]) = x.shape.length
+  def sizeOfDim[I](x: T[I], dim: Int) = x.shape(dim)
   def sum[A](x: T[A]) = x.handle.fold(R.zero)(R.add) // TODO: wrong
   def product[A](x: T[A]) = ???
 
@@ -106,11 +114,9 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
 
   def dot[A](x: T[A], y: T[A]) = ???
   def contract[A, B, C](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]) = ???
-  def rank(x: T[_]) = x.rank
-  def shape(x: T[_]) = x.shape
-  def size(x: T[_]) = x.size
-  def get(x: T[_], is: Seq[Int]) = x.apply(is: _*)
-  def set(x: T[_], is: Seq[Int], v: R): Unit = x.update(is: _*)(v)
+
+  def get[A](x: T[A], is: Seq[Int]) = x.apply(is: _*)
+  def set[A](x: T[A], is: Seq[Int], v: R): Unit = x.update(is: _*)(v)
 
   def newTensor[A](shape: Seq[Int]) = fromFlatArray[A](Array.ofDim[R](shape.product), shape.toArray)
 

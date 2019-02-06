@@ -1,6 +1,5 @@
 package nexus.diff.execution
 
-import cats._
 import nexus.diff.exception._
 import nexus.diff._
 import nexus._
@@ -14,7 +13,7 @@ import scala.collection._
  * @since 0.1.0
  */
 class WengertList(override val rawMap: ReversibleLinkedHashMap[Symbolic[_], Id[_]] = ReversibleLinkedHashMap[Symbolic[_], Id[_]]())
-  extends SymbolicMap[Id](rawMap) with Iterable[Assignment] {
+  extends BoxMap[Symbolic, Id](rawMap) with Iterable[Assignment] {
 
   def increment[X](e: Symbolic[X], v: X): Unit = e.tag.ev match {
     case gX: Grad[X] => // if differentiable

@@ -7,7 +7,5 @@ import nexus.diff.PolyOp1
  */
 object Erf extends PolyOp1
 
-object InvErf extends PolyOp1
-
 object Gamma extends PolyOp1
 

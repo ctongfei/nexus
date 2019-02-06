@@ -3,11 +3,11 @@ package nexus.diff
 import shapeless._
 
 /**
- * Represents an assignment to a symbolic expression, which takes the form `Expr[X] := X`.
+ * Represents an assignment to a symbolic expression, which takes the form `Symbolic[X] := X`.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Assignment extends ExprValuePair[Id] {
+trait Assignment extends ExprValuePair[Symbolic, Id] {
 
   override def toString = s"$expr := $value"
 

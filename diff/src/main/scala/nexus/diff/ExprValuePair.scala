@@ -4,21 +4,22 @@ import scala.language.higherKinds
 
 /**
  * Object holding some information associated with a symbolic expression.
- * @tparam V Higher-kinded type that defines the type of information stored for a specific type of expression
- * @note Isomorphic to `(Symoblic[A], V[A]) forSome { type A }`
+ * @tparam F Box type
+ * @tparam G Higher-kinded type that defines the type of information stored for a specific type of expression
+ * @note Isomorphic to `(F[A], G[A]) forSome { type A }`
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait ExprValuePair[V[_]] extends Product2[Symbolic[_], V[_]] {
+trait ExprValuePair[F[_], G[_]] extends Product2[F[_], G[_]] {
 
   /** Existential type for the data held in this expression. */
   type Data
 
   /** The symbolic expression of this object. */
-  val expr: Symbolic[Data]
+  val expr: F[Data]
 
   /** The stored information assigned to the specific expression. */
-  val value: V[Data]
+  val value: G[Data]
 
   // Conforms to Scala idioms
   def _1 = expr

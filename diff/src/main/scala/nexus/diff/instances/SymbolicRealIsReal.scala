@@ -27,15 +27,15 @@ class SymbolicRealIsReal[R](implicit R: IsReal[R]) extends IsReal[Symbolic[R]] {
   def sqr(x: Symbolic[R]) = Sqr(x)
   def sqrt(x: Symbolic[R]) = Sqrt(x)
   def toFloat(x: Symbolic[R]) = ???
-  def one = Const(R.one)
-  def zero = Const(R.zero)
+  def one = Symbolic.Algebra.const(R.one, "1")
+  def zero = Symbolic.Algebra.const(R.zero, "0")
   def toDouble(x: Symbolic[R]) = ???
   def arcsin(x: Symbolic[R]) = ???
   def arccos(x: Symbolic[R]) = ???
   def arctan(x: Symbolic[R]) = ???
-  override def addScalar(x1: Symbolic[R], x2: Double) = Add(x1, Const(R.fromDouble(x2)))
+  override def addScalar(x1: Symbolic[R], x2: Double) = Add(x1, Symbolic.Algebra.const(R.fromDouble(x2), ""))
   override def addInplace(x1: Symbolic[R], x2: Symbolic[R]) = Add(x1, x2)
-  override def fromDouble(d: Double) = Const(R.fromDouble(d))
+  override def fromDouble(d: Double) = Symbolic.Algebra.const(R.fromDouble(d))
 }
 
 

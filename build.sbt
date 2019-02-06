@@ -60,18 +60,19 @@ lazy val tensor = (project in file("tensor"))
     name := "nexus-tensor"
   )
 
-lazy val prob = (project in file("prob"))
+lazy val diff = (project in file("diff"))
   .settings(commonSettings: _*)
   .dependsOn(tensor)
   .settings(
-    name := "nexus-prob"
+    name := "nexus-diff"
   )
 
-lazy val diff = (project in file("diff"))
+lazy val workflow = (project in file("workflow"))
   .settings(commonSettings: _*)
-  .dependsOn(tensor, prob)
+  .dependsOn(tensor)
+  .dependsOn(jvmRefBackend)
   .settings(
-    name := "nexus-diff"
+    name := "nexus-workflow"
   )
 
 // this is a small, pure Java library
@@ -99,6 +100,12 @@ lazy val ml = (project in file("ml"))
     name := "nexus-ml"
   )
 
+lazy val nlp = (project in file("nlp"))
+  .settings(commonSettings: _*)
+  .dependsOn(ml)
+  .settings(
+    name := "nexus-nlp"
+  )
 
 lazy val tensorboard = (project in file("interop/tensorboard"))
   .settings(commonSettings: _*)

@@ -13,32 +13,32 @@ object tensormath {
   // ALGEBRAIC OPERATIONS
 
   /** Adds two tensors of the same shape. */
-  def add[T[_], R, A](x: T[A], y: T[A])(implicit T: RingTensorK[T, R]): T[A] = T.add(x, y)
+  def add[T[_], R, I](x: T[I], y: T[I])(implicit T: RingTensorK[T, R]): T[I] = T.add(x, y)
 
   /** Negates a tensor. */
-  def neg[T[_], R, A](x: T[A])(implicit T: RingTensorK[T, R]): T[A] = T.neg(x)
+  def neg[T[_], R, I](x: T[I])(implicit T: RingTensorK[T, R]): T[I] = T.neg(x)
 
   /** Subtracts a tensor from another of the same shape. */
-  def sub[T[_], R, A](x: T[A], y: T[A])(implicit T: RingTensorK[T, R]): T[A] = T.sub(x, y)
+  def sub[T[_], R, I](x: T[I], y: T[I])(implicit T: RingTensorK[T, R]): T[I] = T.sub(x, y)
 
   /** Elementwise-multiplies two real tensors of the same shape. */
-  def mul[T[_], R, A](x: T[A], y: T[A])(implicit T: RingTensorK[T, R]): T[A] = T.mul(x, y)
+  def mul[T[_], R, I](x: T[I], y: T[I])(implicit T: RingTensorK[T, R]): T[I] = T.mul(x, y)
 
   /** Elementwise-divides a real tensor by another of the same shape. */
-  def div[T[_], R, A](x: T[A], y: T[A])(implicit T: RingTensorK[T, R]): T[A] = T.div(x, y)
+  def div[T[_], R, I](x: T[I], y: T[I])(implicit T: RingTensorK[T, R]): T[I] = T.div(x, y)
 
   /** Matrix multiplication of two matrices. */
-  def matMul[T[_], R, U, V, W](x: T[(U, V)], y: T[(V, W)])(implicit T: RingTensorK[T, R]): T[(U, W)] = T.matMul(x, y)
+  def matMul[T[_], R, I, J, K](x: T[(I, J)], y: T[(J, K)])(implicit T: RingTensorK[T, R]): T[(I, K)] = T.matMul(x, y)
 
-  def mvMul[T[_], R, U, V](x: T[(U, V)], y: T[V])(implicit T: RingTensorK[T, R]): T[U] = T.mvMul(x, y)
+  def mvMul[T[_], R, I, J](x: T[(I, J)], y: T[J])(implicit T: RingTensorK[T, R]): T[I] = T.mvMul(x, y)
 
-  def transpose[T[_], R, U, V](x: T[(U, V)])(implicit T: RingTensorK[T, R]): T[(V, U)] = T.transpose(x)
+  def transpose[T[_], R, I, J](x: T[(I, J)])(implicit T: RingTensorK[T, R]): T[(J, I)] = T.transpose(x)
 
   /** Sum of all elements in a real tensor. */
-  def sum[T[_], R, A](x: T[A])(implicit T: RingTensorK[T, R]): R = T.sum(x)
+  def sum[T[_], R, I](x: T[I])(implicit T: RingTensorK[T, R]): R = T.sum(x)
 
   /** Sum along an axis of a real tensor, resulting in a tensor with that axis removed. */
-  def sum[T[_], R, U, X, V](x: T[U], dim: X)(implicit T: RingTensorK[T, R], rx: Remove.Aux[U, X, V]): T[V] =
+  def sum[T[_], R, U, I, V](x: T[U], dim: I)(implicit T: RingTensorK[T, R], rx: Remove.Aux[U, I, V]): T[V] =
     ???
 
   def sum[T[_], R, U, N <: Nat, V](x: T[U], dim: N)(implicit T: RingTensorK[T, R], rx: RemoveAt.Aux[U, N, V]): T[V] =

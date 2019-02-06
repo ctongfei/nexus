@@ -19,11 +19,10 @@ class ResidualUnit[X](val residual: Func1[X, X])(implicit X: Grad[X]) extends Mo
     case _ => Set[Param[_]]()
   }
 
-  def apply(x: Symbolic[X]): Symbolic[X] = {
+  def apply[F[_] : Algebra](x: F[X]) = {
     val r = residual(x)
     Add.grad.apply(x, r)
   }
-
 }
 
 object ResidualUnit {

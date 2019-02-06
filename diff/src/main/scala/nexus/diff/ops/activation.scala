@@ -2,6 +2,7 @@ package nexus.diff.ops
 
 import nexus.diff._
 import nexus._
+import nexus.diff.ops.mixin._
 import nexus.syntax._
 
 /**
@@ -18,12 +19,12 @@ import nexus.syntax._
  * @since 0.1.0
  */
 object ReLU extends PolyOp1 {
-  implicit def reLUF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
-    new F[T[a], T[a]] {
+  implicit def reLUF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = "ReLU"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x: T[a]) = T.relu(x)
-      def backward(dy: T[a], y: T[a], x: T[a]) = dy |*| T.pos(x)
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x: T[I]) = T.relu(x)
+      def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| T.pos(x)
     }
 }
 
@@ -36,12 +37,12 @@ object ReLU extends PolyOp1 {
  * @since 0.1.0
  */
 object Sigmoid extends PolyOp1 { // TODO: ufunc
-  implicit def sigmoidF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
-    new F[T[a], T[a]] {
+  implicit def sigmoidF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = "Sigmoid"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x: T[a]) = T.sigmoid(x)
-      def backward(dy: T[a], y: T[a], x: T[a]) = dy |*| y |*| T.addScalar(-y, T.R.one) // TODO: inplace
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x: T[I]) = T.sigmoid(x)
+      def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| y |*| T.addScalar(-y, T.R.one) // TODO: inplace
     }
 }
 
@@ -54,12 +55,12 @@ object Sigmoid extends PolyOp1 { // TODO: ufunc
  * @since 0.1.0
  */
 object SoftPlus extends PolyOp1 {
-  implicit def softPlusF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
-    new F[T[a], T[a]] {
+  implicit def softPlusF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = "SoftPlus"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x: T[a]) = T.log1p(T.exp(x))
-      def backward(dy: T[a], y: T[a], x: T[a]) = dy |*| T.sigmoid(x)
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x: T[I]) = T.log1p(T.exp(x))
+      def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| T.sigmoid(x)
     }
 }
 
@@ -72,19 +73,53 @@ object SoftPlus extends PolyOp1 {
  * @since 0.1.0
  */
 object Softmax extends PolyOp1 {
-  implicit def softmaxF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a]] =
-    new F[T[a], T[a]] {
+  implicit def softmaxF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = "Softmax"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x: T[a]) = {
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x: T[I]) = {
         import T._
         val expX = exp(x)
         expX :* R.inv(sum(expX)) //TODO: numerical stability
       }
-      def backward(dy: T[a], y: T[a], x: T[a]) = {
+      def backward(dy: T[I], y: T[I], x: T[I]) = {
         import T._
         val dyy = dy |*| y
         dyy - (y :* sum(dyy))
     }
   }
+}
+
+/**
+ * The sigmoid-weighted linear unit (SiLU) function.
+ * This is equivalent to the Swish-1 activation function.
+ *
+ * References:
+ *  - S Elfwing, E Uchibe, K Doya (2018):
+ *    Sigmoid-weighted linear units for neural network function approximation in reinforcement learning.
+ *    **Neural networks** (107), pp. 3-11. https://doi.org/10.1016/j.neunet.2017.12.012.
+ *  - P Ramachandran, B Zoph, Q V Le (2017):
+ *    Searching for activation functions. https://arxiv.org/abs/1710.05941
+ */
+object SiLU extends PolyOp1 with RealElementwisePolyOp1Mixin {
+  def name = "SiLU"
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = ???
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = ???
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = x |*| T.sigmoid(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) =
+    dy |*| (y + T.sigmoid(x) |*| (-y +# 1.0))
+}
+
+/**
+ * The Gaussian error linear unit (GELU) function.
+ *
+ * Reference:
+ *  - D Hendrycks, K Gimpel (2016): Gaussian error linear units. https://arxiv.org/abs/1606.08415
+ */
+object GELU extends PolyOp1 with RealElementwisePolyOp1Mixin {
+  def name = "GELU"
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = ???
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = ???
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = ???
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = ???
 }

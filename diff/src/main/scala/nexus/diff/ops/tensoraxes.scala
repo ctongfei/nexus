@@ -13,27 +13,27 @@ import shapeless._
  */
 object RenameAxis extends ParameterizedPolyOp1 {
 
-  implicit def renameF[T[_], E, a, u <: Dim, v <: Dim, b]
-  (implicit r: Replace.Aux[a, u, v, b], T: IsTensorK[T, E]) = (uv: (u, v)) =>
-    new F[T[a], T[b]] {
-      val (u, v) = uv
-      def name = n"Rename[$u -> $v]"
-      def tag = Tag.tensor[T, E, b]
-      def forward(x: T[a]) = T.renameAxis[a, b](x)
-      def backward(dy: T[b], y: T[b], x: T[a]) = T.renameAxis[b, a](dy)
+  implicit def renameF[T[_], E, U, I <: Dim, J <: Dim, V]
+  (implicit r: Replace.Aux[U, I, J, V], T: IsTensorK[T, E]) = (ij: (I, J)) =>
+    new F[T[U], T[V]] {
+      val (i, j) = ij
+      def name = n"Rename[$i -> $j]"
+      def tag = Tag.tensor[T, E, V]
+      def forward(x: T[U]) = T.renameAxis[U, V](x)
+      def backward(dy: T[V], y: T[V], x: T[U]) = T.renameAxis[V, U](dy)
     }
 
 }
 
 object ConcatAlong extends ParameterizedPolyOp2 {
-  implicit def concatAlongF[T[_], E, a, u <: Dim, n <: Nat]
-  (implicit n: IndexOf.Aux[a, u, n], T: IsTensorK[T, E]) = (u: u) =>
-    new F[T[a], T[a], T[a]] {
+  implicit def concatAlongF[T[_], E, U, I <: Dim, N <: Nat]
+  (implicit n: IndexOf.Aux[U, I, N], T: IsTensorK[T, E]) = (u: I) =>
+    new F[T[U], T[U], T[U]] {
         def name = n"Concat[$u]"
-        def tag = Tag.tensor[T, E, a]
-        def forward(x1: T[a], x2: T[a]) = ???
-        def backward1(dy: T[a], y: T[a], x1: T[a], x2: T[a]) = ???
-        def backward2(dy: T[a], y: T[a], x1: T[a], x2: T[a]) = ???
+        def tag = Tag.tensor[T, E, U]
+        def forward(x1: T[U], x2: T[U]) = ???
+        def backward1(dy: T[U], y: T[U], x1: T[U], x2: T[U]) = ???
+        def backward2(dy: T[U], y: T[U], x1: T[U], x2: T[U]) = ???
     }
 
 }
@@ -43,14 +43,14 @@ object ConcatAlong extends ParameterizedPolyOp2 {
  */
 object Unsqueeze extends ParameterizedPolyOp1 {
 
-  implicit def unsqueezeF[T[_], E, a, n <: Nat, u <: Dim, b]
-  (implicit ia: InsertAt.Aux[a, n, u, b], T: IsTensorK[T, E]) = (nu: (n, u)) =>
-    new F[T[a], T[b]] {
-      val (n, u) = nu
-      def name = n"ExpandDim[$n: $u]"
-      def tag = Tag.tensor[T, E, b]
-      def forward(x: T[a]) = ???
-      def backward(dy: T[b], y: T[b], x: T[a]) = ???
+  implicit def unsqueezeF[T[_], E, U, N <: Nat, I <: Dim, V]
+  (implicit ia: InsertAt.Aux[U, N, I, V], T: IsTensorK[T, E]) = (ni: (N, I)) =>
+    new F[T[U], T[V]] {
+      val (n, i) = ni
+      def name = n"Unsqueeze[$n: $i]"
+      def tag = Tag.tensor[T, E, V]
+      def forward(x: T[U]) = ???
+      def backward(dy: T[V], y: T[V], x: T[U]) = ???
     }
 
 }
@@ -60,13 +60,13 @@ object Unsqueeze extends ParameterizedPolyOp1 {
  */
 object Squeeze extends ParameterizedPolyOp1 {
 
-  implicit def squeezeF[T[_], E, a, n <: Nat, u <: Dim, b]
-  (implicit ix: IndexOf.Aux[a, u, n], rx: RemoveAt.Aux[a, n, b], T: IsTensorK[T, E]) = (u: u) =>
-    new F[T[a], T[b]] {
-      def name = n"Squeeze[$u]"
-      def tag = Tag.tensor[T, E, b]
-      def forward(x: T[a]) = ???
-      def backward(dy: T[b], y: T[b], x: T[a]) = ???
+  implicit def squeezeF[T[_], E, U, N <: Nat, I <: Dim, V]
+  (implicit ix: IndexOf.Aux[U, I, N], rx: RemoveAt.Aux[U, N, V], T: IsTensorK[T, E]) = (i: I) =>
+    new F[T[U], T[V]] {
+      def name = n"Squeeze[$i]"
+      def tag = Tag.tensor[T, E, V]
+      def forward(x: T[U]) = ???
+      def backward(dy: T[V], y: T[V], x: T[U]) = ???
     }
 
 }

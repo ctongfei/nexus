@@ -4,31 +4,41 @@ import nexus.diff._
 import nexus._
 
 object Det extends PolyOp1 {
-  implicit def detF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(A, A)], R] =
-    new F[T[(A, A)], R] {
+  implicit def detF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(I, I)], R] =
+    new F[T[(I, I)], R] {
       def name = "Det"
       def tag = Tag.real[R]
-      def forward(x: T[(A, A)]) = ???
-      def backward(dy: R, y: R, x: T[(A, A)]) = ???
+      def forward(x: T[(I, I)]) = ???
+      def backward(dy: R, y: R, x: T[(I, I)]) = ???
     }
 }
 
 object MatInv extends PolyOp1 {
-  implicit def matInvF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(A, A)], T[(A, A)]] =
-    new F[T[(A, A)], T[(A, A)]] {
+  implicit def matInvF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(I, I)], T[(I, I)]] =
+    new F[T[(I, I)], T[(I, I)]] {
       def name = "MatInv"
       def tag = ???
-      def forward(x: T[(A, A)]) = ???
-      def backward(dy: T[(A, A)], y: T[(A, A)], x: T[(A, A)]) = ???
+      def forward(x: T[(I, I)]) = ???
+      def backward(dy: T[(I, I)], y: T[(I, I)], x: T[(I, I)]) = ???
     }
 }
 
 object Trace extends PolyOp1 {
-  implicit def traceF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(A, A)], R] =
-    new F[T[(A, A)], R] {
+  implicit def traceF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(I, I)], R] =
+    new F[T[(I, I)], R] {
       def name = "Trace"
       def tag = Tag.real[R]
-      def forward(x: T[(A, A)]) = ???
-      def backward(dy: R, y: R, x: T[(A, A)]) = ???
+      def forward(x: T[(I, I)]) = ???
+      def backward(dy: R, y: R, x: T[(I, I)]) = ???
+    }
+}
+
+object Diag extends PolyOp1 {
+  implicit def diagF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(I, I)], T[I]] =
+    new F[T[(I, I)], T[I]] {
+      def name = "Diag"
+      def tag = ???
+      def forward(x: T[(I, I)]) = ???
+      def backward(dy: T[I], y: T[I], x: T[(I, I)]) = ???
     }
 }

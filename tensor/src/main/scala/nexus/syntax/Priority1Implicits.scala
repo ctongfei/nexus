@@ -41,44 +41,44 @@ trait Priority1Implicits {
 
   }
 
-  implicit class TensorOps[T[_], E, A](x: T[A])(implicit T: IsTensorK[T, E]) {
+  implicit class TensorOps[T[_], E, U](x: T[U])(implicit T: IsTensorK[T, E]) {
 
     def apply(indices: Int*): E = T.get(x, indices)
     def shape: Seq[Int] = macro op1
 
-    def unstackAlong[U, B](axis: U)(implicit rx: Remove.Aux[A, U, B]): Seq[T[B]] = T.unstackAlong(x, axis)
+    def unstackAlong[I, V](axis: I)(implicit rx: Remove.Aux[U, I, V]): Seq[T[V]] = T.unstackAlong(x, axis)
 
   }
 
-  implicit class RealTensorOps[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) {
+  implicit class RealTensorOps[T[_], R, U](x: T[U])(implicit T: IsRealTensorK[T, R]) {
 
     /** Addition of two tensors with the same axes and shape. */
-    def +(y: T[A]): T[A] = macro op2
+    def +(y: T[U]): T[U] = macro op2
     /** Subtraction of two tensors with the same axes and shape. */
-    def -(y: T[A]): T[A] = macro op2
+    def -(y: T[U]): T[U] = macro op2
     /** Negation of a tensor. */
-    def unary_- : T[A] = macro op1
+    def unary_- : T[U] = macro op1
     /** Elementwise multiplication (Hadamard product) of two tensors with the same axes and shape. */
-    def |*|(y: T[A]): T[A] = macro op2
+    def |*|(y: T[U]): T[U] = macro op2
     /** Elementwise division of two tensors with the same axes and shape. */
-    def |/|(y: T[A]): T[A] = macro op2
+    def |/|(y: T[U]): T[U] = macro op2
     /** Scales a tensor by a scalar. */
-    def :*(y: R): T[A] = macro op2
+    def :*(y: R): T[U] = macro op2
     /** Scales a tensor by a scalar. */
-    def :*(y: Float): T[A] = macro op2TRFloat
+    def :*(y: Float): T[U] = macro op2TRFloat
     /** Scales a tensor by a scalar. */
-    def :*(y: Double): T[A] = macro op2TRDouble
+    def :*(y: Double): T[U] = macro op2TRDouble
 
-    def :/(y: R): T[A] = T.scale(x, T.R.inv(y))
-    def :/(y: Float): T[A] = T.scale(x, T.R.fromFloat(1f / y))
-    def :/(y: Double): T[A] = T.scale(x, T.R.fromDouble(1d / y))
+    def :/(y: R): T[U] = T.scale(x, T.R.inv(y))
+    def :/(y: Float): T[U] = T.scale(x, T.R.fromFloat(1f / y))
+    def :/(y: Double): T[U] = T.scale(x, T.R.fromDouble(1d / y))
 
     /** Dot product (inner product) of two tensors of the same shape and size. */
-    def dot(y: T[A]): R = macro op2
-    def ⋅(y: T[A]): R = T.dot(x, y)
+    def dot(y: T[U]): R = macro op2
+    def ⋅(y: T[U]): R = T.dot(x, y)
 
     /** Natural contraction of two tensors. */
-    def ⋈[B, C](y: T[B])(implicit sd: SymDiff.Aux[A, B, C]): T[C] = T.contract(x, y)
+    def ⋈[V, W](y: T[V])(implicit sd: SymDiff.Aux[U, V, W]): T[W] = T.contract(x, y)
 
 
   }

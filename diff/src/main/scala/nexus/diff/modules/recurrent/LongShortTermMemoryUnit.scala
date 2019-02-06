@@ -2,6 +2,7 @@ package nexus.diff.modules.recurrent
 
 import nexus.diff._
 import nexus.diff.ops._
+import nexus.diff.syntax._
 import nexus._
 
 /**
@@ -13,15 +14,11 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class LongShortTermMemoryUnit[T[_], R, a <: Dim, c <: Dim, h <: Dim]()(implicit T: IsRealTensorK[T, R])
-  extends RecurrentUnit[(T[c], T[h]), T[a]]
+class LongShortTermMemoryUnit[T[_], R, I <: Dim, C <: Dim, H <: Dim]()(implicit T: IsRealTensorK[T, R])
+  extends RecurrentUnit[(T[C], T[H]), T[I]]
 {
-  def apply(ch: Symbolic[(T[c], T[h])], x: Symbolic[T[a]]) = {
-    val c = ch |> Tuple2First
-    val h = ch |> Tuple2Second
 
-    (c, h) |> AsTuple2
-  }
+  def apply[F[_] : Algebra](ch: F[(T[C], T[H])], x2: F[T[I]]) = ???
 }
 
 
@@ -38,15 +35,15 @@ object LongShortTermMemoryUnit {
    * @param T
    * @tparam T
    * @tparam R
-   * @tparam a
-   * @tparam c
-   * @tparam h
+   * @tparam I
+   * @tparam C
+   * @tparam H
    * @return
    */
-  def apply[T[_], R, a <: Dim, c <: Dim, h <: Dim](
-                                   inputAxisAndSize: (a, Int),
-                                   cellAxisAndSize: (c, Int),
-                                   hiddenAxisAndSize: (h, Int)
+  def apply[T[_], R, I <: Dim, C <: Dim, H <: Dim](
+                                   inputAxisAndSize: (I, Int),
+                                   cellAxisAndSize: (C, Int),
+                                   hiddenAxisAndSize: (H, Int)
                                    )
                                    (implicit T: IsRealTensorK[T, R]) = {
     ???

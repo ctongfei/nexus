@@ -13,5 +13,7 @@ package object nexus {
   sealed class ?
   val ? : ? = new ?
 
+  type Id[A] = A
+  def Id[A](a: A): Id[A] = a
 
 }

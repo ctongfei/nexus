@@ -12,30 +12,30 @@ import nexus.typelevel._
 trait RingTensorK[T[_], R] extends IsTensorK[T, R] {
 
 
-  def zeroBy[A](x: T[A]): T[A]
+  def zeroBy[I](x: T[I]): T[I]
 
 
-  def add[A](x: T[A], y: T[A]): T[A]
-  def addInplace[A](x1: T[A], x2: T[A]): T[A]
-  def addScalar[A](x: T[A], u: R): T[A]
-  def neg[A](x: T[A]): T[A]
-  def sub[A](x: T[A], y: T[A]): T[A]
+  def add[I](x: T[I], y: T[I]): T[I]
+  def addInplace[I](x1: T[I], x2: T[I]): T[I]
+  def addScalar[I](x: T[I], u: R): T[I]
+  def neg[I](x: T[I]): T[I]
+  def sub[I](x: T[I], y: T[I]): T[I]
 
-  def subScalar[A](x: T[A], u: R): T[A]
-  def mul[A](x: T[A], y: T[A]): T[A]
-  def div[A](x: T[A], y: T[A]): T[A]
-  def scale[A](x: T[A], u: R): T[A]
+  def subScalar[I](x: T[I], u: R): T[I]
+  def mul[I](x: T[I], y: T[I]): T[I]
+  def div[I](x: T[I], y: T[I]): T[I]
+  def scale[I](x: T[I], u: R): T[I]
 
-  def sqr[A](x: T[A]): T[A]
+  def sqr[I](x: T[I]): T[I]
 
 
-  def sum[A](x: T[A]): R
-  def product[A](x: T[A]): R
+  def sum[I](x: T[I]): R
+  def product[I](x: T[I]): R
 
-  def dot[A](x: T[A], y: T[A]): R
-  def matMul[U, V, W](x: T[(U, V)], y: T[(V, W)]): T[(U, W)]
-  def mvMul[U, V](x: T[(U, V)], y: T[V]): T[U]
-  def vvMul[U, V](x: T[U], y: T[V]): T[(U, V)]
+  def dot[I](x: T[I], y: T[I]): R
+  def matMul[I, J, K](x: T[(I, J)], y: T[(J, K)]): T[(I, K)]
+  def mvMul[I, J](x: T[(I, J)], y: T[J]): T[I]
+  def vvMul[I, J](x: T[I], y: T[J]): T[(I, J)]
   def contract[U, V, W](x: T[U], y: T[V])(implicit sd: SymDiff.Aux[U, V, W]): T[W]
 
 

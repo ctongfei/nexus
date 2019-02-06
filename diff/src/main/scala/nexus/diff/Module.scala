@@ -1,7 +1,5 @@
 package nexus.diff
 
-import nexus.diff.execution._
-
 
 trait AnyModule extends HasParameters {
 
@@ -12,24 +10,24 @@ trait AnyModule extends HasParameters {
 
   def loadFromParameterMap(m: Map[String, Param[_]]): Unit =
     for (p <- parameters)
-      p.__assign_!(m(p.name).value)
+      p.assign_!(m(p.name).value)
 
 }
 
+trait Module0[Y] extends Func0[Y] with AnyModule
+
 trait Module1[X, Y] extends Func1[X, Y] with AnyModule { self =>
 
-  def >>[Z](that: Func1[Y, Z]): Module1[X, Z] = new Module1[X, Z] {
+  def >>[Z](that: Module1[Y, Z]): Module1[X, Z] = new Module1[X, Z] {
 
     def parameters = self.parameters union (that match {
       case that: Module1[Y, Z] => that.parameters
       case _ => Set()
     })
-
-    def apply(x: Symbolic[X]) = that(self(x))
-
+    def apply[F[_]: Algebra](x: F[X]): F[Z] = that(self(x))
   }
 
-  def >>[Z](that: PolyFunc1)(implicit f: that.F[Y, Z]): Module1[X, Z] = self >> that.ground(f)
+  def >>[Z](that: PolyModule1)(implicit p: that.F[Y, Z]): Module1[X, Z] = self >> that.ground(p)
 
 }
 

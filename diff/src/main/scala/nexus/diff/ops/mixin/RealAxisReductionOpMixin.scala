@@ -9,19 +9,21 @@ import nexus.typelevel._
  */
 trait RealAxisReductionOpMixin { poly: ParameterizedPolyOp1 =>
 
-  def forwardR[T[_], R, A, U <: Dim, B](x: T[A], u: U)
-                                       (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[A, U, B]): T[B]
+  def name: String
 
-  def backwardR[T[_], R, A, U <: Dim, B](dy: T[B], y: T[B], x: T[A])
-                                        (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[A, U, B]): T[A]
+  def forwardR[T[_], R, U, I <: Dim, V](x: T[U], dim: I)
+                                       (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): T[V]
 
-  implicit def fR[T[_], R, A, U <: Dim, B]
-  (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[A, U, B]): U => F[T[A], T[B]] =
-    (u: U) => new F[T[A], T[B]] {
-      def name = n"SumAlong[$u]"
-      def tag = Tag.realTensor[T, R, B]
-      def forward(x: T[A]) = poly.forwardR(x, u)
-      def backward(dy: T[B], y: T[B], x: T[A]) = poly.backwardR(dy, y, x)
+  def backwardR[T[_], R, U, I <: Dim, V](dy: T[V], y: T[V], x: T[U])
+                                        (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): T[U]
+
+  implicit def fR[T[_], R, U, I <: Dim, V]
+  (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): I => F[T[U], T[V]] =
+    (dim: I) => new F[T[U], T[V]] {
+      def name = n"${poly.name}[$dim]"
+      def tag = Tag.realTensor[T, R, V]
+      def forward(x: T[U]) = poly.forwardR(x, dim)
+      def backward(dy: T[V], y: T[V], x: T[U]) = poly.backwardR(dy, y, x)
     }
 
 }

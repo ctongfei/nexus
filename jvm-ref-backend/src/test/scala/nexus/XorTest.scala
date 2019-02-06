@@ -9,6 +9,7 @@ import nexus.jvm.setFloat32AsDefault._
 import nexus.diff.modules._
 import nexus.diff.ops._
 import nexus.diff.optimizers._
+import nexus.diff.syntax._
 
 // Define names of axes (an empty class and an object with the same name)
 class Batch extends Dim
@@ -42,8 +43,8 @@ object XorTest extends App {
   val xs = X unstackAlong Batch
   val ys = Y unstackAlong Batch
 
-  val x = Input[FloatTensor[In]]()
-  val y = Input[FloatTensor[Out]]()
+  val x = Input[FloatTensor[In]]
+  val y = Input[FloatTensor[Out]]
 
   val Layer1 = Affine(In -> 2, Hidden -> 2)
   val Layer2 = Affine(Hidden -> 2, Out -> 2)

@@ -104,5 +104,5 @@ object Inv extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def forwardR[R](x: R)(implicit R: IsReal[R]) = R.inv(x)
   def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = -dy * R.sqr(y)
   def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.inv(x)
-  def backwardTR[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, E]) = -dy |*| T.sqr(y)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = -dy |*| T.sqr(y)
 }

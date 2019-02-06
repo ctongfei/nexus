@@ -18,17 +18,17 @@ class SimpleForward private(val values: WengertList) extends ForwardInterpreter 
       case Param(x, _) => values(e) = x; x
       case Const(x, _) => values(e) = x; x
 
-      case App1(o, x) =>
+      case Symbolic.App1(o, x) =>
         val y = o.forward(apply(x))
         values(e) = y; y
-      case App2(o, x1, x2) =>
+      case Symbolic.App2(o, x1, x2) =>
         val y = o.forward(apply(x1), apply(x2))
         values(e) = y; y
-      case App3(o, x1, x2, x3) =>
+      case Symbolic.App3(o, x1, x2, x3) =>
         val y = o.forward(apply(x1), apply(x2), apply(x3))
         values(e) = y; y
 
-      case e @ Input(_) =>
+      case e: Input[A] =>
         throw new InputNotGivenException(e) // should already be in `values`
     }
   }

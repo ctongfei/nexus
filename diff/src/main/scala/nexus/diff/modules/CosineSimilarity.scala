@@ -10,7 +10,9 @@ import nexus.diff.syntax._
  * @author Tongfei Chen
  */
 object CosineSimilarity extends PolyModule2 {
-  implicit def cosineSimilarityF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] = F { (x1, x2) =>
-    Dot(x1, x2) / L2Norm(x1) / L2Norm(x2)
-  }
+  implicit def cosineSimilarityF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R] =
+    new F[T[I], T[I], R] {
+      def apply[F[_] : Algebra](x1: F[T[I]], x2: F[T[I]]) = Div(Dot(x1, x2), Mul(L2Norm(x1), L2Norm(x2)))
+      def parameters = Set()
+    }
 }

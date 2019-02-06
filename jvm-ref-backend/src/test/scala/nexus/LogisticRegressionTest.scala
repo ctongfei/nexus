@@ -4,6 +4,7 @@ import nexus.diff.Input
 import nexus.diff.ops._
 import nexus.diff.optimizers._
 import nexus.diff.execution._
+import nexus.diff.syntax._
 import nexus.jvm._
 import nexus.jvm.setFloat32AsDefault._
 import nexus.diff.modules._
@@ -34,8 +35,8 @@ object LogisticRegressionTest extends App {
   val xs = X unstackAlong Batch
   val ys = Y unstackAlong Batch
 
-  val x = Input[FloatTensor[In]]()
-  val y = Input[FloatTensor[Out]]()
+  val x = Input[FloatTensor[In]]
+  val y = Input[FloatTensor[Out]]
 
   val Layer = Affine(In -> 2, Out -> 2)
 

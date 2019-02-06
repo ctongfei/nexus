@@ -1,6 +1,5 @@
 package nexus.diff
 
-import cats._
 import nexus._
 import nexus.diff.util._
 
@@ -11,7 +10,8 @@ import nexus.diff.util._
  * @since 0.1.0
  * @author Tongfei Chen
  */
-sealed trait Symbolic[X] {
+trait Symbolic[X] {
+  import Symbolic._
 
   type Data = X
 
@@ -21,22 +21,7 @@ sealed trait Symbolic[X] {
   /** Will the gradient of this expression be computed when performing backward computation? */
   def requireGrad: Boolean
 
-  /**
-   * Gets the value of this expression given an implicit computation instance,
-   * while forcing this expression to be evaluated strictly in that specific
-   * computation instance.
-   */
-  def value(implicit comp: Symbolic ~> Id): X = comp(this)
-
-  def !>[Y](f: X => Y): Symbolic[Y] = Op1.fromFunction(f)(this)
-
-  /** Passes this expression through a function. */
-  def |>[Y](f: Func1[X, Y]): Symbolic[Y] = f(this)
-
-  /** Passes this expression through a type-polymorphic function. */
-  def |>[Y](f: PolyFunc1)(implicit ff: f.F[X, Y]): Symbolic[Y] = f(this)
-
-  /** Creates an assignment to this expression. */
+  /** Creates an assignment to this symbolic expression. */
   def :=(value: X): Assignment = Assignment(this, value)
 
   /** Substitutes an input to an expression in this expression. */
@@ -50,110 +35,66 @@ sealed trait Symbolic[X] {
   }
 }
 
-/**
- * A placeholder for inputs to a computation graph.
- */
-case class Input[X](name: String = ExprName.nextInput) extends Symbolic[X] { self =>
+object Symbolic {
 
-  def tag = Tag.none[X] // no need to compute the gradient of the input
-  def requireGrad = false
+  implicit object Algebra extends Algebra[Symbolic] {
+    type In[X] = Input[X]
+    def input[X](input: Input[X], name: String = "") = new Input[X](name)
+    def const[X](value: X, name: String = "") = new Const(value, name)
+    def param[X](p: Param[X]) = p
+    def app0[Y](op: Op0[Y]) = App0(op)
+    def app1[X, Y](op: Op1[X, Y], x: Symbolic[X]) = App1(op, x)
+    def app2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Symbolic[X1], x2: Symbolic[X2]) = App2(op, x1, x2)
+    def app3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3]) = App3(op, x1, x2, x3)
+    def unroll[S[_], X](xs: Symbolic[S[X]])(implicit unroll: Unroll[S, Symbolic]) = ???
+  }
 
-  /** Constructs a neural function (lambda expression). */
-  def =>>[Y](y: Symbolic[Y]): Lambda1[X, Y] = Lambda1(this, y)
-
-  override def toString = name
-
-}
-
-
-/**
- * A parameter of a model.
- * @param value Initial value of this parameter
- * @note A `Param` has to be differentiable by providing a `Grad[X]` instance as its type tag.
- */
-case class Param[X](var value: X, name: String)(implicit grad: Grad[X]) extends Symbolic[X] {
-
-  // Circumvent typechecking issues when loading from parameterMap
-  private[nexus] def __assign_!(newValue: Any): Unit =
-    value = newValue.asInstanceOf[X]
-
-  final def requireGrad = true // or else, how could it be updated?
-
-  def tag: Tag.Aux[X, Grad] = Tag.of(grad)
-
-  private[this] val ev = tag.ev
-
-  def +=(g: X): Unit = if (ev.mutable)
-    ev.addInplace(value, g)
-  else value = ev.add(value, g)
-
-  def -=(g: X): Unit = +=(ev.neg(g))
-
-  override def toString = name
-
-}
-
-object Param {
+  case class App0[Y](op: Op0[Y]) extends Symbolic[Y] {
+    type Output = Y
+    def tag = op.tag
+    final def requireGrad = false  // nothing to backpropagate!
+    override def toString = s"${op.name}()"
+  }
 
   /**
-   * Shorthand syntax for creating a parameter.
+   * The result of the application of a unary function to an expression.
    */
-  // Use `sourcecode.Name` to get the name of the Scala val
-  def apply[X](x: X)(implicit name: sourcecode.Name, grad: Grad[X]): Param[X] =
-    Param[X](x, name.value)(grad)
-
-}
-
-
-/**
- * A constant value in a computational graph.
- * @param value Value of this constant
- */
-case class Const[X](value: X, name: String = ExprName.nextConst) extends Symbolic[X] {
-
-  final def tag = Tag.none[X]
-  override def requireGrad = false
-  override def toString = name
-
-}
+  case class App1[X, Y](op: Op1[X, Y], x: Symbolic[X]) extends Symbolic[Y] {
+    type Input = X
+    type Output = Y
+    val requireGrad = op.differentiable && x.requireGrad
+    def tag = op.tag
+    override def toString = s"${op.name}($x)"
+  }
 
 
-/**
- * The result of the application of a unary function to an expression.
- */
-case class App1[X, Y](op: Op1[X, Y], x: Symbolic[X]) extends Symbolic[Y] {
-  type Input = X
-  type Output = Y
-  val requireGrad = op.differentiable && x.requireGrad
-  def tag = op.tag
-  override def toString = s"${op.name}($x)"
-}
+  /**
+   * The result of the application of a binary function to two expressions.
+   */
+  case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Symbolic[X1], x2: Symbolic[X2]) extends Symbolic[Y] {
+    type Input1 = X1
+    type Input2 = X2
+    type Output = Y
+
+    val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad)
+    def tag = op.tag
+    override def toString = s"${op.name}($x1, $x2)"
+  }
 
 
-/**
- * The result of the application of a binary function to two expressions.
- */
-case class App2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Symbolic[X1], x2: Symbolic[X2]) extends Symbolic[Y] {
-  type Input1 = X1
-  type Input2 = X2
-  type Output = Y
+  /**
+   * The result of the application of a ternary function to three expressions.
+   */
+  case class App3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3]) extends Symbolic[Y] {
+    type Input1 = X1
+    type Input2 = X2
+    type Input3 = X3
+    type Output = Y
 
-  val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad)
-  def tag = op.tag
-  override def toString = s"${op.name}($x1, $x2)"
-}
+    val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad || x3.requireGrad)
+    def tag = op.tag
+    override def toString = s"${op.name}($x1, $x2, $x3)"
+  }
 
 
-/**
- * The result of the application of a ternary function to three expressions.
- */
-case class App3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3]) extends Symbolic[Y] {
-  type Input1 = X1
-  type Input2 = X2
-  type Input3 = X3
-  type Output = Y
-
-  val requireGrad = op.differentiable && (x1.requireGrad || x2.requireGrad || x3.requireGrad)
-  def tag = op.tag
-  override def toString = s"${op.name}($x1, $x2, $x3)"
 }

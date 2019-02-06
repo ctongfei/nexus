@@ -4,5 +4,6 @@ package nexus.diff
  * @author Tongfei Chen
  */
 package object syntax extends
-  SymbolicRealOpsMixin with
-  ExprRealTensorMixin
+  BoxOpsMixin with
+  BoxRealOpsMixin with
+  BoxRealTensorMixin

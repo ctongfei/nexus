@@ -11,9 +11,9 @@ import nexus._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Cond extends PolyOp3 {
+object If extends PolyOp3 {
 
-  implicit def condF[X](implicit X: Grad[X]): F[Boolean, X, X, X] = new F[Boolean, X, X, X] {
+  implicit def ifF[X](implicit X: Grad[X]): F[Boolean, X, X, X] = new F[Boolean, X, X, X] {
       def name = "If"
       def tag = Tag.of(X)
       def forward(c: Boolean, t: X, f: X) = if (c) t else f
@@ -27,17 +27,17 @@ object Cond extends PolyOp3 {
    */
   object Elementwise extends PolyOp3 {
 
-    implicit def condElementwiseF[TB[_], B, TR[_], R, a](
+    implicit def ifElementwiseF[TB[_], B, TR[_], R, U](
                                                         implicit TB: BoolTensorK[TB, B],
                                                         TR: IsRealTensorK[TR, R]
-                                                      ): F[TB[a], TR[a], TR[a], TR[a]] =
-      new F[TB[a], TR[a], TR[a], TR[a]] {
+                                                      ): F[TB[U], TR[U], TR[U], TR[U]] =
+      new F[TB[U], TR[U], TR[U], TR[U]] {
         def name = "If.Elementwise"
-        def tag = Tag.realTensor[TR, R, a]
-        def forward(x1: TB[a], x2: TR[a], x3: TR[a]) = ???
-        def backward1(dy: TR[a], y: TR[a], x1: TB[a], x2: TR[a], x3: TR[a]) = throw new OperatorNotDifferentiableException(this, 1)
-        def backward2(dy: TR[a], y: TR[a], x1: TB[a], x2: TR[a], x3: TR[a]) = ???
-        def backward3(dy: TR[a], y: TR[a], x1: TB[a], x2: TR[a], x3: TR[a]) = ???
+        def tag = Tag.realTensor[TR, R, U]
+        def forward(x1: TB[U], x2: TR[U], x3: TR[U]) = ???
+        def backward1(dy: TR[U], y: TR[U], x1: TB[U], x2: TR[U], x3: TR[U]) = throw new OperatorNotDifferentiableException(this, 1)
+        def backward2(dy: TR[U], y: TR[U], x1: TB[U], x2: TR[U], x3: TR[U]) = ???
+        def backward3(dy: TR[U], y: TR[U], x1: TB[U], x2: TR[U], x3: TR[U]) = ???
       }
 
   }

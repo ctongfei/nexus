@@ -58,7 +58,6 @@ Nexus is modularized. It contains the following modules:
 | Module               |  Description                                        |
 |----------------------|-----------------------------------------------------|
 | `nexus-tensor`       | Foundations for typesafe tensors                    |
-| `nexus-prob`         | Typesafe probabilistic programming                  |
 | `nexus-diff`         | Typesafe deep learning (differentiable programming) |
 | `nexus-ml`           | High-level machine learning abstractions / models   |
 | `nexus-jvm-backend`  | JVM reference backend (slow)                        |

@@ -20,4 +20,5 @@ trait AnyOp[Y] {
   def tag: Tag[Y]
 
   override def toString = name
+
 }

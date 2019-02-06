@@ -11,7 +11,7 @@ import nexus.diff._
 trait ForwardInterpreter extends (Symbolic ~> Id) {
 
   /** Cached values in this computation instance. */
-  def values: SymbolicMap[Id]
+  def values: BoxMap[Symbolic, Id]
 
 }
 

@@ -20,7 +20,7 @@ class Convolution1D[T[_], R, W <: Dim, X <: Dim, Y <: Dim] private(
 
   def parameters = Set(kernel)
 
-  def apply(x: Symbolic[T[(W, X)]]) = ???
+  def apply[F[_] : Algebra](x: F[T[(W, X)]]) = ???
 }
 
 

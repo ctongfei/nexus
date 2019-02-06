@@ -55,3 +55,4 @@ nav:
       - 'Torch':
           - 'Torch': 'torch.md'
           - 'Torch CUDA support': 'torch-cuda.md'
+  - 'Code style': 'code-style.md'

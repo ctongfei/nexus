@@ -1,6 +1,5 @@
 package nexus.diff.execution
 
-import cats._
 import nexus.diff._
 import nexus._
 
@@ -9,6 +8,6 @@ import nexus._
  */
 trait Backpropagation[F <: ForwardInterpreter] {
 
-  def compute[R](e: Symbolic[R])(implicit R: IsReal[R], forward: F): SymbolicMap[Id]
+  def compute[R](e: Symbolic[R])(implicit R: IsReal[R], forward: F): BoxMap[Symbolic, Id]
 
 }

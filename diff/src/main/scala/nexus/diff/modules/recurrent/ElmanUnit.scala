@@ -1,28 +1,30 @@
 package nexus.diff.modules.recurrent
 
+import nexus._
 import nexus.diff._
 import nexus.diff.modules._
 import nexus.diff.ops._
-import nexus._
-import nexus.diff.util._
+import nexus.diff.syntax._
 
 /**
  * Elman recurrent unit -- the simplest case of a recurrent unit.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class ElmanUnit[T[_], R, X <: Dim, S <: Dim] private(
-  val inputLayer: Affine[T, R, X, S],
+class ElmanUnit[T[_], R, I <: Dim, S <: Dim] private(
+  val inputLayer: Affine[T, R, I, S],
   val stateActivation: Func1[T[S], T[S]],
-  val inputAxis: X,
+  val inputAxis: I,
   val stateAxis: S
 )
 (implicit T: IsRealTensorK[T, R])
-  extends RecurrentUnit[T[S], T[X]]
+  extends RecurrentUnit[T[S], T[I]]
 {
 
-  def apply(s: Symbolic[T[S]], x: Symbolic[T[X]]) =
-    ((s |> RenameAxis(stateAxis -> inputAxis)), x) |> ConcatAlong(inputAxis) |> inputLayer |> stateActivation
+  def apply[F[_] : Algebra](s: F[T[S]], x: F[T[I]]) = {
+    val si = ConcatAlong(inputAxis)(s |> RenameAxis(stateAxis -> inputAxis), x)
+    si |> inputLayer |> stateActivation
+  }
 
 }
 

@@ -22,8 +22,7 @@ class Linear[T[_], R, X <: Dim, Y <: Dim] private(
 
   def parameters = Set(weight)
 
-  def apply(x: Symbolic[T[X]]): Symbolic[T[Y]] = MVMul(weight, x)
-
+  def apply[F[_] : Algebra](x: F[T[X]]) = MVMul(weight.as, x)
 }
 
 object Linear {

@@ -1,6 +1,6 @@
 package nexus.diff.execution
 
-import cats._
+import cats.~>
 import nexus.diff._
 import nexus._
 
@@ -11,20 +11,20 @@ import nexus._
  */
 object Backward extends Backpropagation[SimpleForward] {
 
-  def compute[R](e: Symbolic[R])(implicit R: IsReal[R], forward: SimpleForward): SymbolicMap[Id] = {
+  def compute[D[_], R](e: D[R])(implicit R: IsReal[R], forward: WengertList): BoxMap[D, Id] = {
 
     val grad = WengertList(e := R.one) // gradient of loss is 1
     val values = forward.values
 
     for (a <- values.reverse) a match {
       case a @ Assignment(e, v) => e match {
-        case e @ App1(o, x) => o match {
+        case e @ Symbolic.App1(o, x) => o match {
           case o: Op1[e.Input, _] if x.requireGrad =>
             val g = o.backward(grad(e), v, values(x))
             grad.increment(x, g)
           case _ => // not differentiable
         }
-        case e @ App2(o, x1, x2) => o match {
+        case e @ Symbolic.App2(o, x1, x2) => o match {
           case o: Op2[e.Input1, e.Input2, _] =>
             if (x1.requireGrad) {
               val g1 = o.backward1(grad(e), v, values(x1), values(x2))
@@ -36,7 +36,7 @@ object Backward extends Backpropagation[SimpleForward] {
             }
           case _ =>
         }
-        case e @ App3(o, x1, x2, x3) => o match {
+        case e @ Symbolic.App3(o, x1, x2, x3) => o match {
           case o: Op3[e.Input1, e.Input2, e.Input3, _] =>
             if (x1.requireGrad) {
               val g1 = o.backward1(grad(e), v, values(x1), values(x2), values(x3))

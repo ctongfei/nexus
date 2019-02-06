@@ -33,7 +33,7 @@ abstract class ParameterizedPolyOp2 { self =>
     def ground[X1, X2, Y](implicit f: F[X1, X2, Y]) = f(parameter)
   }
 
-  def apply[P](parameter: P) = new Proxy(parameter)
+  def apply[P](parameter: P): Proxy[P] = new Proxy(parameter)
 
 }
 
@@ -49,6 +49,6 @@ abstract class ParameterizedPolyOp3 { self =>
     override def ground[X1, X2, X3, Y](implicit f: F[X1, X2, X3, Y]) = f(parameter)
   }
 
-  def apply[P](parameter: P) = new Proxy(parameter)
+  def apply[P](parameter: P): Proxy[P] = new Proxy(parameter)
 
 }

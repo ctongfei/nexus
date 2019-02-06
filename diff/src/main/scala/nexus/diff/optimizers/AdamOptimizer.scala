@@ -17,7 +17,7 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
   /**
    * First-order and second-order momentum stored in the optimizer.
    */
-  val history = SymbolicMap[AdamHistory]()
+  val history = BoxMap[Symbolic, AdamHistory]()
 
   def updateParam[X](p: Param[X], g: X): Unit = {
 

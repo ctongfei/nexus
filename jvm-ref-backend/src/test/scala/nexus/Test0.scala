@@ -22,9 +22,9 @@ object Test0 extends App {
   val b = new b
   val c = new c
 
-  val p = Param(3.0f, name = "p")
+  val p: Symbolic[Float] = Param(3.0f, name = "p")
 
-  val q = Param(FloatTensor.fromFlatArray((), Array(), Array(1f)), name = "q")
+  val q: Symbolic[FloatTensor[Unit]] = Param(FloatTensor.fromFlatArray((), Array(), Array(1f)), name = "q")
 
   val z = q |> Dropout(0.3)
 

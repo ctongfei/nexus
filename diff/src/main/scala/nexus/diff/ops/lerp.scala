@@ -22,15 +22,15 @@ object LinearInterpolation extends PolyOp3 {
     }
 
   // TODO: generalize to all vector spaces?
-  implicit def lerpTensorF[T[_], R, a](implicit T: IsRealTensorK[T, R]): F[T[a], T[a], R, T[a]] =
-    new F[T[a], T[a], R, T[a]] {
+  implicit def lerpTensorF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R, T[I]] =
+    new F[T[I], T[I], R, T[I]] {
       import T._
       def name = "LinearInterpolation"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x1: T[a], x2: T[a], t: R) = (x1 :* (R.one - t)) + (x2 :* t)
-      def backward1(dy: T[a], y: T[a], x1: T[a], x2: T[a], t: R) = dy :* (R.one - t)
-      def backward2(dy: T[a], y: T[a], x1: T[a], x2: T[a], t: R) = dy :* t
-      def backward3(dy: T[a], y: T[a], x1: T[a], x2: T[a], t: R) = dy ⋅ (x2 - x1)
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x1: T[I], x2: T[I], t: R) = (x1 :* (R.one - t)) + (x2 :* t)
+      def backward1(dy: T[I], y: T[I], x1: T[I], x2: T[I], t: R) = dy :* (R.one - t)
+      def backward2(dy: T[I], y: T[I], x1: T[I], x2: T[I], t: R) = dy :* t
+      def backward3(dy: T[I], y: T[I], x1: T[I], x2: T[I], t: R) = dy ⋅ (x2 - x1)
     }
 
 }

@@ -23,12 +23,12 @@ trait RealElementwisePolyOp1Mixin { poly: PolyOp1 =>
       def backward(dy: R, y: R, x: R) = poly.backwardR(dy, y, x)
     }
 
-  implicit def fTR[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
+  implicit def fTR[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = s"${poly.name}.Elementwise"
-      def tag = Tag.realTensor[T, R, A]
-      def forward(x: T[A]) = poly.forwardTR(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = poly.backwardTR(dy, y, x)
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x: T[I]) = poly.forwardTR(x)
+      def backward(dy: T[I], y: T[I], x: T[I]) = poly.backwardTR(dy, y, x)
     }
 
 }
@@ -49,13 +49,13 @@ trait IntElementwisePolyOp1Mixin { poly: PolyOp1 =>
       def backward(dy: Z, y: Z, x: Z) = throw new OperatorNotDifferentiableException(this, 1)
     }
 
-  implicit def fTZ[T[_], Z, A](implicit T: IsIntTensorK[T, Z]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
+  implicit def fTZ[T[_], Z, I](implicit T: IsIntTensorK[T, Z]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = s"${poly.name}.Elementwise"
       def tag = ???
       override def differentiable = false
-      def forward(x: T[A]) = poly.forwardTZ(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = throw new OperatorNotDifferentiableException(this, 1)
+      def forward(x: T[I]) = poly.forwardTZ(x)
+      def backward(dy: T[I], y: T[I], x: T[I]) = throw new OperatorNotDifferentiableException(this, 1)
     }
 
 }
@@ -66,7 +66,7 @@ trait BoolElementwisePolyOp1Mixin { poly: PolyOp1 =>
   def name: String
 
   def forwardB[B](x: B)(implicit B: IsBool[B]): B
-  def forwardTB[T[_], B, A](x: T[A])(implicit T: IsBoolTensorK[T, B]): T[A]
+  def forwardTB[T[_], B, I](x: T[I])(implicit T: IsBoolTensorK[T, B]): T[I]
 
   implicit def fB[B](implicit B: IsBool[B]): F[B, B] =
     new F[B, B] {
@@ -77,13 +77,13 @@ trait BoolElementwisePolyOp1Mixin { poly: PolyOp1 =>
       def backward(dy: B, y: B, x: B) = throw new OperatorNotDifferentiableException(this, 1)
     }
 
-  implicit def fTB[T[_], B, A](implicit T: IsBoolTensorK[T, B]): F[T[A], T[A]] =
-    new F[T[A], T[A]] {
+  implicit def fTB[T[_], B, I](implicit T: IsBoolTensorK[T, B]): F[T[I], T[I]] =
+    new F[T[I], T[I]] {
       def name = s"${poly.name}.Elementwise"
       def tag = ???
       override def differentiable = false
-      def forward(x: T[A]) = poly.forwardTB(x)
-      def backward(dy: T[A], y: T[A], x: T[A]) = throw new OperatorNotDifferentiableException(this, 1)
+      def forward(x: T[I]) = poly.forwardTB(x)
+      def backward(dy: T[I], y: T[I], x: T[I]) = throw new OperatorNotDifferentiableException(this, 1)
     }
 
 }

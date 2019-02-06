@@ -24,7 +24,7 @@ CXXFLAGS_Darwin :=
 CXXFLAGS := $(CXXFLAGS_$(OS))
 
 LDFLAGS_Linux := -shared -fPIC torch_wrap_fixed.o -o $(RESOURCES_PATH)/$(JNI_FILENAME) -L $(PYTORCH_LIB_PATH) -l caffe2 -l caffe2_gpu
-LDFLAGS_Darwin := -dynamiclib -undefined suppress -flat_namespace torch_wrap_fixed.o -o $RESOURCES_PATH/$JNI_FILENAME
+LDFLAGS_Darwin := -dynamiclib -undefined suppress -flat_namespace torch_wrap_fixed.o -o $(RESOURCES_PATH)/$(JNI_FILENAME)
 LDFLAGS := $(LDFLAGS_$(OS))
 
 .PHONY: all clean cleanall

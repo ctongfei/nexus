@@ -15,16 +15,16 @@ object Sqr extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Sqr"
   def forwardR[R](x: R)(implicit R: IsReal[R]) = R.sqr(x)
   def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * x * 2
-  def forwardTR[T[_], E, A](x: T[A])(implicit T: IsRealTensorK[T, E]) = T.sqr(x)
-  def backwardTR[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, E]) = dy |*| x :* 2
+  def forwardTR[T[_], R, I](x: T[I])(implicit T: IsRealTensorK[T, R]) = T.sqr(x)
+  def backwardTR[T[_], R, I](dy: T[I], y: T[I], x: T[I])(implicit T: IsRealTensorK[T, R]) = dy |*| x :* 2
 }
 
 object Sqrt extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Sqrt"
   def forwardR[R](x: R)(implicit R: IsReal[R]) = R.sqrt(x)
   def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(y) * 0.5
-  def forwardTR[T[_], E, A](x: T[A])(implicit T: IsRealTensorK[T, E]) = T.sqrt(x)
-  def backwardTR[T[_], E, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, E]) = dy |*| T.inv(y) :* 0.5
+  def forwardTR[T[_], R, I](x: T[I])(implicit T: IsRealTensorK[T, R]) = T.sqrt(x)
+  def backwardTR[T[_], R, I](dy: T[I], y: T[I], x: T[I])(implicit T: IsRealTensorK[T, R]) = dy |*| T.inv(y) :* 0.5
 }
 
 // TODO: Power

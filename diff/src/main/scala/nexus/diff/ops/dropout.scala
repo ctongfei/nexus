@@ -8,12 +8,12 @@ import nexus._
  */
 object Dropout extends ParameterizedPolyOp1 {
 
-  implicit def dropoutF[T[_], R, a](implicit T: IsRealTensorK[T, R]) = (rate: Double) =>
-    new F[T[a], T[a]] {
+  implicit def dropoutF[T[_], R, I](implicit T: IsRealTensorK[T, R]) = (rate: Double) =>
+    new F[T[I], T[I]] {
       def name = s"Dropout[rate = $rate]"
-      def tag = Tag.realTensor[T, R, a]
-      def forward(x: T[a]) = x // TODO: not implemented
-      def backward(dy: T[a], y: T[a], x: T[a]) = dy // as if it does not exist
+      def tag = Tag.realTensor[T, R, I]
+      def forward(x: T[I]) = x // TODO: not implemented
+      def backward(dy: T[I], y: T[I], x: T[I]) = dy // as if it does not exist
     }
 
 }

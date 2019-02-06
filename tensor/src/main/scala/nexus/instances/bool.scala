@@ -1,7 +1,6 @@
 package nexus.instances
 
 import nexus._
-import cats._
 
 object BoolIsBool extends IsBool[Boolean] {
   def top = true

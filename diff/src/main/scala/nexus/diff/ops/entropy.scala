@@ -7,12 +7,12 @@ import nexus.syntax._
 
 object Entropy extends PolyOp1 {
 
-  implicit def entropyF[T[_], R, A](implicit T: IsRealTensorK[T, R]) = new F[T[A], R] {
+  implicit def entropyF[T[_], R, I](implicit T: IsRealTensorK[T, R]) = new F[T[I], R] {
     import T._
     def name = "Entropy"
     def tag = Tag.real[R]
-    def forward(x: T[A]) = -sum(x |*| log(x))
-    def backward(dy: R, y: R, x: T[A]) = (log(x) +# 1) :* (-dy)
+    def forward(x: T[I]) = -sum(x |*| log(x))
+    def backward(dy: R, y: R, x: T[I]) = (log(x) +# 1) :* (-dy)
   }
 
 }
@@ -30,27 +30,27 @@ object Entropy extends PolyOp1 {
  */
 object CrossEntropy extends PolyOp2 {
 
-  implicit def crossEntropyF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
-    new F[T[A], T[A], R] {
+  implicit def crossEntropyF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R] =
+    new F[T[I], T[I], R] {
       import T._
       def name = "CrossEntropy"
       def tag = Tag.real[R]
-      def forward(p: T[A], q: T[A]) = -sum(p |*| log(q))
-      def backward1(dy: R, y: R, p: T[A], q: T[A]) = -log(q) :* dy
-      def backward2(dy: R, y: R, p: T[A], q: T[A]) = -(p |/| q) :* dy
+      def forward(p: T[I], q: T[I]) = -sum(p |*| log(q))
+      def backward1(dy: R, y: R, p: T[I], q: T[I]) = -log(q) :* dy
+      def backward2(dy: R, y: R, p: T[I], q: T[I]) = -(p |/| q) :* dy
     }
 
 }
 
 object KullbackLeiblerDivergence extends PolyOp2 {
 
-  implicit def kullbackLeiblerDivergenceF[T[_], R, A <: Dim](implicit T: IsRealTensorK[T, R]): F[T[A], T[A], R] =
-    new F[T[A], T[A], R] {
+  implicit def kullbackLeiblerDivergenceF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R] =
+    new F[T[I], T[I], R] {
       def name = "KullbackLeiblerDivergence"
       def tag = Tag.real[R]
-      def forward(x1: T[A], x2: T[A]) = ???
-      def backward1(dy: R, y: R, x1: T[A], x2: T[A]) = ???
-      def backward2(dy: R, y: R, x1: T[A], x2: T[A]) = ???
+      def forward(x1: T[I], x2: T[I]) = ???
+      def backward1(dy: R, y: R, x1: T[I], x2: T[I]) = ???
+      def backward2(dy: R, y: R, x1: T[I], x2: T[I]) = ???
     }
 
 }

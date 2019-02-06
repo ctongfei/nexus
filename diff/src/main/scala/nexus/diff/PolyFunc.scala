@@ -1,5 +1,11 @@
 package nexus.diff
 
+trait PolyFunc0 {
+  type F[Y]
+  def ground[Y](implicit f: F[Y]): Func0[Y]
+  def apply[D[_]: Algebra, Y]()(implicit f: F[Y]): D[Y] = ground(f)()
+}
+
 /**
  * Represents unary type-polymorphic functions that operates on expressions.
  *
@@ -14,7 +20,7 @@ trait PolyFunc1 {
   /**
    * Type constraint / proof expressing what type of variables this polymorphic operation can apply to.
    *
-   * Presence of an implicit `F[X, Y]` encodes the predicate
+   * Presence of an implicit `P[X, Y]` encodes the predicate
    * "This function can be applied on `X`, and the result type is `Y`."
    */
   type F[X, Y]
@@ -26,8 +32,7 @@ trait PolyFunc1 {
   def ground[X, Y](implicit f: F[X, Y]): Func1[X, Y]
 
   /** Given input expression, constructs the output expression. */
-  def apply[X, Y](x: Symbolic[X])(implicit f: F[X, Y]): Symbolic[Y] =
-    ground(f)(x)
+  def apply[D[_]: Algebra, X, Y](x: D[X])(implicit f: F[X, Y]): D[Y] = ground(f)(x)
 
 }
 
@@ -42,8 +47,7 @@ trait PolyFunc2 {
 
   def ground[X1, X2, Y](implicit f: F[X1, X2, Y]): Func2[X1, X2, Y]
 
-  def apply[X1, X2, Y](x1: Symbolic[X1], x2: Symbolic[X2])(implicit f: F[X1, X2, Y]): Symbolic[Y] =
-    ground(f)(x1, x2)
+  def apply[D[_]: Algebra, X1, X2, Y](x1: D[X1], x2: D[X2])(implicit f: F[X1, X2, Y]): D[Y] = ground(f)(x1, x2)
 
 }
 
@@ -59,7 +63,6 @@ trait PolyFunc3 {
 
   def ground[X1, X2, X3, Y](implicit f: F[X1, X2, X3, Y]): Func3[X1, X2, X3, Y]
 
-  def apply[X1, X2, X3, Y](x1: Symbolic[X1], x2: Symbolic[X2], x3: Symbolic[X3])(implicit f: F[X1, X2, X3, Y]): Symbolic[Y] =
-    ground(f)(x1, x2, x3)
+  def apply[D[_]: Algebra, X1, X2, X3, Y](x1: D[X1], x2: D[X2], x3: D[X3])(implicit f: F[X1, X2, X3, Y]): D[Y] = ground(f)(x1, x2, x3)
 
 }

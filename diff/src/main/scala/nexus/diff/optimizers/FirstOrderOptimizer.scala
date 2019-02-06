@@ -1,9 +1,10 @@
 package nexus.diff.optimizers
 
-import cats._
+import cats.~>
+import nexus._
 import nexus.diff._
 import nexus.diff.execution._
-import nexus._
+import nexus.diff.syntax._
 
 /**
  * Base abstract class for optimizers.
@@ -18,7 +19,7 @@ abstract class FirstOrderOptimizer extends HasParameters {
 
   def updateParam[X](p: Param[X], g: X): Unit
 
-  def update(gradients: SymbolicMap[Id]): Unit = {
+  def update(gradients: BoxMap[Symbolic, Id]): Unit = {
     t += 1
     for (item <- gradients) {
       item.expr match {
@@ -29,7 +30,7 @@ abstract class FirstOrderOptimizer extends HasParameters {
     }
   }
 
-  def step[R: IsReal](loss: Symbolic[R])(implicit comp: SimpleForward) = {
+  def step[D[_]: Algebra, R: IsReal](loss: D[R])(implicit comp: D ~> Id) = {
     val lossValue = loss.value
     val gradients = Backward.compute(loss)
     update(gradients)

@@ -7,24 +7,15 @@ import nexus._
 /**
  * @author Tongfei Chen
  */
-trait SymbolicRealOpsMixin {
+trait BoxRealOpsMixin {
 
-  implicit class SymbolicRealOps[R](val x: Symbolic[R])(implicit R: IsReal[R]) {
+  implicit class BoxRealOps[D[_], R](val x: D[R])(implicit F: Algebra[D], R: IsReal[R]) {
 
-    def +(y: Symbolic[R]): Symbolic[R] = Add(x, y)
-
-    def -(y: Symbolic[R]): Symbolic[R] = Sub(x, y)
-
-    def *(y: Symbolic[R]): Symbolic[R] = Mul(x, y)
-
-    def /(y: Symbolic[R]): Symbolic[R] = Div(x, y)
-
-  }
-
-
-  implicit class ExprRealOps2[T[_], R, A](val x: Symbolic[R])(implicit T: IsRealTensorK[T, R]) {
-
-    def *:(y: Symbolic[T[A]]): Symbolic[T[A]] = Scale(x, y)
+    def +(y: D[R]): D[R] = Add(x, y)
+    def unary_- : D[R] = Neg(x)
+    def -(y: D[R]): D[R] = Sub(x, y)
+    def *(y: D[R]): D[R] = Mul(x, y)
+    def /(y: D[R]): D[R] = Div(x, y)
 
   }
 
