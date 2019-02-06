@@ -67,14 +67,6 @@ lazy val diff = (project in file("diff"))
     name := "nexus-diff"
   )
 
-lazy val workflow = (project in file("workflow"))
-  .settings(commonSettings: _*)
-  .dependsOn(tensor)
-  .dependsOn(jvmRefBackend)
-  .settings(
-    name := "nexus-workflow"
-  )
-
 // this is a small, pure Java library
 lazy val jniLoader = (project in file("jni-loader"))
   .settings(commonSettings: _*)
