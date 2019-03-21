@@ -23,6 +23,7 @@ trait Algebra[D[_]] {
 
   import Algebra._
 
+  /** Type of input to the neural program that this algebra accepts. */
   type In[_]
 
   def forTraining: Boolean

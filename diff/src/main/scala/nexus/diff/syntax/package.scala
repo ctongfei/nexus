@@ -6,4 +6,6 @@ package nexus.diff
 package object syntax extends
   BoxOpsMixin with
   BoxRealOpsMixin with
-  BoxRealTensorMixin
+  BoxRealTensorMixin with
+  PartialOpsMixin
+
