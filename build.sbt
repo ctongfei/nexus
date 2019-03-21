@@ -67,6 +67,13 @@ lazy val diff = (project in file("diff"))
     name := "nexus-diff"
   )
 
+lazy val prob = (project in file("prob"))
+  .settings(commonSettings: _*)
+  .dependsOn(diff)
+  .settings(
+    name := "nexus-prob"
+  )
+
 // this is a small, pure Java library
 lazy val jniLoader = (project in file("jni-loader"))
   .settings(commonSettings: _*)
@@ -78,7 +85,7 @@ lazy val jniLoader = (project in file("jni-loader"))
 
 lazy val testBase = (project in file("test-base"))
   .settings(commonSettings: _*)
-  .dependsOn(diff)
+  .dependsOn(diff).dependsOn(prob)
   .settings(
     name := "nexus-test-base",
     publishArtifact := false,
@@ -92,13 +99,6 @@ lazy val ml = (project in file("ml"))
     name := "nexus-ml"
   )
 
-lazy val nlp = (project in file("nlp"))
-  .settings(commonSettings: _*)
-  .dependsOn(ml)
-  .settings(
-    name := "nexus-nlp"
-  )
-
 lazy val tensorboard = (project in file("interop/tensorboard"))
   .settings(commonSettings: _*)
   .dependsOn(diff)
@@ -106,9 +106,15 @@ lazy val tensorboard = (project in file("interop/tensorboard"))
     name := "nexus-interop-tensorboard"
   )
 
-lazy val jvmRefBackend = (project in file("jvm-ref-backend"))
+lazy val jvmRefMacros = (project in file("jvm-ref/macros"))
   .settings(commonSettings: _*)
-  .dependsOn(diff)
+  .settings(
+    name := "nexus-jvm-ref-macros"
+  )
+
+lazy val jvmRefBackend = (project in file("jvm-ref/backend"))
+  .settings(commonSettings: _*)
+  .dependsOn(diff).dependsOn(jvmRefMacros)
   .settings(
     name := "nexus-jvm-ref-backend"
   )
@@ -140,6 +146,13 @@ lazy val torchCuda = (project in file("torch/cuda"))
     name := "nexus-torch-backend-cuda"
   )
 
+val root = (project in file("."))
+  .settings(commonSettings: _*)
+  .enablePlugins(ScalaUnidocPlugin)
+  .settings(
+    name := "nexus"
+  )
+  .aggregate(tensor, diff, prob, ml, )
 
 // function that find html files recursively
 def listHtmlFile(dir: java.io.File): List[java.io.File] = {

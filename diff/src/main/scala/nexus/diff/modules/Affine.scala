@@ -27,8 +27,8 @@ class Affine[T[_], R, X <: Dim, Y <: Dim] private(
   /** The additive bias of this layer. */
   def bias = b
 
-  def apply[F[_]: Algebra](x: F[T[X]]): F[T[Y]] =
-    Add(MVMul(W.as, x), b.as)
+  def apply[D[_]: Algebra](x: D[T[X]]): D[T[Y]] =
+    Add(MVMul(W.as[D], x), b.as[D])
 
 }
 
@@ -50,14 +50,14 @@ object Affine {
   def apply[T[_], R, X <: Dim, Y <: Dim](
                                  inAxisAndSize: (X, Int),
                                  outAxisAndSize: (Y, Int),
-                               )(implicit dType: RealDType.Aux[R, T], name: sourcecode.Name = sourcecode.Name.generate): Affine[T, R, X, Y] =
+                                 name: String = sourcecode.Name.generate.value,
+                               )(implicit dType: RealDType.Aux[R, T]): Affine[T, R, X, Y] =
   {
-    import dType._
     implicit val T = IsRealTensorK.fromDType[T, R]
     val (_, nX) = inAxisAndSize
     val (_, nY) = outAxisAndSize
-    val W = Param(T.newGaussianTensor[(Y, X)](0f, 1f, Array(nY, nX)), name = s"${name.value}.weight")
-    val b = Param(T.newGaussianTensor[Y](0f, 1f, Array(nY)), name = s"${name.value}.bias")
+    val W = Param(T.newGaussianTensor[(Y, X)](0f, 1f, Array(nY, nX)), name = s"$name.weight")
+    val b = Param(T.newGaussianTensor[Y](0f, 1f, Array(nY)), name = s"$name.bias")
     from[T, R, X, Y](W, b)
   }
 

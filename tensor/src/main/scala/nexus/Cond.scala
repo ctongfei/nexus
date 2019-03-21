@@ -17,6 +17,6 @@ trait Cond[B, F[_]] {
    * @tparam X Type of `then`/`else` clauses
    * @note {{{ cond(c, t, f) }}} is semantically equivalent to {{{ if (c) t else f }}}
    */
-  def cond[X](c: B, t: F[X], f: F[X]): F[X]
+  def cond[X](c: B, t: => F[X], f: => F[X]): F[X]
 
 }

@@ -3,8 +3,9 @@ package nexus.diff
 import cats._
 
 /**
- * PyTorch-style eagerly-executed traced computation node.
+ * An eagerly-executed traced computation node (in the style of PyTorch).
  * @author Tongfei Chen
+ * @since 0.1.0
  */
 trait Traced[X] {
 
@@ -20,16 +21,23 @@ trait Traced[X] {
 
 object Traced {
 
-  implicit object Algebra extends Algebra[Traced] {
+  implicit object Algebra extends DifferentiableAlgebra[Traced] {
     type In[X] = X
+    def forTraining = true
+    def tag[X](x: Traced[X]) = x.tag
     def input[X](input: X, name: String): Traced[X] = new Const(input, name)
     def const[X](value: X, name: String): Traced[X] = new Const(value, name)
-    def param[X](p: Param[X]): Traced[X] = p
+
     def app0[Y](op: Op0[Y]): Traced[Y] = App0(op)
     def app1[X, Y](op: Op1[X, Y], x: Traced[X]): Traced[Y] = App1(op, x)
     def app2[X1, X2, Y](op: Op2[X1, X2, Y], x1: Traced[X1], x2: Traced[X2]): Traced[Y] = App2(op, x1, x2)
     def app3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Traced[X1], x2: Traced[X2], x3: Traced[X3]): Traced[Y] = App3(op, x1, x2, x3)
-    def unroll[S[_], X](xs: Traced[S[X]])(implicit unroll: Unroll[S, Traced]) = ???
+
+    def fromParam[X](p: Param[X]) = p
+    def getParam[X](p: Traced[X]) = p match {
+      case p: Param[X] => Some(p)
+      case _ => None
+    }
   }
 
 

@@ -2,12 +2,16 @@ package nexus.instances
 
 import nexus._
 
-object FloatIsReal extends IsReal[Float] {
+object FloatIsReal extends IsReal[Float] with GetReal[Float] {
   type R = Float
   def B = BoolIsBool
   
   val one = 1f
   val zero = 0f
+
+  def uniformSample: R = randomSource.nextFloat()
+  def normalSample: R = randomSource.nextGaussian().toFloat
+
   def add(x: R, y: R) = x + y
   def sub(x: R, y: R) = x - y
   def neg(x: R) = -x
@@ -21,6 +25,10 @@ object FloatIsReal extends IsReal[Float] {
   def sgn(x: R) = Math.signum(x)
   def sqr(x: R) = x * x
   def sqrt(x: R) = Math.sqrt(x).toFloat
+
+  val pi = Math.PI.toFloat
+  val e = Math.E.toFloat
+  val twoPi = Math.PI.toFloat * 2.0f
   def exp(x: R) = Math.exp(x).toFloat
   def log(x: R) = Math.log(x).toFloat
   def expm1(x: R) = Math.expm1(x).toFloat
@@ -34,6 +42,7 @@ object FloatIsReal extends IsReal[Float] {
   override def fromDouble(a: Double) = a.toFloat
   override def fromInt(n: Int) = n.toFloat
 
+  override def toDouble(x: R) = x.toDouble
   def toFloat(x: R) = x
 
   override def addInplace(x1: R, x2: R) = x1 + x2
@@ -41,11 +50,14 @@ object FloatIsReal extends IsReal[Float] {
   override def toString = "Float"
 }
 
-object DoubleIsReal extends IsReal[Double] {
+object DoubleIsReal extends IsReal[Double] with GetReal[Double] {
   type R = Double
 
   def one = 1d
   def zero = 0d
+  def uniformSample: R = randomSource.nextDouble()
+  def normalSample: R = randomSource.nextGaussian()
+
   def add(x: R, y: R) = x + y
   def sub(x: R, y: R) = x - y
   def neg(x: R) = -x
@@ -59,6 +71,10 @@ object DoubleIsReal extends IsReal[Double] {
   def sgn(x: R) = Math.signum(x)
   def sqr(x: R) = x * x
   def sqrt(x: R) = Math.sqrt(x)
+
+  val pi = Math.PI
+  val e = Math.E
+  val twoPi = Math.PI * 2.0
   def exp(x: R) = Math.exp(x)
   def log(x: R) = Math.log(x)
   def expm1(x: R) = Math.expm1(x)
@@ -73,6 +89,7 @@ object DoubleIsReal extends IsReal[Double] {
   override def fromDouble(a: R) = a
   override def fromInt(n: Int) = n
 
+  def toDouble(x: R) = x
   def toFloat(x: R) = x.toFloat
 
   override def addInplace(x1: R, x2: R) = x1 + x2

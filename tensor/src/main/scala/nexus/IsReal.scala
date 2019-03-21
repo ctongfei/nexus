@@ -12,7 +12,6 @@ import scala.annotation._
 @implicitNotFound("Cannot prove that type ${R} is a real number.")
 trait IsReal[@specialized(Float, Double) R] extends Grad[R] with Field[R] {
   def zeroBy(x: R) = zero
-  def toFloat(x: R): Float
 
   def mutable = false
 
@@ -20,6 +19,8 @@ trait IsReal[@specialized(Float, Double) R] extends Grad[R] with Field[R] {
   def one: R
   def fromDouble(d: Double): R
   def fromFloat(f: Float): R = fromDouble(f)
+  def uniformSample: R
+  def normalSample: R
 
   def add(x: R, y: R): R
   def sub(x: R, y: R): R
@@ -27,6 +28,10 @@ trait IsReal[@specialized(Float, Double) R] extends Grad[R] with Field[R] {
   def mul(x: R, y: R): R
   def div(x: R, y: R): R
   def inv(x: R): R
+
+  def pi: R
+  def e: R
+  def twoPi: R // also known as tau, as in the Tau Manifesto
 
   def exp(x: R): R
   def log(x: R): R
@@ -59,9 +64,15 @@ trait IsReal[@specialized(Float, Double) R] extends Grad[R] with Field[R] {
 
 
 object IsReal {
-
   def apply[R](implicit R: IsReal[R]) = R
-
   implicit def c2[T[_], R](implicit T: IsRealTensorK[T, R]): IsReal[R] = T.R
+}
+
+
+@implicitNotFound("Cannot get real value out of boxed type ${R}.")
+trait GetReal[@specialized(Float, Double) R] {
+
+  def toFloat(x: R): Float
+  def toDouble(x: R): Double
 
 }

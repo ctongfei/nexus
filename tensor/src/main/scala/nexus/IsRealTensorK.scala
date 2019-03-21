@@ -20,7 +20,7 @@ trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends RingTensorK[T, 
   /**
    * @group Creation
    */
-  def newGaussianTensor[I](μ: Double, σ2: Double, shape: Array[Int]): T[I]
+  def newGaussianTensor[U](μ: Double, σ2: Double, shape: Array[Int]): T[U]
 
   /**
    * Multiplicative inverse (reciprocal).
@@ -28,35 +28,35 @@ trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends RingTensorK[T, 
    * @groupdesc arithmetic These operators operates elementwise on tensors
    * @group elementwise
    */
-  def inv[I](x: T[I]): T[I]
+  def inv[U](x: T[U]): T[U]
 
   /**
    * Square root.
    * @group elementwise
    */
-  def sqrt[I](x: T[I]): T[I]
+  def sqrt[U](x: T[U]): T[U]
 
-  def log[I](x: T[I]): T[I]
-  def exp[I](x: T[I]): T[I]
-  def log1p[I](x: T[I]): T[I]
-  def expm1[I](x: T[I]): T[I]
+  def log[U](x: T[U]): T[U]
+  def exp[U](x: T[U]): T[U]
+  def log1p[U](x: T[U]): T[U]
+  def expm1[U](x: T[U]): T[U]
 
-  def sin[I](x: T[I]): T[I]
-  def cos[I](x: T[I]): T[I]
-  def tan[I](x: T[I]): T[I]
-  def arcsin[I](x: T[I]): T[I]
-  def arccos[I](x: T[I]): T[I]
-  def arctan[I](x: T[I]): T[I]
+  def sin[U](x: T[U]): T[U]
+  def cos[U](x: T[U]): T[U]
+  def tan[U](x: T[U]): T[U]
+  def arcsin[U](x: T[U]): T[U]
+  def arccos[U](x: T[U]): T[U]
+  def arctan[U](x: T[U]): T[U]
 
 
-  def sigmoid[I](x: T[I]): T[I]
+  def sigmoid[U](x: T[U]): T[U]
 
-  def relu[I](x: T[I]): T[I]
+  def relu[U](x: T[U]): T[U]
 
-  def abs[I](x: T[I]): T[I]
-  def sgn[I](x: T[I]): T[I]
+  def abs[U](x: T[U]): T[U]
+  def sgn[U](x: T[U]): T[U]
 
-  def pos[I](x: T[I]): T[I]
+  def pos[U](x: T[U]): T[U]
 
   private object grounded extends IsRealTensor[T[Any], R] {
     def elementType = self.elementType
@@ -73,7 +73,7 @@ trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends RingTensorK[T, 
     def sqrt(x: T[Any]) = self.sqrt(x)
   } // only allocate one object
 
-  def ground[I]: IsRealTensor[T[I], R] = grounded.asInstanceOf[IsRealTensor[T[I], R]]
+  def ground[U]: IsRealTensor[T[U], R] = grounded.asInstanceOf[IsRealTensor[T[U], R]]
 }
 
 object IsRealTensorK {

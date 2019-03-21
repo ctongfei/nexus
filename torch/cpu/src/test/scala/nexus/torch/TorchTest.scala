@@ -1,7 +1,7 @@
 package nexus.torch
 
 import nexus._
-import nexus.tensormath._
+import nexus.math._
 import nexus.syntax._
 import nexus.torch._
 import nexus.torch.jni._

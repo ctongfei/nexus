@@ -9,7 +9,6 @@ package object instances {
 
   implicit val impBoolIsBool: IsBool[Boolean] = BoolIsBool
   implicit val impBoolIdCond: Cond[Boolean, Id] = BoolIdCond
-  implicit val impBoolFunction0Cond: Cond[Boolean, Function0] = BoolFunction0Cond
 
   implicit val impByteIsInt: IsInt[Byte] = ByteIsInt
   implicit val impShortIsInt: IsInt[Short] = ShortIsInt

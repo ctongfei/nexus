@@ -12,7 +12,7 @@ import nexus.diff.syntax._
  * @since 0.1.0
  */
 class ElmanUnit[T[_], R, I <: Dim, S <: Dim] private(
-  val inputLayer: Affine[T, R, I, S],
+  val transitionLayer: Affine[T, R, I, S],
   val stateActivation: Func1[T[S], T[S]],
   val inputAxis: I,
   val stateAxis: S
@@ -23,7 +23,7 @@ class ElmanUnit[T[_], R, I <: Dim, S <: Dim] private(
 
   def apply[F[_] : Algebra](s: F[T[S]], x: F[T[I]]) = {
     val si = ConcatAlong(inputAxis)(s |> RenameAxis(stateAxis -> inputAxis), x)
-    si |> inputLayer |> stateActivation
+    si |> transitionLayer |> stateActivation
   }
 
 }
@@ -56,7 +56,8 @@ object ElmanUnit {
     val inputLayer = Affine(
       inputAxis -> (inputSize + stateSize),
       stateAxis -> stateSize,
-    )(dt, name = sourcecode.Name(s"${name.value}.transition"))
+      name = s"$name.transition"
+    )(dt)
     new ElmanUnit[T, R, X, S](
       inputLayer,
       activation.ground(saf),

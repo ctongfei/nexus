@@ -1,7 +1,7 @@
 package nexus.testbase.ops
 
-import nexus._
-import nexus.ops._
+import nexus.diff._
+import nexus.diff.ops._
 import nexus.prob._
 import nexus._
 import nexus.syntax._
@@ -11,8 +11,7 @@ import org.scalatest._
  * Tests R^n^ -> R functions.
  * @author Tongfei Chen
  */
-class OpVSTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) extends FunSuite {
-
+class OpVSTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R], RToFloat: CastToFloat[R]) extends FunSuite {
 
   class Axis
   val len = 10
@@ -33,7 +32,10 @@ class OpVSTests[T[_], R](gen: Stochastic[R])(implicit T: IsRealTensorK[T, R]) ex
         (op.forward(x + δx) - op.forward(x - δx)) / (δ * 2d)
       }
 
-    def error(ag: T[Axis], ng: T[Axis]): R = L2Norm(ag - ng) / L2Norm(ag)
+    def error(ag: T[Axis], ng: T[Axis]): R = {
+      L2Norm(Id(ag - ng)) / L2Norm(Id(ag))
+    }
+
   }
 
   val ops = Seq(

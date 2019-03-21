@@ -3,12 +3,16 @@ package nexus.diff.instances
 import nexus.diff._
 import nexus.diff.ops._
 import nexus._
+import nexus.diff.util._
 import nexus.instances._
 
 /**
  * @author Tongfei Chen
  */
 object SymbolicBoolIsBool extends IsBool[Symbolic[Boolean]] {
+
+  def fromBoolean(b: Boolean) = Symbolic.Algebra.const(b, ExprName.nextConst)
+
   def top = Symbolic.Algebra.const(true, "true")
   def bot = Symbolic.Algebra.const(false, "false")
   def not(a: Symbolic[Boolean]) = Not(a)

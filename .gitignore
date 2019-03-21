@@ -63,6 +63,7 @@ project/plugins/project/
 *.log
 
 # Torch: auto-generated source
+torch/.idea/
 torch/jni/src/main/java
 torch/include-swig
 torch/torch_wrap.cxx

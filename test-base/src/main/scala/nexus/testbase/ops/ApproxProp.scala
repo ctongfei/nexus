@@ -1,7 +1,7 @@
 package nexus.testbase.ops
 
 import nexus._
-import nexus._
+import nexus.diff._
 import nexus.prob._
 
 /**
@@ -17,7 +17,9 @@ abstract class ApproxProp[X, R](
                                  val relativeDiff: Double = 0.001,
                                  val tolerableRelativeError: Double = 0.01,
                                  val tolerablePassedRatio: Double = 0.95,
-)(implicit R: IsReal[R]) {
+)(implicit R: IsReal[R], RToFloat: CastToFloat[R]) {
+
+  import RToFloat._
 
   def autoGrad(x: X): X
   def numGrad(x: X): X
@@ -27,7 +29,7 @@ abstract class ApproxProp[X, R](
     val samples = gen.repeatToSeq(numSamples).sample
     val numPassedCheck = samples count { x =>
       val e = error(autoGrad(x), numGrad(x))
-      val passed = R.toFloat(e) < tolerableRelativeError
+      val passed = toFloat(e) < tolerableRelativeError
       if (!passed) println(s" - [WARNING!] ${op.name}($x): Relative error = $e")
       else         println(s" - [   OK   ] ${op.name}($x): Relative error = $e")
       passed

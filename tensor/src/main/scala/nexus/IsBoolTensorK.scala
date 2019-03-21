@@ -11,9 +11,9 @@ trait IsBoolTensorK[T[_], @specialized(Boolean) B] extends IsTensorK[T, B] { sel
   val B: IsBool[B]
   def elementType = B
 
-  def not[I](x: T[I]): T[I]
-  def and[I](x1: T[I], x2: T[I]): T[I]
-  def or[I](x1: T[I], x2: T[I]): T[I]
-  def xor[I](x1: T[I], x2: T[I]): T[I]
+  def not[U](x: T[U]): T[U]
+  def and[U](x1: T[U], x2: T[U]): T[U]
+  def or[U](x1: T[U], x2: T[U]): T[U]
+  def xor[U](x1: T[U], x2: T[U]): T[U]
 
 }

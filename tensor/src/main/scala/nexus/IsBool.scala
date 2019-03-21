@@ -24,4 +24,12 @@ trait IsBool[@specialized(Boolean) B] extends Bool[B] {
   def zero = bot
   def one = top
 
+  def fromBoolean(b: Boolean): B
+}
+
+
+@implicitNotFound("Cannot get a Boolean value out of boxed type ${B}.")
+trait GetBool[@specialized(Boolean) B] {
+
+  def toBoolean(a: B): Boolean
 }

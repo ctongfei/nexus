@@ -1,7 +1,9 @@
 package nexus.diff.optimizers
 
 import nexus.diff._
+import nexus.diff.collection._
 import nexus.syntax._
+
 import scala.math._
 
 /**
@@ -17,7 +19,7 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
   /**
    * First-order and second-order momentum stored in the optimizer.
    */
-  val history = BoxMap[Symbolic, AdamHistory]()
+  val history = new HashBoxMap[Symbolic, AdamHistory]
 
   def updateParam[X](p: Param[X], g: X): Unit = {
 
@@ -53,4 +55,8 @@ class AdamOptimizer(α: => Double = 0.001, β1: Double = 0.9, β2: Double = 0.99
 
 }
 
+/**
+ * @param m First-order moment
+ * @param v Second-order moment (only diagonal)
+ */
 private[nexus] case class AdamHistory[X](var m: X, var v: X)

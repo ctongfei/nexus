@@ -29,7 +29,7 @@ abstract class TensorFactory[T[_], E](val T: IsTensorK[T, E]) {
    * Creates a tensor (with arbitrary rank) with the specified labels and sizes.
    * @example {{{ FloatTensor.newTensor(Width -> 128, Height -> 128, Channel -> 3) }}}
    */
-  def newTensor[S, U](shape: S)(implicit s: SizedAxes.Aux[S, U]): T[U] =
+  def newTensor[Shape, U](shape: Shape)(implicit s: UnzipSizedDims.Aux[Shape, U]): T[U] =
     T.newTensor[U](s.shape(shape))
 
   /**
@@ -43,7 +43,8 @@ abstract class TensorFactory[T[_], E](val T: IsTensorK[T, E]) {
    *           ) // return type: FloatTensor[(A, B)]
    * }}}
    */
-  def fromNestedArray[U, N <: Nat, Arr](axes: U)(array: Arr)(implicit nest: Nest.Aux[Arr, E, N], len: Len.Aux[U, N]): T[U] =
+  def fromNestedArray[U, N <: Nat, Arr]
+  (axes: U)(array: Arr)(implicit nest: Nest.Aux[Arr, E, N], len: Len.Aux[U, N]): T[U] =
     T.fromNestedArray(axes)(array)
 
 }

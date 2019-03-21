@@ -7,7 +7,7 @@ import nexus.diff._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class ExpressionNotDifferentiableException(e: Symbolic[_])
+class ExpressionNotDifferentiableException[D[_]](e: D[_])
   extends Exception(s"Not differentiable with respect to expression $e.")
 
 /**

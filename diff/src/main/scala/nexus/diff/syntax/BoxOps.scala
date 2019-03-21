@@ -1,12 +1,20 @@
 package nexus.diff.syntax
 
 import cats._
+import nexus.IsReal
 import nexus.diff._
+import nexus.diff.execution.Forward
 
 /**
  * @author Tongfei Chen
  */
 trait BoxOpsMixin {
+
+  implicit class TaggedBoxOps[D[_], X](x: D[X])(implicit D: DifferentiableAlgebra[D]) {
+
+    def tag = D.tag(x)
+
+  }
 
   implicit class BoxOps[D[_]: Algebra, X](x: D[X]) {
 
@@ -23,6 +31,15 @@ trait BoxOpsMixin {
      * This may trigger the execution of computations depending on box type [[D]].
      */
     def value(implicit comp: D ~> Id): X = comp(x)
+
+  }
+
+  implicit class LossOps[D[_], R: IsReal](x: D[R])(implicit D: DifferentiableAlgebra[D]) {
+
+    /**
+     * Computes the gradients of all parameters from this loss.
+     */
+    def gradients(implicit F: Forward[D]) = D.gradients(x)
   }
 
 }

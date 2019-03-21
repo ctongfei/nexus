@@ -1,6 +1,7 @@
 package nexus
 
 import cats._
+import cats.arrow.Category
 import cats.evidence._
 
 /**
@@ -24,6 +25,11 @@ object Cast {
 
   implicit def fromCatsAs[S, T](implicit ev: S As T): Cast[S, T] = new Cast[S, T] {
     def cast(s: S) = ev.coerce(s)
+  }
+
+  implicit object Category extends Category[Cast] {
+    def id[A] = fromCatsAs(As.refl[A])
+    def compose[A, B, C](f: Cast[B, C], g: Cast[A, B]) = new Composed(g, f)
   }
 }
 
@@ -59,6 +65,11 @@ object BidiCast extends BidiCastBetweenAnyVals {
   }
 
   implicit def inverse[S, T](implicit ST: BidiCast[S, T]): BidiCast[T, S] = ST.inverse
+
+  implicit object Category extends Category[BidiCast] {
+    override def id[A] = fromCatsIs(Is.refl[A])
+    override def compose[A, B, C](f: BidiCast[B, C], g: BidiCast[A, B]) = new Composed(g, f)
+  }
 
 }
 

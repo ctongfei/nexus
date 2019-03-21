@@ -1,5 +1,7 @@
 package nexus.diff
 
+import nexus._
+
 trait PolyFunc0 {
   type F[Y]
   def ground[Y](implicit f: F[Y]): Func0[Y]

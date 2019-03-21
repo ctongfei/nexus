@@ -21,7 +21,7 @@ object Sum {
 
   object Along extends ParameterizedPolyOp1 with RealAxisReductionOpMixin {
     def name = "SumAlong"
-    def forwardR[T[_], R, U, I <: Dim, V](x: T[U], dim: I)(implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]) = ???
+    def forwardR[T[_], R, U, I <: Dim, V](x: T[U], dim: I)(implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): T[V] = ???
     def backwardR[T[_], R, U, I <: Dim, V](dy: T[V], y: T[V], x: T[U])(implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]) = ???
   }
 

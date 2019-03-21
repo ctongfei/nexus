@@ -5,6 +5,7 @@ import nexus.typelevel._
 import nexus.util._
 import shapeless._
 
+import scala.collection._
 import scala.reflect._
 
 /**
@@ -24,12 +25,12 @@ trait IsTensorK[T[_], @specialized E] { self =>
 
   def rank[I](x: T[I]): Int
 
-  def shape[I](x: T[I]): IndexedSeq[Int] = new IndexedSeq[Int] {
+  def sizeOfDim[I](x: T[I], dim: Int): Int
+
+  def shape[I](x: T[I]): immutable.IndexedSeq[Int] = new immutable.IndexedSeq[Int] {
     def length = rank(x)
     def apply(idx: Int) = sizeOfDim(x, idx)
   }
-
-  def sizeOfDim[I](x: T[I], dim: Int): Int
 
   def numElements[I](x: T[I]): Int = shape(x).product
 
@@ -58,10 +59,10 @@ trait IsTensorK[T[_], @specialized E] { self =>
   def tabulate[I](n: Int)(f: Int => E): T[I] =
     tabulateA(Array(n))((a: Array[Int]) => f(a(0)))
 
-  def tabulate[a, b](m: Int, n: Int)(f: (Int, Int) => E): T[(a, b)] =
+  def tabulate[I, J](m: Int, n: Int)(f: (Int, Int) => E): T[(I, J)] =
     tabulateA(Array(m, n))((a: Array[Int]) => f(a(0), a(1)))
 
-  def tabulate[a, b, c](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(a, b, c)] =
+  def tabulate[I, J, K](n0: Int, n1: Int, n2: Int)(f: (Int, Int, Int) => E): T[(I, J, K)] =
     tabulateA(Array(n0, n1, n2))((a: Array[Int]) => f(a(0), a(1), a(2)))
 
   def map[I](x: T[I])(f: E => E): T[I]

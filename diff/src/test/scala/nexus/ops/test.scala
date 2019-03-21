@@ -5,7 +5,6 @@ import nexus.diff._
 import nexus.diff.instances._
 import nexus.instances._
 import nexus.diff.ops._
-import nexus.prob._
 import shapeless._
 
 /**

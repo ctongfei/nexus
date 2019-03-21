@@ -37,8 +37,18 @@ object Diag extends PolyOp1 {
   implicit def diagF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[(I, I)], T[I]] =
     new F[T[(I, I)], T[I]] {
       def name = "Diag"
-      def tag = ???
+      def tag = Tag.realTensor[T, R, I]
       def forward(x: T[(I, I)]) = ???
       def backward(dy: T[I], y: T[I], x: T[(I, I)]) = ???
+    }
+}
+
+object MatFromDiag extends PolyOp1 {
+  implicit def matFromDiagF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[I], T[(I, I)]] =
+    new F[T[I], T[(I, I)]] {
+      override def name: String = "MatFromDiag"
+      override def tag = Tag.realTensor[T, R, (I, I)]
+      override def forward(x: T[I]): T[(I, I)] = ???
+      override def backward(dy: T[(I, I)], y: T[(I, I)], x: T[I]): T[I] = ???
     }
 }

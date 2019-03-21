@@ -3,6 +3,7 @@ package nexus.diff.optimizers
 import cats.~>
 import nexus._
 import nexus.diff._
+import nexus.diff.collection._
 import nexus.diff.execution._
 import nexus.diff.syntax._
 
@@ -19,20 +20,21 @@ abstract class FirstOrderOptimizer extends HasParameters {
 
   def updateParam[X](p: Param[X], g: X): Unit
 
-  def update(gradients: BoxMap[Symbolic, Id]): Unit = {
+  def update[D[_]](gradients: BoxMap[D, Id])(implicit D: Algebra[D]): Unit = {
     t += 1
     for (item <- gradients) {
       item.expr match {
-        case param: Param[item.Data] =>
+        case D.Param(param: Param[item.Data]) =>
           updateParam(param, item.value)
         case _ =>
       }
     }
   }
 
-  def step[D[_]: Algebra, R: IsReal](loss: D[R])(implicit comp: D ~> Id) = {
+  def step[D[_]: DifferentiableAlgebra, R: IsReal](loss: D[R])(implicit forward: Forward[D]) = {
     val lossValue = loss.value
-    val gradients = Backward.compute(loss)
+    val backward = forward.backward
+    val gradients = backward.compute(loss)
     update(gradients)
   }
 

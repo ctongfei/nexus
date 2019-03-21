@@ -28,7 +28,7 @@ case class Param[X] private(var value: X, name: String)(implicit grad: Grad[X]) 
   /**
    * Coerces this parameter into one of the execution boxes ([[Symbolic]] / [[Traced]]).
    */
-  def as[D[_]](implicit D: Algebra[D]): D[X] = D.param(this)
+  def as[D[_]](implicit D: Algebra[D]): D[X] = D.fromParam(this)
 
   override def toString = name
 

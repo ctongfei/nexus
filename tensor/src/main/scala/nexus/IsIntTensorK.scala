@@ -12,7 +12,5 @@ trait IsIntTensorK[T[_], @specialized(Long, Int, Short, Byte) Z] extends RingTen
   val Z: IsInt[Z]
   def elementType = Z
 
-  def zeroBy[I](x: T[I]): T[I]
-
-  def ground[I]: IsTensor[T[I], Z] = ???
+  def ground[U]: IsTensor[T[U], Z] = ???
 }

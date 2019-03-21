@@ -46,6 +46,7 @@ nav:
   - 'Introduction': 'index.md'
   - 'Tensors':
     - 'Typesafe tensors': 'tensor.md'
+    - 'Tensor slicing': 'slice.md'
     - 'Tensor operations': 'tensor-ops.md'
   - 'Deep learning':
     - 'Symbolic expressions': 'expr.md'

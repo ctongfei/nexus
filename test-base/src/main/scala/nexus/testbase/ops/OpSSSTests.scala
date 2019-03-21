@@ -1,9 +1,9 @@
 package nexus.testbase.ops
 
 import nexus._
-import nexus.ops._
+import nexus.diff._
+import nexus.diff.ops._
 import nexus.prob._
-import nexus._
 import nexus.syntax._
 import org.scalatest._
 
@@ -11,7 +11,7 @@ import org.scalatest._
  * Tests (R, R) -> R functions.
  * @author Tongfei Chen
  */
-class OpSSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R]) extends FunSuite {
+class OpSSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R], RToFloat: CastToFloat[R]) extends FunSuite {
 
   class Prop(op: Op2[R, R, R], gen: Stochastic[(R, R)]) extends ApproxProp[(R, R), R](op, gen) {
     import R._

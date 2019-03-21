@@ -32,3 +32,11 @@ trait IsInt[@specialized(Byte, Short, Int, Long) Z] extends Ring[Z] {
   def negate(x: Z) = neg(x)
   def times(x: Z, y: Z) = mul(x, y)
 }
+
+@implicitNotFound("Cannot get integer value out of boxed type ${Z}.")
+trait GetInt[@specialized(Byte, Short, Int, Long) Z] {
+
+  def toInt(x: Z): Int
+  def toLong(x: Z): Long
+
+}

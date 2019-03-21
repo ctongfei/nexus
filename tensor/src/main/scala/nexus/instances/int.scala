@@ -3,7 +3,7 @@ package nexus.instances
 import nexus._
 import cats._
 
-object ByteIsInt extends IsInt[Byte] {
+object ByteIsInt extends IsInt[Byte] with GetInt[Byte] {
   def add(x: Byte, y: Byte) = (x + y).toByte
   def neg(x: Byte) = (-x).toByte
   def sub(x: Byte, y: Byte) = (x - y).toByte
@@ -19,9 +19,11 @@ object ByteIsInt extends IsInt[Byte] {
   def ne(x: Byte, y: Byte) = x != y
   def le(x: Byte, y: Byte) = x <= y
   def fromLong(x: Long) = x.toByte
+  def toInt(x: Byte) = x.toInt
+  def toLong(x: Byte) = x.toLong
 }
 
-object ShortIsInt extends IsInt[Short] {
+object ShortIsInt extends IsInt[Short] with GetInt[Short] {
   def add(x: Short, y: Short) = (x + y).toShort
   def neg(x: Short) = (-x).toShort
   def sub(x: Short, y: Short) = (x - y).toShort
@@ -37,9 +39,11 @@ object ShortIsInt extends IsInt[Short] {
   def ne(x: Short, y: Short) = x != y
   def le(x: Short, y: Short) = x <= y
   def fromLong(x: Long) = x.toShort
+  def toInt(x: Short) = x.toInt
+  def toLong(x: Short) = x.toLong
 }
 
-object IntIsInt extends IsInt[Int] {
+object IntIsInt extends IsInt[Int] with GetInt[Int] {
   def add(x: Int, y: Int) = x + y
   def neg(x: Int) = -x
   def sub(x: Int, y: Int) = x - y
@@ -55,9 +59,11 @@ object IntIsInt extends IsInt[Int] {
   def ne(x: Int, y: Int) = x != y
   def le(x: Int, y: Int) = x <= y
   def fromLong(x: Long) = x.toInt
+  def toInt(x: Int) = x
+  def toLong(x: Int) = x.toLong
 }
 
-object LongIsInt extends IsInt[Long] {
+object LongIsInt extends IsInt[Long] with GetInt[Long] {
   def add(x: Long, y: Long) = x + y
   def neg(x: Long) = -x
   def sub(x: Long, y: Long) = x - y
@@ -73,4 +79,6 @@ object LongIsInt extends IsInt[Long] {
   def ne(x: Long, y: Long) = x != y
   def le(x: Long, y: Long) = x <= y
   def fromLong(x: Long) = x
+  override def toInt(x: Long) = x.toInt
+  override def toLong(x: Long) = x
 }

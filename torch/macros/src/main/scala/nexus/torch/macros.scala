@@ -3,6 +3,7 @@ package nexus.torch
 import scala.reflect.macros._
 
 /**
+ * Generates calls to Torch C API.
  * @author Tongfei Chen
  */
 object macros {
