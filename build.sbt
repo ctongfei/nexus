@@ -1,9 +1,5 @@
 import scala.io._
 
-scalaVersion := "2.12.6"
-enablePlugins(ScalaUnidocPlugin)
-
-
 // credit to http://stackoverflow.com/a/32114551/2990673
 lazy val mathFormulaInDoc = taskKey[Unit]("add MathJax script import in scaladoc html to display LaTeX formula")
 
@@ -18,7 +14,7 @@ lazy val commonSettings = Seq(
 
   libraryDependencies ++= Seq(
     "com.chuusai"   %% "shapeless"  % "2.3.3",
-    "org.typelevel" %% "cats-core"  % "1.5.0",
+    "org.typelevel" %% "cats-core"  % "1.6.0",
     "org.typelevel" %% "algebra"    % "1.0.0",
     "com.lihaoyi"   %% "sourcecode" % "0.1.5"
   ),
@@ -40,11 +36,15 @@ lazy val commonSettings = Seq(
           """<head>
              |  <script type="text/x-mathjax-config">
              |    MathJax.Hub.Config({
+             |      tex2jax: {
+             |        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+             |        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+             |      },
              |      asciimath2jax: { delimiters: [['[[', ']]']] }
              |    });
              |  </script>
              |  <script type="text/javascript" async
-             |    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+             |    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
              |  </script>""".stripMargin))
         writer.close()
       }
@@ -150,9 +150,13 @@ val root = (project in file("."))
   .settings(commonSettings: _*)
   .enablePlugins(ScalaUnidocPlugin)
   .settings(
-    name := "nexus"
+    name := "nexus",
+    unidocProjectFilter in (ScalaUnidoc, unidoc) :=
+      inAnyProject -- inProjects(testBase)
+        -- inProjects(jvmRefMacros) -- inProjects(jvmRefBackend)
+        -- inProjects(torchJni) -- inProjects(torchMacros) -- inProjects(torchCpu) -- inProjects(torchCuda)
   )
-  .aggregate(tensor, diff, prob, ml, )
+  .aggregate(tensor, diff)  // other libraries yet to be added
 
 // function that find html files recursively
 def listHtmlFile(dir: java.io.File): List[java.io.File] = {

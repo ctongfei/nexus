@@ -31,7 +31,7 @@ Building a typesafe XOR network:
 
   val ŷ = x                       |>   // type: Symbolic[FloatTensor[In]]
     Affine(In -> 2, Hidden -> 2)  |>   // type: Symbolic[FloatTensor[Hidden]]
-    Sigmoid                       |>   // type: Symbolic[FloatTensor[Hidden]]
+    Logistic                      |>   // type: Symbolic[FloatTensor[Hidden]]
     Affine(Hidden -> 2, Out -> 2) |>   // type: Symbolic[FloatTensor[Out]]
     Softmax                            // type: Symbolic[FloatTensor[Out]]
   val loss = CrossEntropy(y, ŷ)        // type: Symbolic[Float]
@@ -42,15 +42,14 @@ Building a typesafe XOR network:
  - **Typeful**. Each axis of a tensor is statically typed using tuples. For example, an image is typed as `FloatTensor[(Width, Height, Channel)]`, whereas an embedded sentence is typed as `FloatTensor[(Word, Embedding)]`. This frees programmers from remembering what each axis stands for.
  - **Typesafe**.  Very strong static type checking to eliminate most bugs at compile time.
  - **Never, ever specify axis index again**. For things like `reduce_sum(x, axis=1)`, write `x |> SumAlong(AxisName)`.
- - **Mixing differentiable code with non-differentiable code**.
  - **Automatic typeclass derivation**: Differentiation through any case class (product type).
  - **Versatile switching between eager and lazy evaluation**.
  - **[TODO] Typesafe tensor sizes using literal singleton types (Scala 2.13+)**. 
  - **[TODO] Automatic batching over sequences/trees** (Neubig, Goldberg, Dyer, NIPS 2017). Free programmers from the pain of manual batching.
  - **[TODO] GPU Acceleration**. Reuse `Torch` C++ core through Swig [(bindings)](https://github.com/ctongfei/JTorch).
- - **[TODO] Multiple backends**. Torch / MXNet? / TensorFlow? / TensorFlow.js for Scala.js? / Lib
+ - **[TODO] Multiple backends**. Torch / MXNet? / TensorFlow.js for Scala.js? / libtorch for ScalaNative?
  - **[TODO] Automatic operator fusion for optimization.**
- - **[TODO] Typesafe higher-order gradients**.
+ - **[TODO] Typesafe higher-order gradients / Jacobians**.
  
 ### Modules
 Nexus is modularized. It contains the following modules:
@@ -59,6 +58,7 @@ Nexus is modularized. It contains the following modules:
 |----------------------|-----------------------------------------------------|
 | `nexus-tensor`       | Foundations for typesafe tensors                    |
 | `nexus-diff`         | Typesafe deep learning (differentiable programming) |
+| `nexus-prob`         | Typesafe probabilistic programming                  |
 | `nexus-ml`           | High-level machine learning abstractions / models   |
 | `nexus-jvm-backend`  | JVM reference backend (slow)                        |
 | `nexus-torch`        | Torch native CPU backend                            |

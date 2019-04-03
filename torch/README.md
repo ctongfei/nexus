@@ -1,11 +1,20 @@
 `nexus-torch` is a tensor computation backend for Nexus based on [PyTorch](https://github.com/pytorch/pytorch). 
 It uses SWIG to generate the JNI bindings directly from the Torch C/C++ source without the Python part of PyTorch.
 
+### Usage
+Start the JVM with the following parameter
+```sh
+  -Djava.library.path=<Location of PyTorch libaries>
+```
+or put that path in `$LD_LIBRARY_PATH`. To get the location of PyTorch libraries, run
+```sh
+python -c "import torch; import os; print(f\"{os.path.dirname(torch.__file__)}/lib\")"
+```
+
 ### Tested environments
 
  - Linux + CUDA 9.1 / 10.0 + PyTorch 1.0.0 / 1.0.1
-
-
+ 
 ### Building the binding manually
 
 Prerequisites:
