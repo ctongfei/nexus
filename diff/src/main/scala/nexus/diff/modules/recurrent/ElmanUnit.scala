@@ -48,7 +48,7 @@ object ElmanUnit {
                                    )
                                    (implicit
                                     dt: RealDType.Aux[R, T],
-                                    saf: activation.F[T[S], T[S]],
+                                    saf: activation.P[T[S], T[S]],
                                     name: sourcecode.Name
                                    ) = {
     val (inputAxis, inputSize) = inputAxisAndSize

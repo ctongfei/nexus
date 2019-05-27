@@ -7,8 +7,8 @@ import nexus.diff.collection._
 /**
  * @author Tongfei Chen
  */
-trait Backward[D[_]] {
+trait Backward[F[_]] {
 
-  def compute[R](loss: D[R])(implicit R: IsReal[R]): BoxMap[D, Id]
+  def compute[R](loss: F[R])(implicit R: IsReal[R]): BoxMap[F, Id]
 
 }

@@ -23,21 +23,9 @@ object Slice {
   }
 
   /** Special syntactic sugar for unbounded slices. */
-  case object ? extends AbstractUnbounded(1) {
-    def ~(r: Int) = RightBounded(r)
-  }
+  case object ? extends AbstractUnbounded(1)
 
   case class Unbounded(override val step: Int = 1) extends AbstractUnbounded
-
-  case class LeftBounded(l: Int, step: Int = 1) extends Slice {
-    def bound(n: Int) = Bounded(l, n, step)
-    def by(step: Int) = LeftBounded(l, step)
-  }
-
-  case class RightBounded(r: Int, step: Int = 1) extends Slice {
-    def bound(n: Int) = Bounded(0, n, step)
-    def by(step: Int) = RightBounded(r, step)
-  }
 
   case class Bounded(l: Int, r: Int, step: Int = 1) extends Slice {
     def bound(n: Int) = this

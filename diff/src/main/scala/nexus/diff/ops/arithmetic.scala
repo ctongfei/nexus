@@ -21,7 +21,7 @@ object Add extends PolyOp2 with RealElementwisePolyOp2Mixin with IntElementwiseP
   def forwardZ[Z](x1: Z, x2: Z)(implicit Z: IsInt[Z]) = Z.add(x1, x2)
   def forwardTZ[T[_], Z, A](x1: T[A], x2: T[A])(implicit T: IsIntTensorK[T, Z]) = T.add(x1, x2)
 
-  def grad[X](implicit X: Grad[X]): F[X, X, X] = new F[X, X, X] {
+  def grad[X](implicit X: Grad[X]): P[X, X, X] = new P[X, X, X] {
     def forward(x1: X, x2: X) = X.add(x1, x2)
     def backward1(dy: X, y: X, x1: X, x2: X) = dy
     def backward2(dy: X, y: X, x1: X, x2: X) = dy

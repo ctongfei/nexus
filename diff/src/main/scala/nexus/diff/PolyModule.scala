@@ -6,9 +6,9 @@ package nexus.diff
  */
 trait PolyModule1 extends PolyFunc1 {
 
-  trait F[X, Y] extends Module1[X, Y]
+  trait P[X, Y] extends Module1[X, Y]
 
-  def ground[X, Y](implicit p: F[X, Y]) = p
+  def ground[X, Y](implicit p: P[X, Y]) = p
 }
 
 /**
@@ -17,9 +17,9 @@ trait PolyModule1 extends PolyFunc1 {
  */
 trait PolyModule2 extends PolyFunc2 {
 
-  trait F[X1, X2, Y] extends Module2[X1, X2, Y]
+  trait P[X1, X2, Y] extends Module2[X1, X2, Y]
 
-  def ground[X1, X2, Y](implicit p: F[X1, X2, Y]) = p
+  def ground[X1, X2, Y](implicit p: P[X1, X2, Y]) = p
 
 }
 
@@ -30,8 +30,8 @@ trait PolyModule2 extends PolyFunc2 {
  */
 trait PolyModule3 extends PolyFunc3 {
 
-  trait F[X1, X2, X3, Y] extends Module3[X1, X2, X3, Y]
+  trait P[X1, X2, X3, Y] extends Module3[X1, X2, X3, Y]
 
-  def ground[X1, X2, X3, Y](implicit p: F[X1, X2, X3, Y]) = p
+  def ground[X1, X2, X3, Y](implicit p: P[X1, X2, X3, Y]) = p
 
 }

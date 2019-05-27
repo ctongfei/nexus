@@ -6,8 +6,8 @@ import nexus._
 
 object Map extends ParameterizedPolyOp1 {
 
-  implicit def mapF[X, Y]: Func1[X, Y] => F[Seq[X], Seq[Y]] = f =>
-    new F[Seq[X], Seq[Y]] {
+  implicit def mapF[X, Y]: Func1[X, Y] => P[Seq[X], Seq[Y]] = f =>
+    new P[Seq[X], Seq[Y]] {
       def forward(x: Seq[X]) = ???
       def backward(dy: Seq[Y], y: Seq[Y], x: Seq[X]) = ???
       def name = s"Map[$f]"
@@ -23,7 +23,7 @@ object Map extends ParameterizedPolyOp1 {
   object Elementwise extends ParameterizedPolyOp1 {
 
     implicit def mapElementwiseF[T[_], R, I](implicit T: IsRealTensorK[T, R]) = (f: Op1[R, R]) =>
-      new F[T[I], T[I]] {
+      new P[T[I], T[I]] {
         import T._
         def name = s"Map[${f.name}]"
         def tag = Tag.realTensor[T, R, I]

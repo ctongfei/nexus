@@ -13,7 +13,7 @@ import nexus._
  */
 object If extends PolyOp3 {
 
-  implicit def ifF[X](implicit X: Grad[X]): F[Boolean, X, X, X] = new F[Boolean, X, X, X] {
+  implicit def ifF[X](implicit X: Grad[X]): P[Boolean, X, X, X] = new P[Boolean, X, X, X] {
       def name = "If"
       def tag = Tag.of(X)
       def forward(c: Boolean, t: X, f: X) = if (c) t else f
@@ -30,8 +30,8 @@ object If extends PolyOp3 {
     implicit def ifElementwiseF[TB[_], B, TR[_], R, U](
                                                         implicit TB: BoolTensorK[TB, B],
                                                         TR: IsRealTensorK[TR, R]
-                                                      ): F[TB[U], TR[U], TR[U], TR[U]] =
-      new F[TB[U], TR[U], TR[U], TR[U]] {
+                                                      ): P[TB[U], TR[U], TR[U], TR[U]] =
+      new P[TB[U], TR[U], TR[U], TR[U]] {
         def name = "If.Elementwise"
         def tag = Tag.realTensor[TR, R, U]
         def forward(x1: TB[U], x2: TR[U], x3: TR[U]) = ???
@@ -52,8 +52,8 @@ object If extends PolyOp3 {
  */
 object StopGrad extends PolyOp1 {
 
-  implicit def stopGradF[X]: F[X, X] =
-    new F[X, X] {
+  implicit def stopGradF[X]: P[X, X] =
+    new P[X, X] {
       def name = "StopGrad"
       def tag = Tag.none[X]
       override def differentiable = false

@@ -53,7 +53,7 @@ trait Stochastic[+X] { self =>
   def productWith[Y, Z](that: Stochastic[Y])(f: (X, Y) => Z): Stochastic[Z] =
     Stochastic(f(self.sample, that.sample))
 
-  def repeatToArray[X1 >: X](n: Int)(implicit ct: ClassTag[X1]): Stochastic[Array[X1]] =
+  def repeatToArray[X1 >: X](n: Int)(implicit tag: ClassTag[X1]): Stochastic[Array[X1]] =
     Stochastic(Array.fill(n)(sample))
 
   def repeatToSeq(n: Int): Stochastic[Seq[X]] = Stochastic {

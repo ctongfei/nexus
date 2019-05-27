@@ -24,7 +24,7 @@ trait BoxOpsMixin {
     def |>[Y](f: Func1[X, Y]): D[Y] = f(x)
 
     /** Passes this expression through a type-polymorphic function. */
-    def |>[Y](f: PolyFunc1)(implicit ff: f.F[X, Y]): D[Y] = f(x)
+    def |>[Y](f: PolyFunc1)(implicit ff: f.P[X, Y]): D[Y] = f(x)
 
     /**
      * Gets the value of this expression given an implicit computation instance.

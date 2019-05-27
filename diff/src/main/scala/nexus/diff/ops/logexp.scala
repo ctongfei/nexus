@@ -49,7 +49,7 @@ object Log1p extends PolyOp1 with RealElementwisePolyOp1Mixin {
 
 object LogSumExp extends PolyOp1 {
 
-  implicit def logSumExpF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], R] = new F[T[I], R] {
+  implicit def logSumExpF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], R] = new P[T[I], R] {
     def name = "LogSumExp"
     def tag = Tag.real[R]
     def forward(x: T[I]) = ???

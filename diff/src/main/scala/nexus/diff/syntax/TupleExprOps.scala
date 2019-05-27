@@ -15,7 +15,7 @@ trait TupleExprOpsMixin {
 
     def |>[Y]
     (f: PolyFunc2)
-    (implicit ff: f.F[X1, X2, Y]): F[Y] =
+    (implicit ff: f.P[X1, X2, Y]): F[Y] =
       f(p._1, p._2)
 
   }
@@ -29,7 +29,7 @@ trait TupleExprOpsMixin {
 
     def |>[Y]
     (f: PolyFunc3)
-    (implicit ff: f.F[X1, X2, X3, Y]): F[Y] =
+    (implicit ff: f.P[X1, X2, X3, Y]): F[Y] =
       f(t._1, t._2, t._3)
 
   }

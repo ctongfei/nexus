@@ -43,7 +43,8 @@ trait Priority1Implicits {
 
   implicit class TensorOps[T[_], E, U](x: T[U])(implicit T: IsTensorK[T, E]) {
 
-    def apply(indices: Int*): E = T.get(x, indices)
+    def apply[I, V](i: I)(implicit ix: Indexing.Aux[U, I, V]): T[V] = T.index(x, i)
+
     def shape: Seq[Int] = macro op1
 
     def unstackAlong[I, V](axis: I)(implicit rx: Remove.Aux[U, I, V]): Seq[T[V]] = T.unstackAlong(x, axis)
@@ -75,6 +76,7 @@ trait Priority1Implicits {
 
     /** Dot product (inner product) of two tensors of the same shape and size. */
     def dot(y: T[U]): R = macro op2
+
     def ⋅(y: T[U]): R = T.dot(x, y)
 
     /** Natural contraction of two tensors. */

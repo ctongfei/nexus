@@ -13,7 +13,7 @@ import scala.reflect._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait IsTensorK[T[_], @specialized E] { self =>
+trait IsTensorK[T[_], @specialized(Boolean, Byte, Short, Int, Long, Float, Double) E] { self =>
 
   type ElementTag[E]
   type TensorTag[te] <: IsTensor[te, E]
@@ -71,12 +71,16 @@ trait IsTensorK[T[_], @specialized E] { self =>
 
   def map3[I](x1: T[I], x2: T[I], x3: T[I])(f: (E, E, E) => E): T[I]
 
+  // Indexing
+  def index[U, V, W](x: T[U], i: V)(implicit ix: Indexing.Aux[U, V, W]): T[W]
+
+  // Operations
 
   def transpose[I, J](x: T[(I, J)]): T[(J, I)]
 
   def sliceAlong[U, I, V](x: T[U], axis: I, n: Int)(implicit rx: Remove.Aux[U, I, V]): T[V]
 
-  def unstackAlong[U, I, V](x: T[U], axis: I)(implicit rx: Remove.Aux[U, I, V]): Seq[T[V]]
+  def unstackAlong[U, I, V](x: T[U], axis: I)(implicit rx: Remove.Aux[U, I, V]): IndexedSeq[T[V]]
 
   def expandDim[U, I <: Nat, X <: Dim, V](x: T[U])(implicit ix: InsertAt.Aux[U, I, X, V]): T[V]
 

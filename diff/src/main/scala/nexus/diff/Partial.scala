@@ -5,13 +5,21 @@ import nexus.diff.execution._
 
 /**
  * Syntactic sugar for partial derivatives / gradients.
+ * @example {{{ ∂(loss) / ∂(param) }}}
  */
-case class ∂[D[_], Y](value: D[Y])
+case class ∂[F[_], Y](value: F[Y])
 
 trait PartialOpsMixin {
 
-  implicit class LossPartialOps[D[_]: DifferentiableAlgebra, Y: IsReal](y: ∂[D, Y]) {
-    def /[X](x: ∂[D, X])(implicit F: Forward[D]): X = F.backward.compute(y.value).apply(x.value)
+  implicit class LossPartialOps[F[_]: DifferentiableAlgebra, Y: IsReal](y: ∂[F, Y]) {
+
+    /**
+     * Computes the gradient between a scalar and a value of any differentiable type.
+     */
+    def /[X](x: ∂[F, X])(implicit F: Forward[F]): X = {  //TODO: subject to change
+      val gradients = F.backward.compute(y.value)
+      gradients(x.value)
+    }
   }
 
 }

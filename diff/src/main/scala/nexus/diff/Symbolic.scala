@@ -3,8 +3,8 @@ package nexus.diff
 import nexus._
 
 /**
- * Represents a symbolic expression in a computational graph.
- * This is the core type in Nexus.
+ * Represents a lazy symbolic expression in a computational graph,
+ * whose actual value is deferred until forward computation.
  * @tparam X Type of data that it conceptually holds
  * @since 0.1.0
  * @author Tongfei Chen

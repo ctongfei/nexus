@@ -1,6 +1,6 @@
 package nexus.functions
 
-import algebra.ring.{Field, Ring}
+import algebra.ring._
 
 
 trait ScalarFunctions {

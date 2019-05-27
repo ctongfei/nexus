@@ -10,8 +10,8 @@ import nexus.typelevel._
 object Sum {
 
   object All extends PolyOp1 {
-    implicit def sumAllF[T[_], R, A](implicit T: IsRealTensorK[T, R]): F[T[A], R] =
-      new F[T[A], R] {
+    implicit def sumAllF[T[_], R, A](implicit T: IsRealTensorK[T, R]): P[T[A], R] =
+      new P[T[A], R] {
         def name = "Sum"
         def tag = Tag.real[R]
         def forward(x: T[A]) = T.sum(x)
@@ -45,7 +45,7 @@ object ArgMaxAlong extends ParameterizedPolyOp1 {
 
   implicit def argmaxAlongF[TR[_], R, TZ[_], Z, a, u <: Dim, b]
   (implicit TR: IsRealTensorK[TR, R], TZ: IsIntTensorK[TZ, Z], r: Remove.Aux[a, u, b]) = (u: u) =>
-    new F[TR[a], TZ[b]] {
+    new P[TR[a], TZ[b]] {
       def name = s"ArgMaxAlong[${typeName(u)}"
       def tag = Tag.tensor[TZ, Z, b] // TODO: intTensor
       override def differentiable = false

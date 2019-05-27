@@ -12,9 +12,9 @@ import nexus.diff.collection._
  */
 class SymbolicBackward(val forward: SymbolicForward) extends Backward[Symbolic] {
 
-  def compute[R](e: Symbolic[R])(implicit R: IsReal[R]): BoxMap[Symbolic, Id] = {
+  def compute[R](loss: Symbolic[R])(implicit R: IsReal[R]): BoxMap[Symbolic, Id] = {
 
-    val grad = WengertList(Assignment(e, R.one)) // gradient of loss is 1
+    val grad = WengertList(Assignment(loss, R.one)) // gradient of loss is 1
 
     for (a <- forward.values.reverse) a match {
       case a @ Assignment(e, v) => e match {

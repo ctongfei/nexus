@@ -10,6 +10,7 @@ object macros {
 
   val jniPrefix = "nexus.torch.jni.torchJNI."
 
+  // map Nexus class names to Torch names
   val nexusTorchClassMap = Map(
     "FloatTensor" -> "THFloatTensor",
     "DoubleTensor" -> "THDoubleTensor",
@@ -20,6 +21,7 @@ object macros {
     "BooleanTensor" -> "THByteTensor"
   )
 
+  // map Nexus function names to Torch names
   val nexusTorchMethodMap = Map(
     "addScalar" -> "add",
     "subScalar" -> "sub",
@@ -32,6 +34,7 @@ object macros {
     "arcsin" -> "asin",
     "arccos" -> "acos",
     "arctan" -> "atan",
+    "logistic" -> "sigmoid",
     "zeroBy" -> "zerosLike"
   )
 

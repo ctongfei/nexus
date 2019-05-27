@@ -8,18 +8,18 @@ package nexus.diff
  */
 abstract class ParameterizedPolyFunc1 { self: Singleton =>
 
-  type F[X, Y]
+  type P[X, Y]
 
-  def ground[X, Y](implicit f: F[X, Y]): Func1[X, Y]
+  def ground[X, Y](implicit f: P[X, Y]): Func1[X, Y]
 
-  class Proxy[P](val parameter: P) extends PolyFunc1 {
-    type F[X, Y] = P => self.F[X, Y]
-    def ground[X, Y](implicit f: F[X, Y]) = self.ground(f(parameter))
+  class Proxy[PP](val parameter: PP) extends PolyFunc1 {
+    type P[X, Y] = PP => self.P[X, Y]
+    def ground[X, Y](implicit f: P[X, Y]) = self.ground(f(parameter))
   }
 
   /**
    * Constructs a polymorphic function given the required parameters.
    */
-  def apply[P](parameter: P): Proxy[P] = new Proxy(parameter)
+  def apply[PP](parameter: PP): Proxy[PP] = new Proxy(parameter)
 
 }

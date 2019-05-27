@@ -9,11 +9,11 @@ import nexus.diff.collection._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-trait Forward[D[_]] extends (D ~> Id) {
+trait Forward[F[_]] extends (F ~> Id) {
 
   /** Cached values in this computation instance. */
-  def values: BoxMap[D, Id]
+  def values: BoxMap[F, Id]
 
-  def backward: Backward[D]
+  def backward: Backward[F]
 
 }

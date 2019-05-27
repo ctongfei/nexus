@@ -9,7 +9,7 @@ import nexus._
 object Clamp extends ParameterizedPolyOp1 {
 
   implicit def clampF[T[_], R, I](implicit T: IsRealTensorK[T, R]) = (range: (R, R)) =>
-      new F[T[I], T[I]] {
+      new P[T[I], T[I]] {
         val (min, max) = range
         def name = s"Clamp[$min, $max]"
         def tag = Tag.realTensor[T, R, I]

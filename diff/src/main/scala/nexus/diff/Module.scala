@@ -27,7 +27,7 @@ trait Module1[X, Y] extends Func1[X, Y] with AnyModule { self =>
     def apply[F[_]: Algebra](x: F[X]): F[Z] = that(self(x))
   }
 
-  def >>[Z](that: PolyModule1)(implicit p: that.F[Y, Z]): Module1[X, Z] = self >> that.ground(p)
+  def >>[Z](that: PolyModule1)(implicit p: that.P[Y, Z]): Module1[X, Z] = self >> that.ground(p)
 
 }
 

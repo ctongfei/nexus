@@ -15,7 +15,7 @@ object RenameAxis extends ParameterizedPolyOp1 {
 
   implicit def renameF[T[_], E, U, I <: Dim, J <: Dim, V]
   (implicit r: Replace.Aux[U, I, J, V], T: IsTensorK[T, E]) = (ij: (I, J)) =>
-    new F[T[U], T[V]] {
+    new P[T[U], T[V]] {
       val (i, j) = ij
       def name = n"Rename[$i -> $j]"
       def tag = Tag.tensor[T, E, V]
@@ -28,7 +28,7 @@ object RenameAxis extends ParameterizedPolyOp1 {
 object ConcatAlong extends ParameterizedPolyOp2 {
   implicit def concatAlongF[T[_], E, U, I <: Dim, N <: Nat]
   (implicit n: IndexOf.Aux[U, I, N], T: IsTensorK[T, E]) = (u: I) =>
-    new F[T[U], T[U], T[U]] {
+    new P[T[U], T[U], T[U]] {
         def name = n"Concat[$u]"
         def tag = Tag.tensor[T, E, U]
         def forward(x1: T[U], x2: T[U]) = ???
@@ -45,7 +45,7 @@ object Unsqueeze extends ParameterizedPolyOp1 {
 
   implicit def unsqueezeF[T[_], E, U, N <: Nat, I <: Dim, V]
   (implicit ia: InsertAt.Aux[U, N, I, V], T: IsTensorK[T, E]) = (ni: (N, I)) =>
-    new F[T[U], T[V]] {
+    new P[T[U], T[V]] {
       val (n, i) = ni
       def name = n"Unsqueeze[$n: $i]"
       def tag = Tag.tensor[T, E, V]
@@ -62,7 +62,7 @@ object Squeeze extends ParameterizedPolyOp1 {
 
   implicit def squeezeF[T[_], E, U, N <: Nat, I <: Dim, V]
   (implicit ix: IndexOf.Aux[U, I, N], rx: RemoveAt.Aux[U, N, V], T: IsTensorK[T, E]) = (i: I) =>
-    new F[T[U], T[V]] {
+    new P[T[U], T[V]] {
       def name = n"Squeeze[$i]"
       def tag = Tag.tensor[T, E, V]
       def forward(x: T[U]) = ???
@@ -83,7 +83,7 @@ object SwapAxes extends ParameterizedPolyOp1
 object MergeAxes extends ParameterizedPolyOp1 {
 
   implicit def mergeAxesF[T[_], E, a, u <: Dim, v <: Dim, w <: Dim, b]
-  (implicit T: IsTensorK[T, E]) = (uvw: ((u, v), w)) => new F[T[a], T[b]] {
+  (implicit T: IsTensorK[T, E]) = (uvw: ((u, v), w)) => new P[T[a], T[b]] {
     val ((u, v), w) = uvw
     def tag = Tag.tensor[T, E, b]
     def name = n"MergeAxes[($u, $v) -> $w]"
@@ -99,7 +99,7 @@ object MergeAxes extends ParameterizedPolyOp1 {
 object SplitAxis extends ParameterizedPolyOp1 {
 
   implicit def splitAxisF[T[_], E, a, u <: Dim, v <: Dim, w <: Dim, b]
-  (implicit T: IsTensorK[T, E]) = (uvw: (u, (v, w))) => new F[T[a], T[b]] {
+  (implicit T: IsTensorK[T, E]) = (uvw: (u, (v, w))) => new P[T[a], T[b]] {
     private[this] val (u, (v, w)) = uvw
     def tag = Tag.tensor[T, E, b]
     def name = n"SplitAxis[$u -> ($v, $w)]"
@@ -121,8 +121,8 @@ object SplitAxis extends ParameterizedPolyOp1 {
 object UnstackAlong extends ParameterizedPolyOp1 {
 
   implicit def unstackAlongF[T[_], E, A, U <: Dim, B]
-  (implicit T: IsTensorK[T, E], rx: Remove.Aux[A, U, B]): U => F[T[A], Seq[T[B]]] =
-    (axis: U) => new F[T[A], Seq[T[B]]] {
+  (implicit T: IsTensorK[T, E], rx: Remove.Aux[A, U, B]): U => P[T[A], Seq[T[B]]] =
+    (axis: U) => new P[T[A], Seq[T[B]]] {
       def name = n"UnstackAlong[$axis]"
       def tag = ???
       def forward(x: T[A]) = T.unstackAlong(x, axis)
@@ -140,8 +140,8 @@ object UnstackAlong extends ParameterizedPolyOp1 {
 object Stack extends ParameterizedPolyOp1 {
 
   implicit def stackF[T[_], E, a, u <: Dim, b]
-  (implicit T: IsTensorK[T, E], ia: InsertAt.Aux[a, _0, u, b]): u => F[Seq[T[a]], T[b]] =
-    (x: u) => new F[Seq[T[a]], T[b]] {
+  (implicit T: IsTensorK[T, E], ia: InsertAt.Aux[a, _0, u, b]): u => P[Seq[T[a]], T[b]] =
+    (x: u) => new P[Seq[T[a]], T[b]] {
       def name = n"Stack[$x]"
       def tag = ???
       def forward(x: Seq[T[a]]) = ???

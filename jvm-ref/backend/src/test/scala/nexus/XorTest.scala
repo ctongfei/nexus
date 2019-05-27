@@ -40,7 +40,7 @@ object XorTest extends App {
     Array(0, 1, 1, 0).map(i => if (i == 0) Array(1f, 0f) else Array(0f, 1f))
   )
 
-  val xs = X unstackAlong In
+  val xs = X unstackAlong Batch
   val ys = Y unstackAlong Batch
 
   val x = Input[FloatTensor[In]]

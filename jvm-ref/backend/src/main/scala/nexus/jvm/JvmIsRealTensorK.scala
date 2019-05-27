@@ -100,7 +100,7 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
     val z = Array.fill(x.shape(0))(R.zero)
     for (i <- 0 until x.shape(0))
       for (j <- 0 until x.shape(1))
-        z(i) += x(i, j) * y(j)
+        z(i) += x.get(i, j) * y.get(j)
     fromFlatArray[A](z, Array(x.shape(0)))
   }
 
@@ -108,15 +108,18 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
     val z = Array.fill(x.shape(0) * y.shape(0))(R.zero)
     for (i <- 0 until x.shape(0))
       for (j <- 0 until y.shape(0))
-        z(i * y.shape(0) + j) = x(i) * y(j)
+        z(i * y.shape(0) + j) = x.get(i) * y.get(j)
     fromFlatArray[(A, B)](z, Array(x.shape(0), y.shape(0)))
   }
 
   def dot[A](x: T[A], y: T[A]) = ???
   def contract[A, B, C](x: T[A], y: T[B])(implicit sd: SymDiff.Aux[A, B, C]) = ???
 
-  def get[A](x: T[A], is: Seq[Int]) = x.apply(is: _*)
+  def get[A](x: T[A], is: Seq[Int]) = x.get(is: _*)
   def set[A](x: T[A], is: Seq[Int], v: R): Unit = x.update(is: _*)(v)
+
+
+  def index[U, V, W](x: T[U], i: V)(implicit ix: Indexing.Aux[U, V, W]) = ???
 
   def newTensor[A](shape: Seq[Int]) = fromFlatArray[A](Array.ofDim[R](shape.product), shape.toArray)
 
@@ -133,7 +136,7 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
 
   //TODO: map functions below should be macros
   def map[A](x: T[A])(f: R => R): T[A] = {
-    if (x.rank == 0) return wrapScalar(f(x())).asInstanceOf[T[A]] // cast is safe
+    if (x.rank == 0) return wrapScalar(f(x.get())).asInstanceOf[T[A]] // cast is safe
     val y = Array.ofDim[R](x.size)
     var yi = 0
     var xi = x.offset
@@ -158,7 +161,7 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
   }
 
   def map2[A](x: T[A], y: T[A])(f: (R, R) => R): T[A] = {
-    if (x.rank == 0 && y.rank == 0) return wrapScalar(f(x(), y())).asInstanceOf[T[A]] // cast is safe
+    if (x.rank == 0 && y.rank == 0) return wrapScalar(f(x.get(), y.get())).asInstanceOf[T[A]] // cast is safe
     val z = Array.ofDim[R](x.size)
     var zi = 0
     var xi = x.offset

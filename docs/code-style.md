@@ -10,13 +10,14 @@
  - `I`, `J`, `K`: Single dimension labels (`I` could be used for tensor axes descriptors for elementwise operations)
  - `U`, `V`, `W`: Tensor axes descriptors (single or multiple dimension labels)
  - `X`, `Y`, `Z`: Arbitrary data type in functions (`X => Y` / `Y => Z`)
- - `F[X..., Y]`: Proof/predicate that an operator/module is applicable
- - `D[_]`: Abstracts over boxes that keeps track of the differentiable program (`Id`/`Symbolic`/`Traced`)
+ - `P[X..., Y]`: Proof/predicate that an operator/module is applicable
+ - `F[_]`: Forward computation boxes (`Id`/`Symbolic`/`Traced`)
+ - `G[_]`: Backward (gradient) computation boxes
  
 Examples:
 
- - Sigmoid activation: `T[I] => T[I]`
- - Addition: `(T[I], T[I]) => T[I]`
+ - Sigmoid activation: `T[U] => T[U]`
+ - Addition: `(T[U], T[U]) => T[U]`
  - Matrix multiplication: `(T[(I, J)], T[(J, K)]) => T[(I, K)]`
  - Sum along axis: `implicit Remove.Aux[U, I, V] => (T[U], I) => T[V]` 
  - Natural tensor contraction: `implicit SymDiff.Aux[U, V, W] => (T[U], T[V]) => T[W]`

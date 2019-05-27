@@ -15,7 +15,6 @@ object math extends ScalarFunctions
 
   implicit class SliceOps(val a: Int) extends AnyVal {
     def ~(b: Int) = Slice.Bounded(a, b)
-    def ~(b: Slice.?.type) = Slice.LeftBounded(a)
   }
 
 }

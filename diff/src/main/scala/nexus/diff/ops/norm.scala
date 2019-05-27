@@ -21,8 +21,8 @@ object Abs extends PolyOp1 with RealElementwisePolyOp1Mixin {
 
 object L1Norm extends PolyOp1 {
 
-  implicit def l1NormF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], R] =
-    new F[T[I], R] {
+  implicit def l1NormF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], R] =
+    new P[T[I], R] {
       def name = "L1Norm"
       def tag = Tag.real[R]
       def forward(x: T[I]) = T.sum(T.abs(x))
@@ -32,8 +32,8 @@ object L1Norm extends PolyOp1 {
 
 object L2Norm extends PolyOp1 {
 
-  implicit def l2NormF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], R] =
-    new F[T[I], R] {
+  implicit def l2NormF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], R] =
+    new P[T[I], R] {
       def name = "L2Norm"
       def tag = Tag.real[R]
       def forward(x: T[I]) = T.R.sqrt(T.dot(x, x))
@@ -44,7 +44,7 @@ object L2Norm extends PolyOp1 {
 object LpNorm extends ParameterizedPolyOp1 {
 
   implicit def lpNormF[T[_], R, I](implicit T: IsRealTensorK[T, R]) = (p: Double) =>
-      new F[T[I], R] {
+      new P[T[I], R] {
         def name = s"LpNorm[$p]"
         def tag = Tag.real[R]
         def forward(x: T[I]) = ???

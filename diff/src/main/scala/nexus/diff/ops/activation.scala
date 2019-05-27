@@ -18,30 +18,28 @@ import nexus.syntax._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object ReLU extends PolyOp1 {
-  implicit def reLUF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
-    new F[T[I], T[I]] {
-      def name = "ReLU"
-      def tag = Tag.realTensor[T, R, I]
-      def forward(x: T[I]) = T.relu(x)
-      def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| T.pos(x)
-    }
+object ReLU extends PolyOp1 with RealElementwisePolyOp1Mixin {
+  def name = "ReLU"
+  def forwardR[R](x: R)(implicit R: IsReal[R]) = ???
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = ???
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = T.relu(x)
+  def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) = dy |*| T.pos(x)
 }
 
 /**
- * Sigmoid (a.k.a. logistic) activation function that maps any real output to the interval (0, 1).
+ * Logistic (a.k.a. sigmoid) activation function that maps any real output to the interval (0, 1).
  * - Input: any tensor 「bb"x"」.
  * - Output: a tensor 「bb"y"」, of the same shape as 「bb"x"」, computed as
  * 「y_i = 1/(1 + e^(-x_i))」.
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object Sigmoid extends PolyOp1 { // TODO: ufunc
-  implicit def sigmoidF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
-    new F[T[I], T[I]] {
-      def name = "Sigmoid"
+object Logistic extends PolyOp1 { // TODO: ufunc
+  implicit def logisticF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], T[I]] =
+    new P[T[I], T[I]] {
+      def name = "Logistic"
       def tag = Tag.realTensor[T, R, I]
-      def forward(x: T[I]) = T.sigmoid(x)
+      def forward(x: T[I]) = T.logistic(x)
       def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| y |*| T.addScalar(-y, T.R.one) // TODO: inplace
     }
 }
@@ -55,12 +53,12 @@ object Sigmoid extends PolyOp1 { // TODO: ufunc
  * @since 0.1.0
  */
 object SoftPlus extends PolyOp1 {
-  implicit def softPlusF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
-    new F[T[I], T[I]] {
+  implicit def softPlusF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], T[I]] =
+    new P[T[I], T[I]] {
       def name = "SoftPlus"
       def tag = Tag.realTensor[T, R, I]
       def forward(x: T[I]) = T.log1p(T.exp(x))
-      def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| T.sigmoid(x)
+      def backward(dy: T[I], y: T[I], x: T[I]) = dy |*| T.logistic(x)
     }
 }
 
@@ -73,8 +71,8 @@ object SoftPlus extends PolyOp1 {
  * @since 0.1.0
  */
 object Softmax extends PolyOp1 {
-  implicit def softmaxF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I]] =
-    new F[T[I], T[I]] {
+  implicit def softmaxF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], T[I]] =
+    new P[T[I], T[I]] {
       def name = "Softmax"
       def tag = Tag.realTensor[T, R, I]
       def forward(x: T[I]) = {
@@ -105,9 +103,9 @@ object SiLU extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "SiLU"
   def forwardR[R](x: R)(implicit R: IsReal[R]) = ???
   def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = ???
-  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = x |*| T.sigmoid(x)
+  def forwardTR[T[_], R, A](x: T[A])(implicit T: IsRealTensorK[T, R]) = x |*| T.logistic(x)
   def backwardTR[T[_], R, A](dy: T[A], y: T[A], x: T[A])(implicit T: IsRealTensorK[T, R]) =
-    dy |*| (y + T.sigmoid(x) |*| (-y +# 1.0))
+    dy |*| (y + T.logistic(x) |*| (-y +# 1.0))
 }
 
 /**

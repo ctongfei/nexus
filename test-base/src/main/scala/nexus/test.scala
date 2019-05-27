@@ -12,6 +12,5 @@ object test {
 
   class A extends Dim; val A = new A
 
-  val a = Input[FloatTensor]
 
 }

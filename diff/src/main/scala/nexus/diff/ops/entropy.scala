@@ -7,13 +7,14 @@ import nexus.syntax._
 
 object Entropy extends PolyOp1 {
 
-  implicit def entropyF[T[_], R, I](implicit T: IsRealTensorK[T, R]) = new F[T[I], R] {
-    import T._
-    def name = "Entropy"
-    def tag = Tag.real[R]
-    def forward(x: T[I]) = -sum(x |*| log(x))
-    def backward(dy: R, y: R, x: T[I]) = (log(x) +# 1) :* (-dy)
-  }
+  implicit def entropyF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], R] =
+    new P[T[I], R] {
+      import T._
+      def name = "Entropy"
+      def tag = Tag.real[R]
+      def forward(x: T[I]) = -sum(x |*| log(x))
+      def backward(dy: R, y: R, x: T[I]) = (log(x) +# 1) :* (-dy)
+    }
 
 }
 
@@ -30,8 +31,8 @@ object Entropy extends PolyOp1 {
  */
 object CrossEntropy extends PolyOp2 {
 
-  implicit def crossEntropyF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R] =
-    new F[T[I], T[I], R] {
+  implicit def crossEntropyF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): P[T[I], T[I], R] =
+    new P[T[I], T[I], R] {
       import T._
       def name = "CrossEntropy"
       def tag = Tag.real[R]
@@ -44,8 +45,8 @@ object CrossEntropy extends PolyOp2 {
 
 object KullbackLeiblerDivergence extends PolyOp2 {
 
-  implicit def kullbackLeiblerDivergenceF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R] =
-    new F[T[I], T[I], R] {
+  implicit def kullbackLeiblerDivergenceF[T[_], R, I <: Dim](implicit T: IsRealTensorK[T, R]): P[T[I], T[I], R] =
+    new P[T[I], T[I], R] {
       def name = "KullbackLeiblerDivergence"
       def tag = Tag.real[R]
       def forward(x1: T[I], x2: T[I]) = ???

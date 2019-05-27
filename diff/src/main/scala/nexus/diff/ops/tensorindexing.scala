@@ -13,8 +13,8 @@ import scala.annotation._
  * @since 0.1.0
  */
 object ScalarToTensor0 extends PolyOp1 {
-  implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[R, T[Unit]] =
-    new F[R, T[Unit]] {
+  implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): P[R, T[Unit]] =
+    new P[R, T[Unit]] {
       def name = "ScalarToTensor0"
       def tag = Tag.tensor[T, R, Unit]
       def forward(x: R) = T.wrapScalar(x)
@@ -29,8 +29,8 @@ object ScalarToTensor0 extends PolyOp1 {
  */
 object Tensor0ToScalar extends PolyOp1 {
 
-  implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): F[T[Unit], R] =
-    new F[T[Unit], R] {
+  implicit def scalar[T[_], R](implicit T: IsRealTensorK[T, R]): P[T[Unit], R] =
+    new P[T[Unit], R] {
       def name = "Tensor0ToTensor"
       def tag = ??? // TODO: element
       def forward(x: T[Unit]) = T.unwrapScalar(x)

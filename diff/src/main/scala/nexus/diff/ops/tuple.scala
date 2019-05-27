@@ -13,8 +13,8 @@ import scala.reflect._
 object Pair extends ParameterizedPolyOp2 { prod =>
 
   object Tuple extends PolyOp2 {
-    implicit def instance[X1: Grad, X2: Grad]: F[X1, X2, (X1, X2)] =
-      new F[X1, X2, (X1, X2)] {
+    implicit def instance[X1: Grad, X2: Grad]: P[X1, X2, (X1, X2)] =
+      new P[X1, X2, (X1, X2)] {
         def forward(x1: X1, x2: X2) = (x1, x2)
         def backward1(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._1
         def backward2(dy: (X1, X2), y: (X1, X2), x1: X1, x2: X2) = dy._2
@@ -24,8 +24,8 @@ object Pair extends ParameterizedPolyOp2 { prod =>
   }
 
   object First extends ParameterizedPolyOp1 {
-    implicit def instance[Y, X1: Grad, X2: Grad]: Generic.Aux[Y, X1 :: X2 :: HNil] => F[Y, X1] = Y =>
-      new F[Y, X1] {
+    implicit def instance[Y, X1: Grad, X2: Grad]: Generic.Aux[Y, X1 :: X2 :: HNil] => P[Y, X1] = Y =>
+      new P[Y, X1] {
         def forward(y: Y) = Y.to(y).head
         def backward(dx1: X1, x1: X1, y: Y) = Y.from(dx1 :: Grad[X2].zeroBy(Y.to(y).tail.head) :: HNil)
         def name = "First"
@@ -34,8 +34,8 @@ object Pair extends ParameterizedPolyOp2 { prod =>
   }
 
   object Second extends ParameterizedPolyOp1 {
-    implicit def instance[Y, X1: Grad, X2: Grad]:  Generic.Aux[Y, X1 :: X2 :: HNil] => F[Y, X2] = Y =>
-      new F[Y, X2] {
+    implicit def instance[Y, X1: Grad, X2: Grad]:  Generic.Aux[Y, X1 :: X2 :: HNil] => P[Y, X2] = Y =>
+      new P[Y, X2] {
         def forward(y: Y) = Y.to(y).tail.head
         def backward(dx2: X2, x2: X2, y: Y) = Y.from(Grad[X1].zeroBy(Y.to(y).head) :: dx2 :: HNil)
         def name = "Second"
@@ -43,8 +43,8 @@ object Pair extends ParameterizedPolyOp2 { prod =>
       }
   }
 
-  implicit def instance[X1: Grad, X2: Grad, Y: ClassTag]: Generic.Aux[Y, X1 :: X2 :: HNil] => F[X1, X2, Y] = implicit Y =>
-    new F[X1, X2, Y] {
+  implicit def instance[X1: Grad, X2: Grad, Y: ClassTag]: Generic.Aux[Y, X1 :: X2 :: HNil] => P[X1, X2, Y] = implicit Y =>
+    new P[X1, X2, Y] {
       def forward(x1: X1, x2: X2) = Y.from(x1 :: x2 :: HNil)
       def backward1(dy: Y, y: Y, x1: X1, x2: X2) = Y.to(dy).head
       def backward2(dy: Y, y: Y, x1: X1, x2: X2) = Y.to(dy).tail.head

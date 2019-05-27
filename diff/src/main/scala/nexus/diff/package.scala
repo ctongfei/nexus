@@ -34,6 +34,13 @@ package object diff {
   type         Float64 = Double
 
 
+  /**
+   * Axis label for the mini-batch.
+   */
+  final class BatchDim extends Dim
+  final val BatchDim = new BatchDim
+
+
   private[nexus] def typeName(o: Any) = {
     val raw = o.getClass.getTypeName
     val last = raw.split('.').last

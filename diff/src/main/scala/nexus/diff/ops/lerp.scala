@@ -11,8 +11,8 @@ import nexus.syntax._
  */
 object LinearInterpolation extends PolyOp3 {
 
-  implicit def lerpScalarF[R](implicit R: IsReal[R]): F[R, R, R, R] =
-    new F[R, R, R, R] {
+  implicit def lerpScalarF[R](implicit R: IsReal[R]): P[R, R, R, R] =
+    new P[R, R, R, R] {
       def name = "LinearInterpolation"
       def tag = Tag.real[R]
       def forward(x1: R, x2: R, t: R) = (R.one - t) * x1 + t * x2
@@ -22,8 +22,8 @@ object LinearInterpolation extends PolyOp3 {
     }
 
   // TODO: generalize to all vector spaces?
-  implicit def lerpTensorF[T[_], R, I](implicit T: IsRealTensorK[T, R]): F[T[I], T[I], R, T[I]] =
-    new F[T[I], T[I], R, T[I]] {
+  implicit def lerpTensorF[T[_], R, I](implicit T: IsRealTensorK[T, R]): P[T[I], T[I], R, T[I]] =
+    new P[T[I], T[I], R, T[I]] {
       import T._
       def name = "LinearInterpolation"
       def tag = Tag.realTensor[T, R, I]

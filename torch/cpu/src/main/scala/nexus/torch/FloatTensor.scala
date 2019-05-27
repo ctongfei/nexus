@@ -6,7 +6,9 @@ import nexus.typelevel._
 import nexus.util._
 import nexus.torch.macros._
 import nexus.torch.jni.torchJNI._
+import nexus.typelevel.Indexing.Aux
 import shapeless._
+
 import scala.reflect._
 
 /**
@@ -103,7 +105,7 @@ object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
   def arctan[A](x: FloatTensor[A]) = arctanImpl(x)
   private def arctanImpl[A](x: FloatTensor[A]): FloatTensor[A] = macro elementwise1[A]
 
-  def sigmoid[A](x: FloatTensor[A]) = sigmoidImpl(x)
+  def logistic[A](x: FloatTensor[A]) = sigmoidImpl(x)
   private def sigmoidImpl[A](x: FloatTensor[A]): FloatTensor[A] = macro elementwise1[A]
 
   def relu[A](x: FloatTensor[A]) = ???
@@ -152,6 +154,8 @@ object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
   def sum[A](x: FloatTensor[A]) = THFloatTensor_sumall(x.ptr).toFloat
   def product[A](x: FloatTensor[A]) = THFloatTensor_prodall(x.ptr).toFloat
 
+
+
   def dot[A](x: FloatTensor[A], y: FloatTensor[A]) = THFloatTensor_dot(x.ptr, y.ptr).toFloat
 
   def matMul[U, V, W](x: FloatTensor[(U, V)], y: FloatTensor[(V, W)]) = {
@@ -184,6 +188,8 @@ object FloatTensorIsRealTensorK extends IsRealTensorK[FloatTensor, Float] {
 
   def wrapScalar(x: Float) = ???
   def unwrapScalar(x: FloatTensor[Unit]) = ???
+
+  def index[U, V, W](x: FloatTensor[U], i: V)(implicit ix: Aux[U, V, W]) = ???
 
   def transpose[U, V](x: FloatTensor[(U, V)]) = {
     val y = new FloatTensor[(V, U)](THFloatTensor_new())

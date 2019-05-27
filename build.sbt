@@ -1,7 +1,10 @@
 import scala.io._
 
+logLevel := Level.Debug
+
 // credit to http://stackoverflow.com/a/32114551/2990673
 lazy val mathFormulaInDoc = taskKey[Unit]("add MathJax script import in scaladoc html to display LaTeX formula")
+
 
 lazy val commonSettings = Seq(
 
@@ -20,38 +23,7 @@ lazy val commonSettings = Seq(
   ),
 
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % Test,
-  libraryDependencies += "me.tongfei"    %% "poly-io"   % "0.3.2" % Test,
-
-  mathFormulaInDoc := {
-    val apiDir = (doc in Compile).value
-    val docDir = apiDir    // /"some"/"subfolder"  // in my case, only api/some/solder is parsed
-    // will replace this "importTag" by "scriptLine
-    // find all html file and apply patch
-    if(docDir.isDirectory)
-      for (f <- listHtmlFile(docDir)) {
-        val content = Source.fromFile(f).getLines().mkString("\n")
-        val writer = new java.io.PrintWriter(f)
-        writer.write(content.replace(
-          "<head>",
-          """<head>
-             |  <script type="text/x-mathjax-config">
-             |    MathJax.Hub.Config({
-             |      tex2jax: {
-             |        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-             |        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-             |      },
-             |      asciimath2jax: { delimiters: [['[[', ']]']] }
-             |    });
-             |  </script>
-             |  <script type="text/javascript" async
-             |    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
-             |  </script>""".stripMargin))
-        writer.close()
-      }
-  },
-
-  // attach this task to doc task
-  mathFormulaInDoc <<= mathFormulaInDoc triggeredBy (doc in Compile)
+  libraryDependencies += "me.tongfei"    %% "poly-io"   % "0.3.2" % Test
 )
 
 lazy val tensor = (project in file("tensor"))
@@ -146,15 +118,44 @@ lazy val torchCuda = (project in file("torch/cuda"))
     name := "nexus-torch-backend-cuda"
   )
 
-val root = (project in file("."))
+val root: Project = (project in file("."))
   .settings(commonSettings: _*)
   .enablePlugins(ScalaUnidocPlugin)
   .settings(
     name := "nexus",
     unidocProjectFilter in (ScalaUnidoc, unidoc) :=
       inAnyProject -- inProjects(testBase)
-        -- inProjects(jvmRefMacros) -- inProjects(jvmRefBackend)
+        -- inProjects(jvmRefMacros) -- inProjects(jvmRefBackend) -- inProjects(jniLoader)
         -- inProjects(torchJni) -- inProjects(torchMacros) -- inProjects(torchCpu) -- inProjects(torchCuda)
+    
+//    unidoc := (unidoc andFinally Def.taskDyn {
+//      val apiDir: java.io.File = new java.io.File(s"${crossTarget.value}/unidoc")
+//      val docDir = apiDir    // /"some"/"subfolder"  // in my case, only api/some/solder is parsed
+//      // will replace this "importTag" by "scriptLine
+//      // find all html file and apply patch
+//      if(docDir.isDirectory)
+//        for (f <- listHtmlFile(docDir)) {
+//          val content = Source.fromFile(f).getLines().mkString("\n")
+//          val writer = new java.io.PrintWriter(f)
+//          writer.write(content.replace(
+//            "<head>",
+//            """<head>
+//               |  <script type="text/x-mathjax-config">
+//               |    MathJax.Hub.Config({
+//               |      tex2jax: {
+//               |        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+//               |        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+//               |      }
+//               |    });
+//               |  </script>
+//               |  <script type="text/javascript" async
+//               |    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+//               |  </script>""".stripMargin))
+//          writer.close()
+//          println(s"MathJax injected to $f.")
+//        }
+//    }).value
+  
   )
   .aggregate(tensor, diff)  // other libraries yet to be added
 
@@ -166,3 +167,4 @@ def listHtmlFile(dir: java.io.File): List[java.io.File] = {
     else                            List[File]()
   }
 }
+

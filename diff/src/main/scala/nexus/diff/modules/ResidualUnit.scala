@@ -30,7 +30,7 @@ object ResidualUnit {
   def apply[X: Grad](residual: Func1[X, X]) =
     new ResidualUnit[X](residual)
 
-  def apply[X: Grad](residual: PolyFunc1)(implicit f: residual.F[X, X]) =
+  def apply[X: Grad](residual: PolyFunc1)(implicit f: residual.P[X, X]) =
     new ResidualUnit[X](residual.ground)
 
 }

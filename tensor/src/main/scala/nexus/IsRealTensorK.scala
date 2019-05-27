@@ -49,7 +49,7 @@ trait IsRealTensorK[T[_], @specialized(Float, Double) R] extends RingTensorK[T, 
   def arctan[U](x: T[U]): T[U]
 
 
-  def sigmoid[U](x: T[U]): T[U]
+  def logistic[U](x: T[U]): T[U]
 
   def relu[U](x: T[U]): T[U]
 

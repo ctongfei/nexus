@@ -18,8 +18,8 @@ trait RealAxisReductionOpMixin { poly: ParameterizedPolyOp1 =>
                                         (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): T[U]
 
   implicit def fR[T[_], R, U, I <: Dim, V]
-  (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): I => F[T[U], T[V]] =
-    (dim: I) => new F[T[U], T[V]] {
+  (implicit T: IsRealTensorK[T, R], rx: Remove.Aux[U, I, V]): I => P[T[U], T[V]] =
+    (dim: I) => new P[T[U], T[V]] {
       def name = n"${poly.name}[$dim]"
       def tag = Tag.realTensor[T, R, V]
       def forward(x: T[U]) = poly.forwardR(x, dim)
