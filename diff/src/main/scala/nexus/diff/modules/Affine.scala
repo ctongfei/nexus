@@ -11,15 +11,13 @@ import nexus.diff.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Affine[T[_], R, X <: Dim, Y <: Dim] private(
-                                                   val W: Param[T[(Y, X)]],
-                                                   val b: Param[T[Y]]
+case class Affine[T[_], R, X <: Dim, Y <: Dim] private(
+                                                   W: Param[T[(Y, X)]],
+                                                   b: Param[T[Y]]
                                                  )
                                                  (implicit T: IsRealTensorK[T, R])
   extends Module1[T[X], T[Y]]
 {
-
-  def parameters = Set(W, b)
 
   /** The linear transformation matrix of this layer. */
   def weight = W

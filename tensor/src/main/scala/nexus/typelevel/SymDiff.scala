@@ -63,7 +63,7 @@ object SymDiff {
     }
 
   implicit def tuple[A, Al <: HList, B, Bl <: HList, C, Cl <: HList]
-  (implicit al: ToHList.Aux[A, Al], bl: ToHList.Aux[B, Bl], sd: SymDiff.Aux[Al, Bl, Cl], cl: ToHList.Aux[C, Cl]): Aux[A, B, C] =
+  (implicit al: ToHList.Aux[A, Al], bl: ToHList.Aux[B, Bl], sd: SymDiff.Aux[Al, Bl, Cl], cl: FromHList.Aux[Cl, C]): Aux[A, B, C] =
     new SymDiff[A, B] {
       type Out = C
       def matchedIndices = sd.matchedIndices

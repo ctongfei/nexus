@@ -37,6 +37,7 @@ trait BatchTensor[T[_], E, U] extends Batch[T[U]] {
   implicit def T: IsTensorK[T, E]
 
   def batchSize = T.sizeOfDim(underlying, 0)
+
   override def apply(i: Int) = {
     val v: T[Uh] = T.sliceAlong(underlying, BatchDim, i)
     v.asInstanceOf[T[U]]  // this cast is safe

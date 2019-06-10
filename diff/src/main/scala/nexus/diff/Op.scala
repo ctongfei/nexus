@@ -1,8 +1,11 @@
 package nexus.diff
 
 import nexus.diff.exception._
+import shapeless.HList
+import shapeless.Nat._
 
 trait Op0[Y] extends Func0[Y] with AnyOp[Y] {
+  type Arity = _0
   final def arity = 0
   def forward(): Y
   def apply[F[_]]()(implicit F: Algebra[F]): F[Y] = F.app0(this)
@@ -15,6 +18,7 @@ trait Op0[Y] extends Func0[Y] with AnyOp[Y] {
  */
 trait Op1[X, Y] extends Func1[X, Y] with AnyOp[Y] { op =>
 
+  type Arity = _1
   final def arity = 1
 
   /** Applies this operation to a symbolic expression. */
@@ -52,6 +56,7 @@ object Op1 {
  */
 trait Op2[X1, X2, Y] extends Func2[X1, X2, Y] with AnyOp[Y] {
 
+  type Arity = _2
   final def arity = 2
 
   /** Applies this operation to two symbolic expressions. */
@@ -109,6 +114,7 @@ object Op2 {
  */
 trait Op3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] with AnyOp[Y] {
 
+  type Arity = _3
   final def arity = 3
 
   def forward(x1: X1, x2: X2, x3: X3): Y

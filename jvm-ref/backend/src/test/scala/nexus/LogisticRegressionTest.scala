@@ -40,7 +40,6 @@ object LogisticRegressionTest extends App {
 
   val Layer = Affine(In -> 2, Out -> 2)
 
-  val z = Layer(x)
   val output = x |> Layer |> Softmax
   val loss = CrossEntropy(y, output)
 

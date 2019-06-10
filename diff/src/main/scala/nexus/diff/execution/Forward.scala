@@ -15,5 +15,6 @@ trait Forward[F[_]] extends (F ~> Id) {
   def values: BoxMap[F, Id]
 
   def backward: Backward[F]
+  // TODO: def backward[G[_]](implicit G: Backward[G]): Backward[F, G]
 
 }

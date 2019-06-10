@@ -20,19 +20,17 @@ package object diff {
   val _8 = shapeless.nat._8
   val _9 = shapeless.nat._9
 
+  type *=>[X, Y] = Func1[X, Y]
+  type **=>[X1, X2, Y] = Func2[X1, X2, Y]
+  type ***=>[X1, X2, X3, Y] = Func3[X1, X2, X3, Y]
+
   // ALIASES AND TYPE TAGS FOR BASIC TYPES
   type         Int8    = Byte
-
   type         Int16   = Short
-
   type         Int32   = Int
-
   type         Int64   = Long
-
   type         Float32 = Float
-
   type         Float64 = Double
-
 
   /**
    * Axis label for the mini-batch.

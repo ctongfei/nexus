@@ -2,9 +2,17 @@ package nexus.diff
 
 import nexus._
 import cats.arrow._
+import shapeless.{HList, HNil}
 
-trait Func0[Y] {
+trait HFunc[Xs <: HList, Y] {
+  def apply[F[_]: Algebra](xs: F[Xs]): F[Y]
+}
+
+trait Func0[Y] { self =>
   def apply[F[_]: Algebra](): F[Y]
+  def asHFunc: HFunc[HNil, Y] = new HFunc[HNil, Y] {
+    def apply[F[_] : Algebra](xs: F[HNil]) = self.apply()
+  }
 }
 
 trait Func1[X, Y] extends (X => Y) {
@@ -25,6 +33,7 @@ trait Func3[X1, X2, X3, Y] extends ((X1, X2, X3) => Y) {
 
 object Func1 {
 
+  /** `Func1` forms a category. */
   implicit object Category extends Category[Func1] {
     def id[A] = new Func1[A, A] {
       def apply[F[_]: Algebra](x: F[A]) = x

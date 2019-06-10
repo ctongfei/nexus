@@ -51,7 +51,7 @@ object Dot extends PolyOp2 {
  */
 object MatMul extends PolyOp2 {
 
-  implicit def matMulF[T[_], R, I, J, K]
+  implicit def matMulF[T[_], R, I <: Dim, J <: Dim, K <: Dim]
   (implicit T: IsRealTensorK[T, R]): P[T[(I, J)], T[(J, K)], T[(I, K)]] =
     new P[T[(I, J)], T[(J, K)], T[(I, K)]] {
       import T._
@@ -69,12 +69,13 @@ object MatMul extends PolyOp2 {
  * @since 0.1.0
  */
 object Transpose extends PolyOp1 {
-  implicit def transposeF[T[_], R, I <: Dim, J <: Dim](implicit T: IsRealTensorK[T, R]) = new P[T[(I, J)], T[(J, I)]] {
-    def name = "Transpose"
-    def tag = Tag.realTensor[T, R, (J, I)]
-    def forward(x: T[(I, J)]) = T.transpose(x)
-    def backward(dy: T[(J, I)], y: T[(J, I)], x: T[(I, J)]) = T.transpose(dy)
-  }
+  implicit def transposeF[T[_], R, I <: Dim, J <: Dim](implicit T: IsRealTensorK[T, R]): P[T[(I, J)], T[(J, I)]] =
+    new P[T[(I, J)], T[(J, I)]] {
+      def name = "Transpose"
+      def tag = Tag.realTensor[T, R, (J, I)]
+      def forward(x: T[(I, J)]) = T.transpose(x)
+      def backward(dy: T[(J, I)], y: T[(J, I)], x: T[(I, J)]) = T.transpose(dy)
+    }
 
 }
 
@@ -134,7 +135,7 @@ object OuterProduct extends PolyOp2 {
  * @since 0.1.0
  */
 object Contract extends PolyOp2 {
-  implicit def contractF[T[_], R, U, V, W](implicit T: IsRealTensorK[T, R], sd: SymDiff.Aux[U, V, W]) =
+  implicit def contractF[T[_], R, U, V, W](implicit T: IsRealTensorK[T, R], sd: SymDiff.Aux[U, V, W]): P[T[U], T[V], T[W]] =
     new P[T[U], T[V], T[W]] {
       def name = "Contract"
       def tag = Tag.realTensor[T, R, W]

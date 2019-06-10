@@ -1,11 +1,26 @@
 package nexus.diff
 
+import shapeless.{HList, Nat}
 
-trait AnyModule extends HasParameters {
+/**
+ * Base trait for all modules.
+ * Modules serve as basic building blocks of neural network that may contain parameters.
+ *
+ * A module should always be implemented as an instance of the trait `Product`, preferably as a '''case class''':
+ * This enables recursive traversal over its components to get all the parameters.
+ */
+trait AnyModule extends HasParameters { self: Product =>
 
-  def parameters: Set[Param[_]]
+  /**
+   * Returns the set of all parameters in this module.
+   */
+  def parameters: Set[Param[_]] = this.productIterator.flatMap {
+    case p: Param[_] => Set(p)
+    case p: AnyModule => p.parameters
+    case _ => Set()
+  }.toSet
 
-  def parameterMap =
+  def parameterMap: Map[String, Param[_]] =
     parameters.view.map(p => p.name -> p).toMap
 
   def loadFromParameterMap(m: Map[String, Param[_]]): Unit =
@@ -14,23 +29,21 @@ trait AnyModule extends HasParameters {
 
 }
 
-trait Module0[Y] extends Func0[Y] with AnyModule
+trait Module0[Y] extends Func0[Y] with AnyModule { self: Product => }
 
-trait Module1[X, Y] extends Func1[X, Y] with AnyModule { self =>
+trait Module1[X, Y] extends Func1[X, Y] with AnyModule { self: Product =>
 
-  def >>[Z](that: Module1[Y, Z]): Module1[X, Z] = new Module1[X, Z] {
-
-    def parameters = self.parameters union (that match {
-      case that: Module1[Y, Z] => that.parameters
-      case _ => Set()
-    })
-    def apply[F[_]: Algebra](x: F[X]): F[Z] = that(self(x))
-  }
-
+  def >>[Z](that: Module1[Y, Z]): Module1[X, Z] = Module1.Composed(this, that)
   def >>[Z](that: PolyModule1)(implicit p: that.P[Y, Z]): Module1[X, Z] = self >> that.ground(p)
 
 }
 
-trait Module2[X1, X2, Y] extends Func2[X1, X2, Y] with AnyModule
+object Module1 {
+  case class Composed[X, Y, Z](f: Module1[X, Y], g: Module1[Y, Z]) extends Module1[X, Z] {
+    def apply[F[_]: Algebra](x: F[X]): F[Z] = g(f(x))
+  }
+}
 
-trait Module3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] with AnyModule
+trait Module2[X1, X2, Y] extends Func2[X1, X2, Y] with AnyModule { self: Product => }
+
+trait Module3[X1, X2, X3, Y] extends Func3[X1, X2, X3, Y] with AnyModule { self: Product => }

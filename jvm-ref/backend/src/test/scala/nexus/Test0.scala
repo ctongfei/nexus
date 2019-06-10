@@ -3,6 +3,7 @@ package nexus
 import nexus.diff._
 import nexus.diff.execution._
 import nexus.jvm._
+import nexus.jvm.setFloat32AsDefault._
 import nexus.diff.ops._
 import nexus.instances._
 import nexus.diff.syntax._
@@ -12,9 +13,9 @@ import nexus.diff.optimizers._
  * Vanilla test to see if p converges to 0.
  * @author Tongfei Chen
  */
-class a
-class b
-class c
+class a extends Dim
+class b extends Dim
+class c extends Dim
 
 object Test0 extends App {
 
@@ -28,6 +29,11 @@ object Test0 extends App {
   val p: Symbolic[Float] = Param(3.0f, name = "p")
 
   val q: Symbolic[FloatTensor[Unit]] = Param(FloatTensor.fromFlatArray((), Array(), Array(1f)), name = "q")
+
+  val u: Symbolic[FloatTensor[(a, b)]] = ???
+  val v: Symbolic[FloatTensor[(b, c)]] = ???
+
+  val w = Contract(u, v)
 
   val t = p |> Exp
   val zzz = t + t

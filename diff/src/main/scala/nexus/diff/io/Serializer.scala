@@ -7,7 +7,7 @@ import nexus.diff._
  */
 trait Serializer {
 
-  def save(module: HasParameters, f: String): Unit
-  def load(module: HasParameters, f: String): Unit
+  def save(map: Map[String, Param[_]], f: String): Unit
+  def load(f: String): Map[String, Param[_]]
 
 }

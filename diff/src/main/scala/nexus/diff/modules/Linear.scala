@@ -10,17 +10,13 @@ import nexus.diff.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Linear[T[_], R, X <: Dim, Y <: Dim] private(
-  val weight: Param[T[(Y, X)]]
-)(implicit T: IsRealTensorK[T, R])
+case class Linear[T[_], R, X <: Dim, Y <: Dim] private(weight: Param[T[(Y, X)]])(implicit T: IsRealTensorK[T, R])
   extends Module1[T[X], T[Y]]
 {
 
   type Input = X
 
   type Output = Y
-
-  def parameters = Set(weight)
 
   def apply[F[_] : Algebra](x: F[T[X]]) = MVMul(weight.as, x)
 }
@@ -46,5 +42,6 @@ object Linear {
     )
     from[T, R, X, Y](weight)
   }
+
 
 }

@@ -9,17 +9,14 @@ import nexus.diff.util._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-class Convolution1D[T[_], R, W <: Dim, X <: Dim, Y <: Dim] private(
-                                                                    val window: Int,
-                                                                    val stride: Int,
-                                                                    val kernel: Param[T[(Y, X)]]
+case class Convolution1D[T[_], R, W <: Dim, X <: Dim, Y <: Dim] private(
+                                                                    window: Int,
+                                                                    stride: Int,
+                                                                    kernel: Param[T[(Y, X)]]
                                                                   )
                                                                   (implicit T: IsRealTensorK[T, R])
   extends Module1[T[(W, X)], T[(W, Y)]]
 {
-
-  def parameters = Set(kernel)
-
   def apply[F[_] : Algebra](x: F[T[(W, X)]]) = ???
 }
 
