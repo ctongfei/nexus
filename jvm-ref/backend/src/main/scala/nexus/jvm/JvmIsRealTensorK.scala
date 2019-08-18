@@ -60,7 +60,7 @@ abstract class JvmIsRealTensorK[R, T[a] <: Tensor[R, a]]
   def mul[A](x: T[A], y: T[A]) = map2(x, y)(R.mul)
   def div[A](x: T[A], y: T[A]) = map2(x, y)(R.div)
   def scale[A](x: T[A], u: R) = map(x)(R.mul(_, u))
-  def inv[A](x: T[A]) = map(x)(R.inv)
+  def inv[A](x: T[A]) = map(x)(R.recip)
   def sqr[A](x: T[A]) = map(x)(R.sqr)
   def sqrt[A](x: T[A]) = map(x)(R.sqrt)
   def log[A](x: T[A]) = map(x)(R.log)

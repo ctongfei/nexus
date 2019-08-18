@@ -7,6 +7,7 @@ import shapeless.Nat
 trait TensorFunctions {
 
   // TENSOR ELEMENT OPERATIONS
+  /** Concatenates a sequence of tensors along a specific axis. */
   def concat[T[_], E, U, I <: Dim, N <: Nat]
   (xs: Seq[T[U]], dim: I)(implicit T: IsTensorK[T, E], ix: IndexOf.Aux[U, I, N]): T[U] =
     ???
@@ -38,16 +39,22 @@ trait TensorFunctions {
   def div[T[_], R, I](x: T[I], y: T[I])(implicit T: RingTensorK[T, R]): T[I] = T.div(x, y)
 
 
-
+  // TENSOR REDUCTION
   /** Sum of all elements in a real tensor. */
   def sum[T[_], R, I](x: T[I])(implicit T: RingTensorK[T, R]): R = T.sum(x)
 
-  /** Sum along an axis of a real tensor, resulting in a tensor with that axis removed. */
+
+  // TENSOR AXIS REDUCTION
+  /** Sum along an axis of a tensor, resulting in a tensor with that axis removed. */
   def sumAlong[T[_], R, U, I <: Dim, V](x: T[U], dim: I)(implicit T: RingTensorK[T, R], rx: Remove.Aux[U, I, V]): T[V] =
     ???
 
   def sumAlong[T[_], R, U, N <: Nat, V](x: T[U], dim: N)(implicit T: RingTensorK[T, R], rx: RemoveAt.Aux[U, N, V]): T[V] =
     ???
+
+
+  def contract[T[_], R, U, V, W](x: T[U], y: T[V])(implicit T: RingTensorK[T, R], sd: SymDiff.Aux[U, V, W]): T[W] =
+    T.contract(x, y)
 
 
   def arithmeticRange = ???

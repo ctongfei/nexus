@@ -22,7 +22,7 @@ object Sqr extends PolyOp1 with RealElementwisePolyOp1Mixin {
 object Sqrt extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Sqrt"
   def forwardR[R](x: R)(implicit R: IsReal[R]) = R.sqrt(x)
-  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(y) * 0.5
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.recip(y) * 0.5
   def forwardTR[T[_], R, I](x: T[I])(implicit T: IsRealTensorK[T, R]) = T.sqrt(x)
   def backwardTR[T[_], R, I](dy: T[I], y: T[I], x: T[I])(implicit T: IsRealTensorK[T, R]) = dy |*| T.inv(y) :* 0.5
 }

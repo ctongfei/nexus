@@ -38,4 +38,18 @@
   .superfences-tabs input:nth-child(n+1):checked + label + .superfences-content {
       display: block;
   }
-  
+
+  table {
+    font-size: 0.75em !important;
+  }
+
+  td {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+th {
+  min-width: 60px !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}

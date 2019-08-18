@@ -8,7 +8,8 @@ import nexus.functions._
  * @author Tongfei Chen
  * @since 0.1.0
  */
-object math extends ScalarFunctions
+package object math
+  extends ScalarFunctions
   with TensorFunctions
   with MatrixFunctions
 {

@@ -1,7 +1,7 @@
 package nexus
 
 /**
- * Typelevel trait that gets the suitable tensor type for a specific element type.
+ * Typelevel function that retrieves the suitable tensor type for a specific element type.
  * @author Tongfei Chen
  * @since 0.1.0
  */

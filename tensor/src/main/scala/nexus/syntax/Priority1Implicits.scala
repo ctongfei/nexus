@@ -55,6 +55,9 @@ trait Priority1Implicits {
 
     /** Addition of two tensors with the same axes and shape. */
     def +(y: T[U]): T[U] = macro op2
+
+    def @+@[V, W](y: T[V]) = ???
+
     /** Subtraction of two tensors with the same axes and shape. */
     def -(y: T[U]): T[U] = macro op2
     /** Negation of a tensor. */
@@ -70,7 +73,7 @@ trait Priority1Implicits {
     /** Scales a tensor by a scalar. */
     def :*(y: Double): T[U] = macro op2TRDouble
 
-    def :/(y: R): T[U] = T.scale(x, T.R.inv(y))
+    def :/(y: R): T[U] = T.scale(x, T.R.recip(y))
     def :/(y: Float): T[U] = T.scale(x, T.R.fromFloat(1f / y))
     def :/(y: Double): T[U] = T.scale(x, T.R.fromDouble(1d / y))
 

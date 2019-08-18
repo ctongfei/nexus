@@ -13,8 +13,6 @@ lazy val commonSettings = Seq(
   isSnapshot := true,
   scalaVersion := "2.12.8",
 
-  scalacOptions += "-Ypartial-unification", // types
-
   libraryDependencies ++= Seq(
     "com.chuusai"   %% "shapeless"  % "2.3.3",
     "org.typelevel" %% "cats-core"  % "1.6.0",

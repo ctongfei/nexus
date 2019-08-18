@@ -46,10 +46,11 @@ object XorTest extends App {
   val x = Input[FloatTensor[In]]
   val y = Input[FloatTensor[Out]]
 
-  val Layer1 = Affine(In -> 2, Hidden -> 2)
-  val Layer2 = Affine(Hidden -> 2, Out -> 2)
-
-  val ŷ = x |> Layer1 |> Logistic |> Layer2 |> Softmax
+  val ŷ = x |>
+    Affine(In -> 2, Hidden -> 2) |>
+    Logistic |>
+    Affine(Hidden -> 2, Out -> 2) |>
+    Softmax
 
   val loss = CrossEntropy(y, ŷ)
 

@@ -14,11 +14,14 @@ trait AnyModule extends HasParameters { self: Product =>
   /**
    * Returns the set of all parameters in this module.
    */
-  def parameters: Set[Param[_]] = this.productIterator.flatMap {
-    case p: Param[_] => Set(p)
-    case p: AnyModule => p.parameters
-    case _ => Set()
-  }.toSet
+  lazy val parameters: Set[Param[_]] = {
+    val paramsOfSubmodules: Iterator[Set[Param[_]]] = this.productIterator.map {
+      case p: Param[_] => Set(p)
+      case p: AnyModule => p.parameters
+      case _ => Set()
+    }
+    paramsOfSubmodules.reduce(_ union _)
+  }
 
   def parameterMap: Map[String, Param[_]] =
     parameters.view.map(p => p.name -> p).toMap

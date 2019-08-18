@@ -39,7 +39,7 @@ class OpSSTests[R](gen: Stochastic[R])(implicit R: IsReal[R], RToFloat: CastToFl
   val genOps: Seq[(Stochastic[R], Seq[Op1[R, R]])] = Seq(
     gen -> Seq(
       Neg.fR[R],
-      Inv.fR[R],
+      Recip.fR[R],
       Sin.fR[R],
       Cos.fR[R],
       Exp.fR[R],

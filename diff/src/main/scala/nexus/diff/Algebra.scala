@@ -57,7 +57,7 @@ trait Algebra[F[_]] {
     def unapply[X](p: F[X]): Option[Param[X]] = getParam(p)
   }
 
-  def liftReal[R: IsReal]: IsReal[F[R]] = new LiftedIsReal()(this, IsReal[R])
+  def liftReal[R: IsReal]: IsReal[F[R]] = ???
 }
 
 
@@ -76,37 +76,37 @@ object Algebra {
     def app3[X1, X2, X3, Y](op: Op3[X1, X2, X3, Y], x1: Id[X1], x2: Id[X2], x3: Id[X3]) = op.forward(x1, x2, x3)
     def unroll[S[_], X](xs: Id[S[X]])(implicit unroll: Unroll[S, Id]) = unroll.unroll(xs)
   }
-
-  class LiftedIsReal[F[_], R](implicit val F: Algebra[F], val R: IsReal[R]) extends IsReal[F[R]] {
-    def zero = F.const(R.zero, "0")
-    def one = F.const(R.one, "1")
-    def pi = F.const(R.pi, "π")
-    def e = F.const(R.e, "e")
-    def twoPi = F.const(R.twoPi, "2π")
-
-    def uniformSample = ???
-    def normalSample = ???
-
-    def add(x: F[R], y: F[R]) = Add(x, y)
-    def sub(x: F[R], y: F[R]) = Sub(x, y)
-    def neg(x: F[R]) = Neg(x)
-    def mul(x: F[R], y: F[R]) = Mul(x, y)
-    def div(x: F[R], y: F[R]) = Div(x, y)
-    def inv(x: F[R]) = Inv(x)
-    def exp(x: F[R]) = Exp(x)
-    def log(x: F[R]) = Log(x)
-    def expm1(x: F[R]) = Expm1(x)
-    def log1p(x: F[R]) = Log1p(x)
-    def abs(x: F[R]) = Abs(x)
-    def sgn(x: F[R]) = ???
-    def sin(x: F[R]) = Sin(x)
-    def cos(x: F[R]) = Cos(x)
-    def tan(x: F[R]) = Tan(x)
-    def arcsin(x: F[R]) = ArcSin(x)
-    def arccos(x: F[R]) = ArcCos(x)
-    def arctan(x: F[R]) = ArcTan(x)
-    def sqr(x: F[R]) = Sqr(x)
-    def sqrt(x: F[R]) = Sqrt(x)
-  }
+//
+//  class LiftedIsReal[F[_], R](implicit val F: Algebra[F], val R: IsReal[R]) extends IsReal[F[R]] {
+//    def zero = F.const(R.zero, "0")
+//    def one = F.const(R.one, "1")
+//    def pi = F.const(R.pi, "π")
+//    def e = F.const(R.e, "e")
+//    def twoPi = F.const(R.twoPi, "2π")
+//
+//    def sampleFromStandardUniform = ???
+//    def sampleFromStandardNormal = ???
+//
+//    def add(x: F[R], y: F[R]) = Add(x, y)
+//    def sub(x: F[R], y: F[R]) = Sub(x, y)
+//    def neg(x: F[R]) = Neg(x)
+//    def mul(x: F[R], y: F[R]) = Mul(x, y)
+//    def div(x: F[R], y: F[R]) = Div(x, y)
+//    def recip(x: F[R]) = Inv(x)
+//    def exp(x: F[R]) = Exp(x)
+//    def log(x: F[R]) = Log(x)
+//    def expm1(x: F[R]) = Expm1(x)
+//    def log1p(x: F[R]) = Log1p(x)
+//    def abs(x: F[R]) = Abs(x)
+//    def sgn(x: F[R]) = ???
+//    def sin(x: F[R]) = Sin(x)
+//    def cos(x: F[R]) = Cos(x)
+//    def tan(x: F[R]) = Tan(x)
+//    def arcsin(x: F[R]) = ArcSin(x)
+//    def arccos(x: F[R]) = ArcCos(x)
+//    def arctan(x: F[R]) = ArcTan(x)
+//    def sqr(x: F[R]) = Sqr(x)
+//    def sqrt(x: F[R]) = Sqrt(x)
+//  }
 
 }

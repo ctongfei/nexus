@@ -78,7 +78,7 @@ object Softmax extends PolyOp1 {
       def forward(x: T[I]) = {
         import T._
         val expX = exp(x)
-        expX :* R.inv(sum(expX)) //TODO: numerical stability
+        expX :* R.recip(sum(expX)) //TODO: numerical stability
       }
       def backward(dy: T[I], y: T[I], x: T[I]) = {
         import T._

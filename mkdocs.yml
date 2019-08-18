@@ -44,13 +44,14 @@ extra_css: ['css/extra.css']
 
 nav:
   - 'Introduction': 'index.md'
+  - 'Basic math':
+      - 'Scalar operations': 'scalar-ops.md'
   - 'Tensors':
     - 'Typesafe tensors': 'tensor.md'
     - 'Tensor slicing': 'slice.md'
-    - 'Tensor operations': 'tensor-ops.md'
   - 'Deep learning':
     - 'Symbolic expressions': 'expr.md'
-    - 'Differentiable operators': 'op.md'
+    - 'Tensor operations': 'tensor-ops.md'
   - 'Tutorial': []
   - 'Computation backends':
       - 'Torch':

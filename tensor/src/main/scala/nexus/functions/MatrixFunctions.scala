@@ -16,5 +16,12 @@ trait MatrixFunctions {
 
   def transpose[T[_], R, I <: Dim, J <: Dim](x: T[(I, J)])(implicit T: RingTensorK[T, R]): T[(J, I)] = T.transpose(x)
 
+  // Decomposition
+  def cholesky[T[_], R, I <: Dim](x: T[(I, I)]): T[(I, I)] = ???
+
+  def svd[T[_], R, I <: Dim, J <: Dim, K <: Dim]
+  (x: T[(I, I)], singularValueDim: K): (T[(I, K)], T[K], T[(K, J)]) = ???
+
+
 
 }

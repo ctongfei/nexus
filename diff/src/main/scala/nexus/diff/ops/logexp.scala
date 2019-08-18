@@ -42,7 +42,7 @@ object Expm1 extends PolyOp1 with RealElementwisePolyOp1Mixin {
 object Log1p extends PolyOp1 with RealElementwisePolyOp1Mixin {
   def name = "Log1p"
   def forwardR[R](x: R)(implicit R: IsReal[R]) = R.log1p(x)
-  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.inv(x + R.one)
+  def backwardR[R](dy: R, y: R, x: R)(implicit R: IsReal[R]) = dy * R.recip(x + R.one)
   def forwardTR[T[_], R, I](x: T[I])(implicit T: IsRealTensorK[T, R]) = T.log1p(x)
   def backwardTR[T[_], R, I](dy: T[I], y: T[I], x: T[I])(implicit T: IsRealTensorK[T, R]) = dy |*| T.inv(T.addScalar(x, T.R.one))
 }
